@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<serializers>
+  <serializer group="Core" elementname="stream:stream">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Streams.Stream, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix>stream</prefix>
+      <namespace>http://etherx.jabber.org/streams</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="stream:features">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Streams.StreamFeatures, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix>stream</prefix>
+      <namespace>http://etherx.jabber.org/streams</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="stream:error">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Streams.StreamError, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix>stream</prefix>
+      <namespace>http://etherx.jabber.org/streams</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="starttls">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Tls.StartTls, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-tls</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="proceed">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Tls.Proceed, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-tls</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="bind">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding.Bind, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-bind</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="abort">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Abort, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-sasl</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="auth">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Auth, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-sasl</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="challenge">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Challenge, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-sasl</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="response">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Response, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-sasl</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="success">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Success, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-sasl</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Core" elementname="failure">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Failure, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>urn:ietf:params:xml:ns:xmpp-sasl</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="IM" elementname="iq">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.IQ, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>jabber:client</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="IM" elementname="message">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Message, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>jabber:client</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="IM" elementname="presence">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence.Presence, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>jabber:client</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="IM" elementname="query">
+    <schema></schema>
+    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster.RosterQuery, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <namespace>
+      <prefix></prefix>
+      <namespace>jabber:iq:roster</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="IM" elementname="register">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.RegisterIQ, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>http://jabber.org/features/iq-register</namespace>
+    </namespace>
+  </serializer>
+  <serializer group="Bosh" elementname="body">
+    <serializertype>BabelIm.Net.Xmpp.Serialization.Extensions.Bosh.HttpBindBody, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <schema></schema>
+    <namespace>
+      <prefix></prefix>
+      <namespace>http://jabber.org/protocol/httpbind</namespace>
+    </namespace>
+  </serializer>
+</serializers>

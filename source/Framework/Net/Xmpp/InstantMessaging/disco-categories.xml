@@ -1,0 +1,442 @@
+<registry type="disco-categories">
+  <category>
+    <name>account</name>
+    <desc>The "account" category is to be used by a server when responding to a disco request sent to the bare JID (user@host addresss) of an account hosted by the server.</desc>
+    <type>
+      <name>admin</name>
+      <desc>The user@host is an administrative account</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>anonymous</name>
+      <desc>The user@host is a "guest" account that allows anonymous login by any user</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>registered</name>
+      <desc>The user@host is a registered or provisioned account associated with a particular non-administrative user</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>auth</name>
+    <desc>The "auth" category consists of server components that provide authentication services within a server implementation.</desc>
+    <type>
+      <name>cert</name>
+      <desc>A server component that authenticates based on external certificates</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>generic</name>
+      <desc>A server authentication component other than one of the registered types</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>ldap</name>
+      <desc>A server component that authenticates against an LDAP database</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>ntlm</name>
+      <desc>A server component that authenticates against an NT domain</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>pam</name>
+      <desc>A server component that authenticates against a PAM system</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>radius</name>
+      <desc>A server component that authenticates against a Radius system</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>automation</name>
+    <desc>The "automation" category consists of entities and nodes that provide automated or programmed interaction.</desc>
+    <type>
+      <name>command-list</name>
+      <desc>The node for a list of commands; valid only for the node "http://jabber.org/protocol/commands"</desc>
+      <doc>XEP-0050</doc>
+    </type>
+    <type>
+      <name>command-node</name>
+      <desc>A node for a specific command; the "node" attribute uniquely identifies the command</desc>
+      <doc>XEP-0050</doc>
+    </type>
+    <type>
+      <name>rpc</name>
+      <desc>An entity that supports Jabber-RPC.</desc>
+      <doc>XEP-0009</doc>
+    </type>
+    <type>
+      <name>soap</name>
+      <desc>An entity that supports the SOAP XMPP Binding.</desc>
+      <doc>XEP-0072</doc>
+    </type>
+    <type>
+      <name>translation</name>
+      <desc>An entity that provides automated translation services.</desc>
+      <doc>XEP-0171</doc>
+    </type>
+  </category>
+  <category>
+    <name>client</name>
+    <desc>The "client" category consists of different types of clients, mostly for instant messaging.</desc>
+    <type>
+      <name>bot</name>
+      <desc>An automated client that is not controlled by a human user</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>console</name>
+      <desc>Minimal non-GUI client used on dumb terminals or text-only screens</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>handheld</name>
+      <desc>A client running on a PDA, RIM device, or other handheld</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>pc</name>
+      <desc>Standard full-GUI client used on desktops and laptops</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>phone</name>
+      <desc>A client running on a mobile phone or other telephony device</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>web</name>
+      <desc>A client operated from within a web browser</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>collaboration</name>
+    <desc>The "collaboration" category consists of services that enable multiple individuals to work together in real time.</desc>
+    <type>
+      <name>whiteboard</name>
+      <desc>Multi-user whiteboarding service</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>component</name>
+    <desc>The "component" category consists of services that are internal to server implementations and not normally exposed outside a server.</desc>
+    <type>
+      <name>archive</name>
+      <desc>A server component that archives traffic</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>c2s</name>
+      <desc>A server component that handles client connections</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>generic</name>
+      <desc>A server component other than one of the registered types</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>load</name>
+      <desc>A server component that handles load balancing</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>log</name>
+      <desc>A server component that logs server information</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>presence</name>
+      <desc>A server component that provides presence information</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>router</name>
+      <desc>A server component that handles core routing logic</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>s2s</name>
+      <desc>A server component that handles server connections</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>sm</name>
+      <desc>A server component that manages user sessions</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>stats</name>
+      <desc>A server component that provides server statistics</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>conference</name>
+    <desc>The "conference" category consists of online conference services such as multi-user chatroom services.</desc>
+    <type>
+      <name>irc</name>
+      <desc>Internet Relay Chat service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>text</name>
+      <desc>Text conferencing service</desc>
+      <doc>XEP-0045: Multi-User Chat</doc>
+    </type>
+  </category>
+  <category>
+    <name>directory</name>
+    <desc>The "directory" category consists of information retrieval services that enable users to search online directories or otherwise be informed about the existence of other XMPP entities.</desc>
+    <type>
+      <name>chatroom</name>
+      <desc>A directory of chatrooms</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>group</name>
+      <desc>A directory that provides shared roster groups</desc>
+      <doc>XEP-0144</doc>
+    </type>
+    <type>
+      <name>user</name>
+      <desc>A directory of end users (e.g., JUD)</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>waitinglist</name>
+      <desc>A directory of waiting list entries</desc>
+      <doc>XEP-0130</doc>
+    </type>
+  </category>
+  <category>
+    <name>gateway</name>
+    <desc>The "gateway" category consists of translators between Jabber/XMPP services and non-XMPP services.</desc>
+    <type>
+      <name>aim</name>
+      <desc>Gateway to AOL Instant Messenger</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>facebook</name>
+      <desc>Gateway to the Facebook IM service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>gadu-gadu</name>
+      <desc>Gateway to the Gadu-Gadu IM service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>http-ws</name>
+      <desc>Gateway that provides HTTP Web Services access</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>icq</name>
+      <desc>Gateway to ICQ</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>irc</name>
+      <desc>Gateway to IRC</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>lcs</name>
+      <desc>Gateway to Microsoft Live Communications Server</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>mrim</name>
+      <desc>Gateway to the mail.ru IM service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>msn</name>
+      <desc>Gateway to MSN Messenger</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>myspaceim</name>
+      <desc>Gateway to the MySpace IM service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>ocs</name>
+      <desc>Gateway to Microsoft Office Communications Server</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>qq</name>
+      <desc>Gateway to the QQ IM service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>sametime</name>
+      <desc>Gateway to IBM Lotus Sametime</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>simple</name>
+      <desc>Gateway to SIP for Instant Messaging and Presence Leveraging Extensions (SIMPLE)</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>skype</name>
+      <desc>Gateway to the Skype service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>sms</name>
+      <desc>Gateway to Short Message Service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>smtp</name>
+      <desc>Gateway to the SMTP (email) network</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>tlen</name>
+      <desc>Gateway to the Tlen IM service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>xfire</name>
+      <desc>Gateway to the Xfire gaming and IM service</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>xmpp</name>
+      <desc>Gateway to another XMPP service (NOT via native server-to-server communication)</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>yahoo</name>
+      <desc>Gateway to Yahoo! Instant Messenger</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>headline</name>
+    <desc>The "headline" category consists of services that provide real-time news or information (often but not necessarily in a message of type "headline").</desc>
+    <type>
+      <name>newmail</name>
+      <desc>Service that notifies a user of new email messages.</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>rss</name>
+      <desc>RSS notification service.</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>weather</name>
+      <desc>Service that provides weather alerts.</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>hierarchy</name>
+    <desc>The "hierarchy" category is used to describe nodes within a hierarchy of nodes; the "branch" and "leaf" types are exhaustive.</desc>
+    <type>
+      <name>branch</name>
+      <desc>A service discovery node that contains further nodes in the hierarchy.</desc>
+      <doc>XEP-0030: Service Discovery</doc>
+    </type>
+    <type>
+      <name>leaf</name>
+      <desc>A service discovery node that does not contain further nodes in the hierarchy.</desc>
+      <doc>XEP-0030: Service Discovery</doc>
+    </type>
+  </category>
+  <category>
+    <name>proxy</name>
+    <desc>The "proxy" category consists of servers or services that act as special-purpose proxies or intermediaries between two or more XMPP endpoints.</desc>
+    <type>
+      <name>bytestreams</name>
+      <desc>SOCKS5 bytestreams proxy service</desc>
+      <doc>XEP-0065: SOCKS5 Bytestreams</doc>
+    </type>
+  </category>
+  <category>
+    <name>pubsub</name>
+    <desc>Services and nodes that adhere to XEP-0060.</desc>
+    <type>
+      <name>collection</name>
+      <desc>A pubsub node of the "collection" type.</desc>
+      <doc>XEP-0060: Publish-Subscribe</doc>
+    </type>
+    <type>
+      <name>leaf</name>
+      <desc>A pubsub node of the "leaf" type.</desc>
+      <doc>XEP-0060: Publish-Subscribe</doc>
+    </type>
+    <type>
+      <name>pep</name>
+      <desc>A personal eventing service that supports the publish-subscribe subset defined in XEP-0163.</desc>
+      <doc>XEP-0163</doc>
+    </type>
+    <type>
+      <name>service</name>
+      <desc>A pubsub service that supports the functionality defined in XEP-0060.</desc>
+      <doc>XEP-0060: Publish-Subscribe</doc>
+    </type>
+  </category>
+  <category>
+    <name>server</name>
+    <desc>The "server" category consists of any Jabber/XMPP server.</desc>
+    <type>
+      <name>im</name>
+      <desc>Standard Jabber/XMPP server used for instant messaging and presence</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+  <category>
+    <name>store</name>
+    <desc>The "store" category consists of internal server components that provide data storage and retrieval services.</desc>
+    <type>
+      <name>berkeley</name>
+      <desc>A server component that stores data in a Berkeley database</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>file</name>
+      <desc>A server component that stores data on the file system</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>generic</name>
+      <desc>A server data storage component other than one of the registered types</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>ldap</name>
+      <desc>A server component that stores data in an LDAP database</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>mysql</name>
+      <desc>A server component that stores data in a MySQL database</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>oracle</name>
+      <desc>A server component that stores data in an Oracle database</desc>
+      <doc>N/A</doc>
+    </type>
+    <type>
+      <name>postgres</name>
+      <desc>A server component that stores data in a PostgreSQL database</desc>
+      <doc>N/A</doc>
+    </type>
+  </category>
+</registry>

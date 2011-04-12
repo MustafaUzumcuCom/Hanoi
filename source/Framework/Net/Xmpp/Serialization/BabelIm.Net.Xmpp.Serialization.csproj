@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9E9572F4-1B90-456E-8EF0-D404D6FD3631}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BabelIm.Net.Xmpp.Serialization</RootNamespace>
+    <AssemblyName>BabelIm.Net.Xmpp.Serialization</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\ResourceBinding\Bind.cs" />
+    <Compile Include="Core\Sasl\Abort.cs" />
+    <Compile Include="Core\Sasl\Auth.cs" />
+    <Compile Include="Core\Sasl\Challenge.cs" />
+    <Compile Include="Core\Sasl\Failiure.cs" />
+    <Compile Include="Core\Sasl\FailiureType.cs" />
+    <Compile Include="Core\Sasl\Mechanims.cs" />
+    <Compile Include="Core\Sasl\Response.cs" />
+    <Compile Include="Core\Sasl\Success.cs" />
+    <Compile Include="Core\Stanzas\StanzaError.cs" />
+    <Compile Include="Core\Streams\Session.cs" />
+    <Compile Include="Core\Streams\Stream.cs" />
+    <Compile Include="Core\Streams\StreamError.cs" />
+    <Compile Include="Core\Streams\StreamErrorText.cs" />
+    <Compile Include="Core\Streams\StreamFeatures.cs" />
+    <Compile Include="Core\Tls\Procced.cs" />
+    <Compile Include="Core\Tls\StartTls.cs" />
+    <Compile Include="Empty.cs" />
+    <Compile Include="Extensions\Bosh\BodyCondition.cs" />
+    <Compile Include="Extensions\Bosh\BodyType.cs" />
+    <Compile Include="Extensions\Bosh\HttpBindBody.cs" />
+    <Compile Include="Extensions\DataForms\DataForm.cs" />
+    <Compile Include="Extensions\DataForms\DataFormField.cs" />
+    <Compile Include="Extensions\DataForms\DataFormFieldType.cs" />
+    <Compile Include="Extensions\DataForms\DataFormItem.cs" />
+    <Compile Include="Extensions\DataForms\DataFormOption.cs" />
+    <Compile Include="Extensions\DataForms\DataFormReported.cs" />
+    <Compile Include="Extensions\DataForms\DataFormType.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucAdminActor.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucAdminContinue.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucAdminItem.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucAdminItemAffiliation.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucAdminItemRole.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucAdminQuery.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucHistory.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucOwnerQuery.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUser.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserActor.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserContinue.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserDecline.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserDestroy.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserInvite.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserItem.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserItemAffiliation.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserItemRole.cs" />
+    <Compile Include="Extensions\MultiUserChat\MucUserStatus.cs" />
+    <Compile Include="Extensions\MultiUserChat\MultiUserChat.cs" />
+    <Compile Include="Extensions\Nickname\Nickname.cs" />
+    <Compile Include="Extensions\PubSub\PubSub.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubAffiliation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubAffiliations.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubAffiliationType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubConfigure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubCreate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubErrorUnsupported.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubErrorUnsupportedFeatureType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventAssociate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventDelete.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventDisassociate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventItems.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventPurge.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventRetract.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventSubscription.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubEventSubscriptionType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubItems.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubPublish.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubRetract.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubSubscribe.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubSubscribeOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubSubscription.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubSubscriptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubSubscriptionType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\PubSub\PubSubUnsubscribe.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\RosterVersioning\RosterVersioningFeature.cs" />
+    <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockingErrors.cs" />
+    <Compile Include="Extensions\SimpleCommunicationsBlocking\Block.cs" />
+    <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockItem.cs" />
+    <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockList.cs" />
+    <Compile Include="Extensions\SimpleCommunicationsBlocking\UnBlock.cs" />
+    <Compile Include="Extensions\UserMood\MoodType.cs" />
+    <Compile Include="Extensions\VCardTemp\VCardData.cs" />
+    <Compile Include="Extensions\VCardAvatars\VCardPhoto.cs" />
+    <Compile Include="Extensions\XmppPing\Ping.cs" />
+    <Compile Include="InstantMessaging\Client\Browse.cs" />
+    <Compile Include="InstantMessaging\Client\Error.cs" />
+    <Compile Include="InstantMessaging\Client\ErrorType.cs" />
+    <Compile Include="InstantMessaging\Client\IQ.cs" />
+    <Compile Include="InstantMessaging\Client\IQType.cs" />
+    <Compile Include="InstantMessaging\Client\Message.cs" />
+    <Compile Include="InstantMessaging\Client\MessageBody.cs" />
+    <Compile Include="InstantMessaging\Client\MessageSubject.cs" />
+    <Compile Include="InstantMessaging\Client\MessageType.cs" />
+    <Compile Include="InstantMessaging\Client\NotificationType.cs" />
+    <Compile Include="InstantMessaging\Presence\Presence.cs" />
+    <Compile Include="InstantMessaging\Presence\ShowType.cs" />
+    <Compile Include="InstantMessaging\Presence\Status.cs" />
+    <Compile Include="InstantMessaging\Presence\PresenceType.cs" />
+    <Compile Include="Extensions\EntityCapabilities\EntityCapabilities.cs" />
+    <Compile Include="InstantMessaging\Privacy\PrivacyActionType.cs" />
+    <Compile Include="InstantMessaging\Privacy\Active.cs" />
+    <Compile Include="InstantMessaging\Privacy\Default.cs" />
+    <Compile Include="InstantMessaging\Privacy\PrivacyItem.cs" />
+    <Compile Include="InstantMessaging\Privacy\PrivacyList.cs" />
+    <Compile Include="InstantMessaging\Privacy\PrivacyQuery.cs" />
+    <Compile Include="InstantMessaging\Privacy\PrivacyType.cs" />
+    <Compile Include="InstantMessaging\Register\Register.cs" />
+    <Compile Include="InstantMessaging\Register\RegisterQuery.cs" />
+    <Compile Include="InstantMessaging\Register\RegisterType.cs" />
+    <Compile Include="InstantMessaging\Roster\RosterAskType.cs" />
+    <Compile Include="InstantMessaging\Roster\RosterItem.cs" />
+    <Compile Include="InstantMessaging\Roster\RosterItemCollection.cs" />
+    <Compile Include="InstantMessaging\Roster\RosterQuery.cs" />
+    <Compile Include="InstantMessaging\Roster\RosterSubscriptionType.cs" />
+    <Compile Include="Extensions\ServiceDiscovery\ActionType.cs" />
+    <Compile Include="Extensions\ServiceDiscovery\ServiceFeature.cs" />
+    <Compile Include="Extensions\ServiceDiscovery\ServiceIdentity.cs" />
+    <Compile Include="Extensions\ServiceDiscovery\ServiceItem.cs" />
+    <Compile Include="Extensions\ServiceDiscovery\ServiceItemQuery.cs" />
+    <Compile Include="Extensions\ServiceDiscovery\ServiceQuery.cs" />
+    <Compile Include="Extensions\VCardAvatars\VCardAvatar.cs" />
+    <Compile Include="ItemChoiceType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extensions\UserTune\Tune.cs" />
+    <Compile Include="Extensions\UserMood\Mood.cs" />
+    <Compile Include="XmppSerializer.cs" />
+    <Compile Include="XmppTextWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Extensions\PubSub\PubSubOwner.cs" />
+    <None Include="Schemas\Core\bind.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Core\dialback.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Core\sasl.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Core\stanzaerror.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Core\streamerror.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Core\streams.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Core\tls.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\Bosh\httpbind.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\Extensions\Bosh\XmppOverBosh.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\Extensions\DataForms\x-data.xsd" />
+    <None Include="Schemas\Extensions\PubSub\pubsub-errors.xsd" />
+    <None Include="Schemas\Extensions\PubSub\pubsub-event.xsd" />
+    <None Include="Schemas\Extensions\PubSub\pubsub-owner.xsd" />
+    <None Include="Schemas\Extensions\PubSub\pubsub.xsd" />
+    <None Include="Schemas\Extensions\RosterVersioning\RosterVersioningFeature.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\Extensions\SimpleCommunicationsBlocking\blocking.xsd" />
+    <None Include="Schemas\Extensions\SimpleCommunicationsBlocking\blocking-errors.xsd" />
+    <None Include="Schemas\Extensions\UserMood\mood.xsd" />
+    <None Include="Schemas\Extensions\UserTune\tune.xsd" />
+    <None Include="Schemas\Extensions\vcard-temp\vcard-temp.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\FeatureNegotiation\feature-neg.xsd" />
+    <None Include="Schemas\Extensions\FeatureNegotiation\feature-neg.xsx">
+      <DependentUpon>feature-neg.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\Extensions\FileTransfer\file-transfer.xsd" />
+    <None Include="Schemas\Extensions\FileTransfer\file-transfer.xsx">
+      <DependentUpon>file-transfer.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\Extensions\InBandByteStreams\ibb.xsd" />
+    <None Include="Schemas\Extensions\Socks5ByteStreams\bytestreams.xsd" />
+    <None Include="Schemas\Extensions\XmppPing\ping.xsd" />
+    <None Include="Schemas\InstantMessaging\authentication.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\EntityCapabilities\caps.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\client.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\ServiceDiscovery\disco-info.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\ServiceDiscovery\disco-items.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\iq-browse.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\iq-register-failiure.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\iq-register.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\privacy.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\roster.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\server.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\InstantMessaging\session.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\vcard-avatars\vcard-avatar.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\MultiUserChat\muc-owner.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\MultiUserChat\muc-unique.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\MultiUserChat\muc-user.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\MultiUserChat\muc.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\MultiUserChat\muc-admin.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Schemas\Extensions\StreamInitiation\si.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Serializers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>rem "C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools\x64\sgen.exe" "$(TargetPath)" /force</PostBuildEvent>
+  </PropertyGroup>
+</Project>

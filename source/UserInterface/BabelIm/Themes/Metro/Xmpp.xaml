@@ -1,0 +1,731 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:BabelIm"
+    xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:common="clr-namespace:BabelIm.Common"
+    xmlns:vc="clr-namespace:BabelIm.ValueConverters"
+    xmlns:config="clr-namespace:BabelIm.Configuration;assembly=BabelIm.Configuration"
+    xmlns:xmppim="clr-namespace:BabelIm.Net.Xmpp.InstantMessaging;assembly=BabelIm.Net.Xmpp.InstantMessaging"
+    xmlns:pe="clr-namespace:BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;assembly=BabelIm.Net.Xmpp.InstantMessaging"
+    xmlns:sd="clr-namespace:BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;assembly=BabelIm.Net.Xmpp.InstantMessaging"
+    xmlns:xcontrols="clr-namespace:BabelIm.Controls;assembly=BabelIm.Controls"
+    mc:Ignorable="d"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+    
+    <!-- Global Settings-->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Brushes.xaml"/>
+        <ResourceDictionary Source="Fonts.xaml"/>
+        <ResourceDictionary Source="ServiceIcons.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!-- Converters -->
+    <vc:XmppContactImageConverter x:Key="ImageConverter" />
+
+    <!-- Images -->
+    <BitmapImage x:Key="MailIcon" UriSource="pack://application:,,,/Resources/Mail.png" />
+    
+    <!-- Label TextBox Style -->
+    <Style x:Key="LabelTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver" />
+                                <VisualState x:Name="Disabled" />
+                                <VisualState x:Name="ReadOnly" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusedStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Duration="00:00:00.001" Storyboard.TargetName="border" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        
+                        <ScrollViewer x:Name="PART_ContentHost" 
+                                      BorderThickness="0" BorderBrush="{x:Null}" 
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        
+                        <Border x:Name="border"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" Visibility="Collapsed" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--ExpandableMenu-->
+    <Style x:Key="ExpandableMenu" TargetType="{x:Type Expander}">
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="BorderBrush" Value="#00FFFFFF" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Expander}">
+                    <ControlTemplate.Resources>
+                        <ControlTemplate x:Key="ExpanderUpHeaderTemplate" TargetType="{x:Type ToggleButton}">
+                            <Border Padding="{TemplateBinding Padding}">
+                                <Grid SnapsToDevicePixels="False" Background="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="19" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Width="16" Height="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Path 
+                                             StrokeThickness="2" 
+                                             HorizontalAlignment="Center" 
+                                             x:Name="arrow" 
+                                             VerticalAlignment="Center" 
+                                             SnapsToDevicePixels="false" 
+                                             Data="M 1,1.5 L 4.5,5 L 8,1.5" 
+                                             Grid.RowSpan="1" 
+                                             RenderTransformOrigin="0.5,0.5" 
+                                             Stroke="{StaticResource TextBrush}">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                    </Grid>
+                                    <ContentPresenter HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Center" SnapsToDevicePixels="True" Grid.Column="1" RecognizesAccessKey="True" />
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="RenderTransform" TargetName="arrow">
+                                        <Setter.Value>
+                                            <TransformGroup>
+                                                <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                            </TransformGroup>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ControlTemplate.Resources>
+                    
+                    <Border SnapsToDevicePixels="true" 
+                            CornerRadius="0" 
+                            x:Name="ExpanderBorder" 
+                            Background="#00A7A6A6">
+                        <DockPanel>
+                            <ToggleButton 
+                                x:Name="HeaderSite" 
+                                Margin="1" 
+                                MinHeight="0" 
+                                MinWidth="0" 
+                                Template="{StaticResource ExpanderUpHeaderTemplate}" 
+                                Content="{TemplateBinding Header}" 
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" 
+                                ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" 
+                                FontFamily="{TemplateBinding FontFamily}" 
+                                FontSize="{TemplateBinding FontSize}" 
+                                FontStretch="{TemplateBinding FontStretch}" 
+                                FontStyle="{TemplateBinding FontStyle}" 
+                                FontWeight="{TemplateBinding FontWeight}" 
+                                Foreground="{TemplateBinding Foreground}" 
+                                HorizontalAlignment="Center"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                Padding="{TemplateBinding Padding}" 
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                DockPanel.Dock="Top" Background="#FF000000" 
+                                BorderBrush="{TemplateBinding BorderBrush}" Opacity="1" />
+
+                            <Border
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter 
+                                    x:Name="ExpandSite" 
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                    Margin="{TemplateBinding Padding}" 
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                    Focusable="false" 
+                                    Visibility="Collapsed" 
+                                />
+                            </Border>
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseEnter" SourceName="ExpanderBorder">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames 
+                                        BeginTime="00:00:00" 
+                                        Storyboard.TargetName="HeaderSite" 
+                                        Storyboard.TargetProperty="(UIElement.Opacity)">
+                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        
+                        <EventTrigger RoutedEvent="UIElement.MouseLeave" SourceName="ExpanderBorder">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames 
+                                        BeginTime="00:00:00" 
+                                        Storyboard.TargetName="HeaderSite" 
+                                        Storyboard.TargetProperty="(UIElement.Opacity)">
+                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <Trigger Property="IsExpanded" Value="true">
+                            <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Up">
+                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Top" />
+                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Bottom" />
+                            <Setter Property="Template" TargetName="HeaderSite" Value="{StaticResource ExpanderUpHeaderTemplate}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="ExpandSite" Value="0.5" />
+                            <Setter Property="Opacity" TargetName="HeaderSite" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- AvatarImage -->
+    <Style x:Key="{x:Type xcontrols:AvatarImage}" TargetType="{x:Type xcontrols:AvatarImage}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xcontrols:AvatarImage}">
+                    <Grid x:Name="RootElement">
+                        <Border Effect="{StaticResource DropShadowBrush}" />
+                        <Image Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Image}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Contact Templates -->
+    <DataTemplate DataType="{x:Type xmppim:XmppContact}">
+        <Grid x:Name="Layout">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="58" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="58" Height="58">
+                <xcontrols:AvatarImage Width="48" Height="48" Image="{Binding Path=Resource.Avatar, Mode=OneWay, Converter={StaticResource ImageConverter}}" />
+            </Grid>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBox x:Name="ScreenName"
+                         Style="{StaticResource LabelTextBox}" 
+                         Text="{Binding Path=DisplayName, Mode=TwoWay}"
+                         FontWeight="SemiBold" FontSize="14" 
+                         VerticalAlignment="Bottom" 
+                         HorizontalAlignment="Left" 
+                         Cursor="Hand" />
+                
+                <TextBlock x:Name="StatusText" 
+                           Text="{Binding Path=Presence.StatusMessage}" 
+                           FontFamily="Segoe WP Light"
+                           FontSize="10" 
+                           TextWrapping="Wrap" 
+                           Margin="0,0,5,0" />
+                
+                <TextBlock x:Name="PresenceText" Text="{Binding Path=Presence.PresenceStatus}" FontSize="10" FontWeight="Light" Margin="0,0,3.5,0" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BigContactTemplate" DataType="{x:Type xmppim:XmppContact}">
+        <Grid x:Name="Layout" Margin="5,10,5,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*" />
+                <RowDefinition Height="50*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Rectangle x:Name="ContactStatus"
+                       Grid.Column="0" Grid.RowSpan="2"
+                       Width="15" Height="Auto" Margin="3.5"
+                       HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                       Fill="Transparent" />
+
+            <!--<TextBox x:Name="ScreenName"
+                        Style="{StaticResource LabelTextBox}" 
+                        Text="{Binding Path=DisplayName, Mode=TwoWay}" 
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Margin="3.5"
+                        Cursor="Hand" />-->
+
+            <TextBlock x:Name="ScreenName"
+                       Grid.Column="1" Grid.Row="0"
+                       Text="{Binding Path=DisplayName, Mode=TwoWay}" 
+                       FontFamily="Segoe WP SemiLight" FontSize="{StaticResource HeaderFontSize}" FontWeight="Light"
+                       HorizontalAlignment="Left" Margin="3.5"
+                       Cursor="Hand" />
+
+            <TextBlock x:Name="StatusText" 
+                       Grid.Column="1" Grid.Row="1"
+                       Text="{Binding Path=Presence.StatusMessage}" 
+                       FontSize="12" FontWeight="Light"
+                       TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" 
+                       HorizontalAlignment="Left" Margin="3.5" />
+
+            <xcontrols:AvatarImage x:Name="AvatarImage"
+                                   Grid.Column="2" Grid.RowSpan="2"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   Width="96" Height="96" Margin="3.5"
+                                   Image="{Binding Path=Resource.Avatar, Mode=OneWay, Converter={StaticResource ImageConverter}}" />
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Available">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#339933" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Away">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Idle">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+                <Setter TargetName="ContactStatus" Property="Opacity" Value="0.5" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Busy">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#E51400" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Offline">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="{StaticResource GrayBrush1}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="NormalContactTemplate" DataType="{x:Type xmppim:XmppContact}">
+        <Grid x:Name="Layout" Margin="5,10,5,10" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*" />
+                <RowDefinition Height="50*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Rectangle x:Name="ContactStatus"
+                       Grid.Column="0" Grid.RowSpan="2"
+                       Width="15" Height="Auto" Margin="3.5"
+                       HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                       Fill="Transparent" />
+                       
+            <!--<TextBox x:Name="ScreenName"
+                        Style="{StaticResource LabelTextBox}" 
+                        Text="{Binding Path=DisplayName, Mode=TwoWay}" 
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Margin="3.5"
+                        Cursor="Hand" />-->
+
+            <TextBlock x:Name="ScreenName"
+                       Grid.Column="1" Grid.Row="0"
+                       Text="{Binding Path=DisplayName, Mode=TwoWay}" 
+                       FontFamily="Segoe WP SemiLight" FontSize="{StaticResource HeaderFontSize}" FontWeight="Light"
+                       HorizontalAlignment="Left" Margin="3.5"
+                       Cursor="Hand" />
+
+            <TextBlock x:Name="StatusText" 
+                       Grid.Column="1" Grid.Row="1"
+                       Text="{Binding Path=Presence.StatusMessage}" 
+                       FontSize="12" FontWeight="Light"
+                       TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" 
+                       HorizontalAlignment="Left" Margin="3.5" />
+
+            <xcontrols:AvatarImage x:Name="AvatarImage"
+                                   Grid.Column="2" Grid.RowSpan="2"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   Width="48" Height="48" Margin="3.5"
+                                   Image="{Binding Path=Resource.Avatar, Mode=OneWay, Converter={StaticResource ImageConverter}}" />
+        </Grid>
+        
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Available">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#339933" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Away">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Idle">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+                <Setter TargetName="ContactStatus" Property="Opacity" Value="0.5" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Busy">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#E51400" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Offline">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="{StaticResource GrayBrush1}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SmallContactTemplate" DataType="{x:Type xmppim:XmppContact}">
+        <Grid x:Name="Layout" Margin="5,10,5,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+                        
+            <Rectangle x:Name="ContactStatus"
+                       Grid.Column="0" 
+                       Width="15" Height="Auto" 
+                       HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3.5"
+                       Fill="Transparent" />
+
+            <StackPanel Grid.Column="1">
+                <TextBlock x:Name="ScreenName"
+                           Text="{Binding Path=DisplayName, Mode=TwoWay}" 
+                           FontSize="{StaticResource HeaderFontSize}" FontWeight="Light"
+                           HorizontalAlignment="Left" Margin="3.5"
+                           Cursor="Hand" />
+
+                <TextBlock x:Name="StatusText" 
+                           Text="{Binding Path=Presence.StatusMessage}" 
+                           FontSize="12" FontWeight="Light"
+                           TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" 
+                           HorizontalAlignment="Left" Margin="3.5" />
+            </StackPanel>
+
+            <xcontrols:AvatarImage 
+                Grid.Column="2"
+                x:Name="AvatarImage"
+                Width="32" Height="32" 
+                Image="{Binding Path=Resource.Avatar, Mode=OneWay, Converter={StaticResource ImageConverter}}"
+                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3.5" />
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Available">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#339933" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Away">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Idle">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+                <Setter TargetName="ContactStatus" Property="Opacity" Value="0.5" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Busy">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#E51400" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Offline">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="{StaticResource GrayBrush1}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="StatusOnlyContactTemplate" DataType="{x:Type xmppim:XmppContact}">
+        <Grid x:Name="Layout" Margin="5,10,5,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="22" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Rectangle x:Name="ContactStatus"
+                       Grid.Column="0" 
+                       Width="15" Height="Auto" Margin="3.5"
+                       HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                       Fill="Transparent" />
+
+            <TextBlock x:Name="ScreenName"
+                       Grid.Column="1"
+                       Text="{Binding Path=DisplayName, Mode=TwoWay}" 
+                       FontSize="{StaticResource HeaderFontSize}" FontWeight="Light"
+                       HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3.5"
+                       Cursor="Hand" />
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Available">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#339933" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Away">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Idle">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#F09609" />
+                <Setter TargetName="ContactStatus" Property="Opacity" Value="0.5" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Busy">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="#E51400" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Presence.PresenceStatus}" Value="Offline">
+                <Setter TargetName="ContactStatus" Property="Fill" Value="{StaticResource GrayBrush1}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <!-- Contact List Style -->
+    <Style x:Key="ContactListStyle" 
+           TargetType="{x:Type ListBox}" 
+           BasedOn="{StaticResource DefaultListBoxStyle}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="BorderBrush" Value="{x:Null}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+        <Setter Property="Margin" Value="3.5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ScrollViewer x:Name="ScrollViewer" Grid.Row="0" 
+                                      BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                      Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+
+                        <Slider x:Name="TemplateSelector" Grid.Row="1"
+                                Minimum="1" Maximum="4" Value="3" 
+                                IsSnapToTickEnabled="True" 
+                                IsMoveToPointEnabled="True"
+                                HorizontalContentAlignment="Stretch" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="TemplateSelector" Property="RangeBase.Value" Value="4">
+                            <Setter Property="ItemsControl.ItemTemplate" Value="{StaticResource BigContactTemplate}" />
+                        </Trigger>
+                        <Trigger SourceName="TemplateSelector" Property="RangeBase.Value" Value="3">
+                            <Setter Property="ItemsControl.ItemTemplate" Value="{StaticResource NormalContactTemplate}" />
+                        </Trigger>
+                        <Trigger SourceName="TemplateSelector" Property="RangeBase.Value" Value="2">
+                            <Setter Property="ItemsControl.ItemTemplate" Value="{StaticResource SmallContactTemplate}" />
+                        </Trigger>
+                        <Trigger SourceName="TemplateSelector" Property="RangeBase.Value" Value="1">
+                            <Setter Property="ItemsControl.ItemTemplate" Value="{StaticResource StatusOnlyContactTemplate}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Personal Eventing and Activity Templates -->
+    
+    <!-- Message Event -->
+    <DataTemplate DataType="{x:Type pe:XmppMessageEvent}">
+        <Grid x:Name="Layout" Margin="5,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" x:Name="StatusImage" Width="48" Height="48" VerticalAlignment="Center" HorizontalAlignment="Left" Source="{StaticResource MailIcon}" />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock x:Name="MessageSubject"
+                         Text="{Binding Path=Message.Subject}" 
+                         FontWeight="Bold" 
+                         FontSize="14" 
+                         VerticalAlignment="Bottom" 
+                         HorizontalAlignment="Left" />
+                <TextBlock x:Name="MessageBody" 
+                           Text="{Binding Path=Message.Body}" 
+                           FontSize="10" 
+                           TextWrapping="Wrap" 
+                           Margin="0,0,5,0" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <!-- User Mood -->
+    <DataTemplate DataType="{x:Type pe:XmppUserMoodEvent}">
+        <Grid x:Name="Layout" Margin="5,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <xcontrols:AvatarImage 
+                Grid.Column="0" 
+                Width="48" 
+                Height="48" 
+                Margin="0,0,4,0"
+                Image="{Binding Path=User.Resource.Avatar, Mode=OneWay, Converter={StaticResource ImageConverter}}" 
+            />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock x:Name="UserName"
+                         Text="{Binding Path=User.DisplayName}" 
+                         FontWeight="Bold" 
+                         FontSize="12" 
+                         VerticalAlignment="Bottom" 
+                         HorizontalAlignment="Left" />
+                <TextBlock x:Name="MoodTitle"
+                         Text="{Binding Path=Mood}" 
+                         FontWeight="Bold" 
+                         FontSize="14" 
+                         VerticalAlignment="Bottom" 
+                         HorizontalAlignment="Left" />
+                <TextBlock x:Name="MoodText" 
+                           Text="{Binding Path=Text}" 
+                           FontSize="10" 
+                           TextWrapping="Wrap" 
+                           Margin="0,0,5,0" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <!-- User Tune -->
+    <DataTemplate DataType="{x:Type pe:XmppUserTuneEvent}">
+        <Grid x:Name="Layout" Margin="5,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="22" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <xcontrols:AvatarImage 
+                Grid.Column="0"
+                x:Name="AvatarImage"
+                Width="48" 
+                Height="48" 
+                Image="{Binding Path=User.Resource.Avatar, Mode=OneWay, Converter={StaticResource ImageConverter}}"
+                HorizontalAlignment="Left"
+            />
+            <Image Grid.Column="1" x:Name="StatusImage" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Left" Source="{StaticResource MusicStatusIcon}" />
+            <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <WrapPanel>
+                    <TextBlock x:Name="UserName"
+                         Text="{Binding Path=User.DisplayName, Mode=OneWay}" 
+                         FontSize="10" 
+                         HorizontalAlignment="Left" 
+                    />
+                    <TextBlock x:Name="ListeningLiteral"
+                         Text=" is listening" 
+                         FontSize="10" 
+                         HorizontalAlignment="Left" 
+                    />
+                </WrapPanel>
+                <TextBlock x:Name="TuneArtist"
+                         Text="{Binding Path=Artist, Mode=OneWay}" 
+                         FontSize="10" 
+                         HorizontalAlignment="Left" 
+                />                
+                <TextBlock x:Name="TuneTitle"
+                     Text="{Binding Path=Title, Mode=OneWay}" 
+                     FontWeight="Bold" 
+                     FontSize="10" 
+                     HorizontalAlignment="Left" 
+                />
+                <WrapPanel>
+                    <TextBlock x:Name="TuneSource"
+                     Text="{Binding Path=Source, Mode=OneWay}" 
+                     FontSize="10" 
+                     HorizontalAlignment="Left" 
+                    />
+                    <TextBlock x:Name="TrackTitle"
+                     Text="{Binding Path=Track, Mode=OneWay, TargetNullValue={x:Static sys:String.Empty}, StringFormat=-{0}}" 
+                     FontSize="10" 
+                     HorizontalAlignment="Left" 
+                    />
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+    
+    <!-- Gateway Service Template -->
+    <DataTemplate DataType="{x:Type sd:XmppGatewayService}">
+        <Grid x:Name="Layout" Margin="5,10,5,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image x:Name="GatewayIcon" Grid.Column="0" Width="48" Height="48" />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock x:Name="ServiceName"
+                         Text="{Binding Path=Name}" 
+                         FontWeight="Bold" 
+                         FontSize="10" 
+                         VerticalAlignment="Bottom" 
+                         HorizontalAlignment="Left" />
+                <TextBlock x:Name="ServiceCategory" 
+                           Text="{Binding Path=Category}" 
+                           FontSize="10" />
+                <TextBlock x:Name="ServiceId" 
+                           Text="{Binding Path=ServiceId}" 
+                           FontSize="10" />
+            </StackPanel>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Type}" Value="Aim">
+                <Setter TargetName="GatewayIcon" Property="Source" Value="{StaticResource AimTransportServiceIcon}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Type}" Value="GTalk">
+                <Setter TargetName="GatewayIcon" Property="Source" Value="{StaticResource GTalkTransportServiceIcon}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Type}" Value="Icq">
+                <Setter TargetName="GatewayIcon" Property="Source" Value="{StaticResource IcqTransportServiceIcon}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Type}" Value="Msn">
+                <Setter TargetName="GatewayIcon" Property="Source" Value="{StaticResource MsnTransportServiceIcon}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Type}" Value="Xmpp">
+                <Setter TargetName="GatewayIcon" Property="Source" Value="{StaticResource XmppTransportServiceIcon}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Type}" Value="Yahoo">
+                <Setter TargetName="GatewayIcon" Property="Source" Value="{StaticResource YahooTransportServiceIcon}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
+    <!-- XMPP Service Template -->
+    <DataTemplate DataType="{x:Type sd:XmppService}">
+        <Grid x:Name="Layout" Margin="5,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Width="48" Height="48" Source="{StaticResource XmppTransportServiceIcon}" />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock x:Name="ServiceName"
+                         Text="{Binding Path=Name}" 
+                         FontWeight="Bold" 
+                         FontSize="10" 
+                         VerticalAlignment="Bottom" 
+                         HorizontalAlignment="Left" />
+                <TextBlock x:Name="ServiceCategory" 
+                           Text="{Binding Path=Category}" 
+                           FontSize="10" />
+                <TextBlock x:Name="SeviceId" 
+                           Text="{Binding Path=ServiceId}" 
+                           FontSize="10" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

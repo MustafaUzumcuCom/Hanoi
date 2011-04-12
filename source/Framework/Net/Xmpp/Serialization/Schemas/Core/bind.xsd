@@ -1,0 +1,52 @@
+<!--RFC3920 : Extensible Messaging and Presence Protocol (XMPP): Core-->
+<!--XEP-0193: Proposed Resource Binding Improvements-->
+<xs:schema
+    xmlns:xs='http://www.w3.org/2001/XMLSchema'
+    targetNamespace='urn:ietf:params:xml:ns:xmpp-bind'
+    xmlns='urn:ietf:params:xml:ns:xmpp-bind'
+    elementFormDefault='qualified'>
+
+  <xs:element name='bind'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs='0' maxOccurs='1'>
+          <xs:element name='resource' type='resourceType'/>
+          <xs:element name='jid' type='fullJIDType'/>
+        </xs:choice>
+        <xs:element name='required'
+                    minOccurs='0'
+                    maxOccurs='1'
+                    type='empty'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='unbind'>
+    <xs:complexType>
+      <xs:sequence minOccurs='0'>
+        <xs:element name='resource' type='resourceType'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name='resourceType'>
+    <xs:restriction base='xs:string'>
+      <xs:minLength value='1'/>
+      <xs:maxLength value='1023'/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='fullJIDType'>
+    <xs:restriction base='xs:string'>
+      <xs:minLength value='8'/>
+      <xs:maxLength value='3071'/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='empty'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value=''/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>

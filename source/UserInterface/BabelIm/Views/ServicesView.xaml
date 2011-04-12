@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="BabelIm.Views.ServicesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Focusable="False">
+    
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="ServicesViewSource" Source="{Binding Path=ServiceDiscovery.Services, Mode=OneWay}" />
+    </UserControl.Resources>
+
+    <DockPanel x:Name="LayoutRoot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <ListBox x:Name="ServicesListBox" 
+                 ScrollViewer.CanContentScroll="False" 
+                 IsSynchronizedWithCurrentItem="True" 
+                 ItemsSource="{Binding Source={StaticResource ServicesViewSource}}" 
+                 Grid.Row="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                 BorderThickness="0,0,0,0">
+        </ListBox>
+    </DockPanel>
+</UserControl>

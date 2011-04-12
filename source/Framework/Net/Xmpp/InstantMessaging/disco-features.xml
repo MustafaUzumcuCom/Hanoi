@@ -1,0 +1,810 @@
+<registry type="disco-features">
+  <var>
+    <name>dnssrv</name>
+    <desc>Support for DNS SRV lookups of XMPP services.</desc>
+    <doc>RFC 3920: XMPP Core, RFC 3921: XMPP IM</doc>
+  </var>
+  <var>
+    <name>fullunicode</name>
+    <desc>Support for Unicode characters, including in displayed text, JIDs, and passwords.</desc>
+    <doc>N/A</doc>
+  </var>
+  <var>
+    <name>gc-1.0</name>
+    <desc>Support for the "groupchat 1.0" protocol.</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/activity</name>
+    <desc>See XEP-0108</desc>
+    <doc>XEP-0108: User Activity</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/address</name>
+    <desc>See XEP-0033</desc>
+    <doc>XEP-0033: Extended Stanza Addressing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp</name>
+    <desc>See XEP-0079</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp#errors</name>
+    <desc>See XEP-0079</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp?action=alert</name>
+    <desc>Support for the "alert" action in Advanced Message Processing.</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp?action=drop</name>
+    <desc>Support for the "drop" action in Advanced Message Processing.</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp?action=error</name>
+    <desc>Support for the "error" action in Advanced Message Processing.</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp?action=notify</name>
+    <desc>Support for the "notify" action in Advanced Message Processing.</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp?condition=deliver</name>
+    <desc>Support for the "deliver" condition in Advanced Message Processing.</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp?condition=expire-at</name>
+    <desc>Support for the "expire-at" condition in Advanced Message Processing.</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/amp?condition=match-resource</name>
+    <desc>Support for the "match-resource" condition in Advanced Message Processing.</desc>
+    <doc>XEP-0079: Advanced Message Processing</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/bytestreams</name>
+    <desc>See XEP-0065</desc>
+    <doc>XEP-0065: SOCKS5 Bytestreams</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/bytestreams#udp</name>
+    <desc>See XEP-0065</desc>
+    <doc>XEP-0065: SOCKS5 Bytestreams</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/caps</name>
+    <desc>See XEP-0115</desc>
+    <doc>XEP-0115: Entity Capabilities</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/chatstates</name>
+    <desc>See XEP-0085</desc>
+    <doc>XEP-0085: Chat State Notifications</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/commands</name>
+    <desc>See XEP-0050</desc>
+    <doc>XEP-0050: Ad-Hoc Commands</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/compress</name>
+    <desc>See XEP-0138</desc>
+    <doc>XEP-0138: Stream Compression</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/disco#info</name>
+    <desc>See XEP-0030</desc>
+    <doc>XEP-0030: Service Discovery</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/disco#items</name>
+    <desc>See XEP-0030</desc>
+    <doc>XEP-0030: Service Discovery</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/feature-neg</name>
+    <desc>See XEP-0020</desc>
+    <doc>XEP-0020: Feature Negotiation</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/geoloc</name>
+    <desc>See XEP-0080</desc>
+    <doc>XEP-0080: User Geolocation</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/http-auth</name>
+    <desc>See XEP-0072</desc>
+    <doc>XEP-0072: SOAP Over XMPP</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/httpbind</name>
+    <desc>See XEP-0124</desc>
+    <doc>XEP-0124: Bidirectional-streams Over Synchronous HTTP</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/ibb</name>
+    <desc>See XEP-0047</desc>
+    <doc>XEP-0047: In-Band Bytestreams</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/mood</name>
+    <desc>See XEP-0107</desc>
+    <doc>XEP-0107: User Mood</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/muc</name>
+    <desc>See XEP-0045</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/muc#admin</name>
+    <desc>See XEP-0045</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/muc#owner</name>
+    <desc>See XEP-0045</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/muc#register</name>
+    <desc>Support for the muc#register FORM_TYPE in Multi-User Chat.</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/muc#roomconfig</name>
+    <desc>Support for the muc#roomconfig FORM_TYPE in Multi-User Chat.</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/muc#roominfo</name>
+    <desc>Support for the muc#roominfo FORM_TYPE in Multi-User Chat.</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/muc#user</name>
+    <desc>See XEP-0045</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/offline</name>
+    <desc>See XEP-0013</desc>
+    <doc>XEP-0013: Flexible Offline Message Retrieval</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/physloc</name>
+    <desc>DEPRECATED</desc>
+    <doc>XEP-0080: User Geolocation</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#access-authorize</name>
+    <desc>The default node access model is authorize.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#access-open</name>
+    <desc>The default node access model is open.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#access-presence</name>
+    <desc>The default node access model is presence.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#access-roster</name>
+    <desc>The default node access model is roster.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#access-whitelist</name>
+    <desc>The default node access model is whitelist.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#auto-create</name>
+    <desc>The service supports automatic creation of nodes on first publish.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#auto-subscribe</name>
+    <desc>The service supports automatic subscription to a nodes based on presence subscription.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#collections</name>
+    <desc>Collection nodes are supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#config-node</name>
+    <desc>Configuration of node options is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#create-and-configure</name>
+    <desc>Simultaneous creation and configuration of nodes is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#create-nodes</name>
+    <desc>Creation of nodes is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#delete-any</name>
+    <desc>Any publisher may delete an item (not only the originating publisher).</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#delete-nodes</name>
+    <desc>Deletion of nodes is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#filtered-notifications</name>
+    <desc>The service supports filtering of notifications based on Entity Capabilities.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#get-pending</name>
+    <desc>Retrieval of pending subscription approvals is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#instant-nodes</name>
+    <desc>Creation of instant nodes is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#item-ids</name>
+    <desc>Publishers may specify item identifiers.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#last-published</name>
+    <desc>
+      The service supports sending of the last published item to new
+      subscribers and to newly available resources.
+    </desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#leased-subscription</name>
+    <desc>Time-based subscriptions are supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#manage-subscription</name>
+    <desc>Node owners may manage subscriptions.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#member-affiliation</name>
+    <desc>The member affiliation is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#meta-data</name>
+    <desc>Node meta-data is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#modify-affiliations</name>
+    <desc>Node owners may modify affiliations.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#multi-collection</name>
+    <desc>A single leaf node may be associated with multiple collections.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#multi-subscribe</name>
+    <desc>A single entity may subscribe to a node multiple times.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#outcast-affiliation</name>
+    <desc>The outcast affiliation is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#persistent-items</name>
+    <desc>Persistent items are supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#presence-notifications</name>
+    <desc>Presence-based delivery of event notifications is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#presence-subscribe</name>
+    <desc>Implicit presence-based subscriptions are supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#publish</name>
+    <desc>Publishing items is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#publish-options</name>
+    <desc>Publication with publish options is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#publisher-affiliation</name>
+    <desc>The publisher affiliation is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#purge-nodes</name>
+    <desc>Purging of nodes is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#retract-items</name>
+    <desc>Item retraction is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#retrieve-affiliations</name>
+    <desc>Retrieval of current affiliations is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#retrieve-default</name>
+    <desc>Retrieval of default node configuration is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#retrieve-items</name>
+    <desc>Item retrieval is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#retrieve-subscriptions</name>
+    <desc>Retrieval of current subscriptions is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#subscribe</name>
+    <desc>Subscribing and unsubscribing are supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#subscription-options</name>
+    <desc>Configuration of subscription options is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/pubsub#subscription-notifications</name>
+    <desc>Notification of subscription state changes is supported.</desc>
+    <doc>XEP-0060</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/rosterx</name>
+    <desc>See XEP-0144</desc>
+    <doc>XEP-0144: Roster Item Exchange</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/sipub</name>
+    <desc>See XEP-0137</desc>
+    <doc>XEP-0137: Publishing SI Requests</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/soap</name>
+    <desc>See XEP-0072</desc>
+    <doc>XEP-0072: SOAP Over XMPP</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/soap#fault</name>
+    <desc>See XEP-0072</desc>
+    <doc>XEP-0072: SOAP Over XMPP</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/waitinglist</name>
+    <desc>See XEP-0130</desc>
+    <doc>XEP-0130: Waiting Lists</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/waitinglist</name>
+    <desc>See XEP-0130</desc>
+    <doc>XEP-0130: Waiting Lists</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/waitinglist/schemes/mailto</name>
+    <desc>Waiting list service supports the mailto: URI scheme.</desc>
+    <doc>XEP-0130: Waiting Lists</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/waitinglist/schemes/tel</name>
+    <desc>Waiting list service supports the tel: URI scheme.</desc>
+    <doc>XEP-0130: Waiting Lists</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/xhtml-im</name>
+    <desc>See XEP-0071</desc>
+    <doc>XEP-0071: XHTML-IM</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/xdata-layout</name>
+    <desc>See XEP-0141</desc>
+    <doc>XEP-0141: Data Forms Layout</doc>
+  </var>
+  <var>
+    <name>http://jabber.org/protocol/xdata-validate</name>
+    <desc>See XEP-0122</desc>
+    <doc>XEP-0122: Data Forms Validation</doc>
+  </var>
+  <var>
+    <name>ipv6</name>
+    <desc>Application supports IPv6.</desc>
+    <doc>N/A</doc>
+  </var>
+  <var>
+    <name>jabber:client</name>
+    <desc>See RFC 3921</desc>
+    <doc>RFC 3921: XMPP IM</doc>
+  </var>
+  <var>
+    <name>jabber:component:accept</name>
+    <desc>See XEP-0114</desc>
+    <doc>XEP-0114: Existing Component Protocol</doc>
+  </var>
+  <var>
+    <name>jabber:component:connect</name>
+    <desc>See XEP-0114</desc>
+    <doc>XEP-0114: Existing Component Protocol</doc>
+  </var>
+  <var>
+    <name>jabber:iq:auth</name>
+    <desc>See XEP-0078</desc>
+    <doc>XEP-0078: Non-SASL Authentication</doc>
+  </var>
+  <var>
+    <name>jabber:iq:browse</name>
+    <desc>See XEP-0011</desc>
+    <doc>XEP-0011 (DEPRECATED)</doc>
+  </var>
+  <var>
+    <name>jabber:iq:gateway</name>
+    <desc>See XEP-0100</desc>
+    <doc>XEP-0100: Gateway Interaction</doc>
+  </var>
+  <var>
+    <name>jabber:iq:last</name>
+    <desc>See XEP-0012</desc>
+    <doc>XEP-0012: Last Activity</doc>
+  </var>
+  <var>
+    <name>jabber:iq:oob</name>
+    <desc>See XEP-0066</desc>
+    <doc>XEP-0066: Out of Band Data</doc>
+  </var>
+  <var>
+    <name>jabber:iq:pass</name>
+    <desc>See XEP-0003</desc>
+    <doc>XEP-0003 (DEPRECATED)</doc>
+  </var>
+  <var>
+    <name>jabber:iq:privacy</name>
+    <desc>See RFC 3921</desc>
+    <doc>RFC 3921: XMPP IM</doc>
+  </var>
+  <var>
+    <name>jabber:iq:private</name>
+    <desc>See XEP-0049</desc>
+    <doc>XEP-0049: Private XML Storage</doc>
+  </var>
+  <var>
+    <name>jabber:iq:register</name>
+    <desc>See XEP-0077</desc>
+    <doc>XEP-0077: In-Band Registration</doc>
+  </var>
+  <var>
+    <name>jabber:iq:roster</name>
+    <desc>See RFC 3921</desc>
+    <doc>RFC 3921: XMPP IM</doc>
+  </var>
+  <var>
+    <name>jabber:iq:rpc</name>
+    <desc>See XEP-0009</desc>
+    <doc>XEP-0009: Jabber-RPC</doc>
+  </var>
+  <var>
+    <name>jabber:iq:search</name>
+    <desc>See XEP-0055</desc>
+    <doc>XEP-0055: Jabber Search</doc>
+  </var>
+  <var>
+    <name>jabber:iq:time</name>
+    <desc>DEPRECATED</desc>
+    <doc>XEP-0202: Entity Time</doc>
+  </var>
+  <var>
+    <name>jabber:iq:version</name>
+    <desc>See XEP-0092</desc>
+    <doc>XEP-0092: Software Version</doc>
+  </var>
+  <var>
+    <name>jabber:server</name>
+    <desc>See RFC 3921</desc>
+    <doc>RFC 3921: XMPP IM</doc>
+  </var>
+  <var>
+    <name>jabber:x:data</name>
+    <desc>See XEP-0004</desc>
+    <doc>XEP-0004: Data Forms</doc>
+  </var>
+  <var>
+    <name>jabber:x:delay</name>
+    <desc>DEPRECATED</desc>
+    <doc>XEP-0203: Delayed Delivery</doc>
+  </var>
+  <var>
+    <name>jabber:x:encrypted</name>
+    <desc>See XEP-0027</desc>
+    <doc>XEP-0027: Current OpenPGP Usage</doc>
+  </var>
+  <var>
+    <name>jabber:x:event</name>
+    <desc>See XEP-0022</desc>
+    <doc>XEP-0022 (DEPRECATED)</doc>
+  </var>
+  <var>
+    <name>jabber:x:expire</name>
+    <desc>See XEP-0023</desc>
+    <doc>XEP-0023 (DEPRECATED)</doc>
+  </var>
+  <var>
+    <name>jabber:x:oob</name>
+    <desc>See XEP-0066</desc>
+    <doc>XEP-0066: Out of Band Data</doc>
+  </var>
+  <var>
+    <name>jabber:x:roster</name>
+    <desc>See XEP-0093</desc>
+    <doc>XEP-0093 (DEPRECATED)</doc>
+  </var>
+  <var>
+    <name>jabber:x:signed</name>
+    <desc>See XEP-0027</desc>
+    <doc>XEP-0027: Current OpenPGP Usage</doc>
+  </var>
+  <var>
+    <name>msglog</name>
+    <desc>Application performs logging or archiving of messages.</desc>
+    <doc>N/A</doc>
+  </var>
+  <var>
+    <name>msgoffline</name>
+    <desc>Server stores messages offline for later delivery.</desc>
+    <doc>XEP-0160: Best Practices for Handling Offline Messages</doc>
+  </var>
+  <var>
+    <name>muc_hidden</name>
+    <desc>Hidden room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_membersonly</name>
+    <desc>Members-only room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_moderated</name>
+    <desc>Moderated room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_nonanonymous</name>
+    <desc>Non-anonymous room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_open</name>
+    <desc>Open room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_passwordprotected</name>
+    <desc>Password-protected room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_persistent</name>
+    <desc>Persistent room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_public</name>
+    <desc>Public room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_rooms</name>
+    <desc>List of MUC rooms (each as a separate item)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_semianonymous</name>
+    <desc>Semi-anonymous room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_temporary</name>
+    <desc>Temporary room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_unmoderated</name>
+    <desc>Unmoderated room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>muc_unsecured</name>
+    <desc>Unsecured room in Multi-User Chat (MUC)</desc>
+    <doc>XEP-0045: Multi-User Chat</doc>
+  </var>
+  <var>
+    <name>roster:delimiter</name>
+    <desc>See XEP-0083</desc>
+    <doc>XEP-0083: Nested Roster Groups</doc>
+  </var>
+  <var>
+    <name>sslc2s</name>
+    <desc>Application supports old-style (pre-TLS) SSL connections on a dedicated port.</desc>
+    <doc>N/A</doc>
+  </var>
+  <var>
+    <name>stringprep</name>
+    <desc>Application supports the nameprep, nodeprep, and resourceprep profiles of stringprep.</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-bind</name>
+    <desc>See RFC 3920</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-e2e</name>
+    <desc>See RFC 3921</desc>
+    <doc>RFC 3923: XMPP E2E</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-sasl</name>
+    <desc>See RFC 3920</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-sasl#c2s</name>
+    <desc>Application supports client-to-server SASL.</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-sasl#s2s</name>
+    <desc>Application supports server-to-server SASL.</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-session</name>
+    <desc>See RFC 3921</desc>
+    <doc>RFC 3921: XMPP IM</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-stanzas</name>
+    <desc>See RFC 3920</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-streams</name>
+    <desc>See RFC 3920</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-tls</name>
+    <desc>See RFC 3920</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-tls#c2s</name>
+    <desc>Application supports client-to-server TLS.</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:params:xml:ns:xmpp-tls#s2s</name>
+    <desc>Application supports server-to-server TLS.</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>urn:ietf:rfc:3264</name>
+    <desc>See XEP-0176</desc>
+    <doc>XEP-0176: Jingle ICE-UDP Transport Method</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:archive:auto</name>
+    <desc>Server supports automatic message archiving</desc>
+    <doc>XEP-0136: Message Archiving</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:archive:manage</name>
+    <desc>Server supports management of archived messages</desc>
+    <doc>XEP-0136: Message Archiving</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:archive:manual</name>
+    <desc>Server supports manual message archiving</desc>
+    <doc>XEP-0136: Message Archiving</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:archive:pref</name>
+    <desc>Server supports message archiving preferences</desc>
+    <doc>XEP-0136: Message Archiving</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:avatar:data</name>
+    <desc>See XEP-0084</desc>
+    <doc>XEP-0084: User Avatars</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:avatar:metadata</name>
+    <desc>See XEP-0084</desc>
+    <doc>XEP-0084: User Avatars</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:delay</name>
+    <desc>See XEP-0203</desc>
+    <doc>XEP-0203: Delayed Delivery</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:jingle:apps:rtp:audio</name>
+    <desc>See XEP-0167</desc>
+    <doc>XEP-0167: Jingle RTP Sessions</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:jingle:apps:rtp:video</name>
+    <desc>See XEP-0167</desc>
+    <doc>XEP-0167: Jingle RTP Sessions</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:ping</name>
+    <desc>See XEP-0199</desc>
+    <doc>XEP-0199: XMPP Ping</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:receipts</name>
+    <desc>See XEP-0199</desc>
+    <doc>XEP-0199: XMPP Ping</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:ssn</name>
+    <desc>Support for Stanza Session Negotiation and its FORM_TYPE</desc>
+    <doc>XEP-0155: Stanza Session Negotiation</doc>
+  </var>
+  <var>
+    <name>urn:xmpp:time</name>
+    <desc>See XEP-0202</desc>
+    <doc>XEP-0202: Entity Time</doc>
+  </var>
+  <var>
+    <name>xmllang</name>
+    <desc>Application supports the 'xml:lang' attribute as described in RFC 3920.</desc>
+    <doc>RFC 3920: XMPP Core</doc>
+  </var>
+  <var>
+    <name>vcard-temp</name>
+    <desc>See XEP-0054</desc>
+    <doc>XEP-0054: vcard-temp</doc>
+  </var>
+</registry>
