@@ -17,9 +17,9 @@
     <notification type="incomingchat">true</notification>
   </notifications>
   <servers>
-    <server name="devcovato">
-      <server>app2.digibusiness.it</server>
-      <domain>digibusiness.it</domain>
+    <server name="Google Talk">
+      <server>talk.google.com</server>
+      <domain>gmail.com</domain>
       <portnumber>5222</portnumber>
       <timeout>30</timeout>
       <useproxy>false</useproxy>
@@ -28,7 +28,7 @@
       <proxyportnumber>0</proxyportnumber>
       <proxyusername></proxyusername>
       <proxypassword></proxypassword>
-      <resolvehostname>false</resolvehostname>
+      <resolvehostname>true</resolvehostname>
       <usehttpbinding>false</usehttpbinding>
     </server>
     <server name="Neko IM">
@@ -45,28 +45,14 @@
       <resolvehostname>true</resolvehostname>
       <usehttpbinding>false</usehttpbinding>
     </server>
-    <server name="Google Talk">
-      <server>talk.google.com</server>
-      <domain>gmail.com</domain>
-      <portnumber>5222</portnumber>
-      <timeout>30</timeout>
-      <useproxy>false</useproxy>
-      <proxytype></proxytype>
-      <proxyserver></proxyserver>
-      <proxyportnumber>0</proxyportnumber>
-      <proxyusername></proxyusername>
-      <proxypassword></proxypassword>
-      <resolvehostname>true</resolvehostname>
-      <usehttpbinding>false</usehttpbinding>
-    </server>
   </servers>
   <accounts>
-    <account name="devcovato" server="devcovato">
+    <account name="Google Talk" server="Google Talk">
       <login>
-        <username>carlosga</username>
+        <username>carlosga05</username>
         <password></password>
       </login>
-      <displayName>Carlos</displayName>
+      <displayName>Carliños</displayName>
       <avatar></avatar>
       <presence>Available</presence>
       <status></status>
@@ -78,17 +64,6 @@
         <password></password>
       </login>
       <displayName>Carlos</displayName>
-      <avatar></avatar>
-      <presence>Available</presence>
-      <status></status>
-      <resource>Home</resource>
-    </account>
-    <account name="Google Talk" server="Google Talk">
-      <login>
-        <username>carlosga05</username>
-        <password></password>
-      </login>
-      <displayName>Carliños</displayName>
       <avatar></avatar>
       <presence>Available</presence>
       <status></status>

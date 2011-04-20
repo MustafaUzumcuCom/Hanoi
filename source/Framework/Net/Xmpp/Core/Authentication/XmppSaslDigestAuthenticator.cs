@@ -206,20 +206,27 @@ namespace BabelIm.Net.Xmpp.Core
 
         private string BuildDigestRespose()
         {
-            StringBuilder response = new StringBuilder();
+            StringBuilder   response    = new StringBuilder();
+            string          digestUri   = String.Empty;
 
             response.AppendFormat("username=\"{0}\",", this.Connection.UserId.UserName);
 
             if (this.digestChallenge.ContainsKey("realm"))
             {
                 response.AppendFormat("realm=\"{0}\",", this.digestChallenge["realm"]);
+                
+                digestUri = String.Format("xmpp/{0}", this.digestChallenge["realm"]);
+            }
+            else
+            {
+                digestUri = String.Format("xmpp/{0}", this.Connection.HostName);
             }
 
             response.AppendFormat("nonce=\"{0}\","          , this.digestChallenge["nonce"]);
             response.AppendFormat("cnonce=\"{0}\","         , this.cnonce);
             response.AppendFormat("nc={0},"                 , "00000001");
             response.AppendFormat("qop={0},"                , this.SelectProtectionQuality());
-            response.AppendFormat("digest-uri=\"{0}/{1}\"," , "xmpp", this.Connection.HostName);
+            response.AppendFormat("digest-uri=\"{0}\","     , digestUri);
             response.AppendFormat("response={0},"           , this.GenerateResponseValue());
             response.AppendFormat("charset={0}"             , this.digestChallenge["charset"]);
 
@@ -228,11 +235,11 @@ namespace BabelIm.Net.Xmpp.Core
 
         private string GenerateResponseValue()
         {
-            string realm		= ((this.digestChallenge.ContainsKey("realm")) ? this.digestChallenge["realm"] : String.Empty);
+            string realm		= ((this.digestChallenge.ContainsKey("realm")) ? this.digestChallenge["realm"] : this.Connection.HostName);
             string nonce		= this.digestChallenge["nonce"].ToString();
             string userId		= this.Connection.UserId.UserName;
             string password		= this.Connection.UserPassword;
-            string digestURI	= String.Format("xmpp/{0}", this.Connection.HostName);
+            string digestURI	= String.Format("xmpp/{0}", realm);
             string quop			= this.SelectProtectionQuality();
 
             /*
