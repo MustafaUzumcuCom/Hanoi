@@ -30,31 +30,24 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:client")]
-	public enum ErrorType
-	{
-		/// <remarks/>
-		[XmlEnumAttribute("auth")]
-		Auth,
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:client")]
+    public enum ErrorType {
+        /// <remarks />
+        [XmlEnumAttribute("auth")] Auth,
 
-		/// <remarks/>
-		[XmlEnumAttribute("cancel")]
-		Cancel,
+        /// <remarks />
+        [XmlEnumAttribute("cancel")] Cancel,
 
-		/// <remarks/>
-		[XmlEnumAttribute("continue")]
-		Continue,
+        /// <remarks />
+        [XmlEnumAttribute("continue")] Continue,
 
-		/// <remarks/>
-		[XmlEnumAttribute("modify")]
-		Modify,
+        /// <remarks />
+        [XmlEnumAttribute("modify")] Modify,
 
-		/// <remarks/>
-		[XmlEnumAttribute("wait")]
-		Wait,
-	}
+        /// <remarks />
+        [XmlEnumAttribute("wait")] Wait,
+    }
 }

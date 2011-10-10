@@ -30,49 +30,30 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.Nickname
-{
-	/// <summary>
-    /// XEP-0172: User Nickname
-	/// </summary>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "http://jabber.org/protocol/nick")]
-	[XmlRootAttribute("nick", Namespace = "http://jabber.org/protocol/nick", IsNullable = false)]
-	public class Nickname
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.Nickname {
+    /// <summary>
+    ///   XEP-0172: User Nickname
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/nick")]
+    [XmlRootAttribute("nick", Namespace = "http://jabber.org/protocol/nick", IsNullable = false)]
+    public class Nickname {
+        private string nick;
+        private string valueField;
 
-		private string nick;
-		private string valueField;
+        /// <remarks />
+        [XmlAttributeAttribute("nick", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://jabber.org/protocol/nick")]
+        public string Nick {
+            get { return nick; }
+            set { nick = value; }
+        }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlAttributeAttribute("nick", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://jabber.org/protocol/nick")]
-		public string Nick
-		{
-			get { return this.nick; }
-			set { this.nick = value; }
-		}
-
-		/// <remarks/>
-		[XmlTextAttribute()]
-		public string Value
-		{
-			get { return this.valueField; }
-			set { this.valueField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public Nickname()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
+    }
 }

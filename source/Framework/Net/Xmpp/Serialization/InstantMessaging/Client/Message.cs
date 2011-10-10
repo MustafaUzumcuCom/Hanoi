@@ -34,103 +34,86 @@ using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat.User;
 using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client
-{
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace = "jabber:client")]
+    [XmlType(Namespace = "jabber:client")]
     [XmlRootAttribute("message", Namespace = "jabber:client", IsNullable = false)]
-    public class Message
-    {
-        #region · Fields ·
-
-        private ArrayList itemsField;
+    public class Message {
         private Error errorField;
         private string fromField;
         private string idField;
+        private ArrayList itemsField;
+        private string langField;
         private string toField;
         private MessageType typeField;
-        private string langField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("subject", typeof(MessageSubject))]
-        [XmlElementAttribute("body", typeof(MessageBody))]
-        [XmlElementAttribute("thread", typeof(string), DataType = "NMTOKEN")]
-        [XmlElementAttribute("active", typeof(NotificationActive), Namespace = "http://jabber.org/protocol/chatstates")]
-        [XmlElementAttribute("composing", typeof(NotificationComposing), Namespace = "http://jabber.org/protocol/chatstates")]
-        [XmlElementAttribute("gone", typeof(NotificationGone), Namespace = "http://jabber.org/protocol/chatstates")]
-        [XmlElementAttribute("inactive", typeof(NotificationInactive), Namespace = "http://jabber.org/protocol/chatstates")]
-        [XmlElementAttribute("paused", typeof(NotificationPaused), Namespace = "http://jabber.org/protocol/chatstates")]
-        [XmlElementAttribute("event", typeof(PubSubEvent), Namespace = "http://jabber.org/protocol/pubsub#event")]
-        [XmlElementAttribute("x", Type = typeof(MucUser), Namespace = "http://jabber.org/protocol/muc#user")]
-        public ArrayList Items
-        {
-            get { return this.itemsField; }
+        public Message() {
+            typeField = MessageType.Normal;
+            itemsField = new ArrayList();
         }
 
-        /// <remarks/>
+        /// <remarks />
+        [XmlElementAttribute("subject", typeof (MessageSubject))]
+        [XmlElementAttribute("body", typeof (MessageBody))]
+        [XmlElementAttribute("thread", typeof (string), DataType = "NMTOKEN")]
+        [XmlElementAttribute("active", typeof (NotificationActive), Namespace = "http://jabber.org/protocol/chatstates")
+        ]
+        [XmlElementAttribute("composing", typeof (NotificationComposing),
+            Namespace = "http://jabber.org/protocol/chatstates")]
+        [XmlElementAttribute("gone", typeof (NotificationGone), Namespace = "http://jabber.org/protocol/chatstates")]
+        [XmlElementAttribute("inactive", typeof (NotificationInactive),
+            Namespace = "http://jabber.org/protocol/chatstates")]
+        [XmlElementAttribute("paused", typeof (NotificationPaused), Namespace = "http://jabber.org/protocol/chatstates")
+        ]
+        [XmlElementAttribute("event", typeof (PubSubEvent), Namespace = "http://jabber.org/protocol/pubsub#event")]
+        [XmlElementAttribute("x", Type = typeof (MucUser), Namespace = "http://jabber.org/protocol/muc#user")]
+        public ArrayList Items {
+            get { return itemsField; }
+        }
+
+        /// <remarks />
         [XmlElement("error")]
-        public Error Error
-        {
-            get { return this.errorField; }
-            set { this.errorField = value; }
+        public Error Error {
+            get { return errorField; }
+            set { errorField = value; }
         }
-                
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("from")]
-        public string From
-        {
-            get { return this.fromField; }
-            set { this.fromField = value; }
+        public string From {
+            get { return fromField; }
+            set { fromField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("id", DataType = "NMTOKEN")]
-        public string ID
-        {
-            get { return this.idField; }
-            set { this.idField = value; }
+        public string ID {
+            get { return idField; }
+            set { idField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("to")]
-        public string To
-        {
-            get { return this.toField; }
-            set { this.toField = value; }
+        public string To {
+            get { return toField; }
+            set { toField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("type")]
-        [DefaultValueAttribute(MessageType.Normal)]
-        public MessageType Type
-        {
-            get { return this.typeField; }
-            set { this.typeField = value; }
+        [DefaultValue(MessageType.Normal)]
+        public MessageType Type {
+            get { return typeField; }
+            set { typeField = value; }
         }
 
-        /// <remarks/>
-        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
-        public string Lang
-        {
-            get { return this.langField; }
-            set { this.langField = value; } 
+        /// <remarks />
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Message()
-        {
-            this.typeField	= MessageType.Normal;
-            this.itemsField = new ArrayList();
-        }
-
-        #endregion
     }
 }

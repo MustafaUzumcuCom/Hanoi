@@ -31,41 +31,22 @@ using System;
 using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.DataForms;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat 
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace="http://jabber.org/protocol/muc#owner")]
-    [XmlRootAttribute("query", Namespace="http://jabber.org/protocol/muc#owner", IsNullable=false)]
-    public class MucOwnerQuery
-	{
-		#region · Fields ·
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#owner")]
+    [XmlRootAttribute("query", Namespace = "http://jabber.org/protocol/muc#owner", IsNullable = false)]
+    public class MucOwnerQuery {
+        private object item;
 
-		private object item;
-
-		#endregion
-     
-		#region · Properties ·
-
-        /// <remarks/>
-		[XmlElementAttribute("x", typeof(DataForm), Namespace="jabber:x:data")]
-        [XmlElementAttribute("destroy", typeof(MucUserDestroy))]
-		public object Item
-		{
-			get { return this.item; }
-			set { this.item = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public MucOwnerQuery()
-		{
-		}
-
-		#endregion
-    }    
+        /// <remarks />
+        [XmlElementAttribute("x", typeof (DataForm), Namespace = "jabber:x:data")]
+        [XmlElementAttribute("destroy", typeof (MucUserDestroy))]
+        public object Item {
+            get { return item; }
+            set { item = value; }
+        }
+    }
 }

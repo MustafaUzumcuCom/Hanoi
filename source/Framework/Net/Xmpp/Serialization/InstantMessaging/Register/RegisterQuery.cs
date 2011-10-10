@@ -30,48 +30,37 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register
-{
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace = "jabber:iq:register")]
+    [XmlType(Namespace = "jabber:iq:register")]
     [XmlRootAttribute("query", Namespace = "jabber:iq:register", IsNullable = false)]
-    public class RegisterQuery
-    {
-        #region · Fields ·
-
-        private string usernameField;
+    public class RegisterQuery {
         private string passwordField;
         private string removeField;
+        private string usernameField;
         // private object itemField;
         // private RegisterType itemElementNameField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("username")]
-        public string UserName
-        {
-            get { return this.usernameField; }
-            set { this.usernameField = value; }
+        public string UserName {
+            get { return usernameField; }
+            set { usernameField = value; }
         }
 
-        /// <remarks/>
-        [XmlElementAttribute("password", typeof(string))]
-        public string Password
-        {
-            get { return this.passwordField; }
-            set { this.passwordField = value; }
+        /// <remarks />
+        [XmlElementAttribute("password", typeof (string))]
+        public string Password {
+            get { return passwordField; }
+            set { passwordField = value; }
         }
 
-        /// <remarks/>
-        [XmlElementAttribute("remove", typeof(string))]
-        public string Remove
-        {
-            get { return this.removeField; }
-            set { this.removeField = value; }
+        /// <remarks />
+        [XmlElementAttribute("remove", typeof (string))]
+        public string Remove {
+            get { return removeField; }
+            set { removeField = value; }
         }
 
         /*
@@ -111,7 +100,5 @@ namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register
             set { this.itemElementNameField = value; }
         }
         */
-
-        #endregion
     }
 }

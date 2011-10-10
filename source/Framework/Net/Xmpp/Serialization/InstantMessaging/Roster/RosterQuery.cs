@@ -30,38 +30,22 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:iq:roster")]
-	[XmlRootAttribute("query", Namespace = "jabber:iq:roster", IsNullable = false)]
-	public class RosterQuery
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:iq:roster")]
+    [XmlRootAttribute("query", Namespace = "jabber:iq:roster", IsNullable = false)]
+    public class RosterQuery {
+        private RosterItemCollection itemsField;
 
-		private RosterItemCollection itemsField;
+        public RosterQuery() {
+            itemsField = new RosterItemCollection();
+        }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlElementAttribute("item")]
-		public RosterItemCollection Items
-		{
-			get { return this.itemsField; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public RosterQuery()
-		{
-			this.itemsField = new RosterItemCollection();
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlElementAttribute("item")]
+        public RosterItemCollection Items {
+            get { return itemsField; }
+        }
+    }
 }

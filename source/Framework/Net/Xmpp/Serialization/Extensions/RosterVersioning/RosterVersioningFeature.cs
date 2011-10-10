@@ -30,51 +30,31 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding
-{
+namespace BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding {
     /// <summary>
-    /// XEP-0237: Roster Versioning
+    ///   XEP-0237: Roster Versioning
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace = "urn:xmpp:features:rosterver")]
+    [XmlType(Namespace = "urn:xmpp:features:rosterver")]
     [XmlRootAttribute("ver", Namespace = "urn:xmpp:features:rosterver")]
-    public class RosterVersioningFeature
-    {
-        #region · Fields ·
+    public class RosterVersioningFeature {
+        private ItemChoiceType itemElementNameField;
+        private Empty itemField;
 
-        private Empty           itemField;    
-        private ItemChoiceType  itemElementNameField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("optional", typeof(Empty))]
-        [XmlElementAttribute("required", typeof(Empty))]
+        /// <remarks />
+        [XmlElementAttribute("optional", typeof (Empty))]
+        [XmlElementAttribute("required", typeof (Empty))]
         [XmlChoiceIdentifierAttribute("ItemElementName")]
-        public Empty Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
+        public Empty Item {
+            get { return itemField; }
+            set { itemField = value; }
         }
-    
-        /// <remarks/>
+
+        /// <remarks />
         [XmlIgnoreAttribute]
-        public ItemChoiceType ItemElementName
-        {
-            get { return this.itemElementNameField; }
-            set { this.itemElementNameField = value; }
+        public ItemChoiceType ItemElementName {
+            get { return itemElementNameField; }
+            set { itemElementNameField = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public RosterVersioningFeature()
-        {
-        }
-
-        #endregion
     }
 }

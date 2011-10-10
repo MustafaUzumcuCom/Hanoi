@@ -31,46 +31,26 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace="http://jabber.org/protocol/muc#admin")]
-    [XmlRootAttribute("query", Namespace="http://jabber.org/protocol/muc#admin", IsNullable=false)]
-    public class MucAdminQuery 
-    {
-    	#region · Fields ·
-
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#admin")]
+    [XmlRootAttribute("query", Namespace = "http://jabber.org/protocol/muc#admin", IsNullable = false)]
+    public class MucAdminQuery {
         private List<MucAdminItem> items;
-    	
-    	#endregion
-    	
-    	#region · Properties ·
-    	
-        /// <remarks/>
+
+        /// <remarks />
         [XmlElementAttribute("item")]
-        public List<MucAdminItem> Items
-        {
-        	get 
-        	{ 
-        		if (this.items == null)
-        		{
-        			this.items = new List<MucAdminItem>();
-        		}
-        		return this.items;
-        	}
+        public List<MucAdminItem> Items {
+            get {
+                if (items == null)
+                {
+                    items = new List<MucAdminItem>();
+                }
+                return items;
+            }
         }
-        
-        #endregion
-        
-        #region · Constructors ·
-        
-        public MucAdminQuery()
-        {
-        }
-        
-        #endregion
     }
 }

@@ -30,59 +30,38 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery
-{
-	/// <summary>
-    /// XEP-0030: Service Discovery
-	/// </summary>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "http://jabber.org/protocol/disco#info")]
-	[XmlRootAttribute("identity", Namespace = "http://jabber.org/protocol/disco#info", IsNullable = false)]
-	public class ServiceIdentity
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#info")]
+    [XmlRootAttribute("identity", Namespace = "http://jabber.org/protocol/disco#info", IsNullable = false)]
+    public class ServiceIdentity {
+        private string categoryField;
+        private string nameField;
+        private string typeField;
+        // private string valueField;
 
-		private string categoryField;
-		private string nameField;
-		private string typeField;
-		// private string valueField;
+        /// <remarks />
+        [XmlAttributeAttribute("category")]
+        public string Category {
+            get { return categoryField; }
+            set { categoryField = value; }
+        }
 
-		#endregion
+        /// <remarks />
+        [XmlAttributeAttribute("name")]
+        public string Name {
+            get { return nameField; }
+            set { nameField = value; }
+        }
 
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlAttributeAttribute("category")]
-		public string Category
-		{
-			get { return this.categoryField; }
-			set { this.categoryField = value; }
-		}
-
-		/// <remarks/>
-		[XmlAttributeAttribute("name")]
-		public string Name
-		{
-			get { return this.nameField; }
-			set { this.nameField = value; }
-		}
-
-		/// <remarks/>
-		[XmlAttributeAttribute("type")]
-		public string Type
-		{
-			get { return this.typeField; }
-			set { this.typeField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public ServiceIdentity()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlAttributeAttribute("type")]
+        public string Type {
+            get { return typeField; }
+            set { typeField = value; }
+        }
+    }
 }

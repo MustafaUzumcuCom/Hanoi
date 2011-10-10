@@ -27,45 +27,28 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("affiliations", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubAffiliations
-    {
-        #region · Fields ·
-
+    public class PubSubAffiliations {
         private List<PubSubAffiliation> affiliationField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("affiliation")]
-        public List<PubSubAffiliation> Affiliation
-        {
-            get { return this.affiliationField; }
-            set { this.affiliationField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubAffiliations()
-        {
-            if ((this.affiliationField == null))
+        public PubSubAffiliations() {
+            if ((affiliationField == null))
             {
-                this.affiliationField = new List<PubSubAffiliation>();
+                affiliationField = new List<PubSubAffiliation>();
             }
         }
 
-        #endregion
+        /// <remarks />
+        [XmlElementAttribute("affiliation")]
+        public List<PubSubAffiliation> Affiliation {
+            get { return affiliationField; }
+            set { affiliationField = value; }
+        }
     }
 }

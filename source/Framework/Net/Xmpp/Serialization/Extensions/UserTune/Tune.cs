@@ -27,109 +27,56 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.UserTune
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.UserTune {
     /// <summary>
-    /// XEP-0118: User Tune
+    ///   XEP-0118: User Tune
     /// </summary>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/tune")]
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/tune")]
     [XmlRootAttribute("tune", Namespace = "http://jabber.org/protocol/tune", IsNullable = false)]
-    public class Tune
-    {
-        #region · Fields ·
+    public class Tune {
+        private ushort lengthField;
+        private bool lengthFieldSpecified;
 
-        private string  artistField;
-        private ushort  lengthField;
-        private bool    lengthFieldSpecified;
-        private string  ratingField;
-        private string  sourceField;
-        private string  titleField;
-        private string  trackField;
-        private string  uriField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("artist")]
-        public string Artist
-        {
-            get { return this.artistField; }
-            set { this.artistField = value; }
-        }
+        public string Artist { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("length", DataType = "unsignedShort")]
-        public ushort Length
-        {
-            get { return this.lengthField; }
-            set
-            {
-                this.lengthField = value;
-                this.lengthFieldSpecified = true;
+        public ushort Length {
+            get { return lengthField; }
+            set {
+                lengthField = value;
+                lengthFieldSpecified = true;
             }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool LengthSpecified
-        {
-            get { return this.lengthFieldSpecified; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool LengthSpecified {
+            get { return lengthFieldSpecified; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("rating", DataType = "positiveInteger")]
-        public string Rating
-        {
-            get { return this.ratingField; }
-            set { this.ratingField = value; }
-        }
+        public string Rating { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("source")]
-        public string Source
-        {
-            get { return this.sourceField; }
-            set { this.sourceField = value; }
-        }
+        public string Source { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("title")]
-        public string Title
-        {
-            get { return this.titleField; }
-            set { this.titleField = value; }
-        }
+        public string Title { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("track")]
-        public string Track
-        {
-            get { return this.trackField; }
-            set { this.trackField = value; }
-        }
+        public string Track { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("uri", DataType = "anyURI")]
-        public string Uri
-        {
-            get { return this.uriField; }
-            set { this.uriField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Tune()
-        {
-        }
-
-        #endregion
+        public string Uri { get; set; }
     }
 }

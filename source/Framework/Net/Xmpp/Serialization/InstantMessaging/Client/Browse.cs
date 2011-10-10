@@ -30,20 +30,14 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:iq:browse")]
-	[XmlRootAttribute("query", Namespace = "jabber:iq:browse", IsNullable = false)]
-	public class Browse
-	{
-		#region · Constructors ·
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:iq:browse")]
+    [XmlRootAttribute("query", Namespace = "jabber:iq:browse", IsNullable = false)]
+    public class Browse {
+        #region · Constructors ·
 
-		public Browse()
-		{
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

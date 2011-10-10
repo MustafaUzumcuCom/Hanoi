@@ -30,39 +30,20 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCard
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCard {
     /// <summary>
-    /// XEP-0153: vCard-Based Avatars
+    ///   XEP-0153: vCard-Based Avatars
     /// </summary>
     [Serializable]
     [XmlType(Namespace = "vcard-temp:x:update")]
     [XmlRoot("x", Namespace = "vcard-temp:x:update", IsNullable = false)]
-    public class VCardAvatar
-    {
-        #region · Fields ·
-
+    public class VCardAvatar {
         private string photo;
 
-        #endregion
-
-        #region · Properties ·
-
         [XmlElement("photo")]
-        public string Photo
-        {
-            get { return this.photo; }
-            set { this.photo = value; }
+        public string Photo {
+            get { return photo; }
+            set { photo = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public VCardAvatar()
-        {
-        }
-
-        #endregion
     }
 }

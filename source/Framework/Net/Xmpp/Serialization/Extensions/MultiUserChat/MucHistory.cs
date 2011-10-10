@@ -30,124 +30,93 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat 
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace="http://jabber.org/protocol/muc")]
-    [XmlRootAttribute("history", Namespace="http://jabber.org/protocol/muc", IsNullable=false)]
-    public class MucHistory 
-    {
-    	#region · Fields ·
+    [XmlType(Namespace = "http://jabber.org/protocol/muc")]
+    [XmlRootAttribute("history", Namespace = "http://jabber.org/protocol/muc", IsNullable = false)]
+    public class MucHistory {
+        private int maxchars;
+        private bool maxcharsSpecified;
+        private int maxstanzas;
+        private bool maxstanzasSpecified;
+        private int seconds;
+        private bool secondsSpecified;
+        private DateTime since;
+        private bool sinceSpecified;
+        private string value;
 
-    	private int 		maxchars;
-        private bool 		maxcharsSpecified;
-        private int 		maxstanzas;
-        private bool 		maxstanzasSpecified;
-        private int 		seconds;
-        private bool 		secondsSpecified;
-        private DateTime 	since;
-        private bool 		sinceSpecified;
-        private string 		value;
-    	
-    	#endregion
-    	
-    	#region · Properties ·
-    	
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("maxchars")]
-        public int Maxchars
-        {
-        	get { return this.maxchars; }
-        	set 
-        	{
-        		this.maxchars 			= value; 
-        		this.maxcharsSpecified 	= true;
-        	}
+        public int Maxchars {
+            get { return maxchars; }
+            set {
+                maxchars = value;
+                maxcharsSpecified = true;
+            }
         }
-        
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool MaxcharsSpecified
-        {
-        	get { return this.maxcharsSpecified; }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool MaxcharsSpecified {
+            get { return maxcharsSpecified; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("maxstanzas")]
-        public int Maxstanzas
-        {
-        	get { return this.maxstanzas; }
-        	set 
-        	{
-        		this.maxstanzas = value;
-        		this.maxstanzasSpecified = true;
-        	}
+        public int Maxstanzas {
+            get { return maxstanzas; }
+            set {
+                maxstanzas = value;
+                maxstanzasSpecified = true;
+            }
         }
-        
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool MaxstanzasSpecified
-        {
-        	get { return this.maxstanzasSpecified; }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool MaxstanzasSpecified {
+            get { return maxstanzasSpecified; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("seconds")]
-        public int Seconds
-        {
-        	get { return this.seconds; }
-        	set 
-        	{
-        		this.seconds 			= value;
-        		this.secondsSpecified 	= true;
-        	}
+        public int Seconds {
+            get { return seconds; }
+            set {
+                seconds = value;
+                secondsSpecified = true;
+            }
         }
-        
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool SecondsSpecified
-        {
-        	get { return this.secondsSpecified; }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool SecondsSpecified {
+            get { return secondsSpecified; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("since")]
-        public DateTime Since
-        {
-        	get { return this.since; }
-        	set 
-        	{
-        		this.since 			= value;
-        		this.sinceSpecified = true;
-        	}
+        public DateTime Since {
+            get { return since; }
+            set {
+                since = value;
+                sinceSpecified = true;
+            }
         }
-        
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool SinceSpecified
-        {
-        	get { return this.sinceSpecified; }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool SinceSpecified {
+            get { return sinceSpecified; }
         }
-        
-        /// <remarks/>
-        [XmlTextAttribute()]
-        public string Value
-        {
-        	get { return this.value; }
-        	set { this.value = value; }
+
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return value; }
+            set { this.value = value; }
         }
-        
-        #endregion
-        
-        #region · Constructors ·
-        
-        public MucHistory()
-        {
-        }
-        
-        #endregion
     }
 }

@@ -31,45 +31,25 @@ using System;
 using System.Collections.Specialized;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-	[XmlRootAttribute("mechanisms", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-	public class Mechanisms
-	{
-		#region · Fields ·
-
+namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+    [XmlRootAttribute("mechanisms", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
+    public class Mechanisms {
         private StringCollection saslMechanisms;
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlElementAttribute("mechanism")]
-		public StringCollection SaslMechanisms
-		{
-            get 
-            {
-                if (this.saslMechanisms == null)
+        /// <remarks />
+        [XmlElementAttribute("mechanism")]
+        public StringCollection SaslMechanisms {
+            get {
+                if (saslMechanisms == null)
                 {
-                    this.saslMechanisms = new StringCollection();
+                    saslMechanisms = new StringCollection();
                 }
 
-                return this.saslMechanisms; 
+                return saslMechanisms;
             }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public Mechanisms()
-		{
-		}
-
-		#endregion
-	}
+        }
+    }
 }

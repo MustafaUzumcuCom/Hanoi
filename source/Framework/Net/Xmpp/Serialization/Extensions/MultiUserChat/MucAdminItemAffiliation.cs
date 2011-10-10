@@ -27,35 +27,27 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat 
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
-    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/muc#admin")]
-    public enum MucAdminItemAffiliation
-    {
-        /// <remarks/>
-        [XmlEnumAttribute("admin")]
-        Admin,
-        
-        /// <remarks/>
-        [XmlEnumAttribute("member")]
-        Member,
-        
-        /// <remarks/>
-        [XmlEnumAttribute("none")]
-        None,
-        
-        /// <remarks/>
-        [XmlEnumAttribute("outcast")]
-        Outcast,
-        
-        /// <remarks/>
-        [XmlEnumAttribute("owner")]
-        Owner,
-    }    
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#admin")]
+    public enum MucAdminItemAffiliation {
+        /// <remarks />
+        [XmlEnumAttribute("admin")] Admin,
+
+        /// <remarks />
+        [XmlEnumAttribute("member")] Member,
+
+        /// <remarks />
+        [XmlEnumAttribute("none")] None,
+
+        /// <remarks />
+        [XmlEnumAttribute("outcast")] Outcast,
+
+        /// <remarks />
+        [XmlEnumAttribute("owner")] Owner,
+    }
 }

@@ -30,39 +30,30 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IncludeInSchema = false)]
-	public enum FailiureType
-	{
-		/// <remarks/>
-		[XmlEnumAttribute("not-authorized")]
-		NotAuthorized,
+namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IncludeInSchema = false)]
+    public enum FailiureType {
+        /// <remarks />
+        [XmlEnumAttribute("not-authorized")] NotAuthorized,
 
-		/// <remarks/>
-		[XmlEnumAttribute("mechanism-too-weak")]
-		MechanismTooWeak,
+        /// <remarks />
+        [XmlEnumAttribute("mechanism-too-weak")] MechanismTooWeak,
 
-		/// <remarks/>
-		[XmlEnumAttribute("temporary-auth-failure")]
-		TemporaryAuthFailure,
+        /// <remarks />
+        [XmlEnumAttribute("temporary-auth-failure")] TemporaryAuthFailure,
 
-		/// <remarks/>
-		[XmlEnumAttribute("invalid-authzid")]
-		InvalidAuthzid,
+        /// <remarks />
+        [XmlEnumAttribute("invalid-authzid")] InvalidAuthzid,
 
-		/// <remarks/>
-		[XmlEnumAttribute("aborted")]
-		Aborted,
+        /// <remarks />
+        [XmlEnumAttribute("aborted")] Aborted,
 
-		/// <remarks/>
-		[XmlEnumAttribute("incorrect-encoding")]
-		IncorrectEncoding,
+        /// <remarks />
+        [XmlEnumAttribute("incorrect-encoding")] IncorrectEncoding,
 
-		/// <remarks/>
-		[XmlEnumAttribute("invalid-mechanism")]
-		InvalidMechanism,
-	}
+        /// <remarks />
+        [XmlEnumAttribute("invalid-mechanism")] InvalidMechanism,
+    }
 }

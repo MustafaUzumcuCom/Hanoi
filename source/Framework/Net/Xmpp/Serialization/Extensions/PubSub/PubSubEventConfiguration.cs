@@ -27,55 +27,32 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.DataForms;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
     [XmlRootAttribute("configuration", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventConfiguration
-    {
-        #region · Fields ·
-
+    public class PubSubEventConfiguration {
         private DataForm dataForm;
-        private string nodeField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute(Namespace = "jabber:x:data")]
-        public DataForm DataForm
-        {
-            get { return this.dataForm; }
-            set { this.dataForm = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubEventConfiguration()
-        {
-            if ((this.dataForm == null))
+        public PubSubEventConfiguration() {
+            if ((dataForm == null))
             {
-                this.dataForm = new DataForm();
+                dataForm = new DataForm();
             }
         }
 
-        #endregion
-    }
+        /// <remarks />
+        [XmlElementAttribute(Namespace = "jabber:x:data")]
+        public DataForm DataForm {
+            get { return dataForm; }
+            set { dataForm = value; }
+        }
 
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node { get; set; }
+    }
 }

@@ -30,118 +30,89 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat 
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace="http://jabber.org/protocol/muc#admin")]
-    [XmlRootAttribute("item", Namespace="http://jabber.org/protocol/muc#admin", IsNullable=false)]
-    public class MucAdminItem 
-    {
-    	#region · Fields ·
-    	
-        private MucAdminActor 			actor;
-        private string                  reason;
-        private MucAdminContinue        muccontinue;
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#admin")]
+    [XmlRootAttribute("item", Namespace = "http://jabber.org/protocol/muc#admin", IsNullable = false)]
+    public class MucAdminItem {
+        private MucAdminActor actor;
         private MucAdminItemAffiliation affiliation;
-        private bool                    affiliationSpecified;
-        private string                  jid;
-        private string                  nick;
-        private MucAdminItemRole        role;
-        private bool                    roleSpecified;
-    	
-    	#endregion
-    	
-    	#region · Properties ·
-    	
-        /// <remarks/>
+        private bool affiliationSpecified;
+        private string jid;
+        private MucAdminContinue muccontinue;
+        private string nick;
+        private string reason;
+        private MucAdminItemRole role;
+        private bool roleSpecified;
+
+        /// <remarks />
         [XmlElement("actor")]
-        public MucAdminActor Actor
-        {
-        	get { return this.actor; }
-        	set { this.actor = value; }
+        public MucAdminActor Actor {
+            get { return actor; }
+            set { actor = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlElement("reason")]
-        public string Reason
-        {
-        	get { return this.reason; }
-        	set { this.reason = value; }
+        public string Reason {
+            get { return reason; }
+            set { reason = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlElement("continue")]
-        public MucAdminContinue Continue
-        {
-        	get { return this.muccontinue; }
-        	set { this.muccontinue = value; }
+        public MucAdminContinue Continue {
+            get { return muccontinue; }
+            set { muccontinue = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("affiliation")]
-        public MucAdminItemAffiliation Affiliation
-        {
-        	get { return this.affiliation; }
-        	set 
-        	{ 
-        		this.affiliation 			= value;
-        		this.affiliationSpecified 	= true;
-        	}
+        public MucAdminItemAffiliation Affiliation {
+            get { return affiliation; }
+            set {
+                affiliation = value;
+                affiliationSpecified = true;
+            }
         }
-        
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool AffiliationSpecified
-        {
-        	get { return this.affiliationSpecified; }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool AffiliationSpecified {
+            get { return affiliationSpecified; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("jid")]
-        public string Jid
-        {
-        	get { return this.jid; }
-        	set { this.jid = value; }
+        public string Jid {
+            get { return jid; }
+            set { jid = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("nick")]
-        public string Nick
-        {
-        	get { return this.nick; }
-        	set { this.nick = value; }
+        public string Nick {
+            get { return nick; }
+            set { nick = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("role")]
-        public MucAdminItemRole Role
-        {
-        	get { return this.role; }
-        	set 
-        	{ 
-        		this.role 			= value;
-        		this.roleSpecified	= true;
-        	}
+        public MucAdminItemRole Role {
+            get { return role; }
+            set {
+                role = value;
+                roleSpecified = true;
+            }
         }
-        
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool RoleSpecified
-        {
-        	get { return this.roleSpecified; }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool RoleSpecified {
+            get { return roleSpecified; }
         }
-    	
-    	#endregion
-    	
-    	#region · Constructors ·
-    	
-    	public MucAdminItem()
-    	{
-    	}
-    	
-    	#endregion
     }
 }

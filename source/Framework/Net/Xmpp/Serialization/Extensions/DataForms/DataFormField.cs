@@ -31,105 +31,81 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms 
-{                  
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace="jabber:x:data")]
-	[XmlRootAttribute("field", Namespace="jabber:x:data", IsNullable=false)]
-	public class DataFormField 
-	{
-		#region · Fields ·
+    [XmlType(Namespace = "jabber:x:data")]
+    [XmlRootAttribute("field", Namespace = "jabber:x:data", IsNullable = false)]
+    public class DataFormField {
+        private string description;
+        private string label;
+        private List<DataFormOption> options;
+        private bool required;
+        private DataFormFieldType type;
+        private List<string> values;
+        private string var;
 
-		private string				    description;
-		private bool				    required;        
-		private List<string>		    values;
-		private List<DataFormOption>    options;
-		private string				    label;
-		private DataFormFieldType	    type;
-		private string				    var;
+        public DataFormField() {
+            type = DataFormFieldType.TextSingle;
+        }
 
-		#endregion
+        [XmlElementAttribute("desc")]
+        public string Description {
+            get { return description; }
+            set { description = value; }
+        }
 
-		#region · Properties ·
+        [XmlElementAttribute("required")]
+        public bool Required {
+            get { return required; }
+            set { required = value; }
+        }
 
-		[XmlElementAttribute("desc")]
-		public string Description
-		{
-			get { return this.description; }
-			set { this.description = value; }
-		}
-        
-		[XmlElementAttribute("required")]
-		public bool Required
-		{
-			get { return this.required; }
-			set { this.required	= value; }
-		}
-                
-		/// <remarks/>
-		[XmlArrayItemAttribute("value")]
-		public List<string> Values
-		{
-			get 
-			{
-				if (this.values == null)
-				{
-					this.values = new List<string>();
-				}
+        /// <remarks />
+        [XmlArrayItemAttribute("value")]
+        public List<string> Values {
+            get {
+                if (values == null)
+                {
+                    values = new List<string>();
+                }
 
-				return this.values; 
-			}
-		}
-        
-		/// <remarks/>
-		[XmlArrayItemAttribute("option")]
-		public List<DataFormOption> Options
-		{
-			get 
-			{
-				if (this.options == null)
-				{
-                    this.options = new List<DataFormOption>();
-				}
+                return values;
+            }
+        }
 
-				return this.options; 
-			}
-		}
-        
-		/// <remarks/>
-		[XmlAttributeAttribute("label")]
-		public string Label
-		{
-			get { return this.label; }
-			set { this.label = value; }
-		}
-        
-		/// <remarks/>
-		[XmlAttributeAttribute("type")]
-		public DataFormFieldType Type
-		{
-			get { return this.type; }
-			set { this.type = value; }
-		}
-        
-		/// <remarks/>
-		[XmlAttributeAttribute("var")]
-		public string Var
-		{
-			get { return this.var; }
-			set { this.var = value; }
-		}
+        /// <remarks />
+        [XmlArrayItemAttribute("option")]
+        public List<DataFormOption> Options {
+            get {
+                if (options == null)
+                {
+                    options = new List<DataFormOption>();
+                }
 
-		#endregion
+                return options;
+            }
+        }
 
-		#region · Constructors ·
+        /// <remarks />
+        [XmlAttributeAttribute("label")]
+        public string Label {
+            get { return label; }
+            set { label = value; }
+        }
 
-		public DataFormField()
-		{
-			this.type = DataFormFieldType.TextSingle;
-		}
+        /// <remarks />
+        [XmlAttributeAttribute("type")]
+        public DataFormFieldType Type {
+            get { return type; }
+            set { type = value; }
+        }
 
-		#endregion        
-    }   
+        /// <remarks />
+        [XmlAttributeAttribute("var")]
+        public string Var {
+            get { return var; }
+            set { var = value; }
+        }
+    }
 }

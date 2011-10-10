@@ -28,50 +28,29 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms 
-{
-	/// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace="jabber:x:data")]
-	[XmlRootAttribute("option", Namespace="jabber:x:data", IsNullable=false)]
-	public class DataFormOption 
-	{   
-		#region · Fields ·
+    [XmlType(Namespace = "jabber:x:data")]
+    [XmlRootAttribute("option", Namespace = "jabber:x:data", IsNullable = false)]
+    public class DataFormOption {
+        private string label;
+        private string value;
 
-		private string value;
-		private string label;
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return value; }
+            set { this.value = value; }
+        }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlTextAttribute()]
-		public string Value
-		{
-			get { return this.value; }
-			set { this.value = value; }
-		}
-        
-		/// <remarks/>
-		[XmlAttributeAttribute("label")]
-		public string Label
-		{
-			get { return this.label; }
-			set { this.label = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public DataFormOption()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlAttributeAttribute("label")]
+        public string Label {
+            get { return label; }
+            set { label = value; }
+        }
+    }
 }

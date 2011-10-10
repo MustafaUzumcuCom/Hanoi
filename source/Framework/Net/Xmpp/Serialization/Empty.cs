@@ -30,14 +30,11 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization
-{
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization {
+    /// <remarks />
     [Serializable]
-    public enum Empty
-    {
-        /// <remarks/>
-        [XmlEnumAttribute("")]
-        Item,
+    public enum Empty {
+        /// <remarks />
+        [XmlEnum("")] Item,
     }
 }

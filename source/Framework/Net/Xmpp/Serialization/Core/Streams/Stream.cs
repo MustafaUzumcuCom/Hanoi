@@ -29,109 +29,85 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Streams
-{
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace = "http://etherx.jabber.org/streams")]
+    [XmlType(Namespace = "http://etherx.jabber.org/streams")]
     [XmlRootAttribute("stream", Namespace = "http://etherx.jabber.org/streams", IsNullable = false)]
-    public class Stream
-    {
-        #region · Fields ·
+    public class Stream {
+        private StreamError errorField;
+        private StreamFeatures featuresField;
+        private string fromField;
+        private string idField;
+        private ArrayList itemsField;
+        private string langField;
+        private string toField;
+        private string versionField;
 
-        private StreamFeatures  featuresField;
-        private ArrayList       itemsField;
-        private StreamError     errorField;
-        private string          fromField;
-        private string          idField;
-        private string          toField;
-        private string          versionField;
-        private string          langField;
+        public Stream() {
+            itemsField = new ArrayList();
+        }
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("features")]
-        public StreamFeatures Features
-        {
-            get { return this.featuresField; }
-            set { this.featuresField = value; }
+        public StreamFeatures Features {
+            get { return featuresField; }
+            set { featuresField = value; }
         }
 
-        /// <remarks/>
-        [XmlElementAttribute("presence", typeof(Presence), Namespace = "jabber:client")]
-        [XmlElementAttribute("iq", typeof(IQ), Namespace = "jabber:client")]
-        [XmlElementAttribute("message", typeof(Message), Namespace = "jabber:client")]
-        public ArrayList Items
-        {
-            get { return this.itemsField; }
+        /// <remarks />
+        [XmlElementAttribute("presence", typeof (Presence), Namespace = "jabber:client")]
+        [XmlElementAttribute("iq", typeof (IQ), Namespace = "jabber:client")]
+        [XmlElementAttribute("message", typeof (Message), Namespace = "jabber:client")]
+        public ArrayList Items {
+            get { return itemsField; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("error")]
-        public StreamError Error
-        {
-            get { return this.errorField; }
-            set { this.errorField = value; }
+        public StreamError Error {
+            get { return errorField; }
+            set { errorField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("from")]
-        public string From
-        {
-            get { return this.fromField; }
-            set { this.fromField = value; }
+        public string From {
+            get { return fromField; }
+            set { fromField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("id", DataType = "NMTOKEN")]
-        public string ID
-        {
-            get { return this.idField; }
-            set { this.idField = value; }
+        public string ID {
+            get { return idField; }
+            set { idField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("to")]
-        public string To
-        {
-            get { return this.toField; }
-            set { this.toField = value; }
+        public string To {
+            get { return toField; }
+            set { toField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("version")]
-        public string Version
-        {
-            get { return this.versionField; }
-            set { this.versionField = value; }
+        public string Version {
+            get { return versionField; }
+            set { versionField = value; }
         }
 
-        /// <remarks/>
-        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
-        public string Lang
-        {
-            get { return this.langField; }
-            set { this.langField = value; }
+        /// <remarks />
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Stream()
-        {
-            this.itemsField = new ArrayList();
-        }
-
-        #endregion
     }
 }

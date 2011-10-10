@@ -30,85 +30,61 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery
-{
-	/// <summary>
-    /// XEP-0030: Service Discovery
-	/// </summary>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "http://jabber.org/protocol/disco#items")]
-	[XmlRootAttribute("item", Namespace = "http://jabber.org/protocol/disco#items", IsNullable = false)]
-	public class ServiceItem
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#items")]
+    [XmlRootAttribute("item", Namespace = "http://jabber.org/protocol/disco#items", IsNullable = false)]
+    public class ServiceItem {
+        private ServiceActionType actionField;
+        private bool actionFieldSpecified;
+        private string jidField;
+        private string nameField;
+        private string nodeField;
+        private string valueField;
 
-		private ServiceActionType actionField;
-		private bool actionFieldSpecified;
-		private string jidField;
-		private string nameField;
-		private string nodeField;
-		private string valueField;
+        /// <remarks />
+        [XmlAttributeAttribute("action")]
+        public ServiceActionType Action {
+            get { return actionField; }
+            set { actionField = value; }
+        }
 
-		#endregion
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool actionSpecified {
+            get { return actionFieldSpecified; }
+            set { actionFieldSpecified = value; }
+        }
 
-		#region · Properties ·
+        /// <remarks />
+        [XmlAttributeAttribute("jid")]
+        public string Jid {
+            get { return jidField; }
+            set { jidField = value; }
+        }
 
-		/// <remarks/>
-		[XmlAttributeAttribute("action")]
-		public ServiceActionType Action
-		{
-			get { return this.actionField; }
-			set { this.actionField = value; }
-		}
+        /// <remarks />
+        [XmlAttributeAttribute("name")]
+        public string Name {
+            get { return nameField; }
+            set { nameField = value; }
+        }
 
-		/// <remarks/>
-		[XmlIgnoreAttribute()]
-		public bool actionSpecified
-		{
-			get { return this.actionFieldSpecified; }
-			set { this.actionFieldSpecified = value; }
-		}
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node {
+            get { return nodeField; }
+            set { nodeField = value; }
+        }
 
-		/// <remarks/>
-		[XmlAttributeAttribute("jid")]
-		public string Jid
-		{
-			get { return this.jidField; }
-			set { this.jidField = value; }
-		}
-
-		/// <remarks/>
-		[XmlAttributeAttribute("name")]
-		public string Name
-		{
-			get { return this.nameField; }
-			set { this.nameField = value; }
-		}
-
-		/// <remarks/>
-		[XmlAttributeAttribute("node")]
-		public string Node
-		{
-			get { return this.nodeField; }
-			set { this.nodeField = value; }
-		}
-
-		/// <remarks/>
-		[XmlTextAttribute()]
-		public string Value
-		{
-			get { return this.valueField; }
-			set { this.valueField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public ServiceItem()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
+    }
 }

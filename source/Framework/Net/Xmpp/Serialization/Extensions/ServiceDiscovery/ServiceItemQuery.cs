@@ -31,50 +31,33 @@ using System;
 using System.Collections;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery {
     /// <summary>
-    /// XEP-0030: Service Discovery
+    ///   XEP-0030: Service Discovery
     /// </summary>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "http://jabber.org/protocol/disco#items")]
-	[XmlRootAttribute("query", Namespace = "http://jabber.org/protocol/disco#items", IsNullable = false)]
-	public class ServiceItemQuery
-	{
-		#region · Fields ·
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#items")]
+    [XmlRootAttribute("query", Namespace = "http://jabber.org/protocol/disco#items", IsNullable = false)]
+    public class ServiceItemQuery {
+        private ArrayList itemsField;
+        private string nodeField;
 
-		private ArrayList itemsField;
-		private string nodeField;
+        public ServiceItemQuery() {
+            itemsField = new ArrayList();
+        }
 
-		#endregion
+        /// <remarks />
+        [XmlElementAttribute("item", typeof (ServiceItem), Namespace = "http://jabber.org/protocol/disco#items")]
+        public ArrayList Items {
+            get { return itemsField; }
+            set { itemsField = value; }
+        }
 
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlElementAttribute("item", typeof(ServiceItem), Namespace = "http://jabber.org/protocol/disco#items")]
-		public ArrayList Items
-		{
-			get { return this.itemsField; }
-			set { this.itemsField = value; }
-		}
-
-		/// <remarks/>
-		[XmlAttributeAttribute("node")]
-		public string Node
-		{
-			get { return this.nodeField; }
-			set { this.nodeField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public ServiceItemQuery()
-		{
-			this.itemsField = new ArrayList();
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node {
+            get { return nodeField; }
+            set { nodeField = value; }
+        }
+    }
 }

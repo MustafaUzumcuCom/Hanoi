@@ -30,46 +30,27 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Stanzas
-{
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas")]
-	[XmlRootAttribute("text", Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas", IsNullable = false)]
-	public class StanzaText
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.Core.Stanzas {
+    [Serializable]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas")]
+    [XmlRootAttribute("text", Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas", IsNullable = false)]
+    public class StanzaText {
+        private string langField;
+        private string valueField;
 
-		private string langField;
-		private string valueField;
+        /// <remarks />
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
+        }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
-		public string Lang
-		{
-			get { return this.langField; }
-			set { this.langField = value; }
-		}
-
-		/// <remarks/>
-		[XmlTextAttribute()]
-		public string Value
-		{
-			get { return this.valueField; }
-			set { this.valueField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public StanzaText()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
+    }
 }

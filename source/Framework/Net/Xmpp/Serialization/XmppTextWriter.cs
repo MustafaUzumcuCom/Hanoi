@@ -27,70 +27,54 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace BabelIm.Net.Xmpp.Serialization
-{
+namespace BabelIm.Net.Xmpp.Serialization {
     /// <summary>
-    /// Custom <see cref="XmlTextWriter"/> implementation for writing XMPP stanzas
+    ///   Custom <see cref = "XmlTextWriter" /> implementation for writing XMPP stanzas
     /// </summary>
-	public sealed class XmppTextWriter
-        : XmlTextWriter
-	{
-		#region · Constructors ·
+    public sealed class XmppTextWriter
+        : XmlTextWriter {
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "XmppTextWriter" /> class.
+        /// </summary>
+        /// <param name = "w">The TextWriter to write to. It is assumed that the TextWriter is already set to the correct encoding.</param>
+        public XmppTextWriter(TextWriter w)
+            : base(w) {
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmppTextWriter"/> class.
+        ///   Initializes a new instance of the <see cref = "XmppTextWriter" /> class.
         /// </summary>
-        /// <param name="w">The TextWriter to write to. It is assumed that the TextWriter is already set to the correct encoding.</param>
-		public XmppTextWriter(TextWriter w) 
-            : base(w)
-		{
-		}
+        /// <param name = "w">The w.</param>
+        public XmppTextWriter(Stream w)
+            : this(w, Encoding.UTF8) {
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmppTextWriter"/> class.
+        ///   Initializes a new instance of the <see cref = "XmppTextWriter" /> class.
         /// </summary>
-        /// <param name="w">The w.</param>
-		public XmppTextWriter(Stream w) 
-            : this(w, Encoding.UTF8)
-		{
-		}
+        /// <param name = "w">The w.</param>
+        /// <param name = "encoding">The encoding.</param>
+        public XmppTextWriter(Stream w, Encoding encoding)
+            : base(w, encoding) {
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmppTextWriter"/> class.
+        ///   Writes the XML declaration with the version "1.0".
         /// </summary>
-        /// <param name="w">The w.</param>
-        /// <param name="encoding">The encoding.</param>
-		public XmppTextWriter(Stream w, Encoding encoding) 
-            : base(w, encoding)
-		{
-		}
-
-		#endregion
-
-		#region · Overriden Methods ·
+        /// <exception cref = "T:System.InvalidOperationException">This is not the first write method called after the constructor. </exception>
+        public override void WriteStartDocument() {
+        }
 
         /// <summary>
-        /// Writes the XML declaration with the version "1.0".
+        ///   Writes the XML declaration with the version "1.0" and the standalone attribute.
         /// </summary>
-        /// <exception cref="T:System.InvalidOperationException">This is not the first write method called after the constructor. </exception>
-		public override void WriteStartDocument()
-		{
-		}
-
-        /// <summary>
-        /// Writes the XML declaration with the version "1.0" and the standalone attribute.
-        /// </summary>
-        /// <param name="standalone">If true, it writes "standalone=yes"; if false, it writes "standalone=no".</param>
-        /// <exception cref="T:System.InvalidOperationException">This is not the first write method called after the constructor. </exception>
-		public override void WriteStartDocument(bool standalone)
-		{
-		}
-
-		#endregion
-	}
+        /// <param name = "standalone">If true, it writes "standalone=yes"; if false, it writes "standalone=no".</param>
+        /// <exception cref = "T:System.InvalidOperationException">This is not the first write method called after the constructor. </exception>
+        public override void WriteStartDocument(bool standalone) {
+        }
+        }
 }

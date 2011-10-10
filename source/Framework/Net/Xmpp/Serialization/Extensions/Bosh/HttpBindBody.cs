@@ -28,7 +28,6 @@
 */
 
 using System;
-using System.CodeDom.Compiler;
 using System.Collections;
 using System.Xml;
 using System.Xml.Schema;
@@ -38,409 +37,359 @@ using BabelIm.Net.Xmpp.Serialization.Core.Streams;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.Bosh
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.Bosh {
     /// <summary>
-    /// XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH)
-    /// XEP-0206: XMPP Over BOSH
+    ///   XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH)
+    ///   XEP-0206: XMPP Over BOSH
     /// </summary>
-    [SerializableAttribute()]
-    [XmlTypeAttribute("body", AnonymousType = true, Namespace = "http://jabber.org/protocol/httpbind")]
-    [XmlRootAttribute(ElementName="body", Namespace = "http://jabber.org/protocol/httpbind", IsNullable = false)]
-    public sealed class HttpBindBody
-    {
-        #region · Fields ·
+    [Serializable]
+    [XmlType("body", AnonymousType = true, Namespace = "http://jabber.org/protocol/httpbind")]
+    [XmlRootAttribute(ElementName = "body", Namespace = "http://jabber.org/protocol/httpbind", IsNullable = false)]
+    public sealed class HttpBindBody {
+        private string acceptField;
+        private string ackField;
+        private XmlAttribute[] anyAttrField;
+        private string authidField;
+        private string charsetsField;
+        private BodyCondition conditionField;
+        private bool conditionFieldSpecified;
+        private string contentField;
+        private string fromField;
+        private byte holdField;
+        private bool holdFieldSpecified;
+        private short inactivityField;
+        private bool inactivityFieldSpecified;
+        private ArrayList itemsField;
+        private string keyField;
+        private string langField;
+        private short maxpauseField;
+        private bool maxpauseFieldSpecified;
+        private string newkeyField;
+        private short pauseField;
+        private bool pauseFieldSpecified;
+        private short pollingField;
+        private bool pollingFieldSpecified;
+        private string reportField;
+        private byte requestsField;
+        private bool requestsFieldSpecified;
+        private bool restartField;
+        private bool restartLogicField;
+        private string ridField;
+        private string routeField;
+        private string sidField;
+        private string streamField;
+        private short timeField;
+        private bool timeFieldSpecified;
+        private string toField;
+        private BodyType typeField;
+        private bool typeFieldSpecified;
+        private string verField;
+        private string versionField;
+        private short waitField;
+        private bool waitFieldSpecified;
 
-        private ArrayList       itemsField;
-        private string          acceptField;
-        private string          ackField;
-        private string          authidField;
-        private string          charsetsField;
-        private BodyCondition   conditionField;
-        private bool            conditionFieldSpecified;
-        private string          contentField;
-        private string          fromField;
-        private byte            holdField;
-        private bool            holdFieldSpecified;
-        private short           inactivityField;
-        private bool            inactivityFieldSpecified;
-        private string          keyField;
-        private short           maxpauseField;
-        private bool            maxpauseFieldSpecified;
-        private string          newkeyField;
-        private short           pauseField;
-        private bool            pauseFieldSpecified;
-        private short           pollingField;
-        private bool            pollingFieldSpecified;
-        private string          reportField;
-        private byte            requestsField;
-        private bool            requestsFieldSpecified;
-        private string          ridField;
-        private string          routeField;
-        private string          sidField;
-        private string          streamField;
-        private short           timeField;
-        private bool            timeFieldSpecified;
-        private string          toField;
-        private BodyType        typeField;
-        private bool            typeFieldSpecified;
-        private string          verField;
-        private short           waitField;
-        private bool            waitFieldSpecified;
-        private string          langField;
-        private bool            restartField;
-        private bool            restartLogicField;
-        private string          versionField;
-        private XmlAttribute[]  anyAttrField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("stream:error", Type = typeof(StreamError), Namespace = "jabber:client", Form = XmlSchemaForm.Qualified)]
-        [XmlElementAttribute("failure", Type = typeof(Failure), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-        [XmlElementAttribute("auth", Type = typeof(Auth), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-        [XmlElementAttribute("challenge", Type = typeof(Challenge), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-        [XmlElementAttribute("response", Type = typeof(Response), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-        [XmlElementAttribute("success", Type = typeof(Success), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-        [XmlElementAttribute("features", Type = typeof(StreamFeatures), Namespace = "http://etherx.jabber.org/streams", Form = XmlSchemaForm.Qualified)]
-        [XmlElementAttribute("iq", Type = typeof(IQ), Namespace = "jabber:client")]
-        [XmlElementAttribute("presence", Type = typeof(Presence), Namespace = "jabber:client")]
-        [XmlElementAttribute("message", Type = typeof(Message), Namespace = "jabber:client")]
-        [XmlElementAttribute("uri", typeof(string))]
-        public ArrayList Items
-        {
-            get { return this.itemsField; }
-            set { this.itemsField = value; }
+        public HttpBindBody() {
+            itemsField = new ArrayList();
         }
 
-        /// <remarks/>
+        /// <remarks />
+        [XmlElementAttribute("stream:error", Type = typeof (StreamError), Namespace = "jabber:client",
+            Form = XmlSchemaForm.Qualified)]
+        [XmlElementAttribute("failure", Type = typeof (Failure), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+        [XmlElementAttribute("auth", Type = typeof (Auth), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+        [XmlElementAttribute("challenge", Type = typeof (Challenge), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+        [XmlElementAttribute("response", Type = typeof (Response), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+        [XmlElementAttribute("success", Type = typeof (Success), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+        [XmlElementAttribute("features", Type = typeof (StreamFeatures), Namespace = "http://etherx.jabber.org/streams",
+            Form = XmlSchemaForm.Qualified)]
+        [XmlElementAttribute("iq", Type = typeof (IQ), Namespace = "jabber:client")]
+        [XmlElementAttribute("presence", Type = typeof (Presence), Namespace = "jabber:client")]
+        [XmlElementAttribute("message", Type = typeof (Message), Namespace = "jabber:client")]
+        [XmlElementAttribute("uri", typeof (string))]
+        public ArrayList Items {
+            get { return itemsField; }
+            set { itemsField = value; }
+        }
+
+        /// <remarks />
         [XmlAttributeAttribute("accept")]
-        public string Accept
-        {
-            get { return this.acceptField; }
-            set { this.acceptField = value; }
+        public string Accept {
+            get { return acceptField; }
+            set { acceptField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("ack", DataType = "positiveInteger")]
-        public string Ack
-        {
-            get { return this.ackField; }
-            set { this.ackField = value; }
+        public string Ack {
+            get { return ackField; }
+            set { ackField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("authid")]
-        public string AuthId
-        {
-            get { return this.authidField; }
-            set { this.authidField = value; }
+        public string AuthId {
+            get { return authidField; }
+            set { authidField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("charsets", DataType = "NMTOKENS")]
-        public string Charsets
-        {
-            get { return this.charsetsField; }
-            set { this.charsetsField = value; }
+        public string Charsets {
+            get { return charsetsField; }
+            set { charsetsField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("condition")]
-        public BodyCondition Condition
-        {
-            get { return this.conditionField; }
-            set { this.conditionField = value; }
+        public BodyCondition Condition {
+            get { return conditionField; }
+            set { conditionField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool ConditionSpecified
-        {
-            get { return this.conditionFieldSpecified; }
-            set { this.conditionFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool ConditionSpecified {
+            get { return conditionFieldSpecified; }
+            set { conditionFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("content")]
-        public string Content
-        {
-            get { return this.contentField; }
-            set { this.contentField = value; }
+        public string Content {
+            get { return contentField; }
+            set { contentField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("from")]
-        public string From
-        {
-            get { return this.fromField; }
-            set { this.fromField = value; }
+        public string From {
+            get { return fromField; }
+            set { fromField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("hold")]
-        public byte Hold
-        {
-            get { return this.holdField; }
-            set { this.holdField = value; }
+        public byte Hold {
+            get { return holdField; }
+            set { holdField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool HoldSpecified
-        {
-            get { return this.holdFieldSpecified; }
-            set { this.holdFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool HoldSpecified {
+            get { return holdFieldSpecified; }
+            set { holdFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("inactivity")]
-        public short Inactivity
-        {
-            get { return this.inactivityField; }
-            set { this.inactivityField = value; }
+        public short Inactivity {
+            get { return inactivityField; }
+            set { inactivityField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool InactivitySpecified
-        {
-            get { return this.inactivityFieldSpecified; }
-            set { this.inactivityFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool InactivitySpecified {
+            get { return inactivityFieldSpecified; }
+            set { inactivityFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("key")]
-        public string Key
-        {
-            get { return this.keyField; }
-            set { this.keyField = value; }
+        public string Key {
+            get { return keyField; }
+            set { keyField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("maxpause")]
-        public short MaxPause
-        {
-            get { return this.maxpauseField; }
-            set { this.maxpauseField = value; }
+        public short MaxPause {
+            get { return maxpauseField; }
+            set { maxpauseField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool MaxPauseSpecified
-        {
-            get { return this.maxpauseFieldSpecified; }
-            set { this.maxpauseFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool MaxPauseSpecified {
+            get { return maxpauseFieldSpecified; }
+            set { maxpauseFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("newkey")]
-        public string NewKey
-        {
-            get { return this.newkeyField; }
-            set { this.newkeyField = value; }
+        public string NewKey {
+            get { return newkeyField; }
+            set { newkeyField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("pause")]
-        public short Pause
-        {
-            get { return this.pauseField; }
-            set { this.pauseField = value; }
+        public short Pause {
+            get { return pauseField; }
+            set { pauseField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool PauseSpecified
-        {
-            get { return this.pauseFieldSpecified; }
-            set { this.pauseFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool PauseSpecified {
+            get { return pauseFieldSpecified; }
+            set { pauseFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("polling")]
-        public short Polling
-        {
-            get { return this.pollingField; }
-            set { this.pollingField = value; }
+        public short Polling {
+            get { return pollingField; }
+            set { pollingField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool PollingSpecified
-        {
-            get { return this.pollingFieldSpecified; }
-            set { this.pollingFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool PollingSpecified {
+            get { return pollingFieldSpecified; }
+            set { pollingFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("report", DataType = "positiveInteger")]
-        public string Report
-        {
-            get { return this.reportField; }
-            set { this.reportField = value; }
+        public string Report {
+            get { return reportField; }
+            set { reportField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("requests")]
-        public byte Requests
-        {
-            get { return this.requestsField; }
-            set { this.requestsField = value; }
+        public byte Requests {
+            get { return requestsField; }
+            set { requestsField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool RequestsSpecified
-        {
-            get { return this.requestsFieldSpecified; }
-            set { this.requestsFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool RequestsSpecified {
+            get { return requestsFieldSpecified; }
+            set { requestsFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("rid", DataType = "positiveInteger")]
-        public string Rid
-        {
-            get { return this.ridField; }
-            set { this.ridField = value; }
+        public string Rid {
+            get { return ridField; }
+            set { ridField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("route")]
-        public string Route
-        {
-            get { return this.routeField; }
-            set { this.routeField = value; }
+        public string Route {
+            get { return routeField; }
+            set { routeField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("sid")]
-        public string Sid
-        {
-            get { return this.sidField; }
-            set { this.sidField = value; }
+        public string Sid {
+            get { return sidField; }
+            set { sidField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("stream")]
-        public string Stream
-        {
-            get { return this.streamField; }
-            set { this.streamField = value; }
+        public string Stream {
+            get { return streamField; }
+            set { streamField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("time")]
-        public short Time
-        {
-            get { return this.timeField; }
-            set { this.timeField = value; }
+        public short Time {
+            get { return timeField; }
+            set { timeField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool TimeSpecified
-        {
-            get { return this.timeFieldSpecified; }
-            set { this.timeFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool TimeSpecified {
+            get { return timeFieldSpecified; }
+            set { timeFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("to")]
-        public string To
-        {
-            get { return this.toField; }
-            set { this.toField = value; }
+        public string To {
+            get { return toField; }
+            set { toField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("type")]
-        public BodyType Type
-        {
-            get { return this.typeField; }
-            set { this.typeField = value; }
+        public BodyType Type {
+            get { return typeField; }
+            set { typeField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool TypeSpecified
-        {
-            get { return this.typeFieldSpecified; }
-            set { this.typeFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool TypeSpecified {
+            get { return typeFieldSpecified; }
+            set { typeFieldSpecified = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("ver")]
-        public string Ver
-        {
-            get { return this.verField; }
-            set { this.verField = value; }
+        public string Ver {
+            get { return verField; }
+            set { verField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("wait")]
-        public short Wait
-        {
-            get { return this.waitField; }
-            set { this.waitField = value; }
+        public short Wait {
+            get { return waitField; }
+            set { waitField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool WaitSpecified
-        {
-            get { return this.waitFieldSpecified; }
-            set { this.waitFieldSpecified = value; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool WaitSpecified {
+            get { return waitFieldSpecified; }
+            set { waitFieldSpecified = value; }
         }
 
-        /// <remarks/>
-        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
-        public string Lang
-        {
-            get { return this.langField; }
-            set { this.langField = value; }
+        /// <remarks />
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
         }
 
-        /// <remarks/>
-        [XmlAnyAttributeAttribute()]
-        public System.Xml.XmlAttribute[] AnyAttr
-        {
-            get { return this.anyAttrField; }
-            set { this.anyAttrField = value; }
+        /// <remarks />
+        [XmlAnyAttributeAttribute]
+        public System.Xml.XmlAttribute[] AnyAttr {
+            get { return anyAttrField; }
+            set { anyAttrField = value; }
         }
 
-        [XmlAttributeAttribute("restart", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:xmpp:xbosh")]
-        public bool Restart
-        {
-            get { return this.restartField; }
-            set { this.restartField = value; }
+        [XmlAttributeAttribute("restart", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:xmpp:xbosh"
+            )]
+        public bool Restart {
+            get { return restartField; }
+            set { restartField = value; }
         }
 
-        [XmlAttributeAttribute("restartlogic", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:xmpp:xbosh")]
-        public bool RestartLogicField
-        {
-            get { return this.restartLogicField; }
-            set { this.restartLogicField = value; }
+        [XmlAttributeAttribute("restartlogic", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "urn:xmpp:xbosh")]
+        public bool RestartLogicField {
+            get { return restartLogicField; }
+            set { restartLogicField = value; }
         }
 
-        [XmlAttributeAttribute("version", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:xmpp:xbosh")]
-        public string VersionField
-        {
-            get { return this.versionField; }
-            set { this.versionField = value; }
+        [XmlAttributeAttribute("version", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:xmpp:xbosh"
+            )]
+        public string VersionField {
+            get { return versionField; }
+            set { versionField = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public HttpBindBody()
-        {
-            this.itemsField = new ArrayList();
-        }
-
-        #endregion
     }
 }

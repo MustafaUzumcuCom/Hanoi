@@ -30,21 +30,17 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery
-{
-	/// <summary>
-    /// XEP-0030: Service Discovery
-	/// </summary>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "http://jabber.org/protocol/disco#items")]
-	public enum ServiceActionType
-	{
-		/// <remarks/>
-		[XmlEnumAttribute("remove")]
-		Remove,
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#items")]
+    public enum ServiceActionType {
+        /// <remarks />
+        [XmlEnumAttribute("remove")] Remove,
 
-		/// <remarks/>
-		[XmlEnumAttribute("update")]
-		Update,
-	}
+        /// <remarks />
+        [XmlEnumAttribute("update")] Update,
+    }
 }

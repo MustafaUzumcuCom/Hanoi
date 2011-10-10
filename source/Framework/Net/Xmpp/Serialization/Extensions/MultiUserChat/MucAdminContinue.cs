@@ -30,49 +30,29 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/muc#admin")]
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#admin")]
     [XmlRootAttribute("continue", Namespace = "http://jabber.org/protocol/muc#admin", IsNullable = false)]
-    public class MucAdminContinue
-    {
-        #region · Fields ·
-
+    public class MucAdminContinue {
         private string thread;
         private string value;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("thread")]
-        public string Thread
-        {
-            get { return this.thread; }
-            set { this.thread = value; }
+        public string Thread {
+            get { return thread; }
+            set { thread = value; }
         }
 
-        /// <remarks/>
-        [XmlTextAttribute()]
-        public string Value
-        {
-            get { return this.value; }
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return value; }
             set { this.value = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public MucAdminContinue()
-        {
-        }
-
-        #endregion
     }
 }

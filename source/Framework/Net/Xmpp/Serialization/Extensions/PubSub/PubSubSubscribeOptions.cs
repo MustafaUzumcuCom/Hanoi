@@ -27,42 +27,15 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("subscribe-options", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubSubscribeOptions
-    {
-        #region · Fields ·
-
-        private string requiredField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+    public class PubSubSubscribeOptions {
+        /// <remarks />
         [XmlElement("required")]
-        public string Required
-        {
-            get { return this.requiredField; }
-            set { this.requiredField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubSubscribeOptions()
-        {
-        }
-
-        #endregion
+        public string Required { get; set; }
     }
 }

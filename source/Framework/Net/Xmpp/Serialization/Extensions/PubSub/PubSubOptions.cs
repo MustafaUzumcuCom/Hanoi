@@ -27,63 +27,27 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("options", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubOptions
-    {
-        #region · Fields ·
+    public class PubSubOptions {
+        /// <remarks />
+        [XmlAnyElementAttribute]
+        public System.Xml.XmlElement Any { get; set; }
 
-        private System.Xml.XmlElement anyField;
-        private string jidField;
-        private string nodeField;
-        private string subidField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlAnyElementAttribute()]
-        public System.Xml.XmlElement Any
-        {
-            get { return this.anyField; }
-            set { this.anyField = value; }
-        }
-
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("jid")]
-        public string Jid
-        {
-            get { return this.jidField; }
-            set { this.jidField = value; }
-        }
+        public string Jid { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("node")]
-        public string node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
+        public string node { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("subid")]
-        public string Subid
-        {
-            get { return this.subidField; }
-            set { this.subidField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        #endregion
+        public string Subid { get; set; }
     }
 }

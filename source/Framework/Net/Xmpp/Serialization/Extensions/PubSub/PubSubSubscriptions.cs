@@ -27,54 +27,32 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("subscriptions", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubSubscriptions
-    {
-        #region · Fields ·
-
+    public class PubSubSubscriptions {
         private List<PubSubSubscription> subscriptionField;
-        private string nodeField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("subscription")]
-        public List<PubSubSubscription> Subscription
-        {
-            get { return this.subscriptionField; }
-            set { this.subscriptionField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubSubscriptions()
-        {
-            if ((this.subscriptionField == null))
+        public PubSubSubscriptions() {
+            if ((subscriptionField == null))
             {
-                this.subscriptionField = new List<PubSubSubscription>();
+                subscriptionField = new List<PubSubSubscription>();
             }
         }
 
-        #endregion
+        /// <remarks />
+        [XmlElementAttribute("subscription")]
+        public List<PubSubSubscription> Subscription {
+            get { return subscriptionField; }
+            set { subscriptionField = value; }
+        }
+
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node { get; set; }
     }
 }

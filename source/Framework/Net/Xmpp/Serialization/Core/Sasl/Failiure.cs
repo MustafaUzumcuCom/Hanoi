@@ -29,56 +29,35 @@
 
 using System;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl
-{
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
     [XmlRootAttribute("failure", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-    public class Failure
-    {
-        #region · Fields ·
-
-        private Empty itemField;
+    public class Failure {
         private FailiureType itemElementNameField;
+        private Empty itemField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("not-authorized", typeof(Empty))]
-        [XmlElementAttribute("mechanism-too-weak", typeof(Empty))]
-        [XmlElementAttribute("temporary-auth-failure", typeof(Empty))]
-        [XmlElementAttribute("invalid-authzid", typeof(Empty))]
-        [XmlElementAttribute("aborted", typeof(Empty))]
+        /// <remarks />
+        [XmlElementAttribute("not-authorized", typeof (Empty))]
+        [XmlElementAttribute("mechanism-too-weak", typeof (Empty))]
+        [XmlElementAttribute("temporary-auth-failure", typeof (Empty))]
+        [XmlElementAttribute("invalid-authzid", typeof (Empty))]
+        [XmlElementAttribute("aborted", typeof (Empty))]
         [XmlElementAttribute("incorrect-encoding")]
-        [XmlElementAttribute("invalid-mechanism", typeof(Empty))]
+        [XmlElementAttribute("invalid-mechanism", typeof (Empty))]
         [XmlChoiceIdentifierAttribute("FailiureType")]
-        public Empty Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
+        public Empty Item {
+            get { return itemField; }
+            set { itemField = value; }
         }
 
-        /// <remarks/>
-        [XmlIgnore()]
-        public FailiureType FailiureType
-        {
-            get { return this.itemElementNameField; }
-            set { this.itemElementNameField = value; }
+        /// <remarks />
+        [XmlIgnore]
+        public FailiureType FailiureType {
+            get { return itemElementNameField; }
+            set { itemElementNameField = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Failure()
-        {
-        }
-
-        #endregion
     }
 }

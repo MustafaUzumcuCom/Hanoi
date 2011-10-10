@@ -27,45 +27,28 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.DataForms;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("configure", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubConfigure
-    {
-        #region · Fields ·
-
+    public class PubSubConfigure {
         private DataForm itemField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("x", Namespace = "jabber:x:data")]
-        public DataForm Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubConfigure()
-        {
-            if ((this.itemField == null))
+        public PubSubConfigure() {
+            if ((itemField == null))
             {
-                this.itemField = new DataForm();
+                itemField = new DataForm();
             }
         }
 
-        #endregion
+        /// <remarks />
+        [XmlElementAttribute("x", Namespace = "jabber:x:data")]
+        public DataForm Item {
+            get { return itemField; }
+            set { itemField = value; }
+        }
     }
 }

@@ -30,70 +30,48 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding
-{
+namespace BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding {
     /// <summary>
-    /// http://xmpp.org/rfcs/rfc3920.html
-    /// http://xmpp.org/extensions/xep-0193.html
+    ///   http://xmpp.org/rfcs/rfc3920.html
+    ///   http://xmpp.org/extensions/xep-0193.html
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-bind")]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-bind")]
     [XmlRootAttribute("bind", Namespace = "urn:ietf:params:xml:ns:xmpp-bind", IsNullable = false)]
-    public class Bind
-    {
-        #region · Fields ·
+    public class Bind {
+        private ItemChoiceType itemElementNameField;
+        private Empty itemField;
+        private string jidField;
+        private string resourceField;
 
-        private Empty           itemField;    
-        private ItemChoiceType  itemElementNameField;
-        private string          resourceField;
-        private string          jidField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("optional", typeof(Empty))]
-        [XmlElementAttribute("required", typeof(Empty))]
+        /// <remarks />
+        [XmlElementAttribute("optional", typeof (Empty))]
+        [XmlElementAttribute("required", typeof (Empty))]
         [XmlChoiceIdentifierAttribute("ItemElementName")]
-        public Empty Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
+        public Empty Item {
+            get { return itemField; }
+            set { itemField = value; }
         }
-    
-        /// <remarks/>
+
+        /// <remarks />
         [XmlIgnoreAttribute]
-        public ItemChoiceType ItemElementName
-        {
-            get { return this.itemElementNameField; }
-            set { this.itemElementNameField = value; }
+        public ItemChoiceType ItemElementName {
+            get { return itemElementNameField; }
+            set { itemElementNameField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("resource")]
-        public string Resource
-        {
-            get { return this.resourceField; }
-            set { this.resourceField = value; }
+        public string Resource {
+            get { return resourceField; }
+            set { resourceField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("jid")]
-        public string Jid
-        {
-            get { return this.jidField; }
-            set { this.jidField = value; }
+        public string Jid {
+            get { return jidField; }
+            set { jidField = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Bind()
-        {
-        }
-
-        #endregion
     }
 }

@@ -30,49 +30,29 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat 
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace="http://jabber.org/protocol/muc#user")]
-	[XmlRootAttribute("destroy", Namespace="http://jabber.org/protocol/muc#user", IsNullable=false)]
-	public class MucUserDestroy 
-	{
-		#region · Fields ·
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#user")]
+    [XmlRootAttribute("destroy", Namespace = "http://jabber.org/protocol/muc#user", IsNullable = false)]
+    public class MucUserDestroy {
+        private string jid;
+        private string reason;
 
-		private string reason;        
-		private string jid;
+        /// <remarks />
+        [XmlText]
+        public string Reason {
+            get { return reason; }
+            set { reason = value; }
+        }
 
-		#endregion
-
-		#region · Properties ·
-        
-		/// <remarks/>
-		[XmlText()]
-		public string Reason
-		{
-			get { return this.reason; }
-			set { this.reason = value; }
-		}
-        
-		/// <remarks/>
-		[XmlAttributeAttribute("jid")]
-		public string Jid
-		{
-			get { return this.jid; }
-			set { this.jid = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public MucUserDestroy()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlAttributeAttribute("jid")]
+        public string Jid {
+            get { return jid; }
+            set { jid = value; }
+        }
+    }
 }

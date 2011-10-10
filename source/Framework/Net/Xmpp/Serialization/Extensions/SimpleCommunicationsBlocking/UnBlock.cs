@@ -31,31 +31,20 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking {
     /// <summary>
-    /// XEP-0191: Simple Communications Blocking
+    ///   XEP-0191: Simple Communications Blocking
     /// </summary>
-    [SerializableAttribute()]
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "urn:xmpp:blocking")]
+    [Serializable]
+    [XmlType(AnonymousType = true, Namespace = "urn:xmpp:blocking")]
     [XmlRootAttribute("unblock", Namespace = "urn:xmpp:blocking", IsNullable = false)]
-    public sealed class UnBlock
-    {
-        #region · Fields ·
-
+    public sealed class UnBlock {
         private List<BlockItem> itemsField;
 
-        #endregion
-
-        #region · Properties ·
-
-        [XmlElementAttribute("item", Type = typeof(BlockItem), Namespace = "urn:xmpp:blocking")]
-        public List<BlockItem> Items
-        {
-            get { return this.itemsField; }
-            set { this.itemsField = value; }
+        [XmlElementAttribute("item", Type = typeof (BlockItem), Namespace = "urn:xmpp:blocking")]
+        public List<BlockItem> Items {
+            get { return itemsField; }
+            set { itemsField = value; }
         }
-
-        #endregion
     }
 }

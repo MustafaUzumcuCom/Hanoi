@@ -28,22 +28,17 @@
 */
 
 using System;
-using System.CodeDom.Compiler;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.Bosh
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.Bosh {
     /// <summary>
-    /// XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH)
-    /// XEP-0206: XMPP Over BOSH
+    ///   XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH)
+    ///   XEP-0206: XMPP Over BOSH
     /// </summary>
-    [SerializableAttribute()]
-    [XmlTypeAttribute("bodyType", AnonymousType = true, Namespace = "http://jabber.org/protocol/httpbind")]
-    public enum BodyType
-    {
-        [XmlEnumAttribute("error")]
-        Error,
-        [XmlEnumAttribute("terminate")]
-        Terminate,
+    [Serializable]
+    [XmlType("bodyType", AnonymousType = true, Namespace = "http://jabber.org/protocol/httpbind")]
+    public enum BodyType {
+        [XmlEnumAttribute("error")] Error,
+        [XmlEnumAttribute("terminate")] Terminate,
     }
 }

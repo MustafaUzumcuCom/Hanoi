@@ -27,50 +27,19 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
     [XmlRootAttribute("disassociate", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventDisassociate
-    {
-        #region · Fields ·
-
-        private string nodeField;
-        private string valueField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+    public class PubSubEventDisassociate {
+        /// <remarks />
         [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
+        public string Node { get; set; }
 
-        /// <remarks/>
-        [XmlTextAttribute()]
-        public string Value
-        {
-            get { return this.valueField; }
-            set { this.valueField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubEventDisassociate()
-        {
-        }
-
-        #endregion
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value { get; set; }
     }
 }

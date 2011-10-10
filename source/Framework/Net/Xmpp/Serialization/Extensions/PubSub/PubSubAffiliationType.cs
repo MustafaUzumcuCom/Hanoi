@@ -27,33 +27,25 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    public enum PubSubAffiliationType
-    {
-        /// <remarks/>
-        [XmlEnumAttribute("member")]
-        Member,
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+    public enum PubSubAffiliationType {
+        /// <remarks />
+        [XmlEnumAttribute("member")] Member,
 
-        /// <remarks/>
-        [XmlEnumAttribute("none")]
-        None,
+        /// <remarks />
+        [XmlEnumAttribute("none")] None,
 
-        /// <remarks/>
-        [XmlEnumAttribute("outcast")]
-        Outcast,
+        /// <remarks />
+        [XmlEnumAttribute("outcast")] Outcast,
 
-        /// <remarks/>
-        [XmlEnumAttribute("owner")]
-        Owner,
+        /// <remarks />
+        [XmlEnumAttribute("owner")] Owner,
 
-        /// <remarks/>
-        [XmlEnumAttribute("publisher")]
-        Publisher,
+        /// <remarks />
+        [XmlEnumAttribute("publisher")] Publisher,
     }
 }

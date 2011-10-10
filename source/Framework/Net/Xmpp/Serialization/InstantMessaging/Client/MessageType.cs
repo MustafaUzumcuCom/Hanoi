@@ -30,31 +30,24 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:client")]
-	public enum MessageType
-	{
-		/// <remarks/>
-		[XmlEnumAttribute("chat")]
-		Chat,
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:client")]
+    public enum MessageType {
+        /// <remarks />
+        [XmlEnumAttribute("chat")] Chat,
 
-		/// <remarks/>
-		[XmlEnumAttribute("error")]
-		Error,
+        /// <remarks />
+        [XmlEnumAttribute("error")] Error,
 
-		/// <remarks/>
-		[XmlEnumAttribute("groupchat")]
-		GroupChat,
+        /// <remarks />
+        [XmlEnumAttribute("groupchat")] GroupChat,
 
-		/// <remarks/>
-		[XmlEnumAttribute("headline")]
-		Headline,
+        /// <remarks />
+        [XmlEnumAttribute("headline")] Headline,
 
-		/// <remarks/>
-		[XmlEnumAttribute("normal")]
-		Normal,
-	}
+        /// <remarks />
+        [XmlEnumAttribute("normal")] Normal,
+    }
 }

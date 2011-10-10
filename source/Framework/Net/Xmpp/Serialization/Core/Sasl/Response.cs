@@ -30,36 +30,17 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl
-{
+namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
     [Serializable]
-    [XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
     [XmlRootAttribute("response", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-    public class Response
-    {
-        #region · Fields ·
-
+    public class Response {
         private string value;
 
-        #endregion
-
-        #region · Properties ·
-
-        [XmlTextAttribute()]
-        public string Value
-        {
-            get { return this.value; }
+        [XmlTextAttribute]
+        public string Value {
+            get { return value; }
             set { this.value = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Response()
-        {
-        }
-
-        #endregion
     }
 }

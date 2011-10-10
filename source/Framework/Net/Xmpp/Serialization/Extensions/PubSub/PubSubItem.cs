@@ -27,52 +27,22 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
 using BabelIm.Net.Xmpp.Serialization.Extensions.UserTune;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("item", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubItem
-    {
-        #region · Fields ·
+    public class PubSubItem {
+        /// <remarks />
+        [XmlElementAttribute("tune", typeof (Tune), Namespace = "http://jabber.org/protocol/tune")]
+        [XmlElementAttribute("mood", typeof (Mood), Namespace = "http://jabber.org/protocol/mood")]
+        public object Item { get; set; }
 
-        private object item;
-        private string idField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("tune", typeof(Tune), Namespace = "http://jabber.org/protocol/tune")]
-        [XmlElementAttribute("mood", typeof(Mood), Namespace = "http://jabber.org/protocol/mood")]
-        public object Item
-        {
-            get { return this.item; }
-            set { this.item = value; }
-        }
-
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("id")]
-        public string Id
-        {
-            get { return this.idField; }
-            set { this.idField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubItem()
-        {
-        }
-
-        #endregion
+        public string Id { get; set; }
     }
 }

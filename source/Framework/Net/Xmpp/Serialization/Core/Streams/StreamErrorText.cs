@@ -29,49 +29,29 @@
 
 using System;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Streams
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(TypeName = "text", Namespace = "urn:ietf:params:xml:ns:xmpp-streams")]
-	[XmlRootAttribute("text", Namespace = "urn:ietf:params:xml:ns:xmpp-streams", IsNullable = false)]
-	public class StreamErrorText
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
+    /// <remarks />
+    [Serializable]
+    [XmlType(TypeName = "text", Namespace = "urn:ietf:params:xml:ns:xmpp-streams")]
+    [XmlRootAttribute("text", Namespace = "urn:ietf:params:xml:ns:xmpp-streams", IsNullable = false)]
+    public class StreamErrorText {
+        private string langField;
+        private string valueField;
 
-		private string langField;
-		private string valueField;
+        /// <remarks />
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
+        }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
-		public string Lang
-		{
-			get { return this.langField; }
-			set { this.langField = value; }
-		}
-
-		/// <remarks/>
-		[XmlTextAttribute()]
-		public string Value
-		{
-			get { return this.valueField; }
-			set { this.valueField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public StreamErrorText()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
+    }
 }

@@ -27,67 +27,27 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("unsubscribe", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubUnsubscribe
-    {
-        #region · Fields ·
-
-        private string jidField;
-        private string nodeField;
-        private string subidField;
-        private string valueField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+    public class PubSubUnsubscribe {
+        /// <remarks />
         [XmlAttributeAttribute("jid")]
-        public string Jid
-        {
-            get { return this.jidField; }
-            set { this.jidField = value; }
-        }
+        public string Jid { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
+        public string Node { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("subid")]
-        public string Subid
-        {
-            get { return this.subidField; }
-            set { this.subidField = value; }
-        }
+        public string Subid { get; set; }
 
-        /// <remarks/>
-        [XmlTextAttribute()]
-        public string Value
-        {
-            get { return this.valueField; }
-            set { this.valueField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubUnsubscribe()
-        {
-        }
-
-        #endregion
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value { get; set; }
     }
 }

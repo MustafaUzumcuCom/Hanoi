@@ -30,106 +30,62 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
     [XmlRootAttribute("subscription", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventSubscription
-    {
-        #region · Fields ·
-
+    public class PubSubEventSubscription {
         private DateTime expiryField;
         private bool expiryFieldSpecified;
-        private string jidField;
-        private string nodeField;
-        private string subidField;
         private PubSubEventSubscriptionType subscriptionType;
         private bool subscriptionTypeSpecified;
-        private string valueField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("expiry")]
-        public DateTime Expiry
-        {
-            get { return this.expiryField; }
-            set
-            {
-                this.expiryField = value;
-                this.expiryFieldSpecified = true;
+        public DateTime Expiry {
+            get { return expiryField; }
+            set {
+                expiryField = value;
+                expiryFieldSpecified = true;
             }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool ExpirySpecified
-        {
-            get { return this.expiryFieldSpecified; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool ExpirySpecified {
+            get { return expiryFieldSpecified; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("jid")]
-        public string Jid
-        {
-            get { return this.jidField; }
-            set { this.jidField = value; }
-        }
+        public string Jid { get; set; }
 
-        /// <remarks/>
-        [XmlAttributeAttribute()]
-        public string node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
+        /// <remarks />
+        [XmlAttributeAttribute]
+        public string node { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("subid")]
-        public string Subid
-        {
-            get { return this.subidField; }
-            set { this.subidField = value; }
-        }
+        public string Subid { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("subscription")]
-        public PubSubEventSubscriptionType SubscriptionType
-        {
-            get { return this.subscriptionType; }
-            set
-            {
-                this.subscriptionType = value;
-                this.subscriptionTypeSpecified = true;
+        public PubSubEventSubscriptionType SubscriptionType {
+            get { return subscriptionType; }
+            set {
+                subscriptionType = value;
+                subscriptionTypeSpecified = true;
             }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool SubscriptionTypeSpecified
-        {
-            get { return this.subscriptionTypeSpecified; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool SubscriptionTypeSpecified {
+            get { return subscriptionTypeSpecified; }
         }
 
-        /// <remarks/>
-        [XmlTextAttribute()]
-        public string Value
-        {
-            get { return this.valueField; }
-            set { this.valueField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubEventSubscription()
-        {
-        }
-
-        #endregion
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value { get; set; }
     }
 }

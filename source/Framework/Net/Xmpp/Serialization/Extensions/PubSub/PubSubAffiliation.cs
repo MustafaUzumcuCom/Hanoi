@@ -27,58 +27,23 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("affiliation", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubAffiliation
-    {
-        #region · Fields ·
-
-        private PubSubAffiliationType affiliationField;
-        private string nodeField;
-        private string valueField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+    public class PubSubAffiliation {
+        /// <remarks />
         [XmlAttributeAttribute("affiliation")]
-        public PubSubAffiliationType Affiliation
-        {
-            get { return this.affiliationField; }
-            set { this.affiliationField = value; }
-        }
+        public PubSubAffiliationType Affiliation { get; set; }
 
-        /// <remarks/>
-        [XmlAttributeAttribute()]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
+        /// <remarks />
+        [XmlAttributeAttribute]
+        public string Node { get; set; }
 
-        /// <remarks/>
-        [XmlTextAttribute()]
-        public string Value
-        {
-            get { return this.valueField; }
-            set { this.valueField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubAffiliation()
-        {
-        }
-
-        #endregion
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value { get; set; }
     }
 }

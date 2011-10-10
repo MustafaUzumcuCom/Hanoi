@@ -27,75 +27,50 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("retract", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubRetract
-    {
-        #region · Fields ·
-
+    public class PubSubRetract {
         private List<PubSubItem> itemField;
-        private string nodeField;
         private bool notifyField;
         private bool notifyFieldSpecified;
 
-        #endregion
+        public PubSubRetract() {
+            if ((itemField == null))
+            {
+                itemField = new List<PubSubItem>();
+            }
+        }
 
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("item")]
-        public List<PubSubItem> Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
+        public List<PubSubItem> Item {
+            get { return itemField; }
+            set { itemField = value; }
         }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
+        public string Node { get; set; }
 
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("notify")]
-        public bool Notify
-        {
-            get { return this.notifyField; }
-            set
-            {
-                this.notifyField = value;
-                this.notifyFieldSpecified = true;
+        public bool Notify {
+            get { return notifyField; }
+            set {
+                notifyField = value;
+                notifyFieldSpecified = true;
             }
         }
 
-        /// <remarks/>
-        [XmlIgnoreAttribute()]
-        public bool NotifySpecified
-        {
-            get { return this.notifyFieldSpecified; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool NotifySpecified {
+            get { return notifyFieldSpecified; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubRetract()
-        {
-            if ((this.itemField == null))
-            {
-                this.itemField = new List<PubSubItem>();
-            }
-        }
-
-        #endregion
     }
 }

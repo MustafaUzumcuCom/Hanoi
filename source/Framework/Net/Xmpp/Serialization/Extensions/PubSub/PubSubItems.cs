@@ -27,72 +27,40 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("items", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubItems
-    {
-        #region · Fields ·
-
+    public class PubSubItems {
         private List<PubSubItem> itemField;
-        private string maxItemsField;
-        private string nodeField;
-        private string subidField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("item")]
-        public List<PubSubItem> Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttributeAttribute("max_items", DataType = "positiveInteger")]
-        public string MaxItems
-        {
-            get { return this.maxItemsField; }
-            set { this.maxItemsField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttributeAttribute("subid")]
-        public string Subid
-        {
-            get { return this.subidField; }
-            set { this.subidField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubItems()
-        {
-            if ((this.itemField == null))
+        public PubSubItems() {
+            if ((itemField == null))
             {
-                this.itemField = new List<PubSubItem>();
+                itemField = new List<PubSubItem>();
             }
         }
 
-        #endregion
+        /// <remarks />
+        [XmlElementAttribute("item")]
+        public List<PubSubItem> Item {
+            get { return itemField; }
+            set { itemField = value; }
+        }
+
+        /// <remarks />
+        [XmlAttributeAttribute("max_items", DataType = "positiveInteger")]
+        public string MaxItems { get; set; }
+
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node { get; set; }
+
+        /// <remarks />
+        [XmlAttributeAttribute("subid")]
+        public string Subid { get; set; }
     }
 }

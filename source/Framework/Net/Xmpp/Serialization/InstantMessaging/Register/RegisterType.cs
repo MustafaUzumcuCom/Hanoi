@@ -30,91 +30,69 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register
-{
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace = "jabber:iq:register", IncludeInSchema = false)]
-    public enum RegisterType
-    {
-        /// <remarks/>
-        [XmlEnumAttribute("misc")]
-        Misc,
+    [XmlType(Namespace = "jabber:iq:register", IncludeInSchema = false)]
+    public enum RegisterType {
+        /// <remarks />
+        [XmlEnumAttribute("misc")] Misc,
 
-        /// <remarks/>
-        [XmlEnumAttribute("username")]
-        Username,
+        /// <remarks />
+        [XmlEnumAttribute("username")] Username,
 
-        /// <remarks/>
-        [XmlEnumAttribute("first")]
-        First,
+        /// <remarks />
+        [XmlEnumAttribute("first")] First,
 
-        /// <remarks/>
-        [XmlEnumAttribute("url")]
-        Url,
+        /// <remarks />
+        [XmlEnumAttribute("url")] Url,
 
-        /// <remarks/>
-        [XmlEnumAttribute("remove")]
-        Remove,
+        /// <remarks />
+        [XmlEnumAttribute("remove")] Remove,
 
-        /// <remarks/>
-        [XmlEnumAttribute("phone")]
-        Phone,
+        /// <remarks />
+        [XmlEnumAttribute("phone")] Phone,
 
-        /// <remarks/>
-        [XmlEnumAttribute("name")]
-        Name,
+        /// <remarks />
+        [XmlEnumAttribute("name")] Name,
 
-        /// <remarks/>
-        [XmlEnumAttribute("state")]
-        State,
+        /// <remarks />
+        [XmlEnumAttribute("state")] State,
 
-        /// <remarks/>
-        [XmlEnumAttribute("registered")]
-        Registered,
+        /// <remarks />
+        [XmlEnumAttribute("registered")] Registered,
 
-        /// <remarks/>
-        [XmlEnumAttribute("date")]
-        Date,
+        /// <remarks />
+        [XmlEnumAttribute("date")] Date,
 
-        /// <remarks/>
-        [XmlEnumAttribute("key")]
-        Key,
+        /// <remarks />
+        [XmlEnumAttribute("key")] Key,
 
-        /// <remarks/>
-        [XmlEnumAttribute("city")]
-        City,
+        /// <remarks />
+        [XmlEnumAttribute("city")] City,
 
-        /// <remarks/>
-        [XmlEnumAttribute("instructions")]
-        Instructions,
+        /// <remarks />
+        [XmlEnumAttribute("instructions")] Instructions,
 
-        /// <remarks/>
-        [XmlEnumAttribute("zip")]
-        Zip,
+        /// <remarks />
+        [XmlEnumAttribute("zip")] Zip,
 
-        /// <remarks/>
-        [XmlEnumAttribute("nick")]
-        Nick,
+        /// <remarks />
+        [XmlEnumAttribute("nick")] Nick,
 
-        /// <remarks/>
-        [XmlEnumAttribute("password")]
-        Password,
+        /// <remarks />
+        [XmlEnumAttribute("password")] Password,
 
-        /// <remarks/>
-        [XmlEnumAttribute("email")]
-        Email,
+        /// <remarks />
+        [XmlEnumAttribute("email")] Email,
 
-        /// <remarks/>
-        [XmlEnumAttribute("address")]
-        Address,
+        /// <remarks />
+        [XmlEnumAttribute("address")] Address,
 
-        /// <remarks/>
-        [XmlEnumAttribute("text")]
-        Text,
+        /// <remarks />
+        [XmlEnumAttribute("text")] Text,
 
-        /// <remarks/>
-        [XmlEnumAttribute("last")]
-        Last
+        /// <remarks />
+        [XmlEnumAttribute("last")] Last
     }
 }

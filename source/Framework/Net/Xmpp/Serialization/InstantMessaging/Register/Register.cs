@@ -29,15 +29,12 @@
 
 using System;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "http://jabber.org/features/iq-register")]
-	[XmlRootAttribute("register", Namespace = "http://jabber.org/features/iq-register", IsNullable = false)]
-	public class RegisterIQ
-	{
-	}
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/features/iq-register")]
+    [XmlRootAttribute("register", Namespace = "http://jabber.org/features/iq-register", IsNullable = false)]
+    public class RegisterIQ {
+    }
 }

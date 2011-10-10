@@ -30,23 +30,18 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Privacy
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:iq:privacy")]
-	public enum PrivacyType
-	{
-		/// <remarks/>
-		[XmlEnumAttribute("group")]
-		Group,
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Privacy {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:iq:privacy")]
+    public enum PrivacyType {
+        /// <remarks />
+        [XmlEnumAttribute("group")] Group,
 
-		/// <remarks/>
-		[XmlEnumAttribute("jid")]
-		JID,
+        /// <remarks />
+        [XmlEnumAttribute("jid")] JID,
 
-		/// <remarks/>
-		[XmlEnumAttribute("subscription")]
-		Subscription,
-	}
+        /// <remarks />
+        [XmlEnumAttribute("subscription")] Subscription,
+    }
 }

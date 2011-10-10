@@ -27,50 +27,19 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#errors")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#errors")]
     [XmlRootAttribute("unsupported", Namespace = "http://jabber.org/protocol/pubsub#errors", IsNullable = false)]
-    public class PubSubErrorUnsupported
-    {
-        #region · Fields ·
-
-        private PubSubErrorUnsupportedFeatureType featureField;
-        private string valueField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+    public class PubSubErrorUnsupported {
+        /// <remarks />
         [XmlAttributeAttribute("feature")]
-        public PubSubErrorUnsupportedFeatureType Feature
-        {
-            get { return this.featureField; }
-            set { this.featureField = value; }
-        }
+        public PubSubErrorUnsupportedFeatureType Feature { get; set; }
 
-        /// <remarks/>
-        [XmlTextAttribute()]
-        public string Value
-        {
-            get { return this.valueField; }
-            set { this.valueField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubErrorUnsupported()
-        {
-        }
-
-        #endregion
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value { get; set; }
     }
-
 }

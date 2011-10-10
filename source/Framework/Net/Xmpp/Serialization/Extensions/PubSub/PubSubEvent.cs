@@ -27,45 +27,20 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
     [XmlRootAttribute("event", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEvent
-    {
-        #region · Fields ·
-
-        private object itemField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("collection", typeof(PubSubEventCollection))]
-        [XmlElementAttribute("configuration", typeof(PubSubEventConfiguration))]
-        [XmlElementAttribute("delete", typeof(PubSubEventDelete))]
-        [XmlElementAttribute("items", typeof(PubSubEventItems))]
-        [XmlElementAttribute("purge", typeof(PubSubEventPurge))]
-        [XmlElementAttribute("subscription", typeof(PubSubEventSubscription))]
-        public object Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubEvent()
-        {
-        }
-
-        #endregion
+    public class PubSubEvent {
+        /// <remarks />
+        [XmlElementAttribute("collection", typeof (PubSubEventCollection))]
+        [XmlElementAttribute("configuration", typeof (PubSubEventConfiguration))]
+        [XmlElementAttribute("delete", typeof (PubSubEventDelete))]
+        [XmlElementAttribute("items", typeof (PubSubEventItems))]
+        [XmlElementAttribute("purge", typeof (PubSubEventPurge))]
+        [XmlElementAttribute("subscription", typeof (PubSubEventSubscription))]
+        public object Item { get; set; }
     }
 }

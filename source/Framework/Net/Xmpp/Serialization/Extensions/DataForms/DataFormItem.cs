@@ -31,45 +31,25 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms 
-{   
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace="jabber:x:data")]
-    [XmlRootAttribute("item", Namespace="jabber:x:data", IsNullable=false)]
-    public class DataFormItem 
-	{        
-		#region · Fields ·
+    [XmlType(Namespace = "jabber:x:data")]
+    [XmlRootAttribute("item", Namespace = "jabber:x:data", IsNullable = false)]
+    public class DataFormItem {
+        private List<DataFormField> fields;
 
-		private List<DataFormField> fields;
+        /// <remarks />
+        [XmlArrayItemAttribute("field")]
+        public List<DataFormField> Fields {
+            get {
+                if (fields == null)
+                {
+                    fields = new List<DataFormField>();
+                }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlArrayItemAttribute("field")]
-		public List<DataFormField> Fields
-		{
-			get
-			{
-				if (this.fields == null) 
-				{
-					this.fields = new List<DataFormField>();
-				}
-
-				return this.fields;
-			}
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-        public DataFormItem()
-		{
-		}
-
-		#endregion
+                return fields;
+            }
+        }
     }
 }

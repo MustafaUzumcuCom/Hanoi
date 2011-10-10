@@ -30,51 +30,31 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Streams
-{
+namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
     /// <summary>
-    /// http://xmpp.org/rfcs/rfc3921.html
+    ///   http://xmpp.org/rfcs/rfc3921.html
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-session")]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-session")]
     [XmlRootAttribute("session", Namespace = "urn:ietf:params:xml:ns:xmpp-session")]
-    public class Session
-    {
-        #region · Fields ·
+    public class Session {
+        private ItemChoiceType itemElementNameField;
+        private Empty itemField;
 
-        private Empty           itemField;    
-        private ItemChoiceType  itemElementNameField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("optional", typeof(Empty))]
-        [XmlElementAttribute("required", typeof(Empty))]
+        /// <remarks />
+        [XmlElementAttribute("optional", typeof (Empty))]
+        [XmlElementAttribute("required", typeof (Empty))]
         [XmlChoiceIdentifierAttribute("ItemElementName")]
-        public Empty Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
+        public Empty Item {
+            get { return itemField; }
+            set { itemField = value; }
         }
-    
-        /// <remarks/>
+
+        /// <remarks />
         [XmlIgnoreAttribute]
-        public ItemChoiceType ItemElementName
-        {
-            get { return this.itemElementNameField; }
-            set { this.itemElementNameField = value; }
+        public ItemChoiceType ItemElementName {
+            get { return itemElementNameField; }
+            set { itemElementNameField = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Session()
-        {
-        }
-
-        #endregion
     }
 }

@@ -30,46 +30,26 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl
-{
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
     [XmlRootAttribute("auth", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-    public class Auth
-    {
-        #region · Fields ·
-
+    public class Auth {
         private string mechanismField;
         private string value;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("mechanism")]
-        public string Mechanism
-        {
-            get { return this.mechanismField; }
-            set { this.mechanismField = value; }
+        public string Mechanism {
+            get { return mechanismField; }
+            set { mechanismField = value; }
         }
 
         [XmlText]
-        public string Value
-        {
-            get { return this.value; }
+        public string Value {
+            get { return value; }
             set { this.value = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Auth()
-        {
-        }
-
-        #endregion
     }
 }

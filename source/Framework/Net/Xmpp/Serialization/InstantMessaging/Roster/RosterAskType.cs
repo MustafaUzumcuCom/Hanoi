@@ -30,15 +30,12 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:iq:roster")]
-	public enum RosterAskType
-	{
-		/// <remarks/>
-		[XmlEnumAttribute("subscribe")]
-		Subscribe,
-	}
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:iq:roster")]
+    public enum RosterAskType {
+        /// <remarks />
+        [XmlEnumAttribute("subscribe")] Subscribe,
+    }
 }

@@ -30,13 +30,11 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-	[XmlRootAttribute("abort", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-	public class Abort
-	{
-	}
+namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+    [XmlRootAttribute("abort", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
+    public class Abort {
+    }
 }

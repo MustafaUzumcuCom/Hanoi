@@ -29,65 +29,131 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization
-{
+namespace BabelIm.Net.Xmpp.Serialization {
     /// <summary>
-    /// Serializer class for XMPP stanzas
+    ///   Serializer class for XMPP stanzas
     /// </summary>
-    public sealed class XmppSerializer
-    {
-        #region · Static Fields ·
-
+    public sealed class XmppSerializer {
         private static readonly string XmlSerializersResource = "BabelIm.Net.Xmpp.Serialization.Serializers.xml";
 
-        private static List<XmppSerializer> Serializers = new List<XmppSerializer>();
-        private static bool                 Initialized = false;
-        private static object				SyncObject	= new object();
+        private static readonly List<XmppSerializer> Serializers = new List<XmppSerializer>();
+        private static bool Initialized;
+        private static readonly object SyncObject = new object();
+        private readonly XmlParserContext context;
 
-        #endregion
-
-        #region · Static Serialization/Deserialization Methods ·
+        private readonly string defaultNamespace;
+        private readonly string elementName;
+        private readonly XmlNameTable nameTable;
+        private readonly XmlSerializerNamespaces namespaces;
+        private readonly XmlNamespaceManager nsMgr;
+        private readonly string prefix;
+        private readonly string schema;
+        private readonly XmlSerializer serializer;
+        private readonly Type serializerType;
 
         /// <summary>
-        /// Serializes the specified value.
+        ///   Initializes a new instance of the <see cref = "XmppSerializer" /> class.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name = "elementName">Name of the element.</param>
+        /// <param name = "schema">The schema.</param>
+        /// <param name = "prefix">The prefix.</param>
+        /// <param name = "defaultNamespace">The default namespace.</param>
+        /// <param name = "serializerType">Type of the serializer.</param>
+        private XmppSerializer(string elementName, string schema, string prefix, string defaultNamespace,
+                               Type serializerType) {
+            this.elementName = elementName;
+            this.serializerType = serializerType;
+            this.schema = schema;
+            this.prefix = prefix;
+            this.defaultNamespace = defaultNamespace;
+            serializer = new XmlSerializer(serializerType);
+            nameTable = new NameTable();
+            nsMgr = new XmlNamespaceManager(nameTable);
+            context = new XmlParserContext(nameTable, nsMgr, null, XmlSpace.None);
+            namespaces = new XmlSerializerNamespaces();
+            namespaces.Add(prefix, defaultNamespace);
+
+            foreach (XmlQualifiedName name in namespaces.ToArray())
+            {
+                nsMgr.AddNamespace(name.Name, name.Namespace);
+            }
+        }
+
+        /// <summary>
+        ///   Gets the name of the element.
+        /// </summary>
+        /// <value>The name of the element.</value>
+        public string ElementName {
+            get { return elementName; }
+        }
+
+        /// <summary>
+        ///   Gets the schema.
+        /// </summary>
+        /// <value>The schema.</value>
+        public string Schema {
+            get { return schema; }
+        }
+
+        /// <summary>
+        ///   Gets the prefix.
+        /// </summary>
+        /// <value>The prefix.</value>
+        public string Prefix {
+            get { return prefix; }
+        }
+
+        /// <summary>
+        ///   Gets the default namespace.
+        /// </summary>
+        /// <value>The default namespace.</value>
+        public string DefaultNamespace {
+            get { return defaultNamespace; }
+        }
+
+        /// <summary>
+        ///   Gets the type of the serializer.
+        /// </summary>
+        /// <value>The type of the serializer.</value>
+        public Type SerializerType {
+            get { return serializerType; }
+        }
+
+        /// <summary>
+        ///   Serializes the specified value.
+        /// </summary>
+        /// <param name = "value">The value.</param>
         /// <returns></returns>
-        public static byte[] Serialize(object value)
-        {
+        public static byte[] Serialize(object value) {
             Initialize();
 
             return GetSerializer(value.GetType()).SerializeObject(value);
         }
 
         /// <summary>
-        /// Serializes the specified value.
+        ///   Serializes the specified value.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="prefix">The prefix.</param>
+        /// <param name = "value">The value.</param>
+        /// <param name = "prefix">The prefix.</param>
         /// <returns></returns>
-        public static byte[] Serialize(object value, string prefix)
-        {
+        public static byte[] Serialize(object value, string prefix) {
             Initialize();
 
             return GetSerializer(value.GetType()).SerializeObject(value);
         }
 
         /// <summary>
-        /// Deserializes the specified XML.
+        ///   Deserializes the specified XML.
         /// </summary>
-        /// <param name="xml">The XML.</param>
+        /// <param name = "xml">The XML.</param>
         /// <returns></returns>
-        public static object Deserialize(string nodeName, string xml)
-        {
+        public static object Deserialize(string nodeName, string xml) {
             Initialize();
 
             XmppSerializer serializer = GetSerializer(nodeName);
@@ -100,41 +166,38 @@ namespace BabelIm.Net.Xmpp.Serialization
             return null;
         }
 
-        #endregion
-
-        #region · Static Methods ·
-
         /// <summary>
-        /// Initializes this instance.
+        ///   Initializes this instance.
         /// </summary>
-        static void Initialize()
-        {
+        private static void Initialize() {
             lock (SyncObject)
             {
                 if (!Initialized)
                 {
-                    using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(XmlSerializersResource))
+                    using (
+                        Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(XmlSerializersResource)
+                        )
                     {
-                        using (StreamReader reader = new StreamReader(stream, System.Text.Encoding.UTF8))
+                        using (var reader = new StreamReader(stream, System.Text.Encoding.UTF8))
                         {
-                            XmlDocument xml = new XmlDocument();
+                            var xml = new XmlDocument();
                             xml.LoadXml(reader.ReadToEnd());
-    
+
                             XmlNodeList list = xml.SelectNodes("/serializers/serializer");
-    
+
                             foreach (XmlNode serializer in list)
                             {
                                 XmlNode node = serializer.SelectSingleNode("namespace");
-    
-                                string 	ename	= serializer.Attributes["elementname"].Value;
-                                string 	schema 	= serializer.SelectSingleNode("schema").InnerText;
-                                string 	prefix 	= node.SelectSingleNode("prefix").InnerText;
-                                string 	nsName 	= node.SelectSingleNode("namespace").InnerText;
-                                Type 	type 	= Type.GetType(serializer.SelectSingleNode("serializertype").InnerText);
-    
+
+                                string ename = serializer.Attributes["elementname"].Value;
+                                string schema = serializer.SelectSingleNode("schema").InnerText;
+                                string prefix = node.SelectSingleNode("prefix").InnerText;
+                                string nsName = node.SelectSingleNode("namespace").InnerText;
+                                Type type = Type.GetType(serializer.SelectSingleNode("serializertype").InnerText);
+
                                 Serializers.Add(new XmppSerializer(ename, schema, prefix, nsName, type));
                             }
-    
+
                             Initialized = true;
                         }
                     }
@@ -143,12 +206,11 @@ namespace BabelIm.Net.Xmpp.Serialization
         }
 
         /// <summary>
-        /// Gets the serializer.
+        ///   Gets the serializer.
         /// </summary>
-        /// <param name="elementName">Name of the element.</param>
+        /// <param name = "elementName">Name of the element.</param>
         /// <returns></returns>
-        static XmppSerializer GetSerializer(string elementName)
-        {
+        private static XmppSerializer GetSerializer(string elementName) {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Serializers Factory not initialized");
@@ -166,12 +228,11 @@ namespace BabelIm.Net.Xmpp.Serialization
         }
 
         /// <summary>
-        /// Gets the serializer.
+        ///   Gets the serializer.
         /// </summary>
-        /// <param name="type">The type.</param>
+        /// <param name = "type">The type.</param>
         /// <returns></returns>
-        static XmppSerializer GetSerializer(Type type)
-        {
+        private static XmppSerializer GetSerializer(Type type) {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Serializers Factory not initialized");
@@ -180,136 +241,34 @@ namespace BabelIm.Net.Xmpp.Serialization
             return Serializers.Where(s => s.SerializerType == type).SingleOrDefault();
         }
 
-        #endregion
-
-        #region · Fields ·
-
-        private string					elementName;
-        private string					schema;
-        private string					prefix;
-        private string					defaultNamespace;
-        private Type					serializerType;
-        private XmlSerializerNamespaces namespaces;
-        private XmlSerializer			serializer;
-        private XmlNameTable			nameTable;
-        private XmlNamespaceManager		nsMgr;
-        private XmlParserContext		context;
-
-        #endregion
-
-        #region · Properties ·
-
         /// <summary>
-        /// Gets the name of the element.
+        ///   Serializes the specified value.
         /// </summary>
-        /// <value>The name of the element.</value>
-        public string ElementName
-        {
-            get { return this.elementName; }
-        }
-
-        /// <summary>
-        /// Gets the schema.
-        /// </summary>
-        /// <value>The schema.</value>
-        public string Schema
-        {
-            get { return this.schema; }
-        }
-
-        /// <summary>
-        /// Gets the prefix.
-        /// </summary>
-        /// <value>The prefix.</value>
-        public string Prefix
-        {
-            get { return this.prefix; }
-        }
-
-        /// <summary>
-        /// Gets the default namespace.
-        /// </summary>
-        /// <value>The default namespace.</value>
-        public string DefaultNamespace
-        {
-            get { return this.defaultNamespace; }
-        }
-
-        /// <summary>
-        /// Gets the type of the serializer.
-        /// </summary>
-        /// <value>The type of the serializer.</value>
-        public Type SerializerType
-        {
-            get { return this.serializerType; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppSerializer"/> class.
-        /// </summary>
-        /// <param name="elementName">Name of the element.</param>
-        /// <param name="schema">The schema.</param>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="defaultNamespace">The default namespace.</param>
-        /// <param name="serializerType">Type of the serializer.</param>
-        private XmppSerializer(string elementName, string schema, string prefix, string defaultNamespace, Type serializerType)
-        {
-            this.elementName		= elementName;
-            this.serializerType		= serializerType;
-            this.schema				= schema;
-            this.prefix				= prefix;
-            this.defaultNamespace	= defaultNamespace;
-            this.serializer         = new XmlSerializer(serializerType);
-            this.nameTable			= new NameTable();
-            this.nsMgr				= new XmlNamespaceManager(this.nameTable);
-            this.context			= new XmlParserContext(this.nameTable, this.nsMgr, null, XmlSpace.None);
-            this.namespaces			= new XmlSerializerNamespaces();
-            this.namespaces.Add(prefix, defaultNamespace);
-
-            foreach (XmlQualifiedName name in this.namespaces.ToArray())
-            {
-                this.nsMgr.AddNamespace(name.Name, name.Namespace);
-            }
-        }
-
-        #endregion
-
-        #region · Private Methods ·
-
-        /// <summary>
-        /// Serializes the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name = "value">The value.</param>
         /// <returns></returns>
-        private byte[] SerializeObject(object value)
-        {
-            return this.SerializeObject(value, "");
+        private byte[] SerializeObject(object value) {
+            return SerializeObject(value, "");
         }
 
         /// <summary>
-        /// Serializes the specified value.
+        ///   Serializes the specified value.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="prefix">The prefix.</param>
+        /// <param name = "value">The value.</param>
+        /// <param name = "prefix">The prefix.</param>
         /// <returns></returns>
-        private byte[] SerializeObject(object value, string prefix)
-        {
-            byte[]		    result	= null;
-            MemoryStream	ms		= null;
-            XmppTextWriter	tw		= null;
+        private byte[] SerializeObject(object value, string prefix) {
+            byte[] result = null;
+            MemoryStream ms = null;
+            XmppTextWriter tw = null;
 
             try
             {
-                ms		= new MemoryStream();
-                tw		= new XmppTextWriter(ms);
-        
+                ms = new MemoryStream();
+                tw = new XmppTextWriter(ms);
+
                 tw.QuoteChar = '\'';
 
-                serializer.Serialize(tw, value, this.namespaces);
+                serializer.Serialize(tw, value, namespaces);
 
                 result = ms.ToArray();
             }
@@ -335,18 +294,15 @@ namespace BabelIm.Net.Xmpp.Serialization
         }
 
         /// <summary>
-        /// Deserializes the specified XML.
+        ///   Deserializes the specified XML.
         /// </summary>
-        /// <param name="xml">The XML.</param>
+        /// <param name = "xml">The XML.</param>
         /// <returns></returns>
-        private object Deserialize(string xml)
-        {
-            using (XmlTextReader reader = new XmlTextReader(xml, XmlNodeType.Element, this.context))
+        private object Deserialize(string xml) {
+            using (var reader = new XmlTextReader(xml, XmlNodeType.Element, context))
             {
-                return this.serializer.Deserialize(reader);
+                return serializer.Deserialize(reader);
             }
         }
-
-        #endregion
     }
 }

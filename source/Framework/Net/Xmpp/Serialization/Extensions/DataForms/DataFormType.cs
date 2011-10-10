@@ -27,30 +27,22 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms 
-{      
-	/// <remarks/>
-	[XmlTypeAttribute(Namespace="jabber:x:data")]
-	public enum DataFormType 
-	{        
-		/// <remarks/>
-		[XmlEnumAttribute("cancel")]
-		Cancel,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("form")]
-		Form,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("result")]
-		Result,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("submit")]
-		Submit,
-	}
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+    /// <remarks />
+    [XmlType(Namespace = "jabber:x:data")]
+    public enum DataFormType {
+        /// <remarks />
+        [XmlEnumAttribute("cancel")] Cancel,
+
+        /// <remarks />
+        [XmlEnumAttribute("form")] Form,
+
+        /// <remarks />
+        [XmlEnumAttribute("result")] Result,
+
+        /// <remarks />
+        [XmlEnumAttribute("submit")] Submit,
+    }
 }

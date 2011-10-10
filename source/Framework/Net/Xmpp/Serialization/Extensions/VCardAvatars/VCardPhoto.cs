@@ -27,49 +27,19 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCard
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCard {
     /// <summary>
-    /// XEP-0153: vCard-Based Avatars
+    ///   XEP-0153: vCard-Based Avatars
     /// </summary>
-    [XmlTypeAttribute(Namespace = "vcard-temp")]
+    [XmlType(Namespace = "vcard-temp")]
     [XmlRootAttribute("PHOTO", Namespace = "vcard-temp", IsNullable = false)]
-    public class VCardPhoto
-    {
-        #region · Fields ·
-
-        private string type;
-        private byte[] photo;
-
-        #endregion
-
-        #region · Properties ·
-
+    public class VCardPhoto {
         [XmlElement("TYPE")]
-        public string Type
-        {
-            get { return this.type; }
-            set { this.type = value; }
-        }
+        public string Type { get; set; }
 
-        [XmlElement("BINVAL", DataType="base64Binary")]
-        public byte[] Photo
-        {
-            get { return this.photo; }
-            set { this.photo = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public VCardPhoto()
-        {
-        }
-
-        #endregion
+        [XmlElement("BINVAL", DataType = "base64Binary")]
+        public byte[] Photo { get; set; }
     }
 }

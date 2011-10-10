@@ -30,62 +30,40 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCard
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCard {
     /// <summary>
-    /// XEP-0054: vcard-temp
+    ///   XEP-0054: vcard-temp
     /// </summary>
     [Serializable]
     [XmlType(Namespace = "vcard-temp")]
     [XmlRoot("x", Namespace = "vcard-temp", IsNullable = false)]
-    public class VCardData
-    {
-        #region · Fields ·
-
-        private string nickName;
+    public class VCardData {
         private string jabberId;
+        private string nickName;
         private VCardPhoto photo;
 
-        #endregion
-
-        #region · Properties ·
-
         [XmlElement("NICKNAME")]
-        public string NickName
-        {
-            get { return this.nickName; }
-            set { this.nickName = value; }
+        public string NickName {
+            get { return nickName; }
+            set { nickName = value; }
         }
 
         [XmlElement("JABBERID")]
-        public string JabberId
-        {
-            get { return this.jabberId; }
-            set { this.jabberId = value; }
+        public string JabberId {
+            get { return jabberId; }
+            set { jabberId = value; }
         }
 
         [XmlElement("PHOTO")]
-        public VCardPhoto Photo
-        {
-            get 
-            {
-                if (this.photo == null)
+        public VCardPhoto Photo {
+            get {
+                if (photo == null)
                 {
-                    this.photo = new VCardPhoto();
+                    photo = new VCardPhoto();
                 }
-                return this.photo; 
+                return photo;
             }
-            set { this.photo = value; }
+            set { photo = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public VCardData()
-        {
-        }
-
-        #endregion
     }
 }

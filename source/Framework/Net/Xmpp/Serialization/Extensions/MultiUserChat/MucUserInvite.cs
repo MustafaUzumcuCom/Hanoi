@@ -30,58 +30,37 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat 
-{
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
-    /// XEP-0045: Multi-User Chat
+    ///   XEP-0045: Multi-User Chat
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace="http://jabber.org/protocol/muc#user")]
-    [XmlRootAttribute("invite", Namespace="http://jabber.org/protocol/muc#user", IsNullable=false)]
-    public class MucUserInvite 
-    {
-    	#region · Fields ·
-        
-        private string reason;
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#user")]
+    [XmlRootAttribute("invite", Namespace = "http://jabber.org/protocol/muc#user", IsNullable = false)]
+    public class MucUserInvite {
         private string from;
+        private string reason;
         private string to;
 
-        #endregion
-    	
-    	#region · Properties ·
-    	
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("reason")]
-        public string Reason
-        {
-            get { return this.reason; }
-            set { this.reason = value; }
+        public string Reason {
+            get { return reason; }
+            set { reason = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("from")]
-        public string From
-        {
-            get { return this.from; }
-            set { this.from = value; }
+        public string From {
+            get { return @from; }
+            set { @from = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("to")]
-        public string To
-        {
-            get { return this.to; }
-            set { this.to = value; }
+        public string To {
+            get { return to; }
+            set { to = value; }
         }
-    	
-    	#endregion
-    	
-    	#region · Constructors ·
-    	
-    	public MucUserInvite()
-    	{    		
-    	}
-    	
-    	#endregion
-    }   
+    }
 }

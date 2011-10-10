@@ -30,47 +30,27 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Privacy
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:iq:privacy")]
-	[XmlRootAttribute("default", Namespace = "jabber:iq:privacy", IsNullable = false)]
-	public class Default
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Privacy {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:iq:privacy")]
+    [XmlRootAttribute("default", Namespace = "jabber:iq:privacy", IsNullable = false)]
+    public class Default {
+        private string nameField;
+        private string valueField;
 
-		private string nameField;
-		private string valueField;
+        /// <remarks />
+        [XmlAttributeAttribute("name")]
+        public string Name {
+            get { return nameField; }
+            set { nameField = value; }
+        }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlAttributeAttribute("name")]
-		public string Name
-		{
-			get { return this.nameField; }
-			set { this.nameField = value; }
-		}
-
-		/// <remarks/>
-		[XmlTextAttribute(DataType = "NMTOKEN")]
-		public string Value
-		{
-			get { return this.valueField; }
-			set { this.valueField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public Default()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlTextAttribute(DataType = "NMTOKEN")]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
+    }
 }

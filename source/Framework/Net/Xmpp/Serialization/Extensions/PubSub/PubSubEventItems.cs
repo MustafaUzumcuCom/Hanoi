@@ -27,55 +27,33 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
     [XmlRootAttribute("items", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventItems
-    {
-        #region · Fields ·
-
+    public class PubSubEventItems {
         private List<object> itemsField;
-        private string nodeField;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("item", typeof(PubSubItem))]
-        [XmlElementAttribute("retract", typeof(PubSubEventRetract))]
-        public List<object> Items
-        {
-            get { return this.itemsField; }
-            set { this.itemsField = value; }
-        }
-
-        /// <remarks/>
-        [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubEventItems()
-        {
-            if ((this.itemsField == null))
+        public PubSubEventItems() {
+            if ((itemsField == null))
             {
-                this.itemsField = new List<object>();
+                itemsField = new List<object>();
             }
         }
 
-        #endregion
+        /// <remarks />
+        [XmlElementAttribute("item", typeof (PubSubItem))]
+        [XmlElementAttribute("retract", typeof (PubSubEventRetract))]
+        public List<object> Items {
+            get { return itemsField; }
+            set { itemsField = value; }
+        }
+
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node { get; set; }
     }
 }

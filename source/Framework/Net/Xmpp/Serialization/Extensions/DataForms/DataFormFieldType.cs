@@ -28,54 +28,41 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms 
-{   
-	/// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace="jabber:x:data")]
-	public enum DataFormFieldType 
-	{        
-		/// <remarks/>
-		[XmlEnumAttribute("boolean")]
-		Boolean,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("fixed")]
-		Fixed,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("hidden")]
-		Hidden,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("jid-multi")]
-		JidMulti,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("jid-single")]
-		JidSingle,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("list-multi")]
-		ListMulti,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("list-single")]
-		ListSingle,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("text-multi")]
-		TextMulti,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("text-private")]
-		TextPrivate,
-        
-		/// <remarks/>
-		[XmlEnumAttribute("text-single")]
-		TextSingle,
-	}
+    [XmlType(Namespace = "jabber:x:data")]
+    public enum DataFormFieldType {
+        /// <remarks />
+        [XmlEnumAttribute("boolean")] Boolean,
+
+        /// <remarks />
+        [XmlEnumAttribute("fixed")] Fixed,
+
+        /// <remarks />
+        [XmlEnumAttribute("hidden")] Hidden,
+
+        /// <remarks />
+        [XmlEnumAttribute("jid-multi")] JidMulti,
+
+        /// <remarks />
+        [XmlEnumAttribute("jid-single")] JidSingle,
+
+        /// <remarks />
+        [XmlEnumAttribute("list-multi")] ListMulti,
+
+        /// <remarks />
+        [XmlEnumAttribute("list-single")] ListSingle,
+
+        /// <remarks />
+        [XmlEnumAttribute("text-multi")] TextMulti,
+
+        /// <remarks />
+        [XmlEnumAttribute("text-private")] TextPrivate,
+
+        /// <remarks />
+        [XmlEnumAttribute("text-single")] TextSingle,
+    }
 }

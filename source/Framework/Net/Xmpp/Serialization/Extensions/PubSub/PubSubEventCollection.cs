@@ -27,50 +27,20 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub
-{
-    /// <remarks/>
-    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+    /// <remarks />
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
     [XmlRootAttribute("collection", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventCollection
-    {
-        #region · Fields ·
+    public class PubSubEventCollection {
+        /// <remarks />
+        [XmlElementAttribute("associate", typeof (PubSubEventAssociate))]
+        [XmlElementAttribute("disassociate", typeof (PubSubEventDisassociate))]
+        public object Item { get; set; }
 
-        private object itemField;
-        private string nodeField;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
-        [XmlElementAttribute("associate", typeof(PubSubEventAssociate))]
-        [XmlElementAttribute("disassociate", typeof(PubSubEventDisassociate))]
-        public object Item
-        {
-            get { return this.itemField; }
-            set { this.itemField = value; }
-        }
-
-        /// <remarks/>
+        /// <remarks />
         [XmlAttributeAttribute("node")]
-        public string Node
-        {
-            get { return this.nodeField; }
-            set { this.nodeField = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public PubSubEventCollection()
-        {
-        }
-
-        #endregion
+        public string Node { get; set; }
     }
 }

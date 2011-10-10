@@ -30,47 +30,28 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence
-{
-	/// <remarks/>
-	[Serializable]
-	[XmlTypeAttribute(Namespace = "jabber:client")]
-	[XmlRootAttribute("status", Namespace = "jabber:client", IsNullable = false)]
-	public class Status
-	{
-		#region · Fields ·
+namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:client")]
+    [XmlRootAttribute("status", Namespace = "jabber:client", IsNullable = false)]
+    public class Status {
+        private string langField;
+        private string valueField;
 
-		private string langField;
-		private string valueField;
+        /// <remarks />
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
+        }
 
-		#endregion
-
-		#region · Properties ·
-
-		/// <remarks/>
-		[XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
-		public string Lang
-		{
-			get { return this.langField; }
-			set { this.langField = value; }
-		}
-
-		/// <remarks/>
-		[XmlTextAttribute()]
-		public string Value
-		{
-			get { return this.valueField; }
-			set { this.valueField = value; }
-		}
-
-		#endregion
-
-		#region · Constructors ·
-
-		public Status()
-		{
-		}
-
-		#endregion
-	}
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
+    }
 }

@@ -31,104 +31,77 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms 
-{               
-    /// <remarks/>
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+    /// <remarks />
     [Serializable]
-    [XmlTypeAttribute(Namespace="jabber:x:data")]
-    [XmlRootAttribute("x", Namespace="jabber:x:data", IsNullable=false)]
-    public class DataForm 
-    {        
-        #region · Fields ·
-
-        private List<string>		instructions;
-        private string				title;
+    [XmlType(Namespace = "jabber:x:data")]
+    [XmlRootAttribute("x", Namespace = "jabber:x:data", IsNullable = false)]
+    public class DataForm {
         private List<DataFormField> fields;
-        private DataFormReported	reported;
-        private List<DataFormItem>	items;
-        private DataFormType		type;
+        private List<string> instructions;
+        private List<DataFormItem> items;
+        private DataFormReported reported;
+        private string title;
+        private DataFormType type;
 
-        #endregion
-
-        #region · Properties ·
-
-        /// <remarks/>
+        /// <remarks />
         [XmlElementAttribute("instructions")]
-        public List<string> Instructions
-        {
-            get
-            {
-                if (this.instructions == null) 
+        public List<string> Instructions {
+            get {
+                if (instructions == null)
                 {
-                    this.instructions = new List<string>();
+                    instructions = new List<string>();
                 }
 
-                return this.instructions;
+                return instructions;
             }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlElementAttribute("title")]
-        public string Title
-        {
-            get { return this.title; }
-            set { this.title = value; }
+        public string Title {
+            get { return title; }
+            set { title = value; }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlElementAttribute("field")]
-        public List<DataFormField> Fields
-        {
-            get
-            {
-                if (this.fields == null) 
+        public List<DataFormField> Fields {
+            get {
+                if (fields == null)
                 {
-                    this.fields = new List<DataFormField>();
+                    fields = new List<DataFormField>();
                 }
 
-                return this.fields;
+                return fields;
             }
         }
-        
-        /// <remarks/>
-        [XmlElementAttribute("reported", IsNullable=false)]
-        public DataFormReported Reported
-        {
-            get { return this.reported; }
-            set { this.reported = value; }
+
+        /// <remarks />
+        [XmlElementAttribute("reported", IsNullable = false)]
+        public DataFormReported Reported {
+            get { return reported; }
+            set { reported = value; }
         }
-        
-        /// <remarks/>
-        [XmlArrayItemAttribute("item", IsNullable=false)]
-        public List<DataFormItem> Items
-        {
-            get
-            {
-                if (this.items == null) 
+
+        /// <remarks />
+        [XmlArrayItemAttribute("item", IsNullable = false)]
+        public List<DataFormItem> Items {
+            get {
+                if (items == null)
                 {
-                    this.items = new List<DataFormItem>();
+                    items = new List<DataFormItem>();
                 }
 
-                return this.items;
+                return items;
             }
         }
-        
-        /// <remarks/>
+
+        /// <remarks />
         [XmlAttributeAttribute("type")]
-        public DataFormType Type
-        {
-            get { return this.type; }
-            set { this.type = value; }
+        public DataFormType Type {
+            get { return type; }
+            set { type = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public DataForm()
-        {
-        }
-
-        #endregion
     }
 }
