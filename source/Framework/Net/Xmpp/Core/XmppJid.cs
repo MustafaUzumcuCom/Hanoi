@@ -32,115 +32,87 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Gnu.Inet.Encoding;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Represents a XMPP JID
+    ///   Represents a XMPP JID
     /// </summary>
-    public sealed class XmppJid
-    {
-        #region · Static Members ·
-
+    public sealed class XmppJid {
         /// <summary>
-        /// Regex used to parse jid strings
+        ///   Regex used to parse jid strings
         /// </summary>
         private static readonly Regex JidRegex = new Regex
-        (
-            @"(?:(?<userid>[^\@]{1,1023})\@)?" +        // optional node
-            @"(?<domain>[a-zA-Z0-9\.\-]{1,1023})" +     // domain
-            @"(?:/(?<resource>.{1,1023}))?",            // resource
+            (
+            @"(?:(?<userid>[^\@]{1,1023})\@)?" + // optional node
+            @"(?<domain>[a-zA-Z0-9\.\-]{1,1023})" + // domain
+            @"(?:/(?<resource>.{1,1023}))?", // resource
             RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.Compiled
-        );
+            );
 
-        #endregion
-
-        #region · Fields ·
-
-        private string userName;
-        private string domainName;
-        private string resourceName;
         private string bareJid;
+        private string domainName;
         private string fullJid;
-
-        #endregion
-
-        #region · Properties ·
+        private string resourceName;
+        private string userName;
 
         /// <summary>
-        /// Gets the Bare JID
+        ///   Initializes a new instance of the <see cref = "XmppJid" /> class with
+        ///   the given JID
         /// </summary>
-        public string BareIdentifier
-        {
-            get { return this.bareJid; }
+        /// <param name = "jid">The XMPP jid</param>
+        public XmppJid(string jid) {
+            Parse(jid);
         }
 
         /// <summary>
-        /// Gets the User Name
+        ///   Initializes a new instance of the <see cref = "XmppJid" /> class with
+        ///   the given user name, domain name and resource name.
         /// </summary>
-        public string UserName
-        {
-            get { return this.userName; }
+        /// <param name = "userName">The user name</param>
+        /// <param name = "domainName">The domain name</param>
+        /// <param name = "resourceName">The resource name</param>
+        public XmppJid(string userName, string domainName, string resourceName) {
+            this.userName = Stringprep.NamePrep(userName);
+            this.domainName = Stringprep.NodePrep(domainName);
+            this.resourceName = Stringprep.ResourcePrep(resourceName);
+
+            BuildBareAndFullJid();
         }
 
         /// <summary>
-        /// Gets the Domain Name
+        ///   Gets the Bare JID
         /// </summary>
-        public string DomainName
-        {
-            get { return this.domainName; }
+        public string BareIdentifier {
+            get { return bareJid; }
         }
 
         /// <summary>
-        /// Gets the Resource Name
+        ///   Gets the User Name
         /// </summary>
-        public string ResourceName
-        {
-            get { return this.resourceName; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppJid"/> class with
-        /// the given JID
-        /// </summary>
-        /// <param name="jid">The XMPP jid</param>
-        public XmppJid(string jid)
-        {
-            this.Parse(jid);
+        public string UserName {
+            get { return userName; }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmppJid"/> class with
-        /// the given user name, domain name and resource name.
+        ///   Gets the Domain Name
         /// </summary>
-        /// <param name="userName">The user name</param>
-        /// <param name="domainName">The domain name</param>
-        /// <param name="resourceName">The resource name</param>
-        public XmppJid(string userName, string domainName, string resourceName)
-        {
-            this.userName       = Stringprep.NamePrep(userName);
-            this.domainName     = Stringprep.NodePrep(domainName);
-            this.resourceName   = Stringprep.ResourcePrep(resourceName);
-
-            this.BuildBareAndFullJid();
+        public string DomainName {
+            get { return domainName; }
         }
 
-        #endregion
-
-        #region · Operator Overloading ·
+        /// <summary>
+        ///   Gets the Resource Name
+        /// </summary>
+        public string ResourceName {
+            get { return resourceName; }
+        }
 
         // Implicit conversion from string to XmppJid. 
-        public static implicit operator XmppJid(string x)
-        {
+        public static implicit operator XmppJid(string x) {
             return new XmppJid(x);
         }
 
         // Explicit conversion from XmppJid to string. 
-        public static implicit operator string(XmppJid x)
-        {
+        public static implicit operator string(XmppJid x) {
             if (x == null)
             {
                 throw new InvalidOperationException();
@@ -149,13 +121,8 @@ namespace BabelIm.Net.Xmpp.Core
             return x.fullJid;
         }
 
-        #endregion
-
-        #region · Overriden Methods ·
-
         // Override the Object.Equals(object o) method:
-        public override bool Equals(object o)
-        {
+        public override bool Equals(object o) {
             // If parameter is null return false.
             if (o == null)
             {
@@ -166,81 +133,71 @@ namespace BabelIm.Net.Xmpp.Core
                 return false;
             }
 
-            return (this.fullJid == ((XmppJid)o).fullJid);
+            return (fullJid == ((XmppJid) o).fullJid);
         }
 
         // Override the Object.GetHashCode() method:
-        public override int GetHashCode()
-        {
-            return this.fullJid.GetHashCode();
+        public override int GetHashCode() {
+            return fullJid.GetHashCode();
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   Returns a <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString()
-        {
-            return this.fullJid;
+        public override string ToString() {
+            return fullJid;
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private void Parse(string jid)
-        {
+        private void Parse(string jid) {
             Match match = JidRegex.Match(jid);
 
             if (match != null)
             {
                 if (match.Groups["userid"] != null)
                 {
-                    this.userName = Stringprep.NamePrep(match.Groups["userid"].Value);
+                    userName = Stringprep.NamePrep(match.Groups["userid"].Value);
                 }
                 if (match.Groups["domain"] != null)
                 {
-                    this.domainName = Stringprep.NodePrep(match.Groups["domain"].Value);
+                    domainName = Stringprep.NodePrep(match.Groups["domain"].Value);
                 }
                 if (match.Groups["resource"] != null)
                 {
-                    this.resourceName = Stringprep.ResourcePrep(match.Groups["resource"].Value);
+                    resourceName = Stringprep.ResourcePrep(match.Groups["resource"].Value);
                 }
             }
 
-            this.BuildBareAndFullJid();
+            BuildBareAndFullJid();
         }
 
-        private void BuildBareAndFullJid()
-        {
-            StringBuilder jidBuffer = new StringBuilder();
+        private void BuildBareAndFullJid() {
+            var jidBuffer = new StringBuilder();
 
-            if (this.UserName != null && this.userName.Length > 0)
+            if (UserName != null && userName.Length > 0)
             {
-                jidBuffer.Append(this.UserName);
+                jidBuffer.Append(UserName);
             }
-            if (this.DomainName != null && this.DomainName.Length > 0)
+            if (DomainName != null && DomainName.Length > 0)
             {
                 if (jidBuffer.Length > 0)
                 {
                     jidBuffer.Append("@");
                 }
 
-                jidBuffer.Append(this.DomainName);
+                jidBuffer.Append(DomainName);
             }
 
-            this.bareJid = jidBuffer.ToString();
+            bareJid = jidBuffer.ToString();
 
-            if (this.ResourceName != null && this.ResourceName.Length > 0)
+            if (ResourceName != null && ResourceName.Length > 0)
             {
-                jidBuffer.AppendFormat("/{0}", this.ResourceName);
+                jidBuffer.AppendFormat("/{0}", ResourceName);
             }
 
-            this.fullJid = jidBuffer.ToString();
+            fullJid = jidBuffer.ToString();
         }
-
-        #endregion
     }
 }

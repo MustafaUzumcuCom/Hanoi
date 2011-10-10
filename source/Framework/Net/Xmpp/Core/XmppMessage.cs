@@ -30,167 +30,138 @@
 using System;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Represents an XMPP message stanza
+    ///   Represents an XMPP message stanza
     /// </summary>
-    public sealed class XmppMessage
-    {
-        #region · Fields ·
-
-        private string                      identifier;
-        private XmppJid                     from;
-        private XmppJid                     to;
-        private MessageType                 type;
-        private string                      subject;
-        private string                      body;
-        private string                      thread;
-        private string                      language;
-        private XmppChatStateNotification   chatStateNotification;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class XmppMessage {
+        private string body;
+        private XmppChatStateNotification chatStateNotification;
+        private XmppJid from;
+        private string identifier;
+        private string language;
+        private string subject;
+        private string thread;
+        private XmppJid to;
+        private MessageType type;
 
         /// <summary>
-        /// Gets the message identifier
+        ///   Initializes a new instance of the <see cref = "T:XmppMessage" /> class.
         /// </summary>
-        public string Identifier
-        {
-            get { return this.identifier; }
+        /// <param name = "message">The message.</param>
+        internal XmppMessage(Message message) {
+            Initialize(message);
         }
 
         /// <summary>
-        /// Gets the message source JID .
+        ///   Gets the message identifier
         /// </summary>
-        /// <value>From.</value>
-        public XmppJid From
-        {
-            get { return this.from; }
+        public string Identifier {
+            get { return identifier; }
         }
 
         /// <summary>
-        /// Gets the message target JID .
+        ///   Gets the message source JID .
         /// </summary>
         /// <value>From.</value>
-        public XmppJid To
-        {
-            get { return this.to; }
+        public XmppJid From {
+            get { return @from; }
         }
 
         /// <summary>
-        /// Gets the message type
+        ///   Gets the message target JID .
         /// </summary>
-        public MessageType Type
-        {
-            get { return this.type; }
+        /// <value>From.</value>
+        public XmppJid To {
+            get { return to; }
         }
 
         /// <summary>
-        /// Gets the message subject.
+        ///   Gets the message type
+        /// </summary>
+        public MessageType Type {
+            get { return type; }
+        }
+
+        /// <summary>
+        ///   Gets the message subject.
         /// </summary>
         /// <value>The subject.</value>
-        public string Subject
-        {
-            get { return this.subject; }
+        public string Subject {
+            get { return subject; }
         }
 
         /// <summary>
-        /// Gets the message body.
+        ///   Gets the message body.
         /// </summary>
         /// <value>The body.</value>
-        public string Body
-        {
-            get { return this.body; }
+        public string Body {
+            get { return body; }
         }
 
         /// <summary>
-        /// Gets the message thread.
+        ///   Gets the message thread.
         /// </summary>
         /// <value>The thread.</value>
-        public string Thread
-        {
-            get { return this.thread; }
+        public string Thread {
+            get { return thread; }
         }
 
         /// <summary>
-        /// Gets the message language.
+        ///   Gets the message language.
         /// </summary>
         /// <value>The language.</value>
-        public string Language
-        {
-            get { return this.language; }
+        public string Language {
+            get { return language; }
         }
 
         /// <summary>
-        /// Gests the chat state notification type
+        ///   Gests the chat state notification type
         /// </summary>
-        public XmppChatStateNotification ChatStateNotification
-        {
+        public XmppChatStateNotification ChatStateNotification {
             get { return chatStateNotification; }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppMessage"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        internal XmppMessage(Message message)
-        {
-            this.Initialize(message);
-        }
-
-        #endregion
-
-        #region · Private methods ·
-
-        private void Initialize(Message message)
-        {
-            this.identifier             = message.ID;
-            this.from                   = message.From;
-            this.to			            = message.To;
-            this.language               = message.Lang;
-            this.type                   = message.Type;
-            this.thread                 = String.Empty;
-            this.chatStateNotification  = XmppChatStateNotification.None;
+        private void Initialize(Message message) {
+            identifier = message.ID;
+            @from = message.From;
+            to = message.To;
+            language = message.Lang;
+            type = message.Type;
+            thread = String.Empty;
+            chatStateNotification = XmppChatStateNotification.None;
 
             foreach (object item in message.Items)
             {
                 if (item is MessageBody)
                 {
-                    this.body = ((MessageBody)item).Value;
+                    body = ((MessageBody) item).Value;
                 }
                 else if (item is MessageSubject)
                 {
-                    this.subject = ((MessageSubject)item).Value;
+                    subject = ((MessageSubject) item).Value;
                 }
                 else if (item is NotificationActive)
                 {
-                    this.chatStateNotification = XmppChatStateNotification.Active;
+                    chatStateNotification = XmppChatStateNotification.Active;
                 }
                 else if (item is NotificationComposing)
                 {
-                    this.chatStateNotification = XmppChatStateNotification.Composing;
+                    chatStateNotification = XmppChatStateNotification.Composing;
                 }
                 else if (item is NotificationGone)
                 {
-                    this.chatStateNotification = XmppChatStateNotification.Gone;
+                    chatStateNotification = XmppChatStateNotification.Gone;
                 }
                 else if (item is NotificationInactive)
                 {
-                    this.chatStateNotification = XmppChatStateNotification.Inactive;
+                    chatStateNotification = XmppChatStateNotification.Inactive;
                 }
                 else if (item is NotificationPaused)
                 {
-                    this.chatStateNotification = XmppChatStateNotification.Paused;
+                    chatStateNotification = XmppChatStateNotification.Paused;
                 }
             }
         }
-
-        #endregion
     }
 }

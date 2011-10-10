@@ -28,115 +28,83 @@
   OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Org.Mentalis.Network.ProxySocket.Authentication
-{
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
+using System;
+using System.Net;
+using System.Net.Sockets;
 
+namespace Org.Mentalis.Network.ProxySocket.Authentication {
     /// <summary>
-    /// Implements a SOCKS authentication scheme.
+    ///   Implements a SOCKS authentication scheme.
     /// </summary>
-    /// <remarks>This is an abstract class; it must be inherited.</remarks>
-    internal abstract class AuthMethod
-    {
-        #region · Fields ·
-
+    /// <remarks>
+    ///   This is an abstract class; it must be inherited.
+    /// </remarks>
+    internal abstract class AuthMethod {
         // private variables
-        /// <summary>Holds the value of the Buffer property.</summary>
-        private byte[] buffer;
-
-        /// <summary>Holds the value of the Server property.</summary>
-        private Socket server;
-
-        /// <summary>Holds the value of the Received property.</summary>
-        private int received;
-
-        #endregion
-
-        #region · Protected Fields ·
-
-        /// <summary>Holds the address of the method to call when the proxy has authenticated the client.</summary>
-        protected HandShakeComplete CallBack;
-
-        #endregion
-
-        #region · Protected Properties ·
 
         /// <summary>
-        /// Gets or sets the socket connection with the proxy server.
+        ///   Holds the address of the method to call when the proxy has authenticated the client.
+        /// </summary>
+        protected HandShakeComplete CallBack;
+
+        /// <summary>
+        ///   Holds the value of the Server property.
+        /// </summary>
+        private Socket server;
+
+        /// <summary>
+        ///   Initializes an AuthMethod instance.
+        /// </summary>
+        /// <param name = "server">The socket connection with the proxy server.</param>
+        public AuthMethod(Socket server) {
+            Server = server;
+        }
+
+        /// <summary>
+        ///   Gets or sets the socket connection with the proxy server.
         /// </summary>
         /// <value>The socket connection with the proxy server.</value>
-        protected Socket Server
-        {
-            get { return this.server; }
-            set
-            {
+        protected Socket Server {
+            get { return server; }
+            set {
                 if (value == null)
                 {
                     throw new ArgumentNullException();
                 }
 
-                this.server = value;
+                server = value;
             }
         }
 
         /// <summary>
-        /// Gets or sets a byt array that can be used to store data.
+        ///   Gets or sets a byt array that can be used to store data.
         /// </summary>
         /// <value>A byte array to store data.</value>
-        protected byte[] Buffer
-        {
-            get { return this.buffer; }
-            set { this.buffer = value; }
-        }
+        protected byte[] Buffer { get; set; }
 
         /// <summary>
-        /// Gets or sets the number of bytes that have been received from the remote proxy server.
+        ///   Gets or sets the number of bytes that have been received from the remote proxy server.
         /// </summary>
         /// <value>An integer that holds the number of bytes that have been received from the remote proxy server.</value>
-        protected int Received
-        {
-            get { return this.received; }
-            set { this.received = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
+        protected int Received { get; set; }
 
         /// <summary>
-        /// Initializes an AuthMethod instance.
+        ///   Authenticates the user.
         /// </summary>
-        /// <param name="server">The socket connection with the proxy server.</param>
-        public AuthMethod(Socket server)
-        {
-            this.Server = server;
-        }
-
-        #endregion
-
-        #region · Abstract Methods ·
-
-        /// <summary>
-        /// Authenticates the user.
-        /// </summary>
-        /// <exception cref="ProxyException">Authentication with the proxy server failed.</exception>
-        /// <exception cref="ProtocolViolationException">The proxy server uses an invalid protocol.</exception>
-        /// <exception cref="SocketException">An operating system error occurs while accessing the Socket.</exception>
-        /// <exception cref="ObjectDisposedException">The Socket has been closed.</exception>
+        /// <exception cref = "ProxyException">Authentication with the proxy server failed.</exception>
+        /// <exception cref = "ProtocolViolationException">The proxy server uses an invalid protocol.</exception>
+        /// <exception cref = "SocketException">An operating system error occurs while accessing the Socket.</exception>
+        /// <exception cref = "ObjectDisposedException">The Socket has been closed.</exception>
         public abstract void Authenticate();
 
         /// <summary>
-        /// Authenticates the user asynchronously.
+        ///   Authenticates the user asynchronously.
         /// </summary>
-        /// <param name="callback">The method to call when the authentication is complete.</param>
-        /// <exception cref="ProxyException">Authentication with the proxy server failed.</exception>
-        /// <exception cref="ProtocolViolationException">The proxy server uses an invalid protocol.</exception>
-        /// <exception cref="SocketException">An operating system error occurs while accessing the Socket.</exception>
-        /// <exception cref="ObjectDisposedException">The Socket has been closed.</exception>
+        /// <param name = "callback">The method to call when the authentication is complete.</param>
+        /// <exception cref = "ProxyException">Authentication with the proxy server failed.</exception>
+        /// <exception cref = "ProtocolViolationException">The proxy server uses an invalid protocol.</exception>
+        /// <exception cref = "SocketException">An operating system error occurs while accessing the Socket.</exception>
+        /// <exception cref = "ObjectDisposedException">The Socket has been closed.</exception>
         public abstract void BeginAuthenticate(HandShakeComplete callback);
-
-        #endregion
     }
 }

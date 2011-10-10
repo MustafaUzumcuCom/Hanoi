@@ -28,105 +28,99 @@
   OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Org.Mentalis.Network.ProxySocket
-{
-    using System;
-    using System.Threading;
+using System;
+using System.Threading;
 
+namespace Org.Mentalis.Network.ProxySocket {
     /// <summary>
-    /// A class that implements the IAsyncResult interface. Objects from this class are returned by the BeginConnect method of the ProxySocket class.
+    ///   A class that implements the IAsyncResult interface. Objects from this class are returned by the BeginConnect method of the ProxySocket class.
     /// </summary>
-    internal class IAsyncProxyResult 
-        : IAsyncResult
-    {
-        #region · Fields ·
-
-        /// <summary>Holds the value of the StateObject property.</summary>
-        private object stateObject;
-
-        /// <summary>Holds the value of the WaitHandle property.</summary>
-        private ManualResetEvent waitHandle;
-
-        #endregion
-
-        #region · Internal Fields ·
-
-        /// <summary>Used internally to represent the state of the asynchronous request</summary>
+    internal class IAsyncProxyResult
+        : IAsyncResult {
+        /// <summary>
+        ///   Used internally to represent the state of the asynchronous request
+        /// </summary>
         internal bool Completed = true;
 
-        #endregion
+        /// <summary>
+        ///   Holds the value of the StateObject property.
+        /// </summary>
+        private object stateObject;
 
-        #region · Properties ·
+        /// <summary>
+        ///   Holds the value of the WaitHandle property.
+        /// </summary>
+        private ManualResetEvent waitHandle;
 
-        /// <summary>Gets a value that indicates whether the server has completed processing the call. It is illegal for the server to use any client supplied resources outside of the agreed upon sharing semantics after it sets the IsCompleted property to "true". Thus, it is safe for the client to destroy the resources after IsCompleted property returns "true".</summary>
+        #region IAsyncResult Members
+
+        /// <summary>
+        ///   Gets a value that indicates whether the server has completed processing the call. It is illegal for the server to use any client supplied resources outside of the agreed upon sharing semantics after it sets the IsCompleted property to "true". Thus, it is safe for the client to destroy the resources after IsCompleted property returns "true".
+        /// </summary>
         /// <value>A boolean that indicates whether the server has completed processing the call.</value>
-        public bool IsCompleted
-        {
-            get { return this.Completed; }
+        public bool IsCompleted {
+            get { return Completed; }
         }
 
-        /// <summary>Gets a value that indicates whether the BeginXXXX call has been completed synchronously. If this is detected in the AsyncCallback delegate, it is probable that the thread that called BeginInvoke is the current thread.</summary>
+        /// <summary>
+        ///   Gets a value that indicates whether the BeginXXXX call has been completed synchronously. If this is detected in the AsyncCallback delegate, it is probable that the thread that called BeginInvoke is the current thread.
+        /// </summary>
         /// <value>Returns false.</value>
-        public bool CompletedSynchronously
-        {
+        public bool CompletedSynchronously {
             get { return false; }
         }
 
-        /// <summary>Gets an object that was passed as the state parameter of the BeginXXXX method call.</summary>
-        /// <value>The object that was passed as the state parameter of the BeginXXXX method call.</value>
-        public object AsyncState
-        {
-            get { return this.stateObject; }
-        }
-        
         /// <summary>
-        /// The AsyncWaitHandle property returns the WaitHandle that can use to perform a WaitHandle.WaitOne or WaitAny or WaitAll. The object which implements IAsyncResult need not derive from the System.WaitHandle classes directly. The WaitHandle wraps its underlying synchronization primitive and should be signaled after the call is completed. This enables the client to wait for the call to complete instead polling. The Runtime supplies a number of waitable objects that mirror Win32 synchronization primitives e.g. ManualResetEvent, AutoResetEvent and Mutex.
-        /// WaitHandle supplies methods that support waiting for such synchronization objects to become signaled with "any" or "all" semantics i.e. WaitHandle.WaitOne, WaitAny and WaitAll. Such methods are context aware to avoid deadlocks. The AsyncWaitHandle can be allocated eagerly or on demand. It is the choice of the IAsyncResult implementer.
+        ///   Gets an object that was passed as the state parameter of the BeginXXXX method call.
+        /// </summary>
+        /// <value>The object that was passed as the state parameter of the BeginXXXX method call.</value>
+        public object AsyncState {
+            get { return stateObject; }
+        }
+
+        ///<summary>
+        ///  The AsyncWaitHandle property returns the WaitHandle that can use to perform a WaitHandle.WaitOne or WaitAny or WaitAll. The object which implements IAsyncResult need not derive from the System.WaitHandle classes directly. The WaitHandle wraps its underlying synchronization primitive and should be signaled after the call is completed. This enables the client to wait for the call to complete instead polling. The Runtime supplies a number of waitable objects that mirror Win32 synchronization primitives e.g. ManualResetEvent, AutoResetEvent and Mutex.
+        ///  WaitHandle supplies methods that support waiting for such synchronization objects to become signaled with "any" or "all" semantics i.e. WaitHandle.WaitOne, WaitAny and WaitAll. Such methods are context aware to avoid deadlocks. The AsyncWaitHandle can be allocated eagerly or on demand. It is the choice of the IAsyncResult implementer.
         ///</summary>
-        /// <value>The WaitHandle associated with this asynchronous result.</value>
-        public WaitHandle AsyncWaitHandle
-        {
-            get
-            {
-                if (this.waitHandle == null)
+        ///<value>The WaitHandle associated with this asynchronous result.</value>
+        public WaitHandle AsyncWaitHandle {
+            get {
+                if (waitHandle == null)
                 {
-                    this.waitHandle = new ManualResetEvent(false);
+                    waitHandle = new ManualResetEvent(false);
                 }
 
-                return this.waitHandle;
+                return waitHandle;
             }
         }
 
         #endregion
 
-        #region · Internal Methods ·
+        /// <summary>
+        ///   Initializes the internal variables of this object
+        /// </summary>
+        /// <param name = "stateObject">An object that contains state information for this request.</param>
+        internal void Init(object stateObject) {
+            this.stateObject = stateObject;
+            Completed = false;
 
-        /// <summary>Initializes the internal variables of this object</summary>
-        /// <param name="stateObject">An object that contains state information for this request.</param>
-        internal void Init(object stateObject)
-        {
-            this.stateObject    = stateObject;
-            this.Completed      = false;
-
-            if (this.waitHandle != null)
+            if (waitHandle != null)
             {
-                this.waitHandle.Reset();
-            }
-
-        }
-
-        /// <summary>Initializes the internal variables of this object</summary>
-        internal void Reset()
-        {
-            this.stateObject    = null;
-            this.Completed      = true;
-
-            if (this.waitHandle != null)
-            {
-                this.waitHandle.Set();
+                waitHandle.Reset();
             }
         }
 
-        #endregion
-    }
+        /// <summary>
+        ///   Initializes the internal variables of this object
+        /// </summary>
+        internal void Reset() {
+            stateObject = null;
+            Completed = true;
+
+            if (waitHandle != null)
+            {
+                waitHandle.Set();
+            }
+        }
+        }
 }

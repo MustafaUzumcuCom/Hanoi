@@ -28,51 +28,38 @@
   OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Org.Mentalis.Network.ProxySocket.Authentication
-{
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
+using System.Net.Sockets;
 
+namespace Org.Mentalis.Network.ProxySocket.Authentication {
     /// <summary>
-    /// This class implements the 'No Authentication' scheme.
+    ///   This class implements the 'No Authentication' scheme.
     /// </summary>
-    internal sealed class AuthNone 
-        : AuthMethod
-    {
-        #region · Constructors ·
-
+    internal sealed class AuthNone
+        : AuthMethod {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthNone"/> class.
+        ///   Initializes a new instance of the <see cref = "AuthNone" /> class.
         /// </summary>
-        /// <param name="server">The socket connection with the proxy server.</param>
+        /// <param name = "server">The socket connection with the proxy server.</param>
         public AuthNone(Socket server)
-            : base(server)
-        {
+            : base(server) {
         }
 
-        #endregion
-
-        #region · Methods ·
-
         /// <summary>
-        /// Authenticates the user.
+        ///   Authenticates the user.
         /// </summary>
-        public override void Authenticate()
-        {
+        public override void Authenticate() {
             return; // Do Nothing
         }
 
         /// <summary>
-        /// Authenticates the user asynchronously.
+        ///   Authenticates the user asynchronously.
         /// </summary>
-        /// <param name="callback">The method to call when the authentication is complete.</param>
-        /// <remarks>This method immediately calls the callback method.</remarks>
-        public override void BeginAuthenticate(HandShakeComplete callback)
-        {
+        /// <param name = "callback">The method to call when the authentication is complete.</param>
+        /// <remarks>
+        ///   This method immediately calls the callback method.
+        /// </remarks>
+        public override void BeginAuthenticate(HandShakeComplete callback) {
             callback(null);
         }
-
-        #endregion
-    }
+        }
 }

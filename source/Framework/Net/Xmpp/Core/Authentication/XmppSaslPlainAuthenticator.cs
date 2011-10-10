@@ -32,95 +32,68 @@ using System.Text;
 using System.Threading;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// <see cref="XmppAuthenticator" /> implementation for the SASL Plain Authentication mechanism.
+    ///   <see cref = "XmppAuthenticator" /> implementation for the SASL Plain Authentication mechanism.
     /// </summary>
     /// <remarks>
-    /// References:
-    ///     http://www.ietf.org/html.charters/sasl-charter.html
-    ///     http://www.ietf.org/internet-drafts/draft-ietf-sasl-plain-09.txt
+    ///   References:
+    ///   http://www.ietf.org/html.charters/sasl-charter.html
+    ///   http://www.ietf.org/internet-drafts/draft-ietf-sasl-plain-09.txt
     /// </remarks>
-    internal sealed class XmppSaslPlainAuthenticator 
-        : XmppAuthenticator
-    {
-        #region · Fields ·
-
-        private AutoResetEvent waitEvent;
-
-        #endregion
-
-        #region · Constructors ·
+    internal sealed class XmppSaslPlainAuthenticator
+        : XmppAuthenticator {
+        private readonly AutoResetEvent waitEvent;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppSaslPlainAuthenticator"/> class.
+        ///   Initializes a new instance of the <see cref = "T:XmppSaslPlainAuthenticator" /> class.
         /// </summary>
-        public XmppSaslPlainAuthenticator(XmppConnection connection) 
-            : base(connection)
-        {
-            this.waitEvent = new AutoResetEvent(false);
+        public XmppSaslPlainAuthenticator(XmppConnection connection)
+            : base(connection) {
+            waitEvent = new AutoResetEvent(false);
         }
 
-        #endregion
-
-        #region · Methods ·
-
         /// <summary>
-        /// Performs the authentication using the SASL Plain authentication mechanism.
+        ///   Performs the authentication using the SASL Plain authentication mechanism.
         /// </summary>
-        public override void Authenticate()
-        {
+        public override void Authenticate() {
             // Send authentication mechanism
-            Auth auth = new Auth();
+            var auth = new Auth();
 
-            auth.Mechanism  = XmppCodes.SaslPlainMechanism;
-            auth.Value      = this.BuildMessage();
+            auth.Mechanism = XmppCodes.SaslPlainMechanism;
+            auth.Value = BuildMessage();
 
-            this.Connection.Send(auth);
+            Connection.Send(auth);
 
-            this.waitEvent.WaitOne();
+            waitEvent.WaitOne();
 
-            if (!this.AuthenticationFailed)
+            if (!AuthenticationFailed)
             {
                 // Re-Initialize XMPP Stream
-                this.Connection.InitializeXmppStream();
+                Connection.InitializeXmppStream();
 
                 // Wait until we receive the Stream features
-                this.Connection.WaitForStreamFeatures();
+                Connection.WaitForStreamFeatures();
             }
         }
 
-        #endregion
-
-        #region · Protected Methods ·
-
-        protected override void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e)
-        {
+        protected override void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e) {
             if (e.StanzaInstance is Success)
             {
-                this.waitEvent.Set();
+                waitEvent.Set();
             }
         }
 
-        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e)
-        {
+        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
             base.OnAuthenticationError(sender, e);
 
-            this.waitEvent.Set();
+            waitEvent.Set();
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private string BuildMessage()
-        {
-            string message  = String.Format("\0{0}\0{1}", this.Connection.UserId.BareIdentifier, this.Connection.UserPassword);
+        private string BuildMessage() {
+            string message = String.Format("\0{0}\0{1}", Connection.UserId.BareIdentifier, Connection.UserPassword);
 
             return Encoding.UTF8.GetBytes(message).ToBase64String();
         }
-
-        #endregion
-    }
+        }
 }

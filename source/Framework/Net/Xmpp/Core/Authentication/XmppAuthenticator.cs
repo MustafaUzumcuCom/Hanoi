@@ -30,183 +30,141 @@
 using System;
 using System.Collections.Generic;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Base class for authentication mechanims implementations.
+    ///   Base class for authentication mechanims implementations.
     /// </summary>
-    internal abstract class XmppAuthenticator 
-        : IDisposable
-    {
-        #region · Fields ·
-
-        private XmppConnection  connection;
-        private string          authenticationError;
-        private bool            authenticationFailed;
-        private List<string>    pendingMessages;
-
-        #endregion
-
-        #region · Properties ·
+    internal abstract class XmppAuthenticator
+        : IDisposable {
+        private string authenticationError;
+        private bool authenticationFailed;
+        private XmppConnection connection;
+        private List<string> pendingMessages;
 
         /// <summary>
-        /// Gets the authentication error.
+        ///   Initializes a new instance of the <see cref = "T:XmppAuthenticator" /> class.
+        /// </summary>
+        /// <param name = "connection">A <see cref = "XmppConnection" /> instance</param>
+        protected XmppAuthenticator(XmppConnection connection) {
+            this.connection = connection;
+
+            Subscribe();
+        }
+
+        /// <summary>
+        ///   Gets the authentication error.
         /// </summary>
         /// <value>The authentication error.</value>
-        public string AuthenticationError
-        {
-            get { return this.authenticationError; }
+        public string AuthenticationError {
+            get { return authenticationError; }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication has failed.
+        ///   Gets a value indicating whether the authentication has failed.
         /// </summary>
         /// <value><c>true</c> if authentication failed; otherwise, <c>false</c>.</value>
-        public bool AuthenticationFailed
-        {
-            get { return this.authenticationFailed; }
-            protected set { this.authenticationFailed = value; }
+        public bool AuthenticationFailed {
+            get { return authenticationFailed; }
+            protected set { authenticationFailed = value; }
         }
 
         /// <summary>
-        /// Gets the connection associated with the authenticator class.
+        ///   Gets the connection associated with the authenticator class.
         /// </summary>
-        public XmppConnection Connection
-        {
-            get { return this.connection; }
+        public XmppConnection Connection {
+            get { return connection; }
         }
 
         /// <summary>
-        /// Gets the list of message ID's pending of response
+        ///   Gets the list of message ID's pending of response
         /// </summary>
-        public List<string> PendingMessages
-        {
-            get
-            {
-                if (this.pendingMessages == null)
+        public List<string> PendingMessages {
+            get {
+                if (pendingMessages == null)
                 {
-                    this.pendingMessages = new List<string>();
+                    pendingMessages = new List<string>();
                 }
 
-                return this.pendingMessages;
+                return pendingMessages;
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
+        #region IDisposable Members
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppAuthenticator"/> class.
+        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        /// <param name="connection">A <see cref="XmppConnection"/> instance</param>
-        protected XmppAuthenticator(XmppConnection connection)
-        {
-            this.connection = connection;
-
-            this.Subscribe();
-        }
-
-        #endregion
-
-        #region · Finalizers ·
-
-        /// <summary>
-        /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="T:BabelIm.Net.Xmpp.Core.XmppAuthenticator"/> is reclaimed by garbage collection.
-        /// </summary>
-        ~XmppAuthenticator()
-        {
-            this.Dispose(false);
-        }
-
-        #endregion
-
-        #region · IDisposable Members ·
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.Dispose(true);
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        #endregion
+
         /// <summary>
-        /// Disposes the specified disposing.
+        ///   Releases unmanaged resources and performs other cleanup operations before the
+        ///   <see cref = "T:BabelIm.Net.Xmpp.Core.XmppAuthenticator" /> is reclaimed by garbage collection.
         /// </summary>
-        /// <param name="disposing">if set to <c>true</c> [disposing].</param>
-        protected virtual void Dispose(bool disposing)
-        {
+        ~XmppAuthenticator() {
+            Dispose(false);
+        }
+
+        /// <summary>
+        ///   Disposes the specified disposing.
+        /// </summary>
+        /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
+        protected virtual void Dispose(bool disposing) {
             if (disposing)
             {
-                this.Unsubscribe();
+                Unsubscribe();
 
-                if (this.pendingMessages != null)
+                if (pendingMessages != null)
                 {
-                    this.pendingMessages.Clear();
+                    pendingMessages.Clear();
                 }
 
-                this.pendingMessages        = null;
-                this.connection             = null;
-                this.authenticationError    = null;
-                this.authenticationFailed   = false;
+                pendingMessages = null;
+                connection = null;
+                authenticationError = null;
+                authenticationFailed = false;
             }
         }
 
-        #endregion
-
-        #region · Methods ·
-
         /// <summary>
-        /// Performs the authentication.
+        ///   Performs the authentication.
         /// </summary>
         public abstract void Authenticate();
 
-        #endregion
-
-        #region · Protected Methods ·
-
-        protected void Subscribe()
-        {
-            this.connection.UnhandledMessage    += new EventHandler<XmppUnhandledMessageEventArgs>(this.OnUnhandledMessage);
-            this.connection.AuthenticationError += new EventHandler<XmppAuthenticationFailiureEventArgs>(this.OnAuthenticationError);
+        protected void Subscribe() {
+            connection.UnhandledMessage += OnUnhandledMessage;
+            connection.AuthenticationError += OnAuthenticationError;
         }
 
-        protected void Unsubscribe()
-        {
-            this.connection.UnhandledMessage    -= new System.EventHandler<XmppUnhandledMessageEventArgs>(this.OnUnhandledMessage);
-            this.connection.AuthenticationError -= new System.EventHandler<XmppAuthenticationFailiureEventArgs>(this.OnAuthenticationError);
+        protected void Unsubscribe() {
+            connection.UnhandledMessage -= OnUnhandledMessage;
+            connection.AuthenticationError -= OnAuthenticationError;
         }
-
-        #endregion
-
-        #region · Protected Event Handlers ·
 
         /// <summary>
-        /// Called when an unhandled message is received
+        ///   Called when an unhandled message is received
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="T:BabelIm.Net.Xmpp.Core.XmppUnhandledMessageEventArgs"/> instance containing the event data.</param>        
+        /// <param name = "sender">The sender.</param>
+        /// <param name = "e">The <see cref = "T:BabelIm.Net.Xmpp.Core.XmppUnhandledMessageEventArgs" /> instance containing the event data.</param>
         protected abstract void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e);
 
         /// <summary>
-        /// Called when an authentication failiure occurs.
+        ///   Called when an authentication failiure occurs.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="BabelIm.Net.Xmpp.Core.XmppAuthenticationFailiureEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e)
-        {
-            if (this.pendingMessages != null)
+        /// <param name = "sender">The sender.</param>
+        /// <param name = "e">The <see cref = "BabelIm.Net.Xmpp.Core.XmppAuthenticationFailiureEventArgs" /> instance containing the event data.</param>
+        protected virtual void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
+            if (pendingMessages != null)
             {
-                this.pendingMessages.Clear();
+                pendingMessages.Clear();
             }
 
-            this.authenticationError    = e.Message;
-            this.authenticationFailed   = true;
+            authenticationError = e.Message;
+            authenticationFailed = true;
         }
-
-        #endregion
-    }
+        }
 }

@@ -29,36 +29,39 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Chat state notification types
+    ///   Chat state notification types
     /// </summary>
     [Serializable]
-    public enum XmppChatStateNotification
-    {
+    public enum XmppChatStateNotification {
         /// <summary>
-        /// No notification
+        ///   No notification
         /// </summary>
         None,
+
         /// <summary>
-        /// The user is active
+        ///   The user is active
         /// </summary>
         Active,
+
         /// <summary>
-        /// The user is composing a new message
+        ///   The user is composing a new message
         /// </summary>
         Composing,
+
         /// <summary>
-        /// The user is "paused"
+        ///   The user is "paused"
         /// </summary>
         Paused,
+
         /// <summary>
-        /// The user is inactive
+        ///   The user is inactive
         /// </summary>
         Inactive,
+
         /// <summary>
-        /// The user is gone
+        ///   The user is gone
         /// </summary>
         Gone
     }

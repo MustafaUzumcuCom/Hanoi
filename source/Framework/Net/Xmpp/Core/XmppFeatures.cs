@@ -29,41 +29,45 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Speficies feature flags supported bythe XMPP server.
+    ///   Speficies feature flags supported bythe XMPP server.
     /// </summary>
     [Flags]
-    internal enum XmppStreamFeatures
-    {
+    internal enum XmppStreamFeatures {
         /// <summary>
-        /// TLS Connections.
+        ///   TLS Connections.
         /// </summary>
-        SecureConnection	= 0,
+        SecureConnection = 0,
+
         /// <summary>
-        /// SASL Digest Authentication Mechanism.
+        ///   SASL Digest Authentication Mechanism.
         /// </summary>
-        SaslDigestMD5		= 2,
+        SaslDigestMD5 = 2,
+
         /// <summary>
-        /// SASL Plaint Authentication Mechanism.
+        ///   SASL Plaint Authentication Mechanism.
         /// </summary>
-        SaslPlain			= 4,
+        SaslPlain = 4,
+
         /// <summary>
-        /// Resource binding.
+        ///   Resource binding.
         /// </summary>
-        ResourceBinding		= 8,
+        ResourceBinding = 8,
+
         /// <summary>
-        /// Session Binding
+        ///   Session Binding
         /// </summary>
-        Sessions			= 16,
+        Sessions = 16,
+
         /// <summary>
-        /// In-Band registration of users.
+        ///   In-Band registration of users.
         /// </summary>
-        InBandRegistration	= 32,
+        InBandRegistration = 32,
+
         /// <summary>
-        /// X-Google-Token Authentication Machanism
+        ///   X-Google-Token Authentication Machanism
         /// </summary>
-        XGoogleToken        = 64
+        XGoogleToken = 64
     }
 }

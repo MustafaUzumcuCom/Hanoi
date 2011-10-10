@@ -28,26 +28,44 @@
   OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Org.Mentalis.Network.ProxySocket
-{
-    using System;
+using System;
 
+namespace Org.Mentalis.Network.ProxySocket {
     /// <summary>
-    /// The exception that is thrown when a proxy error occurs.
+    ///   The exception that is thrown when a proxy error occurs.
     /// </summary>
     [Serializable]
-    public class ProxyException 
-        : Exception
-    {
-        #region · Static Methods ·
+    public class ProxyException
+        : Exception {
+        /// <summary>
+        ///   Initializes a new instance of the ProxyException class.
+        /// </summary>
+        public ProxyException()
+            : this("An error occured while talking to the proxy server.") {
+        }
 
         /// <summary>
-        /// Converts a SOCKS5 error number to a human readable string.
+        ///   Initializes a new instance of the ProxyException class.
         /// </summary>
-        /// <param name="socks5Error">The error number returned by a SOCKS5 server.</param>
+        /// <param name = "message">The message that describes the error.</param>
+        public ProxyException(string message)
+            : base(message) {
+        }
+
+        /// <summary>
+        ///   Initializes a new instance of the ProxyException class.
+        /// </summary>
+        /// <param name = "socks5Error">The error number returned by a SOCKS5 server.</param>
+        public ProxyException(int socks5Error)
+            : this(ProxyException.Socks5ToString(socks5Error)) {
+        }
+
+        /// <summary>
+        ///   Converts a SOCKS5 error number to a human readable string.
+        /// </summary>
+        /// <param name = "socks5Error">The error number returned by a SOCKS5 server.</param>
         /// <returns>A string representation of the specified SOCKS5 error number.</returns>
-        public static string Socks5ToString(int socks5Error)
-        {
+        public static string Socks5ToString(int socks5Error) {
             switch (socks5Error)
             {
                 case 0:
@@ -81,37 +99,5 @@ namespace Org.Mentalis.Network.ProxySocket
                     return "Unspecified SOCKS error.";
             }
         }
- 
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the ProxyException class.
-        /// </summary>
-        public ProxyException()
-            : this("An error occured while talking to the proxy server.")
-        {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the ProxyException class.
-        /// </summary>
-        /// <param name="message">The message that describes the error.</param>
-        public ProxyException(string message)
-            : base(message)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ProxyException class.
-        /// </summary>
-        /// <param name="socks5Error">The error number returned by a SOCKS5 server.</param>
-        public ProxyException(int socks5Error)
-            : this(ProxyException.Socks5ToString(socks5Error))
-        {
-        }
-
-        #endregion
-   }
 }

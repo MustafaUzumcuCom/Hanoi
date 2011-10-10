@@ -28,12 +28,11 @@
   OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Org.Mentalis.Network.ProxySocket
-{
-    using System;
+using System;
 
+namespace Org.Mentalis.Network.ProxySocket {
     /// <summary>
-    /// References the callback method to be called when the protocol negotiation is completed.
+    ///   References the callback method to be called when the protocol negotiation is completed.
     /// </summary>
     internal delegate void HandShakeComplete(Exception error);
 }

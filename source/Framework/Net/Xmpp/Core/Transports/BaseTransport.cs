@@ -6,42 +6,69 @@ using DnDns.Enums;
 using DnDns.Query;
 using DnDns.Records;
 
-namespace BabelIm.Net.Xmpp.Core.Transports
-{
+namespace BabelIm.Net.Xmpp.Core.Transports {
     /// <summary>
-    /// Base class for transport implementations
+    ///   Base class for transport implementations
     /// </summary>
     internal abstract class BaseTransport
-        : ITransport
-    {
-        #region · Fields ·
+        : ITransport {
+        private XmppConnectionString connectionString;
+        private string hostName;
+        private bool isDisposed;
 
-        private bool                    isDisposed;
-        private XmppConnectionString    connectionString;
-        private string                  hostName;
-        private XmppJid                 userId;
-        private object                  syncReads;
-        private object                  syncWrites;
+        private Subject<object> onMessageReceivedSubject = new Subject<object>();
+        private Subject<string> onXmppStreamClosedSubject = new Subject<string>();
+        private Subject<string> onXmppStreamInitializedSubject = new Subject<string>();
+        private object syncReads;
+        private object syncWrites;
+        private XmppJid userId;
 
-        #region · Observable Subjects ·
+        protected BaseTransport() {
+            this.syncReads = new object();
+            this.syncWrites = new object();
+        }
 
-        private Subject<object> onMessageReceivedSubject        = new Subject<object>();
-        private Subject<string> onXmppStreamInitializedSubject  = new Subject<string>();
-        private Subject<string> onXmppStreamClosedSubject       = new Subject<string>();
+        protected Subject<object> OnMessageReceivedSubject {
+            get { return this.onMessageReceivedSubject; }
+        }
 
-        #endregion
+        protected Subject<string> OnXmppStreamInitializedSubject {
+            get { return this.onXmppStreamInitializedSubject; }
+        }
 
-        #endregion
+        protected Subject<string> OnXmppStreamClosedSubject {
+            get { return this.onXmppStreamClosedSubject; }
+        }
 
-        #region · Properties ·
+        protected bool IsDisposed {
+            get { return this.isDisposed; }
+        }
+
+        protected XmppConnectionString ConnectionString {
+            get { return this.connectionString; }
+            set { this.connectionString = value; }
+        }
+
+        protected XmppJid UserId {
+            get { return this.userId; }
+            set { this.userId = value; }
+        }
+
+        protected object SyncReads {
+            get { return this.syncReads; }
+        }
+
+        protected object SyncWrites {
+            get { return this.syncWrites; }
+        }
+
+        #region ITransport Members
 
         /// <summary>
-        /// XMPP server Host name
+        ///   XMPP server Host name
         /// </summary>
-        public string HostName
-        {
-            get
-            {
+        public string HostName {
+            get {
                 if (!String.IsNullOrWhiteSpace(this.hostName))
                 {
                     return this.hostName;
@@ -52,110 +79,22 @@ namespace BabelIm.Net.Xmpp.Core.Transports
             protected set { this.hostName = value; }
         }
 
-        #endregion
-
-        #region · Observable Properties ·
-
-        public IObservable<object> OnMessageReceived
-        {
+        public IObservable<object> OnMessageReceived {
             get { return this.onMessageReceivedSubject.AsObservable(); }
         }
 
-        public IObservable<string> OnXmppStreamInitialized
-        {
+        public IObservable<string> OnXmppStreamInitialized {
             get { return this.onXmppStreamInitializedSubject.AsObservable(); }
         }
 
-        public IObservable<string> OnXmppStreamClosed
-        {
+        public IObservable<string> OnXmppStreamClosed {
             get { return this.onXmppStreamClosedSubject.AsObservable(); }
         }
 
-        #endregion
-
-        #region · Protected Subject Properties ·
-
-        protected Subject<object> OnMessageReceivedSubject
-        {
-            get { return this.onMessageReceivedSubject; }
-        }
-
-        protected Subject<string> OnXmppStreamInitializedSubject
-        {
-            get { return this.onXmppStreamInitializedSubject; }
-        }
-
-        protected Subject<string> OnXmppStreamClosedSubject
-        {
-            get { return this.onXmppStreamClosedSubject; }
-        }
-
-        #endregion
-
-        #region · Protected Properties ·
-
-        protected bool IsDisposed
-        {
-            get { return this.isDisposed; }
-        }
-        
-        protected XmppConnectionString ConnectionString
-        {
-            get { return this.connectionString; }
-            set { this.connectionString = value; }
-        }
-        
-        protected XmppJid UserId
-        {
-            get { return this.userId; }            
-            set { this.userId = value; }
-        }
-        
-        protected object SyncReads
-        {
-            get { return this.syncReads; }
-        }
-
-        protected object SyncWrites
-        {
-            get { return this.syncWrites; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        protected BaseTransport()
-        {
-            this.syncReads  = new object();
-            this.syncWrites = new object();
-        }
-
-        #endregion
-
-        #region · Finalizer ·
-
         /// <summary>
-        /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="T:BabelIm.Net.Xmpp.Core.XmppConnection"/> is reclaimed by garbage collection.
+        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        ~BaseTransport()
-        {
-            // Do not re-create Dispose clean-up code here.
-            // Calling Dispose(false) is optimal in terms of
-            // readability and maintainability.
-            this.Dispose(false);
-        }
-
-        #endregion
-
-        #region · IDisposable Methods ·
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
+        public void Dispose() {
             this.Dispose(true);
 
             // This object will be cleaned up by the Dispose method.
@@ -165,41 +104,6 @@ namespace BabelIm.Net.Xmpp.Core.Transports
             // from executing a second time.
             GC.SuppressFinalize(this);
         }
-
-        /// <summary>
-        /// Disposes the specified disposing.
-        /// </summary>
-        /// <param name="disposing">if set to <c>true</c> [disposing].</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.isDisposed)
-            {
-                if (disposing)
-                {
-                    this.Close();
-                }
-
-                this.userId             = null;
-                this.connectionString   = null;
-                this.syncReads          = null;
-                this.syncWrites         = null;
-
-                this.onMessageReceivedSubject       = null;
-                this.onXmppStreamInitializedSubject = null;
-                this.onXmppStreamClosedSubject      = null;
-
-                // Call the appropriate methods to clean up 
-                // unmanaged resources here.
-                // If disposing is false, 
-                // only the following code is executed.               
-            }
-
-            this.isDisposed = true;
-        }
-
-        #endregion
-
-        #region · Methods ·
 
         public abstract void Open(XmppConnectionString connectionString);
 
@@ -211,33 +115,70 @@ namespace BabelIm.Net.Xmpp.Core.Transports
 
         public abstract void Send(byte[] message);
 
-        public virtual void Close()
-        {
-            this.userId                         = null;
-            this.connectionString               = null;
-            this.syncReads                      = null;
-            this.syncWrites                     = null;
-            this.onMessageReceivedSubject       = null;
+        public virtual void Close() {
+            this.userId = null;
+            this.connectionString = null;
+            this.syncReads = null;
+            this.syncWrites = null;
+            this.onMessageReceivedSubject = null;
             this.onXmppStreamInitializedSubject = null;
-            this.onXmppStreamClosedSubject      = null;
+            this.onXmppStreamClosedSubject = null;
         }
 
         #endregion
 
-        #region · DNS Lookup Methods ·
+        /// <summary>
+        ///   Releases unmanaged resources and performs other cleanup operations before the
+        ///   <see cref = "T:BabelIm.Net.Xmpp.Core.XmppConnection" /> is reclaimed by garbage collection.
+        /// </summary>
+        ~BaseTransport() {
+            // Do not re-create Dispose clean-up code here.
+            // Calling Dispose(false) is optimal in terms of
+            // readability and maintainability.
+            this.Dispose(false);
+        }
 
-        protected void ResolveHostName()
-        {
+        /// <summary>
+        ///   Disposes the specified disposing.
+        /// </summary>
+        /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
+        protected virtual void Dispose(bool disposing) {
+            if (!this.isDisposed)
+            {
+                if (disposing)
+                {
+                    this.Close();
+                }
+
+                this.userId = null;
+                this.connectionString = null;
+                this.syncReads = null;
+                this.syncWrites = null;
+
+                this.onMessageReceivedSubject = null;
+                this.onXmppStreamInitializedSubject = null;
+                this.onXmppStreamClosedSubject = null;
+
+                // Call the appropriate methods to clean up 
+                // unmanaged resources here.
+                // If disposing is false, 
+                // only the following code is executed.               
+            }
+
+            this.isDisposed = true;
+        }
+
+        protected void ResolveHostName() {
             try
             {
-                DnsQueryRequest     request     = new DnsQueryRequest();
-                DnsQueryResponse    response    = request.Resolve
-                (
-                    String.Format("{0}.{1}", XmppCodes.XmppSrvRecordPrefix, this.ConnectionString.HostName),
-                    NsType.SRV,
-                    NsClass.INET,
-                    ProtocolType.Tcp
-                );
+                var request = new DnsQueryRequest();
+                DnsQueryResponse response = request.Resolve
+                    (
+                        String.Format("{0}.{1}", XmppCodes.XmppSrvRecordPrefix, this.ConnectionString.HostName),
+                        NsType.SRV,
+                        NsClass.INET,
+                        ProtocolType.Tcp
+                    );
 
                 foreach (SrvRecord record in response.Answers.OfType<SrvRecord>())
                 {
@@ -248,7 +189,5 @@ namespace BabelIm.Net.Xmpp.Core.Transports
             {
             }
         }
-
-        #endregion
-    }
+        }
 }

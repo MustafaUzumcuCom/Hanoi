@@ -32,221 +32,179 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Represents a Connection String
+    ///   Represents a Connection String
     /// </summary>
-    public sealed class XmppConnectionString
-    {
-        #region · Static Fields ·
+    public sealed class XmppConnectionString {
+        /// <summary>
+        ///   Synonyms list
+        /// </summary>
+        private static readonly Dictionary<string, string> Synonyms = GetSynonyms();
+
+        private readonly Dictionary<string, object> options;
 
         /// <summary>
-        /// Synonyms list
+        ///   Initializes a new instance of the <see cref = "T:XmppConnectionString" /> class.
         /// </summary>
-        static Dictionary<string, string> Synonyms = GetSynonyms();
-
-        #endregion
-
-        #region · Static Methods ·
-
-        /// <summary>
-        /// Gets a value indicating whether the given key value is a synonym
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static bool IsSynonym(string key)
-        {
-            return Synonyms.ContainsKey(key);
+        /// <param name = "connectionString">The connection string.</param>
+        public XmppConnectionString(string connectionString) {
+            options = new Dictionary<string, object>();
+            Load(connectionString);
         }
 
         /// <summary>
-        /// Gets the synonym for the give key value
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static string GetSynonym(string key)
-        {
-            return Synonyms[key];
-        }
-
-        /// <summary>
-        /// Gets the synonyms.
-        /// </summary>
-        /// <returns></returns>
-        private static Dictionary<string, string> GetSynonyms()
-        {
-            Dictionary<string, string> synonyms = new Dictionary<string, string>();
-
-            synonyms.Add("server",              "server");
-            synonyms.Add("port number",         "port number");
-            synonyms.Add("user id",             "user id");
-            synonyms.Add("uid",                 "user id");
-            synonyms.Add("user password",       "user password");
-            synonyms.Add("resource",            "resource");
-            synonyms.Add("connection timeout",  "connection timeout");
-            synonyms.Add("use proxy",           "use proxy");
-            synonyms.Add("proxy type",          "proxy type");
-            synonyms.Add("proxy server",        "proxy server");
-            synonyms.Add("proxy port number",   "proxy port number");
-            synonyms.Add("proxy user name",     "proxy user name");
-            synonyms.Add("proxy password",      "proxy password");
-            synonyms.Add("http binding",        "http binding");
-            synonyms.Add("resolve host name",   "resolve host name");
-
-            return synonyms;
-        }
-
-        #endregion
-
-        #region · Fields ·
-
-        private Dictionary<string, object> options;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <summary>
-        /// Gets the login server.
+        ///   Gets the login server.
         /// </summary>
         /// <value>The server.</value>
-        public string HostName
-        {
-            get { return this.GetString("server"); }
+        public string HostName {
+            get { return GetString("server"); }
         }
 
         /// <summary>
-        /// Gets a value indicating whether to resolve host names.
+        ///   Gets a value indicating whether to resolve host names.
         /// </summary>
         /// <value>
         ///   <c>true</c> if host name should be resolved; otherwise, <c>false</c>.
         /// </value>
-        public bool ResolveHostName
-        {
-            get { return this.GetBoolean("resolve host name"); }
+        public bool ResolveHostName {
+            get { return GetBoolean("resolve host name"); }
         }
 
         /// <summary>
-        /// Gets the port number.
+        ///   Gets the port number.
         /// </summary>
         /// <value>The port.</value>
-        public int PortNumber
-        {
-            get { return this.GetInt32("port number"); }
+        public int PortNumber {
+            get { return GetInt32("port number"); }
         }
 
         /// <summary>
-        /// Gets the user id.
+        ///   Gets the user id.
         /// </summary>
         /// <value>The user id.</value>
-        public string UserId
-        {
-            get { return this.GetString("user id"); }
+        public string UserId {
+            get { return GetString("user id"); }
         }
 
         /// <summary>
-        /// Gets the password.
+        ///   Gets the password.
         /// </summary>
         /// <value>The password.</value>
-        public string UserPassword
-        {
-            get { return this.GetString("user password"); }
+        public string UserPassword {
+            get { return GetString("user password"); }
         }
 
         /// <summary>
-        /// Gets the connection timeout.
+        ///   Gets the connection timeout.
         /// </summary>
         /// <value>The connection timeout.</value>
-        public int ConnectionTimeout
-        {
-            get { return this.GetInt32("connection timeout"); }
+        public int ConnectionTimeout {
+            get { return GetInt32("connection timeout"); }
         }
 
         /// <summary>
-        /// Gets a value that indicating whether the connection should be done throught a proxy
+        ///   Gets a value that indicating whether the connection should be done throught a proxy
         /// </summary>
-        public bool UseProxy
-        {
-            get { return this.GetBoolean("use proxy"); }
+        public bool UseProxy {
+            get { return GetBoolean("use proxy"); }
         }
 
         /// <summary>
-        /// Gets the proxy type
+        ///   Gets the proxy type
         /// </summary>
-        public string ProxyType
-        {
-            get { return this.GetString("proxy type"); }
+        public string ProxyType {
+            get { return GetString("proxy type"); }
         }
 
         /// <summary>
-        /// Gets the proxy server
+        ///   Gets the proxy server
         /// </summary>
-        public string ProxyServer
-        {
-            get { return this.GetString("proxy server"); }
+        public string ProxyServer {
+            get { return GetString("proxy server"); }
         }
 
         /// <summary>
-        /// Gets the proxy port number
+        ///   Gets the proxy port number
         /// </summary>
-        public int ProxyPortNumber
-        {
-            get { return this.GetInt32("proxy port number"); }
+        public int ProxyPortNumber {
+            get { return GetInt32("proxy port number"); }
         }
 
         /// <summary>
-        /// Gets the proxy user name
+        ///   Gets the proxy user name
         /// </summary>
-        public string ProxyUserName
-        {
-            get { return this.GetString("proxy user name"); }
+        public string ProxyUserName {
+            get { return GetString("proxy user name"); }
         }
 
         /// <summary>
-        /// Gets the proxy password
+        ///   Gets the proxy password
         /// </summary>
-        public string ProxyPassword
-        {
-            get { return this.GetString("proxy password"); }
+        public string ProxyPassword {
+            get { return GetString("proxy password"); }
         }
 
         /// <summary>
-        /// Gets a value that indicates if http binding should be used
+        ///   Gets a value that indicates if http binding should be used
         /// </summary>
-        public bool UseHttpBinding
-        {
-            get { return this.GetBoolean("http binding"); }
+        public bool UseHttpBinding {
+            get { return GetBoolean("http binding"); }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppConnectionString"/> class.
+        ///   Gets a value indicating whether the given key value is a synonym
         /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public XmppConnectionString(string connectionString)
-        {
-            this.options = new Dictionary<string, object>();
-            this.Load(connectionString);
+        /// <param name = "key"></param>
+        /// <returns></returns>
+        public static bool IsSynonym(string key) {
+            return Synonyms.ContainsKey(key);
         }
 
-        #endregion
-
-        #region · Overriden methods ·
+        /// <summary>
+        ///   Gets the synonym for the give key value
+        /// </summary>
+        /// <param name = "key"></param>
+        /// <returns></returns>
+        public static string GetSynonym(string key) {
+            return Synonyms[key];
+        }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   Gets the synonyms.
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<string, string> GetSynonyms() {
+            var synonyms = new Dictionary<string, string>();
+
+            synonyms.Add("server", "server");
+            synonyms.Add("port number", "port number");
+            synonyms.Add("user id", "user id");
+            synonyms.Add("uid", "user id");
+            synonyms.Add("user password", "user password");
+            synonyms.Add("resource", "resource");
+            synonyms.Add("connection timeout", "connection timeout");
+            synonyms.Add("use proxy", "use proxy");
+            synonyms.Add("proxy type", "proxy type");
+            synonyms.Add("proxy server", "proxy server");
+            synonyms.Add("proxy port number", "proxy port number");
+            synonyms.Add("proxy user name", "proxy user name");
+            synonyms.Add("proxy password", "proxy password");
+            synonyms.Add("http binding", "http binding");
+            synonyms.Add("resolve host name", "resolve host name");
+
+            return synonyms;
+        }
+
+        /// <summary>
+        ///   Returns a <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString()
-        {
-            StringBuilder cs = new StringBuilder();
-            Dictionary<string, object>.Enumerator e = this.options.GetEnumerator();
+        public override string ToString() {
+            var cs = new StringBuilder();
+            Dictionary<string, object>.Enumerator e = options.GetEnumerator();
 
             while (e.MoveNext())
             {
@@ -257,7 +215,7 @@ namespace BabelIm.Net.Xmpp.Core
                         cs.Append(";");
                     }
 
-                    string key = CultureInfo.CurrentUICulture.TextInfo.ToTitleCase(e.Current.Key.ToString());
+                    string key = CultureInfo.CurrentUICulture.TextInfo.ToTitleCase(e.Current.Key);
                     cs.AppendFormat(CultureInfo.CurrentUICulture, "{0}={1}", key, e.Current.Value);
                 }
             }
@@ -265,28 +223,22 @@ namespace BabelIm.Net.Xmpp.Core
             return cs.ToString();
         }
 
-        #endregion
+        private void SetDefaultOptions() {
+            options.Clear();
 
-        #region · Private Methods ·
-
-        private void SetDefaultOptions()
-        {
-            this.options.Clear();
-
-            this.options.Add("login server",        null);
-            this.options.Add("port number",         5222);
-            this.options.Add("user id",             null);
-            this.options.Add("user password",       null);
-            this.options.Add("resource",            null);
-            this.options.Add("sasl",                false);
-            this.options.Add("connection timeout",  -1);
+            options.Add("login server", null);
+            options.Add("port number", 5222);
+            options.Add("user id", null);
+            options.Add("user password", null);
+            options.Add("resource", null);
+            options.Add("sasl", false);
+            options.Add("connection timeout", -1);
         }
 
-        private void Load(string connectionString)
-        {
+        private void Load(string connectionString) {
             string[] keyPairs = connectionString.Split(';');
 
-            this.SetDefaultOptions();
+            SetDefaultOptions();
 
             foreach (string keyPair in keyPairs)
             {
@@ -300,55 +252,49 @@ namespace BabelIm.Net.Xmpp.Core
 
                     if (Synonyms.ContainsKey(values[0]))
                     {
-                        string key = (string)Synonyms[values[0]];
-                        this.options[key] = values[1].Trim();
+                        string key = Synonyms[values[0]];
+                        options[key] = values[1].Trim();
                     }
                 }
             }
 
-            this.Validate();
+            Validate();
         }
 
-        private void Validate()
-        {
-            if ((this.HostName == null || this.HostName.Length == 0) ||
-                (this.UserId == null || this.UserId.Length == 0) ||
-                (this.UserPassword == null || this.UserPassword.Length == 0))
+        private void Validate() {
+            if ((HostName == null || HostName.Length == 0) ||
+                (UserId == null || UserId.Length == 0) ||
+                (UserPassword == null || UserPassword.Length == 0))
             {
                 throw new XmppException("Invalid connection string options.");
             }
         }
 
-        private string GetString(string key)
-        {
-            if (this.options.ContainsKey(key))
+        private string GetString(string key) {
+            if (options.ContainsKey(key))
             {
-                return (string)this.options[key];
+                return (string) options[key];
             }
-            
+
             return null;
         }
 
-        private int GetInt32(string key)
-        {
-            if (this.options.ContainsKey(key))
+        private int GetInt32(string key) {
+            if (options.ContainsKey(key))
             {
-                return Convert.ToInt32(this.options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToInt32(options[key], CultureInfo.CurrentUICulture);
             }
-        
+
             return 0;
         }
 
-        private bool GetBoolean(string key)
-        {
-            if (this.options.ContainsKey(key))
+        private bool GetBoolean(string key) {
+            if (options.ContainsKey(key))
             {
-                return Convert.ToBoolean(this.options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToBoolean(options[key], CultureInfo.CurrentUICulture);
             }
 
             return false;
         }
-
-        #endregion
     }
 }

@@ -29,29 +29,24 @@
 */
 
 // Implements a number of classes to allow Sockets to connect trough a firewall.
-namespace Org.Mentalis.Network.ProxySocket
-{
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
 
+namespace Org.Mentalis.Network.ProxySocket {
     /// <summary>
-    /// Specifies the type of proxy servers that an instance of the ProxySocket class can use.
+    ///   Specifies the type of proxy servers that an instance of the ProxySocket class can use.
     /// </summary>
-    public enum ProxyTypes
-    {
+    public enum ProxyTypes {
         /// <summary>
-        /// No proxy server; the ProxySocket object behaves exactly like an ordinary Socket object.
+        ///   No proxy server; the ProxySocket object behaves exactly like an ordinary Socket object.
         /// </summary>
         None,
-        
+
         /// <summary>
-        /// A SOCKS4[A] proxy server.
+        ///   A SOCKS4[A] proxy server.
         /// </summary>
         Socks4,
 
         /// <summary>
-        /// A SOCKS5 proxy server.
+        ///   A SOCKS5 proxy server.
         /// </summary>
         Socks5
     }

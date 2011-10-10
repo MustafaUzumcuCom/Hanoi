@@ -27,23 +27,15 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-
-namespace BabelIm.Net.Xmpp.Core.Transports
-{
+namespace BabelIm.Net.Xmpp.Core.Transports {
     /// <summary>
-    /// Interface for secure transport implementations
+    ///   Interface for secure transport implementations
     /// </summary>
     internal interface ISecureTransport
-        : ITransport
-    {
-        #region · Methods ·
-
+        : ITransport {
         /// <summary>
-        /// Opens a secure transport connection
+        ///   Opens a secure transport connection
         /// </summary>
         void OpenSecureConnection();
-
-        #endregion
-    }
+        }
 }

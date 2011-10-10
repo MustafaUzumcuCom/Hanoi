@@ -29,24 +29,17 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// An ID generator for XMPP messages.
+    ///   An ID generator for XMPP messages.
     /// </summary>
-    public static class XmppIdentifierGenerator
-    {
-        #region · Static Methods ·
-
+    public static class XmppIdentifierGenerator {
         /// <summary>
-        /// Generates a new message ID.
+        ///   Generates a new message ID.
         /// </summary>
         /// <returns>The message ID as a string.</returns>
-        public static string Generate()
-        {
+        public static string Generate() {
             return Guid.NewGuid().ToString().Replace("-", "");
         }
-
-        #endregion
     }
 }

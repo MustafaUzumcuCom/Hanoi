@@ -29,44 +29,28 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Event args for the <see cref="XmppConnection.UnhandledMessage"/> event.
+    ///   Event args for the <see cref = "XmppConnection.UnhandledMessage" /> event.
     /// </summary>
-    public sealed class XmppUnhandledMessageEventArgs 
-        : EventArgs
-    {
-        #region · Fields ·
-
-        private object message;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class XmppUnhandledMessageEventArgs
+        : EventArgs {
+        private readonly object message;
 
         /// <summary>
-        /// Gets the stanza instance.
+        ///   Initializes a new instance of the <see cref = "T:XmppUnhandledMessageEventArgs" /> class.
         /// </summary>
-        /// <value>The stanza instance.</value>
-        public object StanzaInstance
-        {
-            get { return this.message; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppUnhandledMessageEventArgs"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        internal XmppUnhandledMessageEventArgs(object message)
-        {
+        /// <param name = "message">The message.</param>
+        internal XmppUnhandledMessageEventArgs(object message) {
             this.message = message;
         }
 
-        #endregion
-    }
+        /// <summary>
+        ///   Gets the stanza instance.
+        /// </summary>
+        /// <value>The stanza instance.</value>
+        public object StanzaInstance {
+            get { return message; }
+        }
+        }
 }

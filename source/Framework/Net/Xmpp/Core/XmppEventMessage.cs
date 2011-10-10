@@ -27,76 +27,56 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// Pub sub event message
+    ///   Pub sub event message
     /// </summary>
-    public sealed class XmppEventMessage 
-    {
-    	#region · Fields ·
-
-    	private string  	identifier;
-        private XmppJid 	from;
-        private XmppJid 	to;
-        private PubSubEvent eventMessage;
-        
-        #endregion
-        
-        #region · Properties ·
+    public sealed class XmppEventMessage {
+        private readonly PubSubEvent eventMessage;
+        private readonly XmppJid from;
+        private readonly string identifier;
+        private readonly XmppJid to;
 
         /// <summary>
-        /// Gets the XMPP Event Message ID
+        ///   Initializes a new instance of the <see cref = "T:XmppEventMessage" /> class.
         /// </summary>
-    	public string Identifier
-    	{
-    		get { return this.identifier; }
-    	}
-    	
-        /// <summary>
-        /// Gets the Event Message source JID
-        /// </summary>
-        public XmppJid From
-        {
-        	get { return this.from; }
+        /// <param name = "message">The event.</param>
+        internal XmppEventMessage(Message message) {
+            identifier = message.ID;
+            @from = message.From;
+            to = message.To;
+            eventMessage = (PubSubEvent) message.Items[0];
         }
 
         /// <summary>
-        /// Gets the Event Message target JID
+        ///   Gets the XMPP Event Message ID
         /// </summary>
-        public XmppJid To
-        {
-        	get { return this.to; }
+        public string Identifier {
+            get { return identifier; }
         }
 
         /// <summary>
-        /// Gets the XMPP Event Message data
+        ///   Gets the Event Message source JID
         /// </summary>
-        public PubSubEvent Event
-        {
-        	get { return this.eventMessage; }
+        public XmppJid From {
+            get { return @from; }
         }
-        
-        #endregion
-        
-        #region · Constructors ·
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppEventMessage"/> class.
+        ///   Gets the Event Message target JID
         /// </summary>
-        /// <param name="message">The event.</param>
-        internal XmppEventMessage(Message message)
-        {
-        	this.identifier     = message.ID;
-        	this.from 		    = message.From;
-        	this.to			    = message.To;
-        	this.eventMessage	= (PubSubEvent)message.Items[0];
+        public XmppJid To {
+            get { return to; }
         }
 
-        #endregion
+        /// <summary>
+        ///   Gets the XMPP Event Message data
+        /// </summary>
+        public PubSubEvent Event {
+            get { return eventMessage; }
+        }
     }
 }

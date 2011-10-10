@@ -35,33 +35,41 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 
-namespace BabelIm.Net.Xmpp.Core
-{
+namespace BabelIm.Net.Xmpp.Core {
     /// <summary>
-    /// <see cref="XmppAuthenticator" /> implementation for the SASL Digest Authentication mechanism.
+    ///   <see cref = "XmppAuthenticator" /> implementation for the SASL Digest Authentication mechanism.
     /// </summary>
     /// <remarks>
-    /// References:
-    ///     http://www.ietf.org/html.charters/sasl-charter.html
-    ///     http://www.ietf.org/internet-drafts/draft-ietf-sasl-rfc2831bis-09.txt
+    ///   References:
+    ///   http://www.ietf.org/html.charters/sasl-charter.html
+    ///   http://www.ietf.org/internet-drafts/draft-ietf-sasl-rfc2831bis-09.txt
     /// </remarks>
-    internal sealed class XmppSaslDigestAuthenticator 
-        : XmppAuthenticator
-    {
-        #region · Static Methods ·
+    internal sealed class XmppSaslDigestAuthenticator
+        : XmppAuthenticator {
+        private readonly string cnonce;
+        private readonly AutoResetEvent successEvent;
+        private Dictionary<string, string> digestChallenge;
 
-        private static Dictionary<string, string> DecodeDigestChallenge(Challenge challenge)
-        {
-            Dictionary<string, string> table = new Dictionary<string, string>();
-            string          decoded     = Encoding.UTF8.GetString(Convert.FromBase64String(challenge.Value));
-            MatchCollection keyPairs    = Regex.Matches(decoded, @"([\w\s\d]*)\s*=\s*([^,]*)");
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "T:XmppSaslDigestAuthenticator" /> class.
+        /// </summary>
+        public XmppSaslDigestAuthenticator(XmppConnection connection)
+            : base(connection) {
+            cnonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(XmppIdentifierGenerator.Generate()));
+            successEvent = new AutoResetEvent(false);
+        }
+
+        private static Dictionary<string, string> DecodeDigestChallenge(Challenge challenge) {
+            var table = new Dictionary<string, string>();
+            string decoded = Encoding.UTF8.GetString(Convert.FromBase64String(challenge.Value));
+            MatchCollection keyPairs = Regex.Matches(decoded, @"([\w\s\d]*)\s*=\s*([^,]*)");
 
             foreach (Match match in keyPairs)
             {
                 if (match.Success && match.Groups.Count == 3)
                 {
-                    string key      = match.Groups[1].Value.Trim();
-                    string value    = match.Groups[2].Value.Trim();
+                    string key = match.Groups[1].Value.Trim();
+                    string value = match.Groups[2].Value.Trim();
 
                     // Strip quotes from the value
                     if (value.StartsWith("\"", StringComparison.OrdinalIgnoreCase) ||
@@ -87,160 +95,121 @@ namespace BabelIm.Net.Xmpp.Core
             return table;
         }
 
-        #endregion
-
-        #region · Fields ·
-
-        private Dictionary<string, string>  digestChallenge;
-        private AutoResetEvent	            successEvent;
-        private string			            cnonce;
-
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppSaslDigestAuthenticator"/> class.
+        ///   Performs the authentication using the SASL digest authentication mechanism.
         /// </summary>
-        public XmppSaslDigestAuthenticator(XmppConnection connection) 
-            : base(connection)
-        {
-            this.cnonce         = Convert.ToBase64String(Encoding.UTF8.GetBytes(XmppIdentifierGenerator.Generate()));
-            this.successEvent	= new AutoResetEvent(false);
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        /// <summary>
-        /// Performs the authentication using the SASL digest authentication mechanism.
-        /// </summary>
-        public override void Authenticate()
-        {
+        public override void Authenticate() {
             // Send authentication mechanism
-            Auth auth = new Auth();
+            var auth = new Auth();
             auth.Mechanism = XmppCodes.SaslDigestMD5Mechanism;
 
-            this.Connection.Send(auth);
+            Connection.Send(auth);
 
-            this.successEvent.WaitOne();
+            successEvent.WaitOne();
 
             // Verify received Digest-Challenge
-            
+
             // Check that the nonce setting is pressent
-            if (!this.digestChallenge.ContainsKey("nonce"))
+            if (!digestChallenge.ContainsKey("nonce"))
             {
                 throw new XmppException("SASL Authrization failed. Incorrect challenge received from server");
             }
 
             // Check that the charset is correct
-            if (this.digestChallenge.ContainsKey("charset") 
-                && this.digestChallenge["charset"] != "utf-8")
+            if (digestChallenge.ContainsKey("charset")
+                && digestChallenge["charset"] != "utf-8")
             {
                 throw new XmppException("SASL Authrization failed. Incorrect challenge received from server");
             }
 
             // Check that the mechanims is correct
-            if (!this.digestChallenge.ContainsKey("algorithm") 
-                || this.digestChallenge["algorithm"] != "md5-sess")
+            if (!digestChallenge.ContainsKey("algorithm")
+                || digestChallenge["algorithm"] != "md5-sess")
             {
                 throw new XmppException("SASL Authrization failed. Incorrect challenge received from server");
             }
 
             // Send the Digest-Reponse
-            Response digestResponse = new Response();
+            var digestResponse = new Response();
 
-            digestResponse.Value = this.BuildDigestRespose();
+            digestResponse.Value = BuildDigestRespose();
 
-            this.Connection.Send(digestResponse);
+            Connection.Send(digestResponse);
 
-            this.successEvent.WaitOne();
+            successEvent.WaitOne();
 
-            if (this.digestChallenge.ContainsKey("rspauth"))
+            if (digestChallenge.ContainsKey("rspauth"))
             {
                 digestResponse = new Response();
-                this.Connection.Send(digestResponse);
+                Connection.Send(digestResponse);
 
-                this.successEvent.WaitOne();
+                successEvent.WaitOne();
             }
 
-            if (!this.AuthenticationFailed)
+            if (!AuthenticationFailed)
             {
                 // Re-Initialize XMPP Stream
-                this.Connection.InitializeXmppStream();
+                Connection.InitializeXmppStream();
 
                 // Wait until we receive the Stream features
-                this.Connection.WaitForStreamFeatures();
+                Connection.WaitForStreamFeatures();
             }
         }
-    
-        #endregion
 
-        #region · Protected Methods ·
-
-        protected override void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e)
-        {
+        protected override void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e) {
             if (e.StanzaInstance is Challenge)
             {
                 // Response to teh Authentication Information Request
-                this.digestChallenge = DecodeDigestChallenge((Challenge)e.StanzaInstance);
-                this.successEvent.Set();
+                digestChallenge = DecodeDigestChallenge((Challenge) e.StanzaInstance);
+                successEvent.Set();
             }
             else if (e.StanzaInstance is Success)
             {
-                this.successEvent.Set();
+                successEvent.Set();
             }
         }
 
-        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e)
-        {
+        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
             base.OnAuthenticationError(sender, e);
 
-            this.successEvent.Set();
+            successEvent.Set();
         }
 
-        #endregion
+        private string BuildDigestRespose() {
+            var response = new StringBuilder();
+            string digestUri = String.Empty;
 
-        #region · Private Methods ·
+            response.AppendFormat("username=\"{0}\",", Connection.UserId.UserName);
 
-        private string BuildDigestRespose()
-        {
-            StringBuilder   response    = new StringBuilder();
-            string          digestUri   = String.Empty;
-
-            response.AppendFormat("username=\"{0}\",", this.Connection.UserId.UserName);
-
-            if (this.digestChallenge.ContainsKey("realm"))
+            if (digestChallenge.ContainsKey("realm"))
             {
-                response.AppendFormat("realm=\"{0}\",", this.digestChallenge["realm"]);
-                
-                digestUri = String.Format("xmpp/{0}", this.digestChallenge["realm"]);
+                response.AppendFormat("realm=\"{0}\",", digestChallenge["realm"]);
+
+                digestUri = String.Format("xmpp/{0}", digestChallenge["realm"]);
             }
             else
             {
-                digestUri = String.Format("xmpp/{0}", this.Connection.HostName);
+                digestUri = String.Format("xmpp/{0}", Connection.HostName);
             }
 
-            response.AppendFormat("nonce=\"{0}\","          , this.digestChallenge["nonce"]);
-            response.AppendFormat("cnonce=\"{0}\","         , this.cnonce);
-            response.AppendFormat("nc={0},"                 , "00000001");
-            response.AppendFormat("qop={0},"                , this.SelectProtectionQuality());
-            response.AppendFormat("digest-uri=\"{0}\","     , digestUri);
-            response.AppendFormat("response={0},"           , this.GenerateResponseValue());
-            response.AppendFormat("charset={0}"             , this.digestChallenge["charset"]);
+            response.AppendFormat("nonce=\"{0}\",", digestChallenge["nonce"]);
+            response.AppendFormat("cnonce=\"{0}\",", cnonce);
+            response.AppendFormat("nc={0},", "00000001");
+            response.AppendFormat("qop={0},", SelectProtectionQuality());
+            response.AppendFormat("digest-uri=\"{0}\",", digestUri);
+            response.AppendFormat("response={0},", GenerateResponseValue());
+            response.AppendFormat("charset={0}", digestChallenge["charset"]);
 
             return Encoding.UTF8.GetBytes(response.ToString()).ToBase64String();
         }
 
-        private string GenerateResponseValue()
-        {
-            string realm		= ((this.digestChallenge.ContainsKey("realm")) ? this.digestChallenge["realm"] : this.Connection.HostName);
-            string nonce		= this.digestChallenge["nonce"].ToString();
-            string userId		= this.Connection.UserId.UserName;
-            string password		= this.Connection.UserPassword;
-            string digestURI	= String.Format("xmpp/{0}", realm);
-            string quop			= this.SelectProtectionQuality();
+        private string GenerateResponseValue() {
+            string realm = ((digestChallenge.ContainsKey("realm")) ? digestChallenge["realm"] : Connection.HostName);
+            string nonce = digestChallenge["nonce"];
+            string userId = Connection.UserId.UserName;
+            string password = Connection.UserPassword;
+            string digestURI = String.Format("xmpp/{0}", realm);
+            string quop = SelectProtectionQuality();
 
             /*
             If authzid is specified, then A1 is
@@ -251,10 +220,10 @@ namespace BabelIm.Net.Xmpp.Core
                 A1 = { H( { username-value, ":", realm-value, ":", passwd } ),
                     ":", nonce-value, ":", cnonce-value }
             */
-            MemoryStream a1 = new MemoryStream();
+            var a1 = new MemoryStream();
 
-            byte[] a1hash   = (new string[] { userId, ":", realm, ":", password }).ComputeMD5Hash();
-            byte[] temp     = Encoding.UTF8.GetBytes(String.Format(":{0}:{1}", nonce, this.cnonce));
+            byte[] a1hash = (new[] {userId, ":", realm, ":", password}).ComputeMD5Hash();
+            byte[] temp = Encoding.UTF8.GetBytes(String.Format(":{0}:{1}", nonce, cnonce));
 
             // There are no authzid-value
             a1.Write(a1hash, 0, a1hash.Length);
@@ -272,7 +241,7 @@ namespace BabelIm.Net.Xmpp.Core
             */
 
             string a2 = "AUTHENTICATE:" + digestURI +
-                ((quop == "auth") ? null : ":00000000000000000000000000000000");
+                        ((quop == "auth") ? null : ":00000000000000000000000000000000");
 
             /*
             KD(k, s) = H({k, ":", s}), 
@@ -291,16 +260,17 @@ namespace BabelIm.Net.Xmpp.Core
              */
 
             string hexA1 = a1.ToArray().ComputeMD5Hash().ToHexString();
-            string hexA2 = (new string[] { a2 }).ComputeMD5Hash().ToHexString();
+            string hexA2 = (new[] {a2}).ComputeMD5Hash().ToHexString();
 
-            return (new string[] { hexA1, ":", nonce, ":", "00000001", ":", cnonce, ":", quop, ":", hexA2 }).ComputeMD5Hash().ToHexString();
+            return
+                (new[] {hexA1, ":", nonce, ":", "00000001", ":", cnonce, ":", quop, ":", hexA2}).ComputeMD5Hash().
+                    ToHexString();
         }
 
-        private string SelectProtectionQuality()
-        {
-            if (this.digestChallenge.ContainsKey("qop-options"))
+        private string SelectProtectionQuality() {
+            if (digestChallenge.ContainsKey("qop-options"))
             {
-                string[] quopOptions = this.digestChallenge["qop-options"].Split(',');
+                string[] quopOptions = digestChallenge["qop-options"].Split(',');
 
                 foreach (string quo in quopOptions)
                 {
@@ -319,7 +289,5 @@ namespace BabelIm.Net.Xmpp.Core
 
             return "auth";
         }
-
-        #endregion
-    }
+        }
 }
