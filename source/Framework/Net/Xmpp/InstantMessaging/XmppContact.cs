@@ -33,7 +33,7 @@ using System.Linq;
 using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {

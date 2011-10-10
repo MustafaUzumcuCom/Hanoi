@@ -35,7 +35,7 @@ using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 using BabelIm.Net.Xmpp.Serialization.Core.Streams;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 
 namespace BabelIm.Net.Xmpp.Serialization.Extensions.Bosh {
     /// <summary>

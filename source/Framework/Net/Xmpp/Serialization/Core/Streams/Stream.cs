@@ -31,7 +31,7 @@ using System;
 using System.Collections;
 using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 
 namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
     /// <remarks />

@@ -39,9 +39,11 @@ using BabelIm.Net.Xmpp.Serialization.Core.Streams;
 using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCard;
+using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.Extensions.XmppPing;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
 
 namespace BabelIm.Net.Xmpp.Core {
@@ -621,7 +623,7 @@ namespace BabelIm.Net.Xmpp.Core {
             {
                 foreach (object item in features.Items)
                 {
-                    if (item is BabelIm.Net.Xmpp.Serialization.InstantMessaging.RegisterIQ)
+                    if (item is RegisterIQ)
                     {
                         streamFeatures |= XmppStreamFeatures.InBandRegistration;
                     }

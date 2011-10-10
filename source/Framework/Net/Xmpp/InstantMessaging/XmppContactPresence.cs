@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

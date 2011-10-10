@@ -32,13 +32,16 @@
 // 
 
 
-/// <summary>
-/// </summary>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.1432")]
-[System.SerializableAttribute]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:xmpp:blocking:errors")]
-[System.Xml.Serialization.XmlRootAttribute("blocked", Namespace = "urn:xmpp:blocking:errors", IsNullable = false)]
-public enum empty {
-    /// <comentarios />
-    [System.Xml.Serialization.XmlEnumAttribute("")] Item,
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking
+{
+    /// <summary>
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.1432")]
+    [System.SerializableAttribute]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:xmpp:blocking:errors")]
+    [System.Xml.Serialization.XmlRootAttribute("blocked", Namespace = "urn:xmpp:blocking:errors", IsNullable = false)]
+    public enum empty {
+        /// <comentarios />
+        [System.Xml.Serialization.XmlEnumAttribute("")] Item,
+    }
 }

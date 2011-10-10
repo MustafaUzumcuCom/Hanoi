@@ -34,9 +34,8 @@ using System.Threading;
 using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat;
-using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat.User;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
     /// <summary>

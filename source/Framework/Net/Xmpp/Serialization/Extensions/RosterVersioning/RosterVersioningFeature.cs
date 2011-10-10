@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding {
+namespace BabelIm.Net.Xmpp.Serialization.Extensions.RosterVersioning {
     /// <summary>
     ///   XEP-0237: Roster Versioning
     /// </summary>

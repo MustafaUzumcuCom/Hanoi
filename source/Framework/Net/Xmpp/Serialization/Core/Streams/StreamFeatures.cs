@@ -34,7 +34,9 @@ using BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 using BabelIm.Net.Xmpp.Serialization.Core.Tls;
 using BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities;
+using BabelIm.Net.Xmpp.Serialization.Extensions.RosterVersioning;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register;
 
 namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
     /// <summary>

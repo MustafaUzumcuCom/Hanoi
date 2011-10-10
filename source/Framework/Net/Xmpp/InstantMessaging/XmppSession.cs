@@ -43,6 +43,7 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
 using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
 using BabelIm.Net.Xmpp.Serialization.Extensions.UserTune;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCard;
+using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {

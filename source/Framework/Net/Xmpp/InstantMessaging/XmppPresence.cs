@@ -28,7 +28,7 @@
 */
 
 using BabelIm.Net.Xmpp.Core;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

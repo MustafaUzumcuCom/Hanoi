@@ -38,8 +38,10 @@ using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCard;
+using BabelIm.Net.Xmpp.Serialization.Extensions.VCardAvatars;
+using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
