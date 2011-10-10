@@ -39,353 +39,293 @@ using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Contact's Roster
+    ///   Contact's Roster
     /// </summary>
     public sealed class XmppRoster
-        : ObservableObject, IEnumerable<XmppContact>, INotifyCollectionChanged
-    {
-        #region · INotifyCollectionChanged Members ·
+        : ObservableObject, IEnumerable<XmppContact>, INotifyCollectionChanged {
+        private readonly XmppConnection connection;
+        private readonly ObservableCollection<XmppContact> contacts;
+        private readonly List<string> pendingMessages;
+        private readonly XmppSession session;
+
+        private IDisposable infoQueryErrorSubscription;
+        private IDisposable presenceSubscription;
+        private IDisposable rosterNotificationSubscription;
+        private IDisposable sessionStateSubscription;
 
         /// <summary>
-        /// Occurs when the roster changes ( contacts added, removed, updated, ... )
+        ///   Initializes a new instance of the <see cref = "XmppRoster" /> class
+        /// </summary>
+        internal XmppRoster(XmppSession session) {
+            this.session = session;
+            connection = session.Connection;
+            contacts = new ObservableCollection<XmppContact>();
+            pendingMessages = new List<string>();
+
+            SubscribeToSessionState();
+        }
+
+        /// <summary>
+        ///   Gets the contact with the given JID
+        /// </summary>
+        /// <param name = "jid">The bare JID</param>
+        /// <returns></returns>
+        public XmppContact this[string jid] {
+            get { return contacts.Where(contact => contact.ContactId.BareIdentifier == jid).SingleOrDefault(); }
+        }
+
+        #region IEnumerable<XmppContact> Members
+
+        IEnumerator<XmppContact> IEnumerable<XmppContact>.GetEnumerator() {
+            return contacts.GetEnumerator();
+        }
+
+        public IEnumerator GetEnumerator() {
+            return contacts.GetEnumerator();
+        }
+
+        #endregion
+
+        #region INotifyCollectionChanged Members
+
+        /// <summary>
+        ///   Occurs when the roster changes ( contacts added, removed, updated, ... )
         /// </summary>
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         #endregion
 
-        #region · Events ·
-
         /// <summary>
-        /// Occurs when the presence of a contact changes
+        ///   Occurs when the presence of a contact changes
         /// </summary>
         public event EventHandler ContactPresenceChanged;
 
         /// <summary>
-        /// Occurs when the Contact's Roster is recevied
+        ///   Occurs when the Contact's Roster is recevied
         /// </summary>
         public event EventHandler RosterReceived;
 
-        #endregion
-
-        #region · Fields ·
-
-        private ObservableCollection<XmppContact>   contacts;
-        private XmppSession                         session;
-        private XmppConnection                      connection;
-        private List<string>                        pendingMessages;
-
-        #region · Subscriptions ·
-
-        private IDisposable sessionStateSubscription;
-        private IDisposable rosterNotificationSubscription;
-        private IDisposable infoQueryErrorSubscription;
-        private IDisposable presenceSubscription;
-
-        #endregion
-
-        #endregion
-
-        #region · Indexers ·
-
         /// <summary>
-        /// Gets the contact with the given JID
+        ///   Adds the given contact to the roster
         /// </summary>
-        /// <param name="jid">The bare JID</param>
-        /// <returns></returns>
-        public XmppContact this[string jid]
-        {
-            get
-            {
-                return this.contacts.Where(contact => contact.ContactId.BareIdentifier == jid).SingleOrDefault();
-            }
-        }
+        /// <param name = "jid">Contact JID</param>
+        /// <param name = "name">Contact name</param>
+        public XmppRoster AddContact(string jid, string name) {
+            var query = new RosterQuery();
+            var iq = new IQ();
 
-        #endregion
-       
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppRoster"/> class
-        /// </summary>
-        internal XmppRoster(XmppSession session)
-        {
-            this.session            = session;
-            this.connection         = session.Connection;
-            this.contacts           = new ObservableCollection<XmppContact>();
-            this.pendingMessages    = new List<string>();
-
-            this.SubscribeToSessionState();
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        /// <summary>
-        /// Adds the given contact to the roster
-        /// </summary>
-        /// <param name="jid">Contact JID</param>
-        /// <param name="name">Contact name</param>
-        public XmppRoster AddContact(string jid, string name)
-        {
-            RosterQuery query   = new RosterQuery();
-            IQ          iq      = new IQ();
-
-            iq.ID   = XmppIdentifierGenerator.Generate();
+            iq.ID = XmppIdentifierGenerator.Generate();
             iq.Type = IQType.Set;
-            iq.From = this.connection.UserId;
+            iq.From = connection.UserId;
 
-            RosterItem item = new RosterItem();
+            var item = new RosterItem();
 
-            item.Subscription   = RosterSubscriptionType.None;
-            item.Jid            = jid;
-            item.Name           = name;
+            item.Subscription = RosterSubscriptionType.None;
+            item.Jid = jid;
+            item.Name = name;
 
             query.Items.Add(item);
 
             iq.Items.Add(query);
 
-            this.pendingMessages.Add(iq.ID);
+            pendingMessages.Add(iq.ID);
 
-            this.connection.Send(iq);
+            connection.Send(iq);
 
             return this;
         }
 
         /// <summary>
-        /// Deletes a user from the roster list
+        ///   Deletes a user from the roster list
         /// </summary>
-        public XmppRoster RemoveContact(XmppJid jid)
-        {
-            RosterQuery query   = new RosterQuery();
-            IQ          iq      = new IQ();
+        public XmppRoster RemoveContact(XmppJid jid) {
+            var query = new RosterQuery();
+            var iq = new IQ();
 
-            iq.ID   = XmppIdentifierGenerator.Generate();
+            iq.ID = XmppIdentifierGenerator.Generate();
             iq.Type = IQType.Set;
-            iq.From = this.connection.UserId;
+            iq.From = connection.UserId;
 
-            RosterItem item = new RosterItem();
+            var item = new RosterItem();
 
-            item.Jid            = jid.BareIdentifier;
-            item.Subscription   = RosterSubscriptionType.Remove;
+            item.Jid = jid.BareIdentifier;
+            item.Subscription = RosterSubscriptionType.Remove;
 
             query.Items.Add(item);
 
             iq.Items.Add(query);
 
-            this.pendingMessages.Add(iq.ID);
+            pendingMessages.Add(iq.ID);
 
-            this.connection.Send(iq);
+            connection.Send(iq);
 
             return this;
         }
 
         /// <summary>
-        /// Request Roster list to the XMPP Server
+        ///   Request Roster list to the XMPP Server
         /// </summary>
-        public XmppRoster RequestRosterList()
-        {
-            RosterQuery query   = new RosterQuery();
-            IQ          iq      = new IQ();
+        public XmppRoster RequestRosterList() {
+            var query = new RosterQuery();
+            var iq = new IQ();
 
-            iq.ID   = XmppIdentifierGenerator.Generate();
+            iq.ID = XmppIdentifierGenerator.Generate();
             iq.Type = IQType.Get;
-            iq.From = this.connection.UserId;
+            iq.From = connection.UserId;
 
             iq.Items.Add(query);
 
-            this.connection.Send(iq);
+            connection.Send(iq);
 
             return this;
         }
 
         /// <summary>
-        /// Refreshes the blocked contacts list
+        ///   Refreshes the blocked contacts list
         /// </summary>
         /// <returns></returns>
-        public XmppRoster RefreshBlockedContacts()
-        {
+        public XmppRoster RefreshBlockedContacts() {
 #warning TODO: Check if contact list should be stored in a separated collection or the information should be injected into XmppContact class
-            if (this.session.ServiceDiscovery.SupportsBlocking)
+            if (session.ServiceDiscovery.SupportsBlocking)
             {
-                IQ iq = new IQ
-                {
-                    ID      = XmppIdentifierGenerator.Generate(),
-                    Type    = IQType.Get
-                };
+                var iq = new IQ
+                             {
+                                 ID = XmppIdentifierGenerator.Generate(),
+                                 Type = IQType.Get
+                             };
 
                 iq.Items.Add(new BlockList());
 
-                this.session.Send(iq);
+                session.Send(iq);
             }
 
             return this;
         }
 
         /// <summary>
-        /// Unblocks all blocked contacts
+        ///   Unblocks all blocked contacts
         /// </summary>
-        public XmppRoster UnBlockAll()
-        {
-            if (this.session.ServiceDiscovery.SupportsBlocking)
+        public XmppRoster UnBlockAll() {
+            if (session.ServiceDiscovery.SupportsBlocking)
             {
-                IQ iq = new IQ
-                {
-                    ID      = XmppIdentifierGenerator.Generate(),
-                    From    = this.session.UserId,
-                    Type    = IQType.Set
-                };
+                var iq = new IQ
+                             {
+                                 ID = XmppIdentifierGenerator.Generate(),
+                                 From = session.UserId,
+                                 Type = IQType.Set
+                             };
 
                 iq.Items.Add(new UnBlock());
 
-                this.session.Send(iq);
+                session.Send(iq);
             }
 
             return this;
         }
 
-        #endregion
-
-        #region · Internal Methods ·
-
         /// <summary>
-        /// Called when the presence of a contact is changed
+        ///   Called when the presence of a contact is changed
         /// </summary>
-        internal void OnContactPresenceChanged()
-        {
-            if (this.ContactPresenceChanged != null)
+        internal void OnContactPresenceChanged() {
+            if (ContactPresenceChanged != null)
             {
-                this.ContactPresenceChanged(this, EventArgs.Empty);
+                ContactPresenceChanged(this, EventArgs.Empty);
             }
         }
 
-        #endregion
-
-        #region · IEnumerable<XmppContact> Members ·
-
-        IEnumerator<XmppContact> IEnumerable<XmppContact>.GetEnumerator()
-        {
-            return this.contacts.GetEnumerator();
-        }
-
-        #endregion
-
-        #region · IEnumerable Members ·
-
-        public IEnumerator GetEnumerator()
-        {
-            return this.contacts.GetEnumerator();
-        }
-
-        #endregion
-
-        #region · Private Methods ·
-
-        private void AddUserContact()
-        {
-            this.contacts.Add
-            (
-                new XmppContact
+        private void AddUserContact() {
+            contacts.Add
                 (
-                    this.session,
-                    this.session.UserId.BareIdentifier,
-                    "",
-                    XmppContactSubscriptionType.Both,
-                    new List<string>(new string[] { "Buddies" })
-                )
-            );
+                    new XmppContact
+                        (
+                        session,
+                        session.UserId.BareIdentifier,
+                        "",
+                        XmppContactSubscriptionType.Both,
+                        new List<string>(new[] {"Buddies"})
+                        )
+                );
         }
 
-        #endregion
-
-        #region · Message Subscriptions ·
-
-        private void SubscribeToSessionState()
-        {
-            this.sessionStateSubscription = this.session
+        private void SubscribeToSessionState() {
+            sessionStateSubscription = session
                 .StateChanged
                 .Subscribe
-            (
-                newState =>
-                {
-                    if (newState == XmppSessionState.LoggingIn)
-                    {
-                        this.Subscribe();
-                    }
-                    else if (newState == XmppSessionState.LoggedIn)
-                    {
-                        this.AddUserContact();
-                    }
-                    else if (newState == XmppSessionState.LoggingOut)
-                    {
-                        this.Unsubscribe();
-                        this.contacts.Clear();
-
-                        if (this.CollectionChanged != null)
+                (
+                    newState =>
                         {
-                            this.InvokeAsynchronouslyInBackground
-                            (
-                                () =>
+                            if (newState == XmppSessionState.LoggingIn)
+                            {
+                                Subscribe();
+                            }
+                            else if (newState == XmppSessionState.LoggedIn)
+                            {
+                                AddUserContact();
+                            }
+                            else if (newState == XmppSessionState.LoggingOut)
+                            {
+                                Unsubscribe();
+                                contacts.Clear();
+
+                                if (CollectionChanged != null)
                                 {
-                                    this.CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                                    InvokeAsynchronouslyInBackground
+                                        (
+                                            () =>
+                                                {
+                                                    CollectionChanged(this,
+                                                                      new NotifyCollectionChangedEventArgs(
+                                                                          NotifyCollectionChangedAction.Reset));
+                                                }
+                                        );
                                 }
-                            );
+                            }
                         }
-                    }
-                }
-            );
+                );
         }
 
-        private void Subscribe()
-        {
-            this.rosterNotificationSubscription = this.connection
+        private void Subscribe() {
+            rosterNotificationSubscription = connection
                 .OnRosterMessage
-                .Subscribe(mesasge => this.OnRosterNotification(mesasge));
+                .Subscribe(mesasge => OnRosterNotification(mesasge));
 
-            this.infoQueryErrorSubscription = this.connection
+            infoQueryErrorSubscription = connection
                 .OnInfoQueryMessage
                 .Where(iq => iq.Type == IQType.Error)
-                .Subscribe(message => this.OnQueryErrorReceived(message));
+                .Subscribe(message => OnQueryErrorReceived(message));
 
-            this.presenceSubscription = this.connection
+            presenceSubscription = connection
                 .OnPresenceMessage
-                .Subscribe(message => this.OnPresenceMessageReceived(message));
+                .Subscribe(message => OnPresenceMessageReceived(message));
 
-            this.contacts.CollectionChanged         += new NotifyCollectionChangedEventHandler(OnCollectionChanged);
+            contacts.CollectionChanged += OnCollectionChanged;
         }
 
-        private void Unsubscribe()
-        {
-            if (this.rosterNotificationSubscription != null)
+        private void Unsubscribe() {
+            if (rosterNotificationSubscription != null)
             {
-                this.rosterNotificationSubscription.Dispose();
-                this.rosterNotificationSubscription = null;
-            }
-            
-            if (this.infoQueryErrorSubscription != null)
-            {
-                this.infoQueryErrorSubscription.Dispose();
-                this.infoQueryErrorSubscription = null;
+                rosterNotificationSubscription.Dispose();
+                rosterNotificationSubscription = null;
             }
 
-            if (this.presenceSubscription != null)
+            if (infoQueryErrorSubscription != null)
             {
-                this.presenceSubscription.Dispose();
-                this.presenceSubscription = null;
+                infoQueryErrorSubscription.Dispose();
+                infoQueryErrorSubscription = null;
             }
 
-            this.contacts.CollectionChanged         -= new NotifyCollectionChangedEventHandler(OnCollectionChanged);
+            if (presenceSubscription != null)
+            {
+                presenceSubscription.Dispose();
+                presenceSubscription = null;
+            }
+
+            contacts.CollectionChanged -= OnCollectionChanged;
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        private void OnRosterNotification(RosterQuery message)
-        {
+        private void OnRosterNotification(RosterQuery message) {
             // It's a roster management related message
             foreach (RosterItem item in message.Items)
             {
@@ -394,50 +334,49 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
                 if (contact == null)
                 {
                     // Create the new contact
-                    XmppContact newContact = new XmppContact
-                    (
-                        this.session,
+                    var newContact = new XmppContact
+                        (
+                        session,
                         item.Jid,
                         item.Name,
-                        (XmppContactSubscriptionType)item.Subscription,
+                        (XmppContactSubscriptionType) item.Subscription,
                         item.Groups
-                    );
+                        );
 
                     // Add the contact to the roster
-                    this.contacts.Add(newContact);
+                    contacts.Add(newContact);
                 }
                 else
                 {
                     switch (item.Subscription)
                     {
                         case RosterSubscriptionType.Remove:
-                            this.contacts.Remove(contact);
+                            contacts.Remove(contact);
                             break;
 
                         default:
                             // Update contact data
                             contact.RefreshData
-                            (
-                                item.Name,
-                                (XmppContactSubscriptionType)item.Subscription,
-                                item.Groups
-                            );
+                                (
+                                    item.Name,
+                                    (XmppContactSubscriptionType) item.Subscription,
+                                    item.Groups
+                                );
                             break;
                     }
                 }
             }
 
-            if (this.RosterReceived != null)
+            if (RosterReceived != null)
             {
-                this.RosterReceived(this, new EventArgs());
+                RosterReceived(this, new EventArgs());
             }
         }
 
-        private void OnPresenceMessageReceived(Presence message)
-        {
+        private void OnPresenceMessageReceived(Presence message) {
             XmppJid jid = message.From;
 
-            if (jid.BareIdentifier == this.session.UserId.BareIdentifier)
+            if (jid.BareIdentifier == session.UserId.BareIdentifier)
             {
 #warning TODO: See how to handle our own presence changes from other resources
             }
@@ -456,7 +395,7 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
 
                             case PresenceType.Subscribe:
                                 // auto-accept subscription requests
-                                this.session.Presence.Subscribed(jid);
+                                session.Presence.Subscribed(jid);
                                 break;
 
                             case PresenceType.Unavailable:
@@ -464,7 +403,7 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
                                 break;
 
                             case PresenceType.Unsubscribe:
-                                this.session.Presence.Unsuscribed(jid);
+                                session.Presence.Unsuscribed(jid);
                                 break;
                         }
                     }
@@ -473,7 +412,7 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
                         contact.UpdatePresence(jid, message);
                     }
                 }
-                else 
+                else
                 {
                     if (message.TypeSpecified)
                     {
@@ -484,11 +423,11 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
 
                             case PresenceType.Subscribe:
                                 // auto-accept subscription requests
-                                this.session.Presence.Subscribed(jid);
+                                session.Presence.Subscribed(jid);
                                 break;
 
                             case PresenceType.Unsubscribe:
-                                this.session.Presence.Unsuscribed(jid);
+                                session.Presence.Unsuscribed(jid);
                                 break;
                         }
                     }
@@ -496,32 +435,24 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
             }
         }
 
-        private void OnQueryErrorReceived(IQ message)
-        {
-            if (this.pendingMessages.Contains(message.ID))
+        private void OnQueryErrorReceived(IQ message) {
+            if (pendingMessages.Contains(message.ID))
             {
-                this.pendingMessages.Remove(message.ID);
+                pendingMessages.Remove(message.ID);
             }
         }
 
-        #endregion
-
-        #region · Change Notification ·
-
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            this.InvokeAsynchronouslyInBackground
-            (
-                () =>
-                {
-                    if (this.CollectionChanged != null)
-                    {
-                        this.CollectionChanged(this, e);
-                    }
-                }
-            );
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            InvokeAsynchronouslyInBackground
+                (
+                    () =>
+                        {
+                            if (CollectionChanged != null)
+                            {
+                                CollectionChanged(this, e);
+                            }
+                        }
+                );
         }
-
-        #endregion
-    }
+        }
 }

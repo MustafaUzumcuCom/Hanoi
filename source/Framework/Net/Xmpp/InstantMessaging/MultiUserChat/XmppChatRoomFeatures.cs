@@ -29,53 +29,60 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
     /// <summary>
-    /// Chat Room Supported Features 
+    ///   Chat Room Supported Features
     /// </summary>
     [Flags]
-    public enum XmppChatRoomFeatures
-    {
+    public enum XmppChatRoomFeatures {
         /// <summary>
-        /// Public
+        ///   Public
         /// </summary>
-        Public              = 1,
+        Public = 1,
+
         /// <summary>
-        /// Persistent
+        ///   Persistent
         /// </summary>
-        Persistent          = 2,
+        Persistent = 2,
+
         /// <summary>
-        /// Open
+        ///   Open
         /// </summary>
-        Open                = 4,
+        Open = 4,
+
         /// <summary>
-        /// Semi Anonymous
+        ///   Semi Anonymous
         /// </summary>
-        SemiAnonymous       = 8,
+        SemiAnonymous = 8,
+
         /// <summary>
-        /// Unmoderated
+        ///   Unmoderated
         /// </summary>
-        Unmoderated         = 16,
+        Unmoderated = 16,
+
         /// <summary>
-        /// Unsecured
+        ///   Unsecured
         /// </summary>
-        Unsecured           = 32,
+        Unsecured = 32,
+
         /// <summary>
-        /// Hidden
+        ///   Hidden
         /// </summary>
-        Hidden              = 64,
+        Hidden = 64,
+
         /// <summary>
-        /// Password Protected
+        ///   Password Protected
         /// </summary>
-        PasswordProtected   = 128,
+        PasswordProtected = 128,
+
         /// <summary>
-        /// Temporary
+        ///   Temporary
         /// </summary>
-        Temporary           = 256,
+        Temporary = 256,
+
         /// <summary>
-        /// NonAnonymous
+        ///   NonAnonymous
         /// </summary>
-        NonAnonymous        = 512
+        NonAnonymous = 512
     }
 }

@@ -33,17 +33,47 @@ using System.Linq;
 using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Represents a chat conversation with a contact.
+    ///   Represents a chat conversation with a contact.
     /// </summary>
-    public sealed class XmppChat
-    {
-        #region · Static Methods ·
+    public sealed class XmppChat {
+        private IDisposable chatMessageSubscription;
+        private XmppContact contact;
+        private Queue<XmppMessage> pendingMessages;
+        private XmppSession session;
 
-        private static object CreateChatStateNotification(XmppChatStateNotification notificationType)
-        {
+        private IDisposable sessionStateSubscription;
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "T:XmppChat" /> class.
+        /// </summary>
+        /// <param name = "session">The session.</param>
+        /// <param name = "contact">The contact.</param>
+        internal XmppChat(XmppSession session, XmppContact contact) {
+            this.session = session;
+            this.contact = contact;
+            pendingMessages = new Queue<XmppMessage>();
+
+            Subscribe();
+        }
+
+        /// <summary>
+        ///   Gets the contact.
+        /// </summary>
+        /// <value>The contact.</value>
+        public XmppContact Contact {
+            get { return contact; }
+        }
+
+        /// <summary>
+        ///   Gets the pending messages
+        /// </summary>
+        public Queue<XmppMessage> PendingMessages {
+            get { return pendingMessages; }
+        }
+
+        private static object CreateChatStateNotification(XmppChatStateNotification notificationType) {
             switch (notificationType)
             {
                 case XmppChatStateNotification.Active:
@@ -65,224 +95,149 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
             return null;
         }
 
-        #endregion
-
-        #region · Events ·
-
         /// <summary>
-        /// Occurs when a new message is received
+        ///   Occurs when a new message is received
         /// </summary>
         public event EventHandler ReceivedMessage;
 
         /// <summary>
-        /// Occurs before the chat is closed
+        ///   Occurs before the chat is closed
         /// </summary>
         public event EventHandler ChatClosing;
 
         /// <summary>
-        /// Occurs when the chat is closed
+        ///   Occurs when the chat is closed
         /// </summary>
         public event EventHandler ChatClosed;
 
-        #endregion
-
-        #region · Fields ·
-
-        private XmppContact         contact;
-        private XmppSession         session;
-        private Queue<XmppMessage>  pendingMessages;
-
-        #region · Subscriptions ·
-
-        private IDisposable chatMessageSubscription;
-        private IDisposable sessionStateSubscription;
-
-        #endregion
-
-        #endregion
-
-        #region · Properties ·
-
         /// <summary>
-        /// Gets the contact.
+        ///   Sends the message.
         /// </summary>
-        /// <value>The contact.</value>
-        public XmppContact Contact
-        {
-            get { return this.contact; }
-        }
-
-        /// <summary>
-        /// Gets the pending messages
-        /// </summary>
-        public Queue<XmppMessage> PendingMessages
-        {
-            get { return this.pendingMessages; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppChat"/> class.
-        /// </summary>
-        /// <param name="session">The session.</param>
-        /// <param name="contact">The contact.</param>
-        internal XmppChat(XmppSession session, XmppContact contact)
-        {
-            this.session            = session;
-            this.contact            = contact;
-            this.pendingMessages    = new Queue<XmppMessage>();
-
-            this.Subscribe();
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        /// <summary>
-        /// Sends the message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public string SendMessage(string message)
-        {
-            if (this.session == null)
+        /// <param name = "message">The message.</param>
+        public string SendMessage(string message) {
+            if (session == null)
             {
                 throw new InvalidOperationException("Chat session is closed.");
             }
 
-            MessageBody body = new MessageBody
-            {
-                Value = message
-            };
+            var body = new MessageBody
+                           {
+                               Value = message
+                           };
 
-            Message chatMessage = new Message
-            {
-                ID      = XmppIdentifierGenerator.Generate(),
-                Type    = MessageType.Chat,
-                From    = this.session.UserId.ToString(),
-                To      = this.Contact.ContactId.ToString(),
-            };
+            var chatMessage = new Message
+                                  {
+                                      ID = XmppIdentifierGenerator.Generate(),
+                                      Type = MessageType.Chat,
+                                      From = session.UserId.ToString(),
+                                      To = Contact.ContactId.ToString(),
+                                  };
 
-            if (this.Contact.SupportsChatStateNotifications)
+            if (Contact.SupportsChatStateNotifications)
             {
                 chatMessage.Items.Add(CreateChatStateNotification(XmppChatStateNotification.Active));
             }
 
             chatMessage.Items.Add(body);
 
-            this.session.Send(chatMessage);
+            session.Send(chatMessage);
 
             return chatMessage.ID;
         }
-        
+
         /// <summary>
-        /// Sends a chat state notification
+        ///   Sends a chat state notification
         /// </summary>
-        /// <param name="notificationType"></param>
-        public void SendChatStateNotification(XmppChatStateNotification notificationType)
-        {
+        /// <param name = "notificationType"></param>
+        public void SendChatStateNotification(XmppChatStateNotification notificationType) {
             // Generate the notification only if the target entity supports it
-            if (this.Contact.SupportsChatStateNotifications)
+            if (Contact.SupportsChatStateNotifications)
             {
-                Message message = new Message
-                {
-                    ID      = XmppIdentifierGenerator.Generate(),
-                    Type    = MessageType.Chat,
-                    From    = this.session.UserId.ToString(),
-                    To      = this.Contact.ContactId.ToString(),
-                };
+                var message = new Message
+                                  {
+                                      ID = XmppIdentifierGenerator.Generate(),
+                                      Type = MessageType.Chat,
+                                      From = session.UserId.ToString(),
+                                      To = Contact.ContactId.ToString(),
+                                  };
 
                 message.Items.Add(CreateChatStateNotification(notificationType));
 
-                this.session.Send(message);
+                session.Send(message);
             }
         }
 
         /// <summary>
-        /// Closes this instance.
+        ///   Closes this instance.
         /// </summary>
-        public void Close()
-        {
-            if (this.ChatClosing != null)
+        public void Close() {
+            if (ChatClosing != null)
             {
-                this.ChatClosing(this, new EventArgs());
+                ChatClosing(this, new EventArgs());
             }
 
-            this.SendChatStateNotification(XmppChatStateNotification.Gone);
-            this.pendingMessages.Clear();
-            this.Unsubscribe();
-            this.pendingMessages = null;
-           
-            if (this.ChatClosed != null)
+            SendChatStateNotification(XmppChatStateNotification.Gone);
+            pendingMessages.Clear();
+            Unsubscribe();
+            pendingMessages = null;
+
+            if (ChatClosed != null)
             {
-                this.ChatClosed(this, new EventArgs());
+                ChatClosed(this, new EventArgs());
             }
 
-            this.session = null;
-            this.contact = null;
+            session = null;
+            contact = null;
         }
 
-        #endregion
-
-        #region · Message Subscriptions ·
-
-        private void SubscribeToSessionState()
-        {
-            this.sessionStateSubscription = this.session
+        private void SubscribeToSessionState() {
+            sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingOut)
                 .Subscribe
-            (
-                newState =>
-                {
-                    this.Close();
-                    this.Unsubscribe();
-                }
-            );
+                (
+                    newState =>
+                        {
+                            Close();
+                            Unsubscribe();
+                        }
+                );
         }
-        
-        private void Subscribe()
-        {
-            this.chatMessageSubscription = this.session
+
+        private void Subscribe() {
+            chatMessageSubscription = session
                 .MessageReceived
-                .Where(m => m.Type == MessageType.Chat && m.From.BareIdentifier == this.contact.ContactId.BareIdentifier)
+                .Where(m => m.Type == MessageType.Chat && m.From.BareIdentifier == contact.ContactId.BareIdentifier)
                 .Subscribe
-            (
-                message =>
-                {
-                    this.pendingMessages.Enqueue(message);
+                (
+                    message =>
+                        {
+                            pendingMessages.Enqueue(message);
 
-                    if (this.ReceivedMessage != null)
-                    {
-                        this.ReceivedMessage(message, new EventArgs());
-                    }
-                }
-            );
+                            if (ReceivedMessage != null)
+                            {
+                                ReceivedMessage(message, new EventArgs());
+                            }
+                        }
+                );
         }
 
-        private void Unsubscribe()
-        {
-            if (this.chatMessageSubscription != null)
+        private void Unsubscribe() {
+            if (chatMessageSubscription != null)
             {
-                this.chatMessageSubscription.Dispose();
-                this.chatMessageSubscription = null;
+                chatMessageSubscription.Dispose();
+                chatMessageSubscription = null;
             }
 
-            this.UnsubscribeFromSessionState();
+            UnsubscribeFromSessionState();
         }
 
-        private void UnsubscribeFromSessionState()
-        {
-            if (this.sessionStateSubscription != null)
+        private void UnsubscribeFromSessionState() {
+            if (sessionStateSubscription != null)
             {
-                this.sessionStateSubscription.Dispose();
-                this.sessionStateSubscription = null;
+                sessionStateSubscription.Dispose();
+                sessionStateSubscription = null;
             }
         }
-
-        #endregion
     }
 }

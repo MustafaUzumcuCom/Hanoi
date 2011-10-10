@@ -33,198 +33,165 @@ using System.Globalization;
 using System.Text;
 using BabelIm.Net.Xmpp.Core;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// XMPP Connection String Builder
+    ///   XMPP Connection String Builder
     /// </summary>
-    public sealed class XmppConnectionStringBuilder
-    {
-        #region · Fields ·
-
-        private Hashtable options;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class XmppConnectionStringBuilder {
+        private readonly Hashtable options;
 
         /// <summary>
-        /// Gets or sets the connection string.
+        ///   Initializes a new instance of the <see cref = "T:XmppConnectionStringBuilder" /> class.
+        /// </summary>
+        public XmppConnectionStringBuilder()
+            : this(null) {
+        }
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "T:XmppConnectionStringBuilder" /> class with
+        ///   the given connection string.
+        /// </summary>
+        /// <param name = "connectionString">The connection string.</param>
+        public XmppConnectionStringBuilder(string connectionString) {
+            options = new Hashtable();
+
+            if (connectionString != null)
+            {
+                Load(connectionString);
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the connection string.
         /// </summary>
         /// <value>The connection string.</value>
-        public string ConnectionString
-        {
-            get { return this.ToString(); }
-            set { this.Load(value); }
+        public string ConnectionString {
+            get { return ToString(); }
+            set { Load(value); }
         }
 
         /// <summary>
-        /// Gets or sets the server.
+        ///   Gets or sets the server.
         /// </summary>
         /// <value>The server.</value>
-        public string HostName
-        {
-            get { return this.GetString("server"); }
-            set { this.SetValue("server", value); }
+        public string HostName {
+            get { return GetString("server"); }
+            set { SetValue("server", value); }
         }
 
         /// <summary>
-        /// Gets a value indicating whether to resolve host names.
+        ///   Gets a value indicating whether to resolve host names.
         /// </summary>
         /// <value>
         ///   <c>true</c> if host name should be resolved; otherwise, <c>false</c>.
         /// </value>
-        public bool ResolveHostName
-        {
-            get { return this.GetBoolean("resolve host name"); }
-            set { this.SetValue("resolve host name", value); }
+        public bool ResolveHostName {
+            get { return GetBoolean("resolve host name"); }
+            set { SetValue("resolve host name", value); }
         }
 
         /// <summary>
-        /// Gets or sets the port.
+        ///   Gets or sets the port.
         /// </summary>
         /// <value>The port.</value>
-        public int Port
-        {
-            get { return this.GetInt32("port number"); }
-            set { this.SetValue("port number", value); }
+        public int Port {
+            get { return GetInt32("port number"); }
+            set { SetValue("port number", value); }
         }
 
         /// <summary>
-        /// Gets or sets the user ID.
+        ///   Gets or sets the user ID.
         /// </summary>
         /// <value>The user ID.</value>
-        public string UserId
-        {
-            get { return this.GetString("user id"); }
-            set { this.SetValue("user id", value); }
+        public string UserId {
+            get { return GetString("user id"); }
+            set { SetValue("user id", value); }
         }
 
         /// <summary>
-        /// Gets or sets the password.
+        ///   Gets or sets the password.
         /// </summary>
         /// <value>The password.</value>
-        public string Password
-        {
-            get { return this.GetString("user password"); }
-            set { this.SetValue("user password", value); }
+        public string Password {
+            get { return GetString("user password"); }
+            set { SetValue("user password", value); }
         }
 
         /// <summary>
-        /// Gets or sets the connection timeout.
+        ///   Gets or sets the connection timeout.
         /// </summary>
         /// <value>The connection timeout.</value>
-        public int ConnectionTimeout
-        {
-            get { return this.GetInt32("connection timeout"); }
-            set { this.SetValue("connection timeout", value); }
+        public int ConnectionTimeout {
+            get { return GetInt32("connection timeout"); }
+            set { SetValue("connection timeout", value); }
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the connection should be done throught a proxy
+        ///   Gets or sets a value that indicates whether the connection should be done throught a proxy
         /// </summary>
-        public bool UseProxy
-        {
-            get { return this.GetBoolean("use proxy"); }
-            set { this.SetValue("use proxy", value); }
+        public bool UseProxy {
+            get { return GetBoolean("use proxy"); }
+            set { SetValue("use proxy", value); }
         }
 
         /// <summary>
-        /// Gets or sets the proxy type
+        ///   Gets or sets the proxy type
         /// </summary>
-        public string ProxyType
-        {
-            get { return this.GetString("proxy type"); }
-            set { this.SetValue("proxy type", value); }
+        public string ProxyType {
+            get { return GetString("proxy type"); }
+            set { SetValue("proxy type", value); }
         }
 
         /// <summary>
-        /// Gets or sets the proxy server
+        ///   Gets or sets the proxy server
         /// </summary>
-        public string ProxyServer
-        {
-            get { return this.GetString("proxy server"); }
-            set { this.SetValue("proxy server", value); }
+        public string ProxyServer {
+            get { return GetString("proxy server"); }
+            set { SetValue("proxy server", value); }
         }
 
         /// <summary>
-        /// Gets or sets the proxy port number
+        ///   Gets or sets the proxy port number
         /// </summary>
-        public int ProxyPortNumber
-        {
-            get { return this.GetInt32("proxy port number"); }
-            set { this.SetValue("proxy port number", value); }
+        public int ProxyPortNumber {
+            get { return GetInt32("proxy port number"); }
+            set { SetValue("proxy port number", value); }
         }
 
         /// <summary>
-        /// Gets or sets the proxy user name
+        ///   Gets or sets the proxy user name
         /// </summary>
-        public string ProxyUserName
-        {
-            get { return this.GetString("proxy user name"); }
-            set { this.SetValue("proxy user name", value); }
+        public string ProxyUserName {
+            get { return GetString("proxy user name"); }
+            set { SetValue("proxy user name", value); }
         }
 
         /// <summary>
-        /// Gets or sets the proxy password
+        ///   Gets or sets the proxy password
         /// </summary>
-        public string ProxyPassword
-        {
-            get { return this.GetString("proxy password"); }
-            set { this.SetValue("proxy password", value); }
+        public string ProxyPassword {
+            get { return GetString("proxy password"); }
+            set { SetValue("proxy password", value); }
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether http binding should be used
+        ///   Gets or sets a value that indicates whether http binding should be used
         /// </summary>
-        public bool UseHttpBinding
-        {
-            get { return this.GetBoolean("http binding"); }
-            set { this.SetValue("http binding", value); }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppConnectionStringBuilder"/> class.
-        /// </summary>
-        public XmppConnectionStringBuilder() 
-            : this(null)
-        {
+        public bool UseHttpBinding {
+            get { return GetBoolean("http binding"); }
+            set { SetValue("http binding", value); }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppConnectionStringBuilder"/> class with
-        /// the given connection string.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public XmppConnectionStringBuilder(string connectionString)
-        {
-            this.options = new Hashtable();
-
-            if (connectionString != null)
-            {
-                this.Load(connectionString);
-            }
-        }
-
-        #endregion
-
-        #region · Overriden methods ·
-
-        /// <summary>
-        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   Returns a <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString()
-        {
-            StringBuilder cs = new StringBuilder();
+        public override string ToString() {
+            var cs = new StringBuilder();
 
-            IDictionaryEnumerator e = this.options.GetEnumerator();
+            IDictionaryEnumerator e = options.GetEnumerator();
 
             while (e.MoveNext())
             {
@@ -243,17 +210,12 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
             return cs.ToString();
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private void Load(string connectionString)
-        {
+        private void Load(string connectionString) {
             string[] keyPairs = connectionString.Split(';');
 
-            if (this.options != null)
+            if (options != null)
             {
-                this.options.Clear();
+                options.Clear();
             }
 
             foreach (string keyPair in keyPairs)
@@ -268,54 +230,48 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
 
                     if (XmppConnectionString.IsSynonym(values[0]))
                     {
-                        this.options[XmppConnectionString.GetSynonym(values[0])] = values[1].Trim();
+                        options[XmppConnectionString.GetSynonym(values[0])] = values[1].Trim();
                     }
                 }
             }
         }
 
-        private string GetString(string key)
-        {
-            if (this.options.Contains(key))
+        private string GetString(string key) {
+            if (options.Contains(key))
             {
-                return (string)this.options[key];
+                return (string) options[key];
             }
-            
+
             return null;
         }
 
-        private int GetInt32(string key)
-        {
-            if (this.options.Contains(key))
+        private int GetInt32(string key) {
+            if (options.Contains(key))
             {
-                return Convert.ToInt32(this.options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToInt32(options[key], CultureInfo.CurrentUICulture);
             }
-            
+
             return 0;
         }
 
-        private bool GetBoolean(string key)
-        {
-            if (this.options.Contains(key))
+        private bool GetBoolean(string key) {
+            if (options.Contains(key))
             {
-                return Convert.ToBoolean(this.options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToBoolean(options[key], CultureInfo.CurrentUICulture);
             }
 
             return false;
         }
 
-        private void SetValue(string key, object value)
-        {
-            if (this.options.Contains(key))
+        private void SetValue(string key, object value) {
+            if (options.Contains(key))
             {
-                this.options[key] = value;
+                options[key] = value;
             }
             else
             {
-                this.options.Add(key, value);
+                options.Add(key, value);
             }
         }
-
-        #endregion
     }
 }

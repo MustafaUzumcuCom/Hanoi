@@ -29,130 +29,92 @@
 
 using System;
 using System.Linq;
-using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Client capabilities (XEP-0115)
+    ///   Client capabilities (XEP-0115)
     /// </summary>
-    public abstract class XmppEntityCapabilities 
-        : XmppClientCapabilities
-    {
-        #region · Consts ·
-
+    public abstract class XmppEntityCapabilities
+        : XmppClientCapabilities {
         /// <summary>
-        /// Default hash algorithm name
+        ///   Default hash algorithm name
         /// </summary>
         /// <remarks>
-        /// SHA-1
+        ///   SHA-1
         /// </remarks>
         public static readonly string DefaultHashAlgorithmName = "sha-1";
 
-        #endregion
-
-        #region · Fields ·
-
-        private XmppSession	session;
-
-        #region · Subscriptions ·
-
-        private IDisposable sessionStateSubscription;
         private IDisposable infoQueryErrorSubscription;
         private IDisposable serviceDiscoverySubscription;
+        private XmppSession session;
 
-        #endregion
-
-        #endregion
-
-        #region · Protected Properties ·
+        private IDisposable sessionStateSubscription;
 
         /// <summary>
-        /// Gets the <see cref="XmppSession">Session</see>
+        ///   Initializes a new instance of the <see cref = "XmppEntityCapabilities" /> class.
         /// </summary>
-        protected XmppSession Session
-        {
-            get { return this.session; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppEntityCapabilities"/> class.
-        /// </summary>
-        protected XmppEntityCapabilities(XmppSession session)
-        	: base()
-        {
+        protected XmppEntityCapabilities(XmppSession session) {
             this.session = session;
 
-            this.SubscribeToSessionState();
+            SubscribeToSessionState();
         }
 
-        #endregion
+        /// <summary>
+        ///   Gets the <see cref = "XmppSession">Session</see>
+        /// </summary>
+        protected XmppSession Session {
+            get { return session; }
+        }
 
-        #region · Message Subscriptions ·
-
-        private void SubscribeToSessionState()
-        {
-            this.sessionStateSubscription = this.session
+        private void SubscribeToSessionState() {
+            sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
                 .Subscribe
-            (
-                newState =>
-                {
-                    if (newState == XmppSessionState.LoggingOut)
-                    {
-                        this.Subscribe();
-                    }
-                    else if (newState == XmppSessionState.LoggingOut)
-                    {
-                        this.Unsubscribe();
-                    }
-                }
-            );
+                (
+                    newState =>
+                        {
+                            if (newState == XmppSessionState.LoggingOut)
+                            {
+                                Subscribe();
+                            }
+                            else if (newState == XmppSessionState.LoggingOut)
+                            {
+                                Unsubscribe();
+                            }
+                        }
+                );
         }
 
-        protected virtual void Subscribe()
-        {
-            this.infoQueryErrorSubscription = this.session.Connection
+        protected virtual void Subscribe() {
+            infoQueryErrorSubscription = session.Connection
                 .OnInfoQueryMessage
                 .Where(message => message.Type == IQType.Error)
-                .Subscribe(message => this.OnQueryErrorMessage(message));
+                .Subscribe(message => OnQueryErrorMessage(message));
 
-            this.serviceDiscoverySubscription = this.session.Connection
+            serviceDiscoverySubscription = session.Connection
                 .OnServiceDiscoveryMessage
-                .Subscribe(message => this.OnServiceDiscoveryMessage(message));
+                .Subscribe(message => OnServiceDiscoveryMessage(message));
         }
 
-        protected virtual void Unsubscribe()
-        {
-            if (this.infoQueryErrorSubscription != null)
+        protected virtual void Unsubscribe() {
+            if (infoQueryErrorSubscription != null)
             {
-                this.infoQueryErrorSubscription.Dispose();
-                this.infoQueryErrorSubscription = null;
+                infoQueryErrorSubscription.Dispose();
+                infoQueryErrorSubscription = null;
             }
 
-            if (this.serviceDiscoverySubscription != null)
+            if (serviceDiscoverySubscription != null)
             {
-                this.serviceDiscoverySubscription.Dispose();
-                this.serviceDiscoverySubscription = null;
+                serviceDiscoverySubscription.Dispose();
+                serviceDiscoverySubscription = null;
             }
         }
-                
-        #endregion
-
-        #region · Message Handlers ·
 
         protected abstract void OnServiceDiscoveryMessage(IQ message);
 
-        protected virtual void OnQueryErrorMessage(IQ message)
-        {
+        protected virtual void OnQueryErrorMessage(IQ message) {
         }
-
-        #endregion
-    }
+        }
 }

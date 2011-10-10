@@ -29,36 +29,39 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Presence states
+    ///   Presence states
     /// </summary>
     [Serializable]
-    public enum XmppPresenceState
-    {
+    public enum XmppPresenceState {
         /// <summary>
-        /// Away
+        ///   Away
         /// </summary>
         Away = 0,
+
         /// <summary>
-        /// Available
+        ///   Available
         /// </summary>
         Available = 1,
+
         /// <summary>
-        /// Busy
+        ///   Busy
         /// </summary>
         Busy = 2,
+
         /// <summary>
-        /// Extended away ( Idle )
+        ///   Extended away ( Idle )
         /// </summary>
         Idle = 4,
+
         /// <summary>
-        /// Invisible
+        ///   Invisible
         /// </summary>
         Invisible = 5,
+
         /// <summary>
-        /// Offline
+        ///   Offline
         /// </summary>
         Offline = -1,
     }

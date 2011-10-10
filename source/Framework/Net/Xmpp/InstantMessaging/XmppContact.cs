@@ -36,113 +36,115 @@ using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Represents a <see cref="XmppRoster"/> contact.
+    ///   Represents a <see cref = "XmppRoster" /> contact.
     /// </summary>
-    public sealed class XmppContact 
-        : ObservableObject
-    {
-        #region · Fields ·
-
-        private string                      name;
-        private string                      displayName;
-        private XmppJid                     contactId;
-        private XmppSession                 session;
+    public sealed class XmppContact
+        : ObservableObject {
+        private readonly XmppJid contactId;
+        private readonly XmppSession session;
+        private readonly object syncObject;
+        private string displayName;
+        private List<string> groups;
+        private string name;
+        private List<XmppContactResource> resources;
         private XmppContactSubscriptionType subscription;
-        private List<XmppContactResource>   resources;
-        private List<string>                groups;
-        private object                      syncObject;
-
-        #endregion
-
-        #region · Properties ·
 
         /// <summary>
-        /// Gets the contact id.
+        ///   Initializes a new instance of the <see cref = "T:XmppContact" /> class.
+        /// </summary>
+        /// <param name = "session">The session.</param>
+        /// <param name = "contactId">The contact id.</param>
+        /// <param name = "name">The name.</param>
+        /// <param name = "subscription">The subscription.</param>
+        /// <param name = "groups">The groups.</param>
+        internal XmppContact(XmppSession session, string contactId, string name,
+                             XmppContactSubscriptionType subscription, IList<string> groups) {
+            this.session = session;
+            syncObject = new object();
+            this.contactId = contactId;
+            resources = new List<XmppContactResource>();
+
+            RefreshData(name, subscription, groups);
+            AddDefaultResource();
+        }
+
+        /// <summary>
+        ///   Gets the contact id.
         /// </summary>
         /// <value>The contact id.</value>
-        public XmppJid ContactId
-        {
-            get { return this.contactId; }
+        public XmppJid ContactId {
+            get { return contactId; }
         }
 
         /// <summary>
-        /// Gets the name.
+        ///   Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name
-        {
-            get { return this.name; }
-            private set
-            {
-                if (this.name != value)
+        public string Name {
+            get { return name; }
+            private set {
+                if (name != value)
                 {
-                    this.name = value;
+                    name = value;
 
-                    this.NotifyPropertyChanged(() => Name);
+                    NotifyPropertyChanged(() => Name);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the contact groups.
+        ///   Gets the contact groups.
         /// </summary>
         /// <value>The groups.</value>
-        public List<string> Groups
-        {
-            get
-            {
-                if (this.groups == null)
+        public List<string> Groups {
+            get {
+                if (groups == null)
                 {
-                    this.groups = new List<string>();
+                    groups = new List<string>();
                 }
 
-                return this.groups;
+                return groups;
             }
         }
 
         /// <summary>
-        /// Gets the contact Display Name
+        ///   Gets the contact Display Name
         /// </summary>
-        public string DisplayName
-        {
-            get { return this.displayName; }
-            set
-            {
-                if (this.displayName != value)
+        public string DisplayName {
+            get { return displayName; }
+            set {
+                if (displayName != value)
                 {
                     if (!String.IsNullOrEmpty(value))
                     {
-                        this.displayName = value;
+                        displayName = value;
                     }
                     else
                     {
-                        this.displayName = this.contactId.UserName;
+                        displayName = contactId.UserName;
                     }
 
-                    this.Update();
+                    Update();
 
-                    this.NotifyPropertyChanged(() => DisplayName);
+                    NotifyPropertyChanged(() => DisplayName);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the list available resources.
+        ///   Gets the list available resources.
         /// </summary>
         /// <value>The resources.</value>
-        public IEnumerable<XmppContactResource> Resources
-        {
-            get
-            {
-                if (this.resources == null)
+        public IEnumerable<XmppContactResource> Resources {
+            get {
+                if (resources == null)
                 {
-                    this.resources = new List<XmppContactResource>();
+                    resources = new List<XmppContactResource>();
                 }
 
-                foreach (XmppContactResource resource in this.resources)
+                foreach (XmppContactResource resource in resources)
                 {
                     yield return resource;
                 }
@@ -150,289 +152,242 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
         }
 
         /// <summary>
-        /// Gets or sets the subscription.
+        ///   Gets or sets the subscription.
         /// </summary>
         /// <value>The subscription.</value>
-        public XmppContactSubscriptionType Subscription
-        {
-            get { return this.subscription; }
-            set
-            {
-                if (this.subscription != value)
+        public XmppContactSubscriptionType Subscription {
+            get { return subscription; }
+            set {
+                if (subscription != value)
                 {
-                    this.subscription = value;
+                    subscription = value;
 
-                    this.NotifyPropertyChanged(() => Subscription);
+                    NotifyPropertyChanged(() => Subscription);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the presence.
+        ///   Gets the presence.
         /// </summary>
         /// <value>The presence.</value>
-        public XmppContactResource Resource
-        {
-            get { return this.GetResource(); }
+        public XmppContactResource Resource {
+            get { return GetResource(); }
         }
 
         /// <summary>
-        /// Gets the presence.
+        ///   Gets the presence.
         /// </summary>
         /// <value>The presence.</value>
-        public XmppContactPresence Presence
-        {
-            get { return this.GetResource().Presence; }
+        public XmppContactPresence Presence {
+            get { return GetResource().Presence; }
         }
 
         /// <summary>
-        /// Gets a value that indicates if the contact supports File Transfer
+        ///   Gets a value that indicates if the contact supports File Transfer
         /// </summary>
-        public bool SupportsFileTransfer
-        {
+        public bool SupportsFileTransfer {
             get { throw new NotImplementedException(); }
         }
 
         /// <summary>
-        /// Gets a value that indicates if the contact supports MUC
+        ///   Gets a value that indicates if the contact supports MUC
         /// </summary>
-        public bool SupportsConference
-        {
-            get { return (this.Resource.Capabilities.Features.Where(f => f.Name == XmppFeatures.MultiUserChat).Count() > 0); }
+        public bool SupportsConference {
+            get { return (Resource.Capabilities.Features.Where(f => f.Name == XmppFeatures.MultiUserChat).Count() > 0); }
         }
 
         /// <summary>
-        /// Gets a value that indicates if the contact supports chat state notifications
+        ///   Gets a value that indicates if the contact supports chat state notifications
         /// </summary>
-        public bool SupportsChatStateNotifications
-        {
-            get { return (this.Resource.Capabilities.Features.Where(f => f.Name == XmppFeatures.ChatStateNotifications).Count() > 0); }
-        }
-        
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppContact"/> class.
-        /// </summary>
-        /// <param name="session">The session.</param>
-        /// <param name="contactId">The contact id.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="subscription">The subscription.</param>
-        /// <param name="groups">The groups.</param>
-        internal XmppContact(XmppSession session, string contactId, string name, XmppContactSubscriptionType subscription, IList<string> groups)
-        {
-            this.session    = session;
-            this.syncObject = new object();
-            this.contactId  = contactId;
-            this.resources  = new List<XmppContactResource>();
-
-            this.RefreshData(name, subscription, groups);
-            this.AddDefaultResource();
+        public bool SupportsChatStateNotifications {
+            get {
+                return
+                    (Resource.Capabilities.Features.Where(f => f.Name == XmppFeatures.ChatStateNotifications).Count() >
+                     0);
+            }
         }
 
-        #endregion
-
-        #region · Methods ·
-
         /// <summary>
-        /// Adds to group.
+        ///   Adds to group.
         /// </summary>
-        /// <param name="groupName">Name of the group.</param>
-        public void AddToGroup(string groupName)
-        {
-            IQ          iq      = new IQ();
-            RosterQuery query   = new RosterQuery();
-            RosterItem  item    = new RosterItem();
+        /// <param name = "groupName">Name of the group.</param>
+        public void AddToGroup(string groupName) {
+            var iq = new IQ();
+            var query = new RosterQuery();
+            var item = new RosterItem();
 
-            if (!this.Groups.Contains(groupName))
+            if (!Groups.Contains(groupName))
             {
-                this.Groups.Add(groupName);
+                Groups.Add(groupName);
             }
 
             iq.Type = IQType.Set;
 
-            item.Jid            = this.ContactId.BareIdentifier;
-            item.Name           = this.Name;
-            item.Subscription   = (RosterSubscriptionType)this.Subscription;
+            item.Jid = ContactId.BareIdentifier;
+            item.Name = Name;
+            item.Subscription = (RosterSubscriptionType) Subscription;
 
             item.Groups.Add(groupName);
 
             query.Items.Add(item);
             iq.Items.Add(query);
 
-            this.session.Send(iq);
+            session.Send(iq);
         }
 
         /// <summary>
-        /// Updates the contact data.
+        ///   Updates the contact data.
         /// </summary>
-        public void Update()
-        {
-            IQ          iq      = new IQ();
-            RosterQuery query   = new RosterQuery();
-            RosterItem  item    = new RosterItem();
+        public void Update() {
+            var iq = new IQ();
+            var query = new RosterQuery();
+            var item = new RosterItem();
 
             iq.Type = IQType.Set;
 
-            item.Jid    = this.ContactId.BareIdentifier;
-            item.Name   = this.DisplayName;
-            item.Subscription = (RosterSubscriptionType)this.Subscription;
+            item.Jid = ContactId.BareIdentifier;
+            item.Name = DisplayName;
+            item.Subscription = (RosterSubscriptionType) Subscription;
 
-            item.Groups.AddRange(this.Groups);
+            item.Groups.AddRange(Groups);
 
             query.Items.Add(item);
             iq.Items.Add(query);
 
-            this.session.Send(iq);
+            session.Send(iq);
         }
 
         /// <summary>
-        /// Request subscription to he presence of the contanct
+        ///   Request subscription to he presence of the contanct
         /// </summary>
-        public void RequestSubscription()
-        {
-            this.session.Presence.RequestSubscription(this.ContactId);
+        public void RequestSubscription() {
+            session.Presence.RequestSubscription(ContactId);
         }
 
         /// <summary>
-        /// Block contact
+        ///   Block contact
         /// </summary>
-        public void Block()
-        {
-            if (this.session.ServiceDiscovery.SupportsBlocking)
+        public void Block() {
+            if (session.ServiceDiscovery.SupportsBlocking)
             {
-                IQ iq = new IQ
-                {
-                    ID      = XmppIdentifierGenerator.Generate(),
-                    From    = this.session.UserId,
-                    Type    = IQType.Set
-                };
+                var iq = new IQ
+                             {
+                                 ID = XmppIdentifierGenerator.Generate(),
+                                 From = session.UserId,
+                                 Type = IQType.Set
+                             };
 
-                Block block = new Block();
+                var block = new Block();
 
                 block.Items.Add
-                (
-                    new BlockItem
-                    {
-                        Jid = this.ContactId.BareIdentifier
-                    }
-                );
+                    (
+                        new BlockItem
+                            {
+                                Jid = ContactId.BareIdentifier
+                            }
+                    );
 
                 iq.Items.Add(block);
 
-                this.session.Send(iq);
+                session.Send(iq);
             }
         }
 
         /// <summary>
-        /// Unblock contact.
+        ///   Unblock contact.
         /// </summary>
-        public void UnBlock()
-        {
-            if (this.session.ServiceDiscovery.SupportsBlocking)
+        public void UnBlock() {
+            if (session.ServiceDiscovery.SupportsBlocking)
             {
-                IQ iq = new IQ
-                {
-                    ID      = XmppIdentifierGenerator.Generate(),
-                    From    = this.session.UserId,
-                    Type    = IQType.Set
-                };
+                var iq = new IQ
+                             {
+                                 ID = XmppIdentifierGenerator.Generate(),
+                                 From = session.UserId,
+                                 Type = IQType.Set
+                             };
 
-                UnBlock unBlock = new UnBlock();
+                var unBlock = new UnBlock();
 
                 unBlock.Items.Add
-                (
-                    new BlockItem
-                    {
-                        Jid = this.ContactId.BareIdentifier
-                    }
-                );
+                    (
+                        new BlockItem
+                            {
+                                Jid = ContactId.BareIdentifier
+                            }
+                    );
 
                 iq.Items.Add(unBlock);
 
-                this.session.Send(iq);
+                session.Send(iq);
             }
         }
 
-        #endregion
-
-        #region · Overriden Methods ·
-
         /// <summary>
-        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   Returns a <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString()
-        {
-            return this.ContactId.ToString();
+        public override string ToString() {
+            return ContactId.ToString();
         }
 
-        #endregion
-
-        #region · Internal Methods ·
-
-        internal void AddDefaultResource()
-        {
-            Presence            defaultPresence = new Presence();
-            XmppContactResource contactResource = new XmppContactResource(this.session, this, this.ContactId);
-            XmppJid             resourceJid     = new XmppJid(this.contactId.UserName, this.ContactId.DomainName, Guid.NewGuid().ToString());
+        internal void AddDefaultResource() {
+            var defaultPresence = new Presence();
+            var contactResource = new XmppContactResource(session, this, ContactId);
+            var resourceJid = new XmppJid(contactId.UserName, ContactId.DomainName, Guid.NewGuid().ToString());
 
             // Add a default resource
-            defaultPresence.TypeSpecified   = true;
-            defaultPresence.From            = resourceJid;
-            defaultPresence.Type            = PresenceType.Unavailable;
+            defaultPresence.TypeSpecified = true;
+            defaultPresence.From = resourceJid;
+            defaultPresence.Type = PresenceType.Unavailable;
 
             defaultPresence.Items.Add(XmppContactResource.DefaultPresencePriorityValue);
 
             contactResource.Update(defaultPresence);
 
-            this.resources.Add(contactResource);
+            resources.Add(contactResource);
         }
 
-        internal void RefreshData(string name, XmppContactSubscriptionType subscription, IList<string> groups)
-        {
-            this.Name = ((name == null) ? String.Empty : name);
+        internal void RefreshData(string name, XmppContactSubscriptionType subscription, IList<string> groups) {
+            Name = ((name == null) ? String.Empty : name);
 
-            if (!String.IsNullOrEmpty(this.Name))
+            if (!String.IsNullOrEmpty(Name))
             {
-                this.displayName = this.name;
+                displayName = this.name;
             }
             else
             {
-                this.displayName = this.contactId.UserName;
+                displayName = contactId.UserName;
             }
 
-            this.Subscription   = subscription;
-            
+            Subscription = subscription;
+
             if (groups != null && groups.Count > 0)
             {
-                this.Groups.AddRange(groups);
+                Groups.AddRange(groups);
             }
             else
             {
-                this.Groups.Add("Contacts");
+                Groups.Add("Contacts");
             }
 
-            this.NotifyPropertyChanged(() => DisplayName);
-            this.NotifyPropertyChanged(() => Groups);
+            NotifyPropertyChanged(() => DisplayName);
+            NotifyPropertyChanged(() => Groups);
         }
 
-        internal void UpdatePresence(XmppJid jid, Presence presence)
-        {
-            lock (this.syncObject)
+        internal void UpdatePresence(XmppJid jid, Presence presence) {
+            lock (syncObject)
             {
-                XmppContactResource resource = this.resources
+                XmppContactResource resource = resources
                     .Where(contactResource => contactResource.ResourceId.Equals(jid))
                     .SingleOrDefault();
 
                 if (resource == null)
                 {
-                    resource = new XmppContactResource(this.session, this, jid);
-                    this.resources.Add(resource);
+                    resource = new XmppContactResource(session, this, jid);
+                    resources.Add(resource);
                 }
 
                 resource.Update(presence);
@@ -441,27 +396,20 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
                 if (!resource.IsDefaultResource &&
                     resource.Presence.PresenceStatus == XmppPresenceState.Offline)
                 {
-                    this.resources.Remove(resource);
+                    resources.Remove(resource);
                 }
 
-                this.NotifyPropertyChanged(() => Presence);
-                this.NotifyPropertyChanged(() => Resource);
+                NotifyPropertyChanged(() => Presence);
+                NotifyPropertyChanged(() => Resource);
             }
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private XmppContactResource GetResource()
-        {
-            var q = from resource in this.resources
+        private XmppContactResource GetResource() {
+            var q = from resource in resources
                     orderby resource.Presence.Priority descending
                     select resource;
 
             return q.FirstOrDefault();
         }
-
-        #endregion
-    }
+        }
 }

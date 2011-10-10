@@ -27,56 +27,35 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
     public sealed class XmppChatRoomUser
-        : ObservableObject
-    {
-        #region · Fields ·
+        : ObservableObject {
+        private readonly MucUserItem userItem;
 
-        private MucUserItem userItem;
-
-        #endregion
-    	
-    	#region · Properties ·
-    	
-        public MucUserActor Actor
-        {
-        	get { return this.userItem.Actor; }
-        }
-        
-        public MucUserItemAffiliation Affiliation
-        {
-        	get { return this.userItem.Affiliation; }
-        }
-                
-        public string Identifier
-        {
-        	get { return this.userItem.Jid; }
-        }
-        
-        public string Nick
-        {
-        	get { return this.userItem.Nick; }
-        }
-        
-        public MucUserItemRole Role
-        {
-        	get { return this.userItem.Role; }
-        }
-            	
-    	#endregion
-    	
-        #region · Constructors ·
-
-        internal XmppChatRoomUser(MucUserItem userItem)
-        {
+        internal XmppChatRoomUser(MucUserItem userItem) {
             this.userItem = userItem;
         }
 
-        #endregion
-    }
+        public MucUserActor Actor {
+            get { return userItem.Actor; }
+        }
+
+        public MucUserItemAffiliation Affiliation {
+            get { return userItem.Affiliation; }
+        }
+
+        public string Identifier {
+            get { return userItem.Jid; }
+        }
+
+        public string Nick {
+            get { return userItem.Nick; }
+        }
+
+        public MucUserItemRole Role {
+            get { return userItem.Role; }
+        }
+        }
 }

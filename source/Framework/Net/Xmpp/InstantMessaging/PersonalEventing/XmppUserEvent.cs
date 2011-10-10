@@ -27,45 +27,27 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
-    /// XMPP User event activity ( tunes, moods, ... )
+    ///   XMPP User event activity ( tunes, moods, ... )
     /// </summary>
-    public abstract class XmppUserEvent 
-        : XmppEvent
-    {
-        #region · Fields ·
-        
-        private XmppContact user;
-        
-        #endregion
-        
-        #region · Properties ·
-        
+    public abstract class XmppUserEvent
+        : XmppEvent {
+        private readonly XmppContact user;
+
         /// <summary>
-        /// Gets the user data
+        ///   Initializes a new instance of the <see cref = "XmppUserEvent" /> class.
         /// </summary>
-        public XmppContact User
-        {
-            get { return this.user; }
-        }
-        
-        #endregion
-        
-        #region · Constructors ·
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppUserEvent"/> class.
-        /// </summary>
-        /// <param name="user"></param>
-        protected XmppUserEvent(XmppContact user)
-        {
+        /// <param name = "user"></param>
+        protected XmppUserEvent(XmppContact user) {
             this.user = user;
         }
-        
-        #endregion
-    }
+
+        /// <summary>
+        ///   Gets the user data
+        /// </summary>
+        public XmppContact User {
+            get { return user; }
+        }
+        }
 }

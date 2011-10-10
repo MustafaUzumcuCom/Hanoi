@@ -38,210 +38,171 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat.User;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
     /// <summary>
-    /// Represents a conversation in a conference room
+    ///   Represents a conversation in a conference room
     /// </summary>
     public sealed class XmppChatRoom
-        : XmppServiceDiscoveryObject
-    {
-        #region · Fields ·
-
-        private ObservableCollection<XmppChatRoomUser>  users;
-        private XmppService                             conferenceService;
-        private AutoResetEvent                          seekEnterChatRoomEvent;
-        private AutoResetEvent                          createChatRoomEvent;
-
-        #region · Subscriptions ·
+        : XmppServiceDiscoveryObject {
+        private readonly AutoResetEvent createChatRoomEvent;
+        private readonly AutoResetEvent seekEnterChatRoomEvent;
+        private XmppService conferenceService;
 
         private IDisposable messageReceivedSubscription;
         private IDisposable presenceSubscription;
-
-        #endregion
-
-        #endregion
-
-        #region · Properties ·
+        private ObservableCollection<XmppChatRoomUser> users;
 
         /// <summary>
-        /// Gets the users.
+        ///   Initializes a new instance of the <see cref = "T:XmppChatRoom" /> class.
+        /// </summary>
+        /// <param name = "session">The session.</param>
+        /// <param name = "conferenceService">The conference service.</param>
+        /// <param name = "chatRoomId">The chat room id.</param>
+        internal XmppChatRoom(XmppSession session, XmppService conferenceService, XmppJid chatRoomId)
+            : base(session, chatRoomId) {
+            this.conferenceService = conferenceService;
+            seekEnterChatRoomEvent = new AutoResetEvent(false);
+            createChatRoomEvent = new AutoResetEvent(false);
+        }
+
+        /// <summary>
+        ///   Gets the users.
         /// </summary>
         /// <value>The users.</value>
-        public ObservableCollection<XmppChatRoomUser> Users
-        {
-            get
-            {
-                if (this.users == null)
+        public ObservableCollection<XmppChatRoomUser> Users {
+            get {
+                if (users == null)
                 {
-                    this.users = new ObservableCollection<XmppChatRoomUser>();
+                    users = new ObservableCollection<XmppChatRoomUser>();
                 }
 
-                return this.users;
+                return users;
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppChatRoom"/> class.
-        /// </summary>
-        /// <param name="session">The session.</param>
-        /// <param name="conferenceService">The conference service.</param>
-        /// <param name="chatRoomId">The chat room id.</param>
-        internal XmppChatRoom(XmppSession session, XmppService conferenceService, XmppJid chatRoomId)
-            : base(session, chatRoomId)
-        {
-            this.conferenceService          = conferenceService;
-            this.seekEnterChatRoomEvent     = new AutoResetEvent(false);
-            this.createChatRoomEvent        = new AutoResetEvent(false);
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        /// <summary>
-        /// Enters to the chat room
+        ///   Enters to the chat room
         /// </summary>
         /// <returns></returns>
-        public XmppChatRoom Enter()
-        {
-            Presence presence = new Presence
-            {
-                From = this.Session.UserId,
-                To = this.Identifier
-            };
+        public XmppChatRoom Enter() {
+            var presence = new Presence
+                               {
+                                   From = Session.UserId,
+                                   To = Identifier
+                               };
 
             presence.Items.Add(new Muc());
 
-            this.Session.Send(presence);
+            Session.Send(presence);
 
-            this.createChatRoomEvent.WaitOne();
+            createChatRoomEvent.WaitOne();
 
             return this;
         }
 
         /// <summary>
-        /// Sends the message.
+        ///   Sends the message.
         /// </summary>
-        /// <param name="message">The message.</param>
-        public XmppChatRoom SendMessage(string message)
-        {
-            Message chatMessage = new Message
-            {
-                ID      = XmppIdentifierGenerator.Generate(),
-                Type    = MessageType.GroupChat,
-                From    = this.Session.UserId.ToString(),
-                To      = this.Identifier
-            };
+        /// <param name = "message">The message.</param>
+        public XmppChatRoom SendMessage(string message) {
+            var chatMessage = new Message
+                                  {
+                                      ID = XmppIdentifierGenerator.Generate(),
+                                      Type = MessageType.GroupChat,
+                                      From = Session.UserId.ToString(),
+                                      To = Identifier
+                                  };
 
             chatMessage.Items.Add
-            (
-                new MessageBody
-                {
-                    Value = message
-                }
-            );
+                (
+                    new MessageBody
+                        {
+                            Value = message
+                        }
+                );
 
-            this.Session.Send(chatMessage);
+            Session.Send(chatMessage);
 
             return this;
         }
-        
+
         /// <summary>
-        /// Invites the given contact to the chat room
+        ///   Invites the given contact to the chat room
         /// </summary>
-        /// <param name="contact"></param>
-        public XmppChatRoom Invite(XmppContact contact)
-        {
-            MucUser user    = new MucUser();
-            Message message = new Message
-            {
-                From    = this.Session.UserId,
-                To      = this.Identifier.BareIdentifier,
-            };
-            MucUserInvite   invite  = new MucUserInvite
-            {
-                To      = contact.ContactId.BareIdentifier,
-                Reason  = "Ninja invite"
-            };
+        /// <param name = "contact"></param>
+        public XmppChatRoom Invite(XmppContact contact) {
+            var user = new MucUser();
+            var message = new Message
+                              {
+                                  From = Session.UserId,
+                                  To = Identifier.BareIdentifier,
+                              };
+            var invite = new MucUserInvite
+                             {
+                                 To = contact.ContactId.BareIdentifier,
+                                 Reason = "Ninja invite"
+                             };
 
             user.Items.Add(invite);
             message.Items.Add(user);
 
-            this.Session.Send(message);
+            Session.Send(message);
 
             return this;
         }
 
         /// <summary>
-        /// Closes the chatroom
+        ///   Closes the chatroom
         /// </summary>
-        public void Close()
-        {
-            Presence presence = new Presence
-            {
-                Id      = XmppIdentifierGenerator.Generate(),
-                To      = this.Identifier,
-                Type    = PresenceType.Unavailable
-            };
+        public void Close() {
+            var presence = new Presence
+                               {
+                                   Id = XmppIdentifierGenerator.Generate(),
+                                   To = Identifier,
+                                   Type = PresenceType.Unavailable
+                               };
 
-            this.PendingMessages.Add(presence.Id);
+            PendingMessages.Add(presence.Id);
 
-            this.Session.Send(presence);
+            Session.Send(presence);
         }
 
-        #endregion
-
-        #region · Message Subscriptions ·
-
-        protected override void Subscribe()
-        {
+        protected override void Subscribe() {
             base.Subscribe();
 
-            this.messageReceivedSubscription = this.Session
+            messageReceivedSubscription = Session
                 .MessageReceived
-                .Where(m => m.Type == MessageType.GroupChat && m.From.BareIdentifier.Equals(this.Identifier.BareIdentifier))
-                .Subscribe(message => this.OnMultiUserChatMessageReceived(message));
-            
-            this.presenceSubscription = this.Session.Connection
+                .Where(m => m.Type == MessageType.GroupChat && m.From.BareIdentifier.Equals(Identifier.BareIdentifier))
+                .Subscribe(message => OnMultiUserChatMessageReceived(message));
+
+            presenceSubscription = Session.Connection
                 .OnPresenceMessage
-                .Where(message => message.From.Equals(this.Identifier.ToString()))
-                .Subscribe(message => this.OnPresenceMessageReceived(message));
+                .Where(message => message.From.Equals(Identifier.ToString()))
+                .Subscribe(message => OnPresenceMessageReceived(message));
         }
 
-        protected override void Unsubscribe()
-        {
+        protected override void Unsubscribe() {
             base.Unsubscribe();
 
-            if (this.messageReceivedSubscription != null)
+            if (messageReceivedSubscription != null)
             {
-                this.messageReceivedSubscription.Dispose();
-                this.messageReceivedSubscription = null;
+                messageReceivedSubscription.Dispose();
+                messageReceivedSubscription = null;
             }
 
-            if (this.presenceSubscription != null)
+            if (presenceSubscription != null)
             {
-                this.presenceSubscription.Dispose();
-                this.presenceSubscription = null;
+                presenceSubscription.Dispose();
+                presenceSubscription = null;
             }
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        private void OnMultiUserChatMessageReceived(XmppMessage message)
-        {
-            this.createChatRoomEvent.Set();
-            this.seekEnterChatRoomEvent.Set();
+        private void OnMultiUserChatMessageReceived(XmppMessage message) {
+            createChatRoomEvent.Set();
+            seekEnterChatRoomEvent.Set();
         }
 
-        private void OnPresenceMessageReceived(Presence message)
-        {
+        private void OnPresenceMessageReceived(Presence message) {
             //<presence to='carlosga@neko.im/Home' from='babelimtest@conference.neko.im/carlosga'>
             //    <x xmlns='http://jabber.org/protocol/muc#user'>
             //        <item jid='carlosga@neko.im/Home' affiliation='owner' role='moderator'/>
@@ -255,21 +216,16 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat
                 {
                     if (item is MucUser)
                     {
-                        this.ProcessMucUser(item as MucUser);
+                        ProcessMucUser(item as MucUser);
                     }
                 }
             }
-         
-            this.createChatRoomEvent.Set();
-            this.seekEnterChatRoomEvent.Set();
+
+            createChatRoomEvent.Set();
+            seekEnterChatRoomEvent.Set();
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private void ProcessMucUser(MucUser item)
-        {
+        private void ProcessMucUser(MucUser item) {
             // Get the Status code
             MucUserStatus status = item.Items.OfType<MucUserStatus>().FirstOrDefault();
 
@@ -294,7 +250,7 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat
                         // context: Configuration change
                         // purpose: Inform occupants that room now shows unavailable members
                         break;
-                    
+
                     case 103:
                         // stanza : message
                         // context: Configuration change
@@ -397,7 +353,5 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat
                 }
             }
         }
-
-        #endregion
-    }
+        }
 }

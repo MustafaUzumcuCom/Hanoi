@@ -27,25 +27,14 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
 #warning TODO: Implement
-    
-    /// <summary>
-    /// Pricacy ling management
-    /// </summary>
-    public sealed class XmppPrivacy
-    {
-        #region · Constructors ·
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppPrivacy"/> class.
-        /// </summary>
-        public XmppPrivacy()
-        {
-        }
+    /// <summary>
+    ///   Pricacy ling management
+    /// </summary>
+    public sealed class XmppPrivacy {
+        #region · Constructors ·
 
         #endregion
     }

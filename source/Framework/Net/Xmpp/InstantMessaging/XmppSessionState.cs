@@ -29,32 +29,34 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Session states
+    ///   Session states
     /// </summary>
     [Serializable]
-    public enum XmppSessionState
-    {
+    public enum XmppSessionState {
         /// <summary>
-        /// Loggin out
+        ///   Loggin out
         /// </summary>
         LoggingOut,
+
         /// <summary>
-        /// Logged out
+        ///   Logged out
         /// </summary>
         LoggedOut,
+
         /// <summary>
-        /// Logging in
+        ///   Logging in
         /// </summary>
         LoggingIn,
+
         /// <summary>
-        /// Logged in
+        ///   Logged in
         /// </summary>
         LoggedIn,
+
         /// <summary>
-        /// Error
+        ///   Error
         /// </summary>
         Error,
     }

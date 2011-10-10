@@ -30,181 +30,155 @@
 using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Presence handling
+    ///   Presence handling
     /// </summary>
-    public sealed class XmppPresence
-    {
-        #region · Fields ·
-
-        private XmppSession session;
-
-        #endregion
-
-        #region · Constructors ·
+    public sealed class XmppPresence {
+        private readonly XmppSession session;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmppPresence"/> class using
-        /// the given session.
+        ///   Initializes a new instance of the <see cref = "XmppPresence" /> class using
+        ///   the given session.
         /// </summary>
-        /// <param name="session"></param>
-        internal XmppPresence(XmppSession session)
-        {
+        /// <param name = "session"></param>
+        internal XmppPresence(XmppSession session) {
             this.session = session;
         }
 
-        #endregion
-
-        #region · Methods ·
-
         /// <summary>
-        /// Gets the presence of the given user.
+        ///   Gets the presence of the given user.
         /// </summary>
-        /// <param name="targetJid">User JID</param>
-        public void GetPresence(XmppJid targetJid)
-        {
-            Presence presence = new Presence
-            {
-                Id      = XmppIdentifierGenerator.Generate(),
-                Type    = PresenceType.Probe,
-                From    = this.session.UserId,
-                To      = targetJid
-            };
+        /// <param name = "targetJid">User JID</param>
+        public void GetPresence(XmppJid targetJid) {
+            var presence = new Presence
+                               {
+                                   Id = XmppIdentifierGenerator.Generate(),
+                                   Type = PresenceType.Probe,
+                                   From = session.UserId,
+                                   To = targetJid
+                               };
 
-            this.session.Send(presence);
+            session.Send(presence);
         }
 
         /// <summary>
-        /// Sets the initial presence status.
+        ///   Sets the initial presence status.
         /// </summary>
-        public void SetInitialPresence()
-        {
-            this.SetInitialPresence(null);
+        public void SetInitialPresence() {
+            SetInitialPresence(null);
         }
 
         /// <summary>
-        /// Sets the initial presence against the given user.
+        ///   Sets the initial presence against the given user.
         /// </summary>
-        /// <param name="target">JID of the target user.</param>
-        public void SetInitialPresence(XmppJid target)
-        {
-            Presence presence = new Presence();
+        /// <param name = "target">JID of the target user.</param>
+        public void SetInitialPresence(XmppJid target) {
+            var presence = new Presence();
 
             if (target != null && target.ToString().Length > 0)
             {
                 presence.To = target.ToString();
             }
 
-            this.session.Send(presence);
+            session.Send(presence);
         }
 
         /// <summary>
-        /// Set the presence as <see cref="XmppPresenceState.Available"/>
+        ///   Set the presence as <see cref = "XmppPresenceState.Available" />
         /// </summary>
-        public void SetPresence()
-        {
-            this.SetPresence(XmppPresenceState.Available);
+        public void SetPresence() {
+            SetPresence(XmppPresenceState.Available);
         }
 
         /// <summary>
-        /// Sets the presense state.
+        ///   Sets the presense state.
         /// </summary>
-        /// <param name="presenceState"></param>
-        public void SetPresence(XmppPresenceState presenceState)
-        {
-            this.SetPresence(presenceState, null);
+        /// <param name = "presenceState"></param>
+        public void SetPresence(XmppPresenceState presenceState) {
+            SetPresence(presenceState, null);
         }
 
         /// <summary>
-        /// Sets the presence state with the given state and status message
+        ///   Sets the presence state with the given state and status message
         /// </summary>
-        /// <param name="showAs"></param>
-        /// <param name="statusMessage"></param>
-        public void SetPresence(XmppPresenceState showAs, string statusMessage)
-        {
-            this.SetPresence(showAs, statusMessage, 0);
+        /// <param name = "showAs"></param>
+        /// <param name = "statusMessage"></param>
+        public void SetPresence(XmppPresenceState showAs, string statusMessage) {
+            SetPresence(showAs, statusMessage, 0);
         }
 
         /// <summary>
-        /// Sets the presence state with the given state, status message and priority
+        ///   Sets the presence state with the given state, status message and priority
         /// </summary>
-        /// <param name="showAs"></param>
-        /// <param name="statusMessage"></param>
-        /// <param name="priority"></param>
-        public void SetPresence(XmppPresenceState showAs, string statusMessage, int priority)
-        {
-            Presence    presence    = new Presence();
-            Status      status      = new Status();
+        /// <param name = "showAs"></param>
+        /// <param name = "statusMessage"></param>
+        /// <param name = "priority"></param>
+        public void SetPresence(XmppPresenceState showAs, string statusMessage, int priority) {
+            var presence = new Presence();
+            var status = new Status();
 
-            status.Value    = statusMessage;
-            presence.Id     = XmppIdentifierGenerator.Generate();
+            status.Value = statusMessage;
+            presence.Id = XmppIdentifierGenerator.Generate();
 
-            presence.Items.Add((ShowType)showAs);
+            presence.Items.Add((ShowType) showAs);
             presence.Items.Add(status);
 
-            this.session.Send(presence);
+            session.Send(presence);
         }
 
         /// <summary>
-        /// Sets the presence as Unavailable
+        ///   Sets the presence as Unavailable
         /// </summary>
-        public void SetUnavailable()
-        {
-            Presence presence = new Presence
-            {
-                Type = PresenceType.Unavailable
-            };
+        public void SetUnavailable() {
+            var presence = new Presence
+                               {
+                                   Type = PresenceType.Unavailable
+                               };
 
-            this.session.Send(presence);
+            session.Send(presence);
         }
 
         /// <summary>
-        /// Request subscription to the given user
+        ///   Request subscription to the given user
         /// </summary>
-        /// <param name="contactId"></param>
-        public void RequestSubscription(XmppJid jid)
-        {
-            Presence presence = new Presence
-            {
-                Type   = PresenceType.Subscribe,
-                To     = jid
-            };
-            
-            this.session.Send(presence);
+        /// <param name = "contactId"></param>
+        public void RequestSubscription(XmppJid jid) {
+            var presence = new Presence
+                               {
+                                   Type = PresenceType.Subscribe,
+                                   To = jid
+                               };
+
+            session.Send(presence);
         }
 
         /// <summary>
-        /// Subscribes to presence updates of the current user
+        ///   Subscribes to presence updates of the current user
         /// </summary>
-        /// <param name="jid"></param>
-        public void Subscribed(XmppJid jid)
-        {
-            Presence presence = new Presence
-            {
-                Type    = PresenceType.Subscribed,
-                To      = jid
-            };
+        /// <param name = "jid"></param>
+        public void Subscribed(XmppJid jid) {
+            var presence = new Presence
+                               {
+                                   Type = PresenceType.Subscribed,
+                                   To = jid
+                               };
 
-            this.session.Send(presence);
+            session.Send(presence);
         }
 
         /// <summary>
-        /// Subscribes to presence updates of the current user
+        ///   Subscribes to presence updates of the current user
         /// </summary>
-        /// <param name="jid"></param>
-        public void Unsuscribed(XmppJid jid)
-        {
-            Presence presence = new Presence
-            {
-                Type    = PresenceType.Unsubscribed,
-                To      = jid
-            };
+        /// <param name = "jid"></param>
+        public void Unsuscribed(XmppJid jid) {
+            var presence = new Presence
+                               {
+                                   Type = PresenceType.Unsubscribed,
+                                   To = jid
+                               };
 
-            this.session.Send(presence);
+            session.Send(presence);
         }
-
-        #endregion
     }
 }

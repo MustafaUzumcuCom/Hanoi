@@ -35,273 +35,219 @@ using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>
-    /// XMPP Service Discovery
+    ///   XMPP Service Discovery
     /// </summary>
-    public sealed class XmppServiceDiscovery 
-        : ObservableObject
-    {
-        #region · Fields ·
-
-        private XmppSession     session;
-        private List<string>    pendingMessages;
-        private string			domainName;
-        private bool            supportsServiceDiscovery;
-
-        private ObservableCollection<XmppService> services;
-
-        #region · Subscriptions ·
-
-        private IDisposable sessionStateSubscription;
+    public sealed class XmppServiceDiscovery
+        : ObservableObject {
+        private readonly string domainName;
+        private readonly List<string> pendingMessages;
+        private readonly XmppSession session;
         private IDisposable infoQuerySubscription;
         private IDisposable serviceDiscoverySubscription;
+        private ObservableCollection<XmppService> services;
 
-        #endregion
-
-        #endregion
-
-        #region · Properties ·
+        private IDisposable sessionStateSubscription;
+        private bool supportsServiceDiscovery;
 
         /// <summary>
-        /// Gets the collection of discovered services
+        ///   Initializes a new instance of the <see cref = "T:XmppServiceDiscovery" /> class.
         /// </summary>
-        public ObservableCollection<XmppService> Services
-        {
-            get
-            {
-                if (this.services == null)
-                {
-                    this.services = new ObservableCollection<XmppService>();
-                }
+        /// <param name = "session">The session.</param>
+        public XmppServiceDiscovery(XmppSession session) {
+            this.session = session;
+            pendingMessages = new List<string>();
 
-                return this.services;
-            }
+            SubscribeToSessionState();
         }
 
         /// <summary>
-        /// Gets a value that indicates if it supports multi user chat
+        ///   Initializes a new instance of the <see cref = "T:XmppServiceDiscovery" /> class.
         /// </summary>
-        public bool SupportsMultiuserChat
-        {
-            get { return this.SupportsFeature(XmppFeatures.MultiUserChat); }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates whether service discovery is supported
-        /// </summary>
-        public bool SupportsServiceDiscovery
-        {
-            get { return this.supportsServiceDiscovery; }
-            private set
-            {
-                if (this.supportsServiceDiscovery != value)
-                {
-                    this.supportsServiceDiscovery = value;
-                    this.NotifyPropertyChanged(() => SupportsServiceDiscovery);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates whether user tunes are supported
-        /// </summary>
-        public bool SupportsUserTune
-        {
-            get { return this.SupportsFeature(XmppFeatures.UserTune); }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates whether user moods are supported
-        /// </summary>
-        public bool SupportsUserMood
-        {
-            get { return this.SupportsFeature(XmppFeatures.UserMood); }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates whether simple communications blocking is supported
-        /// </summary>
-        public bool SupportsBlocking
-        {
-            get { return this.SupportsFeature(XmppFeatures.SimpleCommunicationsBlocking); }
-        }
-        
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppServiceDiscovery"/> class.
-        /// </summary>
-        /// <param name="session">The session.</param>
-        public XmppServiceDiscovery(XmppSession session)
-        {
-            this.session            = session;
-            this.pendingMessages    = new List<string>();
-
-            this.SubscribeToSessionState();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:XmppServiceDiscovery"/> class.
-        /// </summary>
-        /// <param name="session">The session.</param>
+        /// <param name = "session">The session.</param>
         public XmppServiceDiscovery(XmppSession session, string domainName)
-            : this(session)
-        {
+            : this(session) {
             this.domainName = domainName;
         }
-        
-        #endregion
-
-        #region · Methods ·
 
         /// <summary>
-        /// Clears service discovery data
+        ///   Gets the collection of discovered services
         /// </summary>
-        public void Clear()
-        {
-            this.pendingMessages.Clear();
-            this.Services.Clear();
+        public ObservableCollection<XmppService> Services {
+            get {
+                if (services == null)
+                {
+                    services = new ObservableCollection<XmppService>();
+                }
 
-            this.NotifyAllPropertiesChanged();
+                return services;
+            }
         }
 
-        public XmppService GetService(XmppServiceCategory category)
-        {
-            return this.Services
+        /// <summary>
+        ///   Gets a value that indicates if it supports multi user chat
+        /// </summary>
+        public bool SupportsMultiuserChat {
+            get { return SupportsFeature(XmppFeatures.MultiUserChat); }
+        }
+
+        /// <summary>
+        ///   Gets a value that indicates whether service discovery is supported
+        /// </summary>
+        public bool SupportsServiceDiscovery {
+            get { return supportsServiceDiscovery; }
+            private set {
+                if (supportsServiceDiscovery != value)
+                {
+                    supportsServiceDiscovery = value;
+                    NotifyPropertyChanged(() => SupportsServiceDiscovery);
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Gets a value that indicates whether user tunes are supported
+        /// </summary>
+        public bool SupportsUserTune {
+            get { return SupportsFeature(XmppFeatures.UserTune); }
+        }
+
+        /// <summary>
+        ///   Gets a value that indicates whether user moods are supported
+        /// </summary>
+        public bool SupportsUserMood {
+            get { return SupportsFeature(XmppFeatures.UserMood); }
+        }
+
+        /// <summary>
+        ///   Gets a value that indicates whether simple communications blocking is supported
+        /// </summary>
+        public bool SupportsBlocking {
+            get { return SupportsFeature(XmppFeatures.SimpleCommunicationsBlocking); }
+        }
+
+        /// <summary>
+        ///   Clears service discovery data
+        /// </summary>
+        public void Clear() {
+            pendingMessages.Clear();
+            Services.Clear();
+
+            NotifyAllPropertiesChanged();
+        }
+
+        public XmppService GetService(XmppServiceCategory category) {
+            return Services
                 .Where(s => s.IsOnCategory(XmppServiceCategory.Conference))
                 .FirstOrDefault();
         }
 
         /// <summary>
-        /// Discover existing services provided by the XMPP Server
+        ///   Discover existing services provided by the XMPP Server
         /// </summary>
         /// <returns></returns>
-        public void DiscoverServices()
-        {
-            this.Clear();
+        public void DiscoverServices() {
+            Clear();
 
-            string  domain      = ((String.IsNullOrEmpty(this.domainName)) ? this.session.UserId.DomainName : this.domainName);
-            string  messageId   = XmppIdentifierGenerator.Generate();
-            IQ      iq          = new IQ
-            {
-                ID   = messageId,
-                Type = IQType.Get,
-                From = this.session.UserId,
-                To   = domain
-            };
+            string domain = ((String.IsNullOrEmpty(domainName)) ? session.UserId.DomainName : domainName);
+            string messageId = XmppIdentifierGenerator.Generate();
+            var iq = new IQ
+                         {
+                             ID = messageId,
+                             Type = IQType.Get,
+                             From = session.UserId,
+                             To = domain
+                         };
 
             iq.Items.Add(new ServiceItemQuery());
 
-            this.pendingMessages.Add(messageId);
+            pendingMessages.Add(messageId);
 
-            this.session.Send(iq);
+            session.Send(iq);
         }
 
-        #endregion
-        
-        #region · Private Methods ·
-        
-        private bool SupportsFeature(string featureName)
-        {
-            var q = from service in this.Services
+        private bool SupportsFeature(string featureName) {
+            var q = from service in Services
                     where service.Features.Where(f => f.Name == featureName).Count() > 0
                     select service;
-            
+
             return (q.Count() > 0);
         }
-        
-        #endregion
 
-        #region · Message Subscriptions ·
-
-        private void SubscribeToSessionState()
-        {
-            this.sessionStateSubscription = this.session
+        private void SubscribeToSessionState() {
+            sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
                 .Subscribe
-            (
-                newState =>
-                {
-                    if (newState == XmppSessionState.LoggingIn)
-                    {
-                        this.Subscribe();
-                    }
-                    else if (newState == XmppSessionState.LoggingOut)
-                    {
-                        this.Unsubscribe();
-                        this.Clear();
-                    }
-                }
-            );
+                (
+                    newState =>
+                        {
+                            if (newState == XmppSessionState.LoggingIn)
+                            {
+                                Subscribe();
+                            }
+                            else if (newState == XmppSessionState.LoggingOut)
+                            {
+                                Unsubscribe();
+                                Clear();
+                            }
+                        }
+                );
         }
 
-        private void Subscribe()
-        {
-            this.infoQuerySubscription = this.session.Connection
+        private void Subscribe() {
+            infoQuerySubscription = session.Connection
                 .OnInfoQueryMessage
-                .Where(message => message.Type == IQType.Error && this.pendingMessages.Contains(message.ID))
-                .Subscribe(message => this.OnQueryErrorReceived(message));
+                .Where(message => message.Type == IQType.Error && pendingMessages.Contains(message.ID))
+                .Subscribe(message => OnQueryErrorReceived(message));
 
-            this.serviceDiscoverySubscription = this.session.Connection
+            serviceDiscoverySubscription = session.Connection
                 .OnServiceDiscoveryMessage
-                .Where(message => message.Type == IQType.Result && this.pendingMessages.Contains(message.ID))
-                .Subscribe(message => this.OnServiceDiscoveryMessageReceived(message));
+                .Where(message => message.Type == IQType.Result && pendingMessages.Contains(message.ID))
+                .Subscribe(message => OnServiceDiscoveryMessageReceived(message));
         }
 
-        private void Unsubscribe()
-        {
-            if (this.infoQuerySubscription != null)
+        private void Unsubscribe() {
+            if (infoQuerySubscription != null)
             {
-                this.infoQuerySubscription.Dispose();
-                this.infoQuerySubscription = null;
+                infoQuerySubscription.Dispose();
+                infoQuerySubscription = null;
             }
 
-            if (this.serviceDiscoverySubscription != null)
+            if (serviceDiscoverySubscription != null)
             {
-                this.serviceDiscoverySubscription.Dispose();
-                this.serviceDiscoverySubscription = null;
+                serviceDiscoverySubscription.Dispose();
+                serviceDiscoverySubscription = null;
             }
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        private void OnServiceDiscoveryMessageReceived(IQ message)
-        {
-            this.pendingMessages.Remove(message.ID);
-            this.SupportsServiceDiscovery = true;
+        private void OnServiceDiscoveryMessageReceived(IQ message) {
+            pendingMessages.Remove(message.ID);
+            SupportsServiceDiscovery = true;
 
             foreach (object item in message.Items)
             {
                 if (item is ServiceItemQuery)
                 {
                     // List of availabl services
-                    foreach (ServiceItem serviceItem in ((ServiceItemQuery)item).Items)
+                    foreach (ServiceItem serviceItem in ((ServiceItemQuery) item).Items)
                     {
-                        this.services.Add(new XmppService(this.session, serviceItem.Jid));
+                        services.Add(new XmppService(session, serviceItem.Jid));
                     }
-                } 
+                }
             }
 
-            this.NotifyPropertyChanged(() => Services);
+            NotifyPropertyChanged(() => Services);
         }
 
-        private void OnQueryErrorReceived(IQ message)
-        {
-            this.pendingMessages.Remove(message.ID);
+        private void OnQueryErrorReceived(IQ message) {
+            pendingMessages.Remove(message.ID);
 
             if (message.Error.FeatureNotImplemented != null)
             {
-                this.SupportsServiceDiscovery = false;
+                SupportsServiceDiscovery = false;
             }
         }
-
-        #endregion
-    }
+        }
 }

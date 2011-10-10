@@ -32,115 +32,86 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Client capabilities (XEP-0115)
+    ///   Client capabilities (XEP-0115)
     /// </summary>
     [Serializable]
-    [XmlTypeAttribute(Namespace = "")]
+    [XmlType(Namespace = "")]
     [XmlRootAttribute("client", Namespace = "", IsNullable = false)]
-    public class XmppClientCapabilities
-    {
-        #region · Fields ·
-
-        private string                      node;
-        private string                      hashAlgorithmName;
-        private string                      verificationString;
-        private List<XmppServiceIdentity>   identities;
-        private List<XmppServiceFeature>    supportedFeatures;
-        
-        #endregion
-
-        #region · Properties ·
+    public class XmppClientCapabilities {
+        private string hashAlgorithmName;
+        private List<XmppServiceIdentity> identities;
+        private string node;
+        private List<XmppServiceFeature> supportedFeatures;
+        private string verificationString;
 
         /// <summary>
-        /// Gets or sets the client node
+        ///   Gets or sets the client node
         /// </summary>
         [XmlAttribute("node")]
-        public string Node
-        {
-            get { return this.node; }
-            set { this.node = value; }
+        public string Node {
+            get { return node; }
+            set { node = value; }
         }
 
         /// <summary>
-        /// Gets or sets the client version
+        ///   Gets or sets the client version
         /// </summary>
         [XmlAttribute("ver")]
-        public string VerificationString
-        {
-            get { return this.verificationString; }
-            set { this.verificationString = value; }
+        public string VerificationString {
+            get { return verificationString; }
+            set { verificationString = value; }
         }
 
         /// <summary>
-        /// Gets or sets the hash algorithm name
+        ///   Gets or sets the hash algorithm name
         /// </summary>
         [XmlAttribute("hash")]
-        public string HashAlgorithmName
-        {
+        public string HashAlgorithmName {
             get { return hashAlgorithmName; }
-            set { this.hashAlgorithmName = value; }
+            set { hashAlgorithmName = value; }
         }
 
         /// <summary>
-        /// Gets or sets the identity.
+        ///   Gets or sets the identity.
         /// </summary>
         /// <value>The identity.</value>
         [XmlArray("identities")]
-        [XmlArrayItem("identity", typeof(XmppServiceIdentity))]
-        public List<XmppServiceIdentity> Identities
-        {
-            get
-            {
-                if (this.identities == null)
+        [XmlArrayItem("identity", typeof (XmppServiceIdentity))]
+        public List<XmppServiceIdentity> Identities {
+            get {
+                if (identities == null)
                 {
-                    this.identities = new List<XmppServiceIdentity>();
+                    identities = new List<XmppServiceIdentity>();
                 }
 
-                return this.identities;
+                return identities;
             }
         }
 
         /// <summary>
-        /// Gets the list of supported features
+        ///   Gets the list of supported features
         /// </summary>
         [XmlArray("features")]
-        [XmlArrayItem("feature", typeof(XmppServiceFeature))]
-        public List<XmppServiceFeature> Features
-        {
-            get
-            {
-                if (this.supportedFeatures == null)
+        [XmlArrayItem("feature", typeof (XmppServiceFeature))]
+        public List<XmppServiceFeature> Features {
+            get {
+                if (supportedFeatures == null)
                 {
-                    this.supportedFeatures = new List<XmppServiceFeature>();
+                    supportedFeatures = new List<XmppServiceFeature>();
                 }
 
-                return this.supportedFeatures;
+                return supportedFeatures;
             }
         }
 
         /// <summary>
-        /// Gets the discovery info node
+        ///   Gets the discovery info node
         /// </summary>
         [XmlIgnore]
-        public string DiscoveryInfoNode
-        {
-            get { return String.Format("{0}#{1}", this.Node, this.VerificationString); }
+        public string DiscoveryInfoNode {
+            get { return String.Format("{0}#{1}", Node, VerificationString); }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppClientCapabilities"/> class.
-        /// </summary>
-        public XmppClientCapabilities()
-        {
-        }
-
-        #endregion
     }
 }

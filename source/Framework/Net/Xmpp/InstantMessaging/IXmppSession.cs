@@ -35,83 +35,33 @@ using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Interface for XMPP session implementations
+    ///   Interface for XMPP session implementations
     /// </summary>
-    public interface IXmppSession
-    {
-        #region · Events ·
+    public interface IXmppSession {
+        IObservable<XmppMessage> MessageReceived { get; }
 
+        IObservable<XmppSessionState> StateChanged { get; }
+
+        XmppPersonalEventing PersonalEventing { get; }
+
+        XmppPresence Presence { get; }
+
+        XmppRoster Roster { get; }
+
+        XmppServiceDiscovery ServiceDiscovery { get; }
+
+        XmppSessionState State { get; }
+
+        XmppJid UserId { get; }
+
+        XmppActivity Activity { get; }
+
+        AvatarStorage AvatarStorage { get; }
+
+        XmppSessionEntityCapabilities Capabilities { get; }
         event EventHandler<XmppAuthenticationFailiureEventArgs> AuthenticationFailed;
-
-        #endregion
-
-        #region · Observable Actions ·
-
-        IObservable<XmppMessage> MessageReceived
-        {
-            get;
-        }
-
-        IObservable<XmppSessionState> StateChanged
-        {
-            get;
-        }
-
-        #endregion
-
-        #region · Properties ·
-
-        XmppPersonalEventing PersonalEventing
-        {
-            get;
-        }
-        
-        XmppPresence Presence
-        {
-            get;
-        }
-
-        XmppRoster Roster
-        {
-            get;
-        }
-
-        XmppServiceDiscovery ServiceDiscovery
-        {
-            get;
-        }
-
-        XmppSessionState State
-        {
-            get;
-        }
-
-        XmppJid UserId
-        {
-            get;
-        }
-
-        XmppActivity Activity
-        {
-            get;
-        }
-
-        AvatarStorage AvatarStorage
-        {
-            get;
-        }
-
-        XmppSessionEntityCapabilities Capabilities
-        {
-            get;
-        }
-
-        #endregion
-
-        #region · Methods ·
 
         IXmppSession Open(string connectionString);
 
@@ -148,7 +98,5 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
         bool HasOpenChat(XmppJid contactId);
 
         bool HasOpenChat(string contactId);
-
-        #endregion
     }
 }

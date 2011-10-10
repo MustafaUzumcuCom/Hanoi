@@ -2,61 +2,41 @@ using System;
 using System.Threading;
 using DJMatty.AMIP.ClientWrapper;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing
-{
-    public sealed class AmipNowPlayingListerner
-    {
-        #region · Fields ·
-        
-        private XmppSession	session;
-        private AMIPClient  client;
-        private Thread		workerThread;
-        
-        #endregion
-        
-        #region · Constructors ·
-        
-        internal AmipNowPlayingListerner(XmppSession session)
-        {
+namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
+    public sealed class AmipNowPlayingListerner {
+        private readonly XmppSession session;
+        private AMIPClient client;
+        private Thread workerThread;
+
+        internal AmipNowPlayingListerner(XmppSession session) {
             this.session = session;
         }
-        
-        #endregion
-            
-        #region · Methods ·
 
-        public void Start()
-        {
-            this.Stop();
+        public void Start() {
+            Stop();
 
-            this.workerThread               = new Thread(new ThreadStart(Listen));
-            this.workerThread.IsBackground  = true;
-            this.workerThread.Start();
+            workerThread = new Thread(Listen);
+            workerThread.IsBackground = true;
+            workerThread.Start();
         }
-        
-        public void Stop()
-        {
-            if (this.workerThread != null)
+
+        public void Stop() {
+            if (workerThread != null)
             {
-                this.workerThread.Interrupt();
-                this.workerThread.Join();
-                this.workerThread = null;
+                workerThread.Interrupt();
+                workerThread.Join();
+                workerThread = null;
             }
         }
-        
-        #endregion
-        
-        #region · Private Methods ·
-                    
-        private void Listen()
-        {
+
+        private void Listen() {
             string lastSong = null;
 
             try
             {
                 // using will force dispose to be called -- dispose will ensure that the AMIP SDK is uninitialized
                 // and any server listeners are removed
-                using (this.client = new AMIPClient("127.0.0.1", 60333, 5000, 5, 1, true))
+                using (client = new AMIPClient("127.0.0.1", 60333, 5000, 5, 1, true))
                 {
                     while (true)
                     {
@@ -81,40 +61,40 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing
                          * var_7		: Genre
                          */
 
-                        string 	currentSong = null;
-                        int 	status		= 0;
+                        string currentSong = null;
+                        int status = 0;
 
                         try
                         {
-                            status		= Convert.ToInt32(this.client.Eval("var_stat"));
-                            currentSong = this.client.Eval("var_s");
+                            status = Convert.ToInt32(client.Eval("var_stat"));
+                            currentSong = client.Eval("var_s");
                         }
                         catch (AMIPException)
                         {
                         }
-                        
+
                         if (status == 1 || status == 3)
                         {
                             if (!String.IsNullOrEmpty(currentSong) &&
                                 (lastSong == null || lastSong != currentSong))
                             {
-                                if (this.session.PersonalEventing.SupportsUserTune)
+                                if (session.PersonalEventing.SupportsUserTune)
                                 {
-                                    string title = this.client.Eval("var_4");
-    
-                                    XmppUserTuneEvent tune = new XmppUserTuneEvent
-                                    (
-                                        this.client.Eval("var_1"),
-                                        (ushort)(Convert.ToUInt16(this.client.Eval("var_sl")) * 1000),
+                                    string title = client.Eval("var_4");
+
+                                    var tune = new XmppUserTuneEvent
+                                        (
+                                        client.Eval("var_1"),
+                                        (ushort) (Convert.ToUInt16(client.Eval("var_sl"))*1000),
                                         null,
                                         ((!String.IsNullOrEmpty(title)) ? title : currentSong),
-                                        this.client.Eval("var_2"),
+                                        client.Eval("var_2"),
                                         null,
                                         null
-                                    );
-    
-                                    this.session.PublishTune(tune);
-    
+                                        );
+
+                                    session.PublishTune(tune);
+
                                     lastSong = currentSong;
                                 }
                             }
@@ -124,17 +104,18 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing
                             if (!String.IsNullOrEmpty(lastSong))
                             {
                                 // If something has been played
-                                this.session.StopTunePublication();
+                                session.StopTunePublication();
 
                                 lastSong = null;
                             }
                         }
-                            
+
 
                         // Wait 10 seconds before continue checking if something is being playing
                         Thread.Sleep(10000);
                     }
-                };
+                }
+                ;
             }
             catch (ThreadInterruptedException)
             {
@@ -143,9 +124,7 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing
             {
             }
 
-            this.client = null;
+            client = null;
         }
-        
-        #endregion	
     }
 }

@@ -40,153 +40,114 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.VCard;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Represents a contact resource
+    ///   Represents a contact resource
     /// </summary>
-    public sealed class XmppContactResource 
-        : ObservableObject
-    {
-        #region · Static Members ·
-
+    public sealed class XmppContactResource
+        : ObservableObject {
         internal static int DefaultPresencePriorityValue = -200;
 
-        #endregion
-
-        #region · Fields ·
-
-        private XmppSession				session;
-        private XmppContact             contact;
-        private XmppJid					resourceId;
-        private XmppContactPresence     presence;
-        private XmppClientCapabilities	capabilities;
-        private string					avatarHash;
-        private Stream					avatar;
-        private List<string>			pendingMessages;
-
-        #region · Subscriptions ·
-
-        private IDisposable sessionStateSubscription;
+        private readonly XmppContact contact;
+        private readonly List<string> pendingMessages;
+        private readonly XmppContactPresence presence;
+        private readonly XmppJid resourceId;
+        private readonly XmppSession session;
+        private Stream avatar;
+        private string avatarHash;
+        private XmppClientCapabilities capabilities;
         private IDisposable infoQueryErrorSubscription;
         private IDisposable serviceDiscoverySubscription;
+        private IDisposable sessionStateSubscription;
         private IDisposable vCardSubscription;
 
-        #endregion
-
-        #endregion
-
-        #region · Properties ·
-
         /// <summary>
-        /// Gets a value that indicates wheter this resource is the default resource
+        ///   Initializes a new instance of the <see cref = "XmppContactResource" /> class.
         /// </summary>
-        /// <value>The resource id.</value>
-        public bool IsDefaultResource
-        {
-            get { return (this.Presence.Priority == DefaultPresencePriorityValue); }
+        internal XmppContactResource(XmppSession session, XmppContact contact, XmppJid resourceId) {
+            this.session = session;
+            this.contact = contact;
+            this.resourceId = resourceId;
+            presence = new XmppContactPresence(this.session);
+            capabilities = new XmppClientCapabilities();
+            pendingMessages = new List<string>();
+
+            Subscribe();
         }
 
         /// <summary>
-        /// Gets or sets the resource id.
+        ///   Gets a value that indicates wheter this resource is the default resource
         /// </summary>
         /// <value>The resource id.</value>
-        public XmppJid ResourceId
-        {
-            get { return this.resourceId; }
+        public bool IsDefaultResource {
+            get { return (Presence.Priority == DefaultPresencePriorityValue); }
         }
 
         /// <summary>
-        /// Gets or sets the resource presence information.
+        ///   Gets or sets the resource id.
+        /// </summary>
+        /// <value>The resource id.</value>
+        public XmppJid ResourceId {
+            get { return resourceId; }
+        }
+
+        /// <summary>
+        ///   Gets or sets the resource presence information.
         /// </summary>
         /// <value>The presence.</value>
-        public XmppContactPresence Presence
-        {
-            get { return this.presence; }
+        public XmppContactPresence Presence {
+            get { return presence; }
         }
 
         /// <summary>
-        /// Gets or sets the resource capabilities.
+        ///   Gets or sets the resource capabilities.
         /// </summary>
         /// <value>The capabilities.</value>
-        public XmppClientCapabilities Capabilities
-        {
-            get { return this.capabilities; }
-            private set
-            {
-                if (this.capabilities != value)
+        public XmppClientCapabilities Capabilities {
+            get { return capabilities; }
+            private set {
+                if (capabilities != value)
                 {
-                    this.capabilities = value;
-                    this.NotifyPropertyChanged(() => Capabilities);
+                    capabilities = value;
+                    NotifyPropertyChanged(() => Capabilities);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the original avatar image
+        ///   Gets the original avatar image
         /// </summary>
-        public Stream Avatar
-        {
-            get { return this.avatar; }
-            private set
-            {
-                if (this.avatar != value)
+        public Stream Avatar {
+            get { return avatar; }
+            private set {
+                if (avatar != value)
                 {
-                    this.avatar = value;
-                    this.NotifyPropertyChanged(() => Avatar);
+                    avatar = value;
+                    NotifyPropertyChanged(() => Avatar);
                 }
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppContactResource"/> class.
-        /// </summary>
-        internal XmppContactResource(XmppSession session, XmppContact contact, XmppJid resourceId)
-        {
-            this.session    		= session;
-            this.contact    		= contact;
-            this.resourceId 		= resourceId;
-            this.presence			= new XmppContactPresence(this.session);
-            this.capabilities 		= new XmppClientCapabilities();
-            this.pendingMessages	= new List<string>();
-
-            this.Subscribe();
+        public override string ToString() {
+            return resourceId.ToString();
         }
 
-        #endregion
+        internal void Update(Presence presence) {
+            Presence.Update(presence);
 
-        #region · Methods ·
-
-        public override string ToString()
-        {
-            return this.resourceId.ToString();
-        }
-
-        #endregion
-
-        #region · Internal Methods ·
-
-        internal void Update(Presence presence)
-        {
-            this.Presence.Update(presence);
-
-            if (this.IsDefaultResource && this.Presence.PresenceStatus == XmppPresenceState.Offline)
+            if (IsDefaultResource && Presence.PresenceStatus == XmppPresenceState.Offline)
             {
-                string cachedHash = this.session.AvatarStorage.GetAvatarHash(this.ResourceId.BareIdentifier);
+                string cachedHash = session.AvatarStorage.GetAvatarHash(ResourceId.BareIdentifier);
 
                 // Grab stored images for offline users
                 if (!String.IsNullOrEmpty(cachedHash))
                 {
                     // Dipose Avatar Streams
-                    this.DisposeAvatarStream();
+                    DisposeAvatarStream();
 
                     // Update the avatar hash and file Paths
-                    this.avatarHash = cachedHash;
-                    this.Avatar     = this.session.AvatarStorage.ReadAvatar(this.ResourceId.BareIdentifier);
+                    avatarHash = cachedHash;
+                    Avatar = session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
                 }
             }
 
@@ -198,237 +159,216 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
                 }
                 else if (item is VCardAvatar)
                 {
-                    VCardAvatar vcard = (VCardAvatar)item;
+                    var vcard = (VCardAvatar) item;
 
                     if (vcard.Photo != null && vcard.Photo.Length > 0)
                     {
                         if (!String.IsNullOrEmpty(vcard.Photo))
                         {
                             // Check if we have the avatar cached
-                            string cachedHash = this.session.AvatarStorage.GetAvatarHash(this.ResourceId.BareIdentifier);
+                            string cachedHash = session.AvatarStorage.GetAvatarHash(ResourceId.BareIdentifier);
 
                             if (cachedHash == vcard.Photo)
                             {
                                 // Dispose Avatar Streams
-                                this.DisposeAvatarStream();
+                                DisposeAvatarStream();
 
                                 // Update the avatar hash and file Paths
-                                this.avatarHash = vcard.Photo;                                
-                                this.Avatar     = this.session.AvatarStorage.ReadAvatar(this.ResourceId.BareIdentifier);
+                                avatarHash = vcard.Photo;
+                                Avatar = session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
                             }
                             else
                             {
                                 // Update the avatar hash
-                                this.avatarHash = vcard.Photo;
+                                avatarHash = vcard.Photo;
 
                                 // Avatar is not cached request the new avatar information
-                                this.RequestAvatar();
+                                RequestAvatar();
                             }
                         }
                     }
                 }
                 else if (item is EntityCapabilities)
-                {                    
-                    EntityCapabilities caps = (EntityCapabilities)item;
+                {
+                    var caps = (EntityCapabilities) item;
 
                     // Request capabilities only if they aren't cached yet for this resource
                     // or the verfiication string differs from the one that is cached
-                    if (this.Capabilities == null || this.Capabilities.VerificationString != caps.VerificationString)
+                    if (Capabilities == null || Capabilities.VerificationString != caps.VerificationString)
                     {
-                        this.Capabilities.Node 					= caps.Node;
-                        this.Capabilities.HashAlgorithmName 	= caps.HashAlgorithmName;
-                        this.Capabilities.VerificationString 	= caps.VerificationString;
-                        this.Capabilities.Identities.Clear();
-                        this.Capabilities.Features.Clear();
-                        
+                        Capabilities.Node = caps.Node;
+                        Capabilities.HashAlgorithmName = caps.HashAlgorithmName;
+                        Capabilities.VerificationString = caps.VerificationString;
+                        Capabilities.Identities.Clear();
+                        Capabilities.Features.Clear();
+
                         // Check if we have the capabilities in the storage
-                        if (this.session.ClientCapabilitiesStorage.Exists(caps.Node, caps.VerificationString))
+                        if (session.ClientCapabilitiesStorage.Exists(caps.Node, caps.VerificationString))
                         {
-                            this.Capabilities = this.session.ClientCapabilitiesStorage.Get(caps.Node, caps.VerificationString);
+                            Capabilities = session.ClientCapabilitiesStorage.Get(caps.Node, caps.VerificationString);
                         }
-                        else if ((this.contact.Subscription == XmppContactSubscriptionType.Both ||
-                             this.contact.Subscription == XmppContactSubscriptionType.To) &&
-                             (!presence.TypeSpecified || presence.Type == PresenceType.Unavailable))
+                        else if ((contact.Subscription == XmppContactSubscriptionType.Both ||
+                                  contact.Subscription == XmppContactSubscriptionType.To) &&
+                                 (!presence.TypeSpecified || presence.Type == PresenceType.Unavailable))
                         {
                             // Discover Entity Capabilities Extension Features
-                            this.DiscoverCapabilities();
+                            DiscoverCapabilities();
                         }
-                        
-                        this.NotifyPropertyChanged(() => Capabilities);
+
+                        NotifyPropertyChanged(() => Capabilities);
                     }
                 }
             }
         }
 
-        #endregion
+        private void DiscoverCapabilities() {
+            var requestIq = new IQ();
+            var request = new ServiceQuery();
 
-        #region · Private Methods ·
-
-        private void DiscoverCapabilities()
-        {
-            IQ              requestIq   = new IQ();
-            ServiceQuery    request     = new ServiceQuery();
-
-            request.Node    = this.Capabilities.DiscoveryInfoNode;
-            requestIq.From  = this.session.UserId;
-            requestIq.ID    = XmppIdentifierGenerator.Generate();
-            requestIq.To    = this.ResourceId;
-            requestIq.Type  = IQType.Get;
+            request.Node = Capabilities.DiscoveryInfoNode;
+            requestIq.From = session.UserId;
+            requestIq.ID = XmppIdentifierGenerator.Generate();
+            requestIq.To = ResourceId;
+            requestIq.Type = IQType.Get;
 
             requestIq.Items.Add(request);
 
-            this.pendingMessages.Add(requestIq.ID);
+            pendingMessages.Add(requestIq.ID);
 
-            this.session.Send(requestIq);
+            session.Send(requestIq);
         }
 
-        private void RequestAvatar()
-        {
-            if (this.contact.Subscription == XmppContactSubscriptionType.Both ||
-                this.contact.Subscription == XmppContactSubscriptionType.To)
+        private void RequestAvatar() {
+            if (contact.Subscription == XmppContactSubscriptionType.Both ||
+                contact.Subscription == XmppContactSubscriptionType.To)
             {
-                IQ iq = new IQ();
+                var iq = new IQ();
 
-                iq.ID   = XmppIdentifierGenerator.Generate();
+                iq.ID = XmppIdentifierGenerator.Generate();
                 iq.Type = IQType.Get;
-                iq.To   = this.ResourceId;
-                iq.From = this.session.UserId;
+                iq.To = ResourceId;
+                iq.From = session.UserId;
 
                 iq.Items.Add(new VCardData());
 
-                this.session.Send(iq);
+                session.Send(iq);
             }
         }
 
-        private void DisposeAvatarStream()
-        {
-            if (this.Avatar != null)
+        private void DisposeAvatarStream() {
+            if (Avatar != null)
             {
-                this.Avatar.Dispose();
-                this.Avatar = null;
+                Avatar.Dispose();
+                Avatar = null;
             }
         }
 
-        #endregion
-
-        #region · Message Subscriptions ·
-
-        private void SubscribeToSessionState()
-        {
-            this.sessionStateSubscription = this.session
+        private void SubscribeToSessionState() {
+            sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingOut)
                 .Subscribe
-            (
-                newState =>
-                {
-                    this.DisposeAvatarStream();
-                    this.Unsubscribe();
-                }
-            );
+                (
+                    newState =>
+                        {
+                            DisposeAvatarStream();
+                            Unsubscribe();
+                        }
+                );
         }
 
-        private void Subscribe()
-        {
-            this.SubscribeToSessionState();
+        private void Subscribe() {
+            SubscribeToSessionState();
 
-            this.infoQueryErrorSubscription = this.session.Connection
+            infoQueryErrorSubscription = session.Connection
                 .OnInfoQueryMessage
                 .Where(message => message.Type == IQType.Error)
-                .Subscribe(message => this.OnQueryErrorMessage(message));
+                .Subscribe(message => OnQueryErrorMessage(message));
 
-            this.serviceDiscoverySubscription = this.session.Connection
+            serviceDiscoverySubscription = session.Connection
                 .OnServiceDiscoveryMessage
-                .Where(message => message.Type == IQType.Result && this.pendingMessages.Contains(message.ID))
-                .Subscribe(message => this.OnServiceDiscoveryMessage(message));
+                .Where(message => message.Type == IQType.Result && pendingMessages.Contains(message.ID))
+                .Subscribe(message => OnServiceDiscoveryMessage(message));
 
-            this.vCardSubscription = this.session.Connection
+            vCardSubscription = session.Connection
                 .OnVCardMessage
-                .Where(message => message.From == this.ResourceId)
-                .Subscribe(message => this.OnVCardMessage(message));
+                .Where(message => message.From == ResourceId)
+                .Subscribe(message => OnVCardMessage(message));
         }
 
-        private void Unsubscribe()
-        {
-            if (this.sessionStateSubscription != null)
+        private void Unsubscribe() {
+            if (sessionStateSubscription != null)
             {
-                this.sessionStateSubscription.Dispose();
-                this.sessionStateSubscription = null;
+                sessionStateSubscription.Dispose();
+                sessionStateSubscription = null;
             }
 
-            if (this.infoQueryErrorSubscription != null)
+            if (infoQueryErrorSubscription != null)
             {
-                this.infoQueryErrorSubscription.Dispose();
-                this.infoQueryErrorSubscription = null;
+                infoQueryErrorSubscription.Dispose();
+                infoQueryErrorSubscription = null;
             }
 
-            if (this.serviceDiscoverySubscription != null)
+            if (serviceDiscoverySubscription != null)
             {
-                this.serviceDiscoverySubscription.Dispose();
-                this.serviceDiscoverySubscription = null;
+                serviceDiscoverySubscription.Dispose();
+                serviceDiscoverySubscription = null;
             }
 
-            if (this.vCardSubscription != null)
+            if (vCardSubscription != null)
             {
-                this.vCardSubscription.Dispose();
-                this.vCardSubscription = null;
+                vCardSubscription.Dispose();
+                vCardSubscription = null;
             }
         }
-        
-        #endregion        
 
-        #region · Message Handlers ·
+        private void OnServiceDiscoveryMessage(IQ message) {
+            pendingMessages.Remove(message.ID);
 
-        private void OnServiceDiscoveryMessage(IQ message)
-        {
-            this.pendingMessages.Remove(message.ID);
-
-            this.Capabilities.Identities.Clear();
-            this.Capabilities.Features.Clear();
+            Capabilities.Identities.Clear();
+            Capabilities.Features.Clear();
 
             // Reponse to our capabilities query
             foreach (object item in message.Items)
             {
                 if (item is ServiceQuery)
                 {
-                    ServiceQuery query = (ServiceQuery)item;
+                    var query = (ServiceQuery) item;
 
                     foreach (ServiceIdentity identity in query.Identities)
                     {
-                        this.Capabilities.Identities.Add
-                        (
-                            new XmppServiceIdentity(identity.Name, identity.Category, identity.Type)
-                        );
+                        Capabilities.Identities.Add
+                            (
+                                new XmppServiceIdentity(identity.Name, identity.Category, identity.Type)
+                            );
                     }
 
                     foreach (ServiceFeature supportedFeature in query.Features)
                     {
-                        this.Capabilities.Features.Add(new XmppServiceFeature(supportedFeature.Name));
+                        Capabilities.Features.Add(new XmppServiceFeature(supportedFeature.Name));
                     }
                 }
             }
 
-            if (!this.session.ClientCapabilitiesStorage.Exists(this.capabilities.Node, this.capabilities.VerificationString))
+            if (!session.ClientCapabilitiesStorage.Exists(capabilities.Node, capabilities.VerificationString))
             {
-                this.session.ClientCapabilitiesStorage.ClientCapabilities.Add(this.Capabilities);
-                this.session.ClientCapabilitiesStorage.Save();
+                session.ClientCapabilitiesStorage.ClientCapabilities.Add(Capabilities);
+                session.ClientCapabilitiesStorage.Save();
             }
 
-            this.NotifyPropertyChanged(() => Capabilities);
+            NotifyPropertyChanged(() => Capabilities);
         }
 
-        private void OnQueryErrorMessage(IQ message)
-        {
-            if (this.pendingMessages.Contains(message.ID))
+        private void OnQueryErrorMessage(IQ message) {
+            if (pendingMessages.Contains(message.ID))
             {
-                this.pendingMessages.Remove(message.ID);
+                pendingMessages.Remove(message.ID);
             }
-        }        
+        }
 
-        private void OnVCardMessage(IQ message)
-        {
+        private void OnVCardMessage(IQ message) {
             // Update the Avatar image
-            VCardData vCard = (VCardData)message.Items[0];
+            var vCard = (VCardData) message.Items[0];
 
             if (vCard.Photo.Photo != null && vCard.Photo.Photo.Length > 0)
             {
@@ -436,9 +376,9 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
 
                 try
                 {
-                    this.DisposeAvatarStream();
+                    DisposeAvatarStream();
 
-                    using (MemoryStream avatarStream = new MemoryStream(vCard.Photo.Photo))
+                    using (var avatarStream = new MemoryStream(vCard.Photo.Photo))
                     {
                         // En sure it's a valid image
                         avatarImage = Image.FromStream(avatarStream);
@@ -446,11 +386,11 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
                         // Save avatar
                         if (avatarStream != null && avatarStream.Length > 0)
                         {
-                            this.session.AvatarStorage.SaveAvatar(this.ResourceId.BareIdentifier, this.avatarHash, avatarStream);
+                            session.AvatarStorage.SaveAvatar(ResourceId.BareIdentifier, avatarHash, avatarStream);
                         }
                     }
 
-                    this.Avatar = this.session.AvatarStorage.ReadAvatar(this.ResourceId.BareIdentifier);
+                    Avatar = session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
                 }
                 catch
                 {
@@ -467,12 +407,10 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
             }
             else
             {
-                this.session.AvatarStorage.RemoveAvatar(this.ResourceId.BareIdentifier);
+                session.AvatarStorage.RemoveAvatar(ResourceId.BareIdentifier);
             }
 
-            this.session.AvatarStorage.Save();
+            session.AvatarStorage.Save();
         }
-        
-        #endregion
-    }
+        }
 }

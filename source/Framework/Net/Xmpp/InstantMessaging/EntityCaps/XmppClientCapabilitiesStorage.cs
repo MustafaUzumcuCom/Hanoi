@@ -36,113 +36,78 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// Entity capabilities store
+    ///   Entity capabilities store
     /// </summary>
     [Serializable]
     [XmlTypeAttribute(Namespace = "")]
     [XmlRootAttribute("capabilities", Namespace = "", IsNullable = false)]
-    public sealed class XmppClientCapabilitiesStorage
-    {
-        #region · Static Members ·
-        
-         private static XmlSerializer Serializer = new XmlSerializer(typeof(XmppClientCapabilitiesStorage));
-        
-        #endregion
-        
-        #region · Consts ·
-        
-        const string ClientCapabilitiesFile = "ClientCapabilities.xml";
-        
-        #endregion
-        
-        #region · Fields ·
-        
+    public sealed class XmppClientCapabilitiesStorage {
+        private const string ClientCapabilitiesFile = "ClientCapabilities.xml";
+        private static XmlSerializer Serializer = new XmlSerializer(typeof (XmppClientCapabilitiesStorage));
+
         private List<XmppClientCapabilities> clientCapabilities;
-        
-        #endregion
-        
-        #region · Properties ·
 
         [XmlArray("caps")]
-        [XmlArrayItem("client", typeof(XmppClientCapabilities))]
-        public List<XmppClientCapabilities> ClientCapabilities
-        {
-            get
-            {
-                if (this.clientCapabilities == null)
+        [XmlArrayItem("client", typeof (XmppClientCapabilities))]
+        public List<XmppClientCapabilities> ClientCapabilities {
+            get {
+                if (clientCapabilities == null)
                 {
-                    this.clientCapabilities = new List<XmppClientCapabilities>();
+                    clientCapabilities = new List<XmppClientCapabilities>();
                 }
-                
-                return this.clientCapabilities;
+
+                return clientCapabilities;
             }
         }
-        
-        #endregion
-        
-        #region · Constructors ·
 
-        public XmppClientCapabilitiesStorage()
-        {
-        }
-        
-        #endregion
-        
-        #region · Methods ·
-        
-        public bool Exists(string node, string verificationString)
-        {
-            return (this.Get(node, verificationString) != null);
-        }
-        
-        public XmppClientCapabilities Get(string node, string verificationString)
-        {
-            return (this.ClientCapabilities.Where(c => c.Node == node && c.VerificationString == verificationString).SingleOrDefault());
+        public bool Exists(string node, string verificationString) {
+            return (Get(node, verificationString) != null);
         }
 
-        public void Load()
-        {
+        public XmppClientCapabilities Get(string node, string verificationString) {
+            return
+                (ClientCapabilities.Where(c => c.Node == node && c.VerificationString == verificationString).
+                    SingleOrDefault());
+        }
+
+        public void Load() {
             using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
             {
                 if (storage.FileExists(ClientCapabilitiesFile))
                 {
-                    using (IsolatedStorageFileStream stream =
-                                new IsolatedStorageFileStream(ClientCapabilitiesFile, FileMode.OpenOrCreate, storage))
+                    using (var stream =
+                        new IsolatedStorageFileStream(ClientCapabilitiesFile, FileMode.OpenOrCreate, storage))
                     {
                         if (stream.Length > 0)
                         {
-                            XmppClientCapabilitiesStorage capsstorage = (XmppClientCapabilitiesStorage)Serializer.Deserialize(stream);
+                            var capsstorage = (XmppClientCapabilitiesStorage) Serializer.Deserialize(stream);
 
-                            this.ClientCapabilities.AddRange(capsstorage.ClientCapabilities);
+                            ClientCapabilities.AddRange(capsstorage.ClientCapabilities);
                         }
                     }
                 }
             }
         }
 
-        public void Save()
-        {
+        public void Save() {
             using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                using (IsolatedStorageFileStream stream = 
-                            new IsolatedStorageFileStream(ClientCapabilitiesFile, FileMode.OpenOrCreate, storage))
+                using (var stream =
+                    new IsolatedStorageFileStream(ClientCapabilitiesFile, FileMode.OpenOrCreate, storage))
                 {
                     // Save Caps as XML
-                    using (XmlTextWriter xmlWriter  = new XmlTextWriter(stream, Encoding.UTF8))
+                    using (var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8))
                     {
                         // Writer settings
-                        xmlWriter.QuoteChar     = '\'';
-                        xmlWriter.Formatting    = Formatting.Indented;
-        
+                        xmlWriter.QuoteChar = '\'';
+                        xmlWriter.Formatting = Formatting.Indented;
+
                         Serializer.Serialize(xmlWriter, this);
                     }
                 }
             }
         }
-        
-        #endregion
     }
 }

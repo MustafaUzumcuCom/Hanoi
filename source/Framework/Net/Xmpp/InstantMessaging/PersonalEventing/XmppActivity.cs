@@ -36,209 +36,167 @@ using System.Linq;
 using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
-    /// XMPP Activity
+    ///   XMPP Activity
     /// </summary>
-    public sealed class XmppActivity 
-        : ObservableObject, IEnumerable<XmppEvent>, INotifyCollectionChanged
-    {
-        #region · INotifyCollectionChanged Members ·
+    public sealed class XmppActivity
+        : ObservableObject, IEnumerable<XmppEvent>, INotifyCollectionChanged {
+        private readonly ObservableCollection<XmppEvent> activities;
+        private readonly XmppSession session;
+
+        private IDisposable eventMessageSubscription;
+        private IDisposable messageSubscription;
+        private IDisposable sessionStateSubscription;
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "XmppSession" /> class
+        /// </summary>
+        internal XmppActivity(XmppSession session) {
+            this.session = session;
+            activities = new ObservableCollection<XmppEvent>();
+
+            SubscribeToSessionState();
+        }
+
+        #region IEnumerable<XmppEvent> Members
+
+        IEnumerator<XmppEvent> IEnumerable<XmppEvent>.GetEnumerator() {
+            return activities.GetEnumerator();
+        }
+
+        public IEnumerator GetEnumerator() {
+            return activities.GetEnumerator();
+        }
+
+        #endregion
+
+        #region INotifyCollectionChanged Members
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         #endregion
 
-        #region · Fields ·
-
-        private ObservableCollection<XmppEvent>	activities;
-        private XmppSession						session;
-
-        #region · Subscriptions ·
-
-        private IDisposable sessionStateSubscription;
-        private IDisposable messageSubscription;
-        private IDisposable eventMessageSubscription;
-        
-        #endregion
-
-        #endregion
-      
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmppSession"/> class
+        ///   Clears the activity list
         /// </summary>
-        internal XmppActivity(XmppSession session)
-        {
-            this.session    = session;
-            this.activities	= new ObservableCollection<XmppEvent>();
+        public void Clear() {
+            activities.Clear();
 
-            this.SubscribeToSessionState();
+            InvokeAsynchronously
+                (
+                    () =>
+                        {
+                            if (CollectionChanged != null)
+                            {
+                                CollectionChanged(this,
+                                                  new NotifyCollectionChangedEventArgs(
+                                                      NotifyCollectionChangedAction.Reset));
+                            }
+                        }
+                );
         }
 
-        #endregion
-        
-        #region · Methods ·
-        
-        /// <summary>
-        /// Clears the activity list
-        /// </summary>
-        public void Clear()
-        {
-        	this.activities.Clear();
-
-            this.InvokeAsynchronously
-            (
-                () =>
-                {
-                    if (this.CollectionChanged != null)
-                    {
-                        this.CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    }
-                }
-            );
-        }
-        
-        #endregion
-
-        #region · IEnumerable<IActivity> Members ·
-
-        IEnumerator<XmppEvent> IEnumerable<XmppEvent>.GetEnumerator()
-        {
-            return this.activities.GetEnumerator();
-        }
-
-        #endregion
-
-        #region · IEnumerable Members ·
-
-        public IEnumerator GetEnumerator()
-        {
-            return this.activities.GetEnumerator();
-        }
-
-        #endregion
-
-        #region · Message Subscriptions ·
-
-        private void SubscribeToSessionState()
-        {
-            this.sessionStateSubscription = this.session
+        private void SubscribeToSessionState() {
+            sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
                 .Subscribe
-            (
-                newState =>
-                {
-                    if (newState == XmppSessionState.LoggingOut)
-                    {
-                        this.Subscribe();
-                    }
-                    else if (newState == XmppSessionState.LoggingOut)
-                    {
-                        this.Clear();
-                        this.Unsubscribe();
-                    }
-                }
-            );
+                (
+                    newState =>
+                        {
+                            if (newState == XmppSessionState.LoggingOut)
+                            {
+                                Subscribe();
+                            }
+                            else if (newState == XmppSessionState.LoggingOut)
+                            {
+                                Clear();
+                                Unsubscribe();
+                            }
+                        }
+                );
         }
 
-        private void Subscribe()
-        {
-            this.messageSubscription = this.session
+        private void Subscribe() {
+            messageSubscription = session
                 .MessageReceived
                 .Where(m => m.Type == MessageType.Headline || m.Type == MessageType.Normal)
                 .Subscribe
-            (
-                message => { this.OnActivityMessage(message); }
-            );
+                (
+                    message => { OnActivityMessage(message); }
+                );
 
-            this.eventMessageSubscription = this.session.Connection
+            eventMessageSubscription = session.Connection
                 .OnEventMessage
-                .Subscribe(message => this.OnEventMessage(message));
+                .Subscribe(message => OnEventMessage(message));
 
-            this.activities.CollectionChanged += new NotifyCollectionChangedEventHandler(OnCollectionChanged);
+            activities.CollectionChanged += OnCollectionChanged;
         }
 
-        private void Unsubscribe()
-        {
-            if (this.messageSubscription != null)
+        private void Unsubscribe() {
+            if (messageSubscription != null)
             {
-                this.messageSubscription.Dispose();
-                this.messageSubscription = null;
+                messageSubscription.Dispose();
+                messageSubscription = null;
             }
 
-            if (this.eventMessageSubscription != null)
+            if (eventMessageSubscription != null)
             {
-                this.eventMessageSubscription.Dispose();
-                this.eventMessageSubscription = null;
+                eventMessageSubscription.Dispose();
+                eventMessageSubscription = null;
             }
 
-            this.activities.CollectionChanged -= new NotifyCollectionChangedEventHandler(OnCollectionChanged);
+            activities.CollectionChanged -= OnCollectionChanged;
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        private void OnActivityMessage(XmppMessage message)
-        {
+        private void OnActivityMessage(XmppMessage message) {
             switch (message.Type)
             {
                 case MessageType.Normal:
-                    this.activities.Add(new XmppMessageEvent(message));
+                    activities.Add(new XmppMessageEvent(message));
                     break;
 
                 case MessageType.Headline:
-                    this.activities.Add(new XmppMessageEvent(message));
+                    activities.Add(new XmppMessageEvent(message));
                     break;
-            }            
+            }
         }
 
-        private void OnEventMessage(XmppEventMessage message)
-        {
-        	// Add the activity based on the source event
-        	if (XmppEvent.IsActivityEvent(message.Event))
-        	{
-                XmppEvent xmppevent = XmppEvent.Create(this.session.Roster[message.From.BareIdentifier], message.Event);
+        private void OnEventMessage(XmppEventMessage message) {
+            // Add the activity based on the source event
+            if (XmppEvent.IsActivityEvent(message.Event))
+            {
+                XmppEvent xmppevent = XmppEvent.Create(session.Roster[message.From.BareIdentifier], message.Event);
 
 #warning TODO: see what to do when it's null
                 if (xmppevent != null)
                 {
 #warning TODO: This needs to be changed
-                    if (xmppevent is XmppUserTuneEvent && ((XmppUserTuneEvent)xmppevent).IsEmpty)
+                    if (xmppevent is XmppUserTuneEvent && ((XmppUserTuneEvent) xmppevent).IsEmpty)
                     {
                         // And empty tune means no info available or that the user
                         // cancelled the tune notifications ??
                     }
                     else
                     {
-                        this.activities.Add(xmppevent);
+                        activities.Add(xmppevent);
                     }
                 }
-        	}
+            }
         }
 
-        #endregion
-
-        #region · Change Notification ·
-
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            this.InvokeAsynchronouslyInBackground
-            (
-                () =>
-                {
-                    if (this.CollectionChanged != null)
-                    {
-                        this.CollectionChanged(this, e);
-                    }
-                }
-            );
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            InvokeAsynchronouslyInBackground
+                (
+                    () =>
+                        {
+                            if (CollectionChanged != null)
+                            {
+                                CollectionChanged(this, e);
+                            }
+                        }
+                );
         }
-
-        #endregion
-    }
+        }
 }

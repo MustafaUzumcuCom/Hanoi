@@ -30,50 +30,32 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.Configuration
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.Configuration {
     [Serializable]
-    [XmlTypeAttribute(Namespace = "")]
+    [XmlType(Namespace = "")]
     [XmlRootAttribute("avatar", Namespace = "", IsNullable = false)]
-    public sealed class Avatar
-    {
-        #region · Fields ·
-
+    public sealed class Avatar {
         private string contact;
         private string hash;
 
-        #endregion
+        public Avatar() {
+        }
 
-        #region · Properties ·
+        public Avatar(string contactId, string hash) {
+            contact = contactId;
+            this.hash = hash;
+        }
 
         [XmlElement("contact")]
-        public string Contact
-        {
-            get { return this.contact; }
-            set { this.contact = value; }
+        public string Contact {
+            get { return contact; }
+            set { contact = value; }
         }
 
         [XmlElement("hash")]
-        public string Hash
-        {
-            get { return this.hash; }
-            set { this.hash = value; }
+        public string Hash {
+            get { return hash; }
+            set { hash = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Avatar()
-        {
-        }
-
-        public Avatar(string contactId, string hash)
-        {
-            this.contact    = contactId;
-            this.hash       = hash;
-        }
-
-        #endregion
     }
 }

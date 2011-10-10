@@ -35,358 +35,298 @@ using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     public abstract class XmppServiceDiscoveryObject
-        : ObservableObject
-    {
-        #region · Fields ·
-
-        private List<XmppServiceIdentity>   identities;
-        private bool                        featuresRequested;
-        private bool                        itemsRequested;
-        private XmppSession                 session;
-        private XmppJid                     identifier;
-        private AutoResetEvent              waitEvent;
-        private List<XmppServiceItem>       items;
-        private List<XmppServiceFeature>    features;
-        private List<string>                pendingMessages;
-
-        #region · Subscriptions ·
-
-        private IDisposable sessionStateSubscription;
+        : ObservableObject {
+        private readonly XmppJid identifier;
+        private readonly XmppSession session;
+        private readonly AutoResetEvent waitEvent;
+        private List<XmppServiceFeature> features;
+        private bool featuresRequested;
+        private List<XmppServiceIdentity> identities;
         private IDisposable infoQuerySubscription;
+        private List<XmppServiceItem> items;
+        private bool itemsRequested;
+        private List<string> pendingMessages;
         private IDisposable serviceDiscoverySubscription;
-
-        #endregion
-
-        #endregion
-
-        #region · Properties ·
+        private IDisposable sessionStateSubscription;
 
         /// <summary>
-        /// Gets the XMPP Identifier (JID)
+        ///   Initializes a new instance of the <see cref = "XmppServiceDiscoveryObject" /> class.
         /// </summary>
-        public XmppJid Identifier
-        {
-            get { return this.identifier; }
-        }
-
-        /// <summary>
-        /// Gets the object identity.
-        /// </summary>
-        public List<XmppServiceIdentity> Identities
-        {
-            get
-            {
-                if (!this.featuresRequested)
-                {
-                    this.DiscoverFeatures();
-                }
-
-                return this.identities;
-            }
-        }
-
-        /// <summary>
-        /// Gets the list of features supported by the XMPP Service
-        /// </summary>
-        public List<XmppServiceFeature> Features
-        {
-            get
-            {
-                if (!this.featuresRequested)
-                {
-                    this.DiscoverFeatures();
-                }
-
-                return this.features;
-            }
-        }
-
-        /// <summary>
-        /// Gets the list of items for the XMPP Service
-        /// </summary>
-        public List<XmppServiceItem> Items
-        {
-            get 
-            {
-                if (!this.itemsRequested)
-                {
-                    this.DiscoverItems();
-                }
-
-                return this.items;
-            }
-        }
-
-        #endregion
-
-        #region · Protected Properties ·
-
-        /// <summary>
-        /// Gets the Xmpp Session
-        /// </summary>
-        protected XmppSession Session
-        {
-            get { return this.session; }
-        }
-
-        /// <summary>
-        /// Gets the list of message id's pending of response
-        /// </summary>
-        protected List<string> PendingMessages
-        {
-            get
-            {
-                if (this.pendingMessages == null)
-                {
-                    this.pendingMessages = new List<string>();
-                }
-
-                return this.pendingMessages;
-            }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppServiceDiscoveryObject"/> class.
-        /// </summary>
-        protected XmppServiceDiscoveryObject(XmppSession session, string identifier)
-        {
-            this.session    = session;
+        protected XmppServiceDiscoveryObject(XmppSession session, string identifier) {
+            this.session = session;
             this.identifier = identifier;
-            this.waitEvent  = new AutoResetEvent(false);
+            waitEvent = new AutoResetEvent(false);
 
-            this.Subscribe();
+            Subscribe();
         }
 
-        #endregion
-
-        #region · Methods ·
+        /// <summary>
+        ///   Gets the XMPP Identifier (JID)
+        /// </summary>
+        public XmppJid Identifier {
+            get { return identifier; }
+        }
 
         /// <summary>
-        /// Discover item features
+        ///   Gets the object identity.
         /// </summary>
-        /// <param name="serviceJid"></param>
-        public virtual void DiscoverFeatures()
-        {
-            if (this.features == null)
+        public List<XmppServiceIdentity> Identities {
+            get {
+                if (!featuresRequested)
+                {
+                    DiscoverFeatures();
+                }
+
+                return identities;
+            }
+        }
+
+        /// <summary>
+        ///   Gets the list of features supported by the XMPP Service
+        /// </summary>
+        public List<XmppServiceFeature> Features {
+            get {
+                if (!featuresRequested)
+                {
+                    DiscoverFeatures();
+                }
+
+                return features;
+            }
+        }
+
+        /// <summary>
+        ///   Gets the list of items for the XMPP Service
+        /// </summary>
+        public List<XmppServiceItem> Items {
+            get {
+                if (!itemsRequested)
+                {
+                    DiscoverItems();
+                }
+
+                return items;
+            }
+        }
+
+        /// <summary>
+        ///   Gets the Xmpp Session
+        /// </summary>
+        protected XmppSession Session {
+            get { return session; }
+        }
+
+        /// <summary>
+        ///   Gets the list of message id's pending of response
+        /// </summary>
+        protected List<string> PendingMessages {
+            get {
+                if (pendingMessages == null)
+                {
+                    pendingMessages = new List<string>();
+                }
+
+                return pendingMessages;
+            }
+        }
+
+        /// <summary>
+        ///   Discover item features
+        /// </summary>
+        /// <param name = "serviceJid"></param>
+        public virtual void DiscoverFeatures() {
+            if (features == null)
             {
-                this.features = new List<XmppServiceFeature>();
+                features = new List<XmppServiceFeature>();
             }
             else
             {
-                this.features.Clear();
+                features.Clear();
             }
 
             // Get Service Info
-            IQ iq = new IQ
-            {
-                ID   = XmppIdentifierGenerator.Generate(),
-                Type = IQType.Get,
-                From = this.session.UserId,
-                To   = this.Identifier
-            };
+            var iq = new IQ
+                         {
+                             ID = XmppIdentifierGenerator.Generate(),
+                             Type = IQType.Get,
+                             From = session.UserId,
+                             To = Identifier
+                         };
 
             iq.Items.Add(new ServiceQuery());
 
-            this.featuresRequested = true;
-            this.PendingMessages.Add(iq.ID);
-            this.session.Send(iq);
+            featuresRequested = true;
+            PendingMessages.Add(iq.ID);
+            session.Send(iq);
 
-            this.waitEvent.WaitOne();
+            waitEvent.WaitOne();
         }
 
         /// <summary>
-        /// Discover item items.
+        ///   Discover item items.
         /// </summary>
-        public virtual void DiscoverItems()
-        {
-            if (!this.featuresRequested)
+        public virtual void DiscoverItems() {
+            if (!featuresRequested)
             {
-                this.DiscoverFeatures();
+                DiscoverFeatures();
             }
 
-            if (this.items == null)
+            if (items == null)
             {
-                this.items = new List<XmppServiceItem>();
+                items = new List<XmppServiceItem>();
             }
             else
             {
-                this.items.Clear();
+                items.Clear();
             }
 
             // Get Service Details
-            IQ iq = new IQ
-            {
-                ID      = XmppIdentifierGenerator.Generate(),
-                Type    = IQType.Get,
-                From    = this.session.UserId,
-                To      = this.Identifier
-            };
+            var iq = new IQ
+                         {
+                             ID = XmppIdentifierGenerator.Generate(),
+                             Type = IQType.Get,
+                             From = session.UserId,
+                             To = Identifier
+                         };
 
             iq.Items.Add(new ServiceItemQuery());
 
-            this.itemsRequested = true;
-            this.PendingMessages.Add(iq.ID);
-            this.session.Send(iq);
+            itemsRequested = true;
+            PendingMessages.Add(iq.ID);
+            session.Send(iq);
 
-            this.waitEvent.WaitOne();
+            waitEvent.WaitOne();
         }
 
-        #endregion
-
-        #region · Overriden Methods ·
-
         /// <summary>
-        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   Returns a <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString()
-        {
-            return this.Identifier;
+        public override string ToString() {
+            return Identifier;
         }
 
         /// <summary>
-        /// Check if the item is on the given service category
+        ///   Check if the item is on the given service category
         /// </summary>
-        /// <param name="category"></param>
+        /// <param name = "category"></param>
         /// <returns></returns>
-        public bool IsOnCategory(XmppServiceCategory category)
-        {
-            return (this.identities.Where(s => s.Category == XmppServiceCategory.Conference).Count() > 0);
+        public bool IsOnCategory(XmppServiceCategory category) {
+            return (identities.Where(s => s.Category == XmppServiceCategory.Conference).Count() > 0);
         }
 
-        #endregion
-
-        #region · Message Subscriptions ·
-
-        private void SubscribeToSessionState()
-        {
-            this.sessionStateSubscription = this.session
+        private void SubscribeToSessionState() {
+            sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
-                .Subscribe(newState => this.OnSessionStateChanged(newState));
+                .Subscribe(newState => OnSessionStateChanged(newState));
         }
 
-        protected virtual void Subscribe()
-        {
-            this.infoQuerySubscription = this.session.Connection
+        protected virtual void Subscribe() {
+            infoQuerySubscription = session.Connection
                 .OnInfoQueryMessage
                 .Where(message => message.Type == IQType.Error)
-                .Subscribe(message => this.OnQueryErrorMessage(message));
+                .Subscribe(message => OnQueryErrorMessage(message));
 
-            this.serviceDiscoverySubscription = this.session.Connection
+            serviceDiscoverySubscription = session.Connection
                 .OnServiceDiscoveryMessage
-                .Where(message => this.PendingMessages.Contains(message.ID))
-                .Subscribe(message => this.OnServiceDiscoveryMessage(message));
+                .Where(message => PendingMessages.Contains(message.ID))
+                .Subscribe(message => OnServiceDiscoveryMessage(message));
         }
 
-        protected virtual void Unsubscribe()
-        {
-            if (this.sessionStateSubscription != null)
+        protected virtual void Unsubscribe() {
+            if (sessionStateSubscription != null)
             {
-                this.sessionStateSubscription.Dispose();
-                this.sessionStateSubscription = null;
+                sessionStateSubscription.Dispose();
+                sessionStateSubscription = null;
             }
 
-            if (this.infoQuerySubscription != null)
+            if (infoQuerySubscription != null)
             {
-                this.infoQuerySubscription.Dispose();
-                this.infoQuerySubscription = null;
+                infoQuerySubscription.Dispose();
+                infoQuerySubscription = null;
             }
 
-            if (this.serviceDiscoverySubscription != null)
+            if (serviceDiscoverySubscription != null)
             {
-                this.serviceDiscoverySubscription.Dispose();
-                this.serviceDiscoverySubscription = null;
+                serviceDiscoverySubscription.Dispose();
+                serviceDiscoverySubscription = null;
             }
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        protected virtual void OnSessionStateChanged(XmppSessionState newState)
-        {
-            this.SubscribeToSessionState();
+        protected virtual void OnSessionStateChanged(XmppSessionState newState) {
+            SubscribeToSessionState();
 
             if (newState == XmppSessionState.LoggingIn)
             {
-                this.Subscribe();
+                Subscribe();
             }
             else if (newState == XmppSessionState.LoggingOut)
             {
-                this.Unsubscribe();
+                Unsubscribe();
             }
 
-            this.NotifyAllPropertiesChanged();
+            NotifyAllPropertiesChanged();
         }
 
-        private void OnServiceDiscoveryMessage(IQ message)
-        {
-            if (this.PendingMessages.Contains(message.ID))
+        private void OnServiceDiscoveryMessage(IQ message) {
+            if (PendingMessages.Contains(message.ID))
             {
-                this.PendingMessages.Remove(message.ID);
+                PendingMessages.Remove(message.ID);
 
                 foreach (object item in message.Items)
                 {
                     if (item is ServiceItemQuery)
                     {
-                        foreach (ServiceItem serviceItem in ((ServiceItemQuery)item).Items)
+                        foreach (ServiceItem serviceItem in ((ServiceItemQuery) item).Items)
                         {
-                            this.items.Add(new XmppServiceItem(this.session, serviceItem.Jid));
+                            items.Add(new XmppServiceItem(session, serviceItem.Jid));
                         }
 
-                        this.NotifyPropertyChanged(() => Items);
+                        NotifyPropertyChanged(() => Items);
                     }
                     else if (item is ServiceQuery)
                     {
                         // Details of available services
-                        ServiceQuery query = (ServiceQuery)item;
+                        var query = (ServiceQuery) item;
 
-                        if (this.identities == null)
+                        if (identities == null)
                         {
-                            this.identities = new List<XmppServiceIdentity>();
+                            identities = new List<XmppServiceIdentity>();
                         }
 
-                        this.identities.Clear();
+                        identities.Clear();
 
                         foreach (ServiceIdentity identity in query.Identities)
                         {
-                            this.identities.Add(new XmppServiceIdentity(identity.Name, identity.Category, identity.Type));
+                            identities.Add(new XmppServiceIdentity(identity.Name, identity.Category, identity.Type));
                         }
 
                         foreach (ServiceFeature feature in query.Features)
                         {
-                            this.features.Add(new XmppServiceFeature(feature.Name));
+                            features.Add(new XmppServiceFeature(feature.Name));
                         }
 
-                        this.NotifyPropertyChanged(() => Identities);
-                        this.NotifyPropertyChanged(() => Features);
+                        NotifyPropertyChanged(() => Identities);
+                        NotifyPropertyChanged(() => Features);
                     }
                 }
-                
-                this.waitEvent.Set();
+
+                waitEvent.Set();
             }
         }
 
-        private void OnQueryErrorMessage(IQ message)
-        {
-            if (this.PendingMessages.Contains(message.ID))
+        private void OnQueryErrorMessage(IQ message) {
+            if (PendingMessages.Contains(message.ID))
             {
-                this.PendingMessages.Remove(message.ID);
+                PendingMessages.Remove(message.ID);
 
-                this.waitEvent.Set();
+                waitEvent.Set();
             }
         }
-
-        #endregion
-    }
+        }
 }

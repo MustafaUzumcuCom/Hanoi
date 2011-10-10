@@ -27,138 +27,107 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.ComponentModel;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// XMPP Contact presence information
+    ///   XMPP Contact presence information
     /// </summary>
-    public sealed class XmppContactPresence 
-        : ObservableObject
-    {
-        #region · Fields ·
-
-        private XmppPresenceState   presenceStatus;
-        private XmppSession         session;
-        private int                 priority;
-        private string              statusMessage;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class XmppContactPresence
+        : ObservableObject {
+        private readonly XmppSession session;
+        private XmppPresenceState presenceStatus;
+        private int priority;
+        private string statusMessage;
 
         /// <summary>
-        /// Gets or sets the presence priority.
+        ///   Initializes a new instance of the <see cref = "">XmppContactPresence</see>
+        /// </summary>
+        /// <param name = "session"></param>
+        internal XmppContactPresence(XmppSession session) {
+            this.session = session;
+            presenceStatus = XmppPresenceState.Offline;
+        }
+
+        /// <summary>
+        ///   Gets or sets the presence priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority
-        {
-            get { return this.priority; }
-            set
-            {
-                if (this.priority != value)
+        public int Priority {
+            get { return priority; }
+            set {
+                if (priority != value)
                 {
-                    this.priority = value;
-                    this.NotifyPropertyChanged(() => Priority);
+                    priority = value;
+                    NotifyPropertyChanged(() => Priority);
                 }
             }
         }
 
         /// <summary>
-        /// Gets or sets the presence status.
+        ///   Gets or sets the presence status.
         /// </summary>
         /// <value>The presence status.</value>
-        public XmppPresenceState PresenceStatus
-        {
-            get { return this.presenceStatus; }
-            set
-            {
-                if (this.presenceStatus != value)
+        public XmppPresenceState PresenceStatus {
+            get { return presenceStatus; }
+            set {
+                if (presenceStatus != value)
                 {
-                    this.presenceStatus = value;
-                    this.NotifyPropertyChanged(() => PresenceStatus);
-                    this.session.Roster.OnContactPresenceChanged();
-                }                
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the presence status message.
-        /// </summary>
-        /// <value>The presence status message.</value>
-        public string StatusMessage
-        {
-            get { return this.statusMessage; }
-            set
-            {
-                if (this.statusMessage != value)
-                {
-                    this.statusMessage = value;
-                    this.NotifyPropertyChanged(() => StatusMessage);
+                    presenceStatus = value;
+                    NotifyPropertyChanged(() => PresenceStatus);
+                    session.Roster.OnContactPresenceChanged();
                 }
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="">XmppContactPresence</see>
+        ///   Gets or sets the presence status message.
         /// </summary>
-        /// <param name="session"></param>
-        internal XmppContactPresence(XmppSession session)
-        {
-            this.session        = session;
-            this.presenceStatus = XmppPresenceState.Offline;
+        /// <value>The presence status message.</value>
+        public string StatusMessage {
+            get { return statusMessage; }
+            set {
+                if (statusMessage != value)
+                {
+                    statusMessage = value;
+                    NotifyPropertyChanged(() => StatusMessage);
+                }
+            }
         }
 
-        #endregion
-
-        #region · Internal Methods ·
-
-        internal void Update(Presence presence)
-        {
+        internal void Update(Presence presence) {
             if (presence.TypeSpecified &&
                 presence.Type == PresenceType.Unavailable)
             {
-                this.PresenceStatus = XmppPresenceState.Offline;
+                PresenceStatus = XmppPresenceState.Offline;
             }
             else
             {
-                this.PresenceStatus = XmppPresenceState.Available;
+                PresenceStatus = XmppPresenceState.Available;
             }
 
             foreach (object item in presence.Items)
             {
                 if (item is sbyte)
                 {
-                    this.Priority = (sbyte)item;
+                    Priority = (sbyte) item;
                 }
                 if (item is int)
                 {
-                    this.Priority = (int)item;
+                    Priority = (int) item;
                 }
                 else if (item is ShowType)
                 {
-                    this.PresenceStatus = this.DecodeShowAs((ShowType)item);
+                    PresenceStatus = DecodeShowAs((ShowType) item);
                 }
                 else if (item is Status)
                 {
-                    this.StatusMessage = ((Status)item).Value;
+                    StatusMessage = ((Status) item).Value;
                 }
             }
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private XmppPresenceState DecodeShowAs(ShowType showas)
-        {
+        private XmppPresenceState DecodeShowAs(ShowType showas) {
             switch (showas)
             {
                 case ShowType.Away:
@@ -176,7 +145,5 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
 
             return XmppPresenceState.Offline;
         }
-
-        #endregion
-    }
+        }
 }

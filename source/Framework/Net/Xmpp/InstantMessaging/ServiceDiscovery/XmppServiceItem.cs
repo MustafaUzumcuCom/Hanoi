@@ -27,23 +27,14 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>
-    /// Represents a <see cref="XmppService"/> item.
+    ///   Represents a <see cref = "XmppService" /> item.
     /// </summary>
     public sealed class XmppServiceItem
-        : XmppServiceDiscoveryObject
-    {
-        #region · Constructors ·
-
+        : XmppServiceDiscoveryObject {
         internal XmppServiceItem(XmppSession session, string identifier)
-            : base(session, identifier)
-        {
+            : base(session, identifier) {
         }
-
-        #endregion
-    }
+        }
 }

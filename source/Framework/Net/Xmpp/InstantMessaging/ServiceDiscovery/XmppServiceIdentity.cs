@@ -29,19 +29,60 @@
 
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>
-    /// XMPP Service Identity
+    ///   XMPP Service Identity
     /// </summary>
-    [XmlTypeAttribute(Namespace = "")]
+    [XmlType(Namespace = "")]
     [XmlRootAttribute("identity", Namespace = "", IsNullable = false)]
-    public sealed class XmppServiceIdentity
-    {
-        #region · Private Static Methods ·
+    public sealed class XmppServiceIdentity {
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "XmppServiceIdentity" /> class.
+        /// </summary>
+        public XmppServiceIdentity() {
+        }
 
-        private static XmppServiceCategory InferCategory(string category)
-        {
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "XmppServiceIdentity" /> class.
+        /// </summary>
+        /// <param name = "name">Identity name</param>
+        /// <param name = "category">Identity category</param>
+        /// <param name = "type">Identity type</param>
+        public XmppServiceIdentity(string name, string category, string type)
+            : this(name, InferCategory(category), type) {
+        }
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "XmppServiceIdentity" /> class.
+        /// </summary>
+        /// <param name = "name">Identity name</param>
+        /// <param name = "category">Identity category</param>
+        /// <param name = "type">Identity type</param>
+        public XmppServiceIdentity(string name, XmppServiceCategory category, string type) {
+            this.Name = name;
+            this.Category = category;
+            this.Type = type;
+        }
+
+        /// <summary>
+        ///   Gets the identity name
+        /// </summary>
+        [XmlAttributeAttribute("name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        ///   Gets the identity category
+        /// </summary>
+        [XmlAttributeAttribute("category")]
+        public XmppServiceCategory Category { get; set; }
+
+        /// <summary>
+        ///   Gets the identity type
+        /// </summary>
+        [XmlAttributeAttribute("type")]
+        public string Type { get; set; }
+
+        private static XmppServiceCategory InferCategory(string category) {
             switch (category)
             {
                 case "account":
@@ -93,84 +134,5 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery
                     return XmppServiceCategory.Unknown;
             }
         }
-
-        #endregion
- 
-        #region · Fields ·
-
-        private string              name;
-        private XmppServiceCategory category;
-        private string              type;
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <summary>
-        /// Gets the identity name
-        /// </summary>
-        [XmlAttributeAttribute("name")]
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; }
-        }
-
-        /// <summary>
-        /// Gets the identity category
-        /// </summary>
-        [XmlAttributeAttribute("category")]
-        public XmppServiceCategory Category
-        {
-            get { return this.category; }
-            set { this.category = value; }
-        }
-
-        /// <summary>
-        /// Gets the identity type
-        /// </summary>
-        [XmlAttributeAttribute("type")]
-        public string Type
-        {
-            get { return this.type; }
-            set { this.type = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppServiceIdentity"/> class.
-        /// </summary>
-        public  XmppServiceIdentity()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppServiceIdentity"/> class.
-        /// </summary>
-        /// <param name="name">Identity name</param>
-        /// <param name="category">Identity category</param>
-        /// <param name="type">Identity type</param>
-        public XmppServiceIdentity(string name, string category, string type)
-            : this(name, InferCategory(category), type)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppServiceIdentity"/> class.
-        /// </summary>
-        /// <param name="name">Identity name</param>
-        /// <param name="category">Identity category</param>
-        /// <param name="type">Identity type</param>
-        public XmppServiceIdentity(string name, XmppServiceCategory category, string type)
-        {
-            this.name       = name;
-            this.category   = category;
-            this.type       = type;
-        }
-
-        #endregion
     }
 }

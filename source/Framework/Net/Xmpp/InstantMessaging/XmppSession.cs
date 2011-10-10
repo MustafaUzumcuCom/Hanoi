@@ -44,86 +44,93 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.UserTune;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCard;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging
-{
+namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
-    /// XMPP Instant Messaging Session
+    ///   XMPP Instant Messaging Session
     /// </summary>
-    public sealed class XmppSession 
-        : IXmppSession
-    {
-        #region · Events ·
+    public sealed class XmppSession
+        : IXmppSession {
+        private readonly AvatarStorage avatarStorage;
+        private readonly Dictionary<string, XmppChat> chats;
+        private readonly XmppClientCapabilitiesStorage clientCapabilitiesStorage;
+        private readonly XmppConnection connection;
 
-        /// <summary>
-        /// Occurs when the authentications fails.
-        /// </summary>
-        public event EventHandler<XmppAuthenticationFailiureEventArgs> AuthenticationFailed;
-
-        #endregion
-
-        #region · Fields ·
-
-        private XmppConnection                  connection;
-        private XmppRoster                      roster;
-        private XmppActivity                    activity;
-        private XmppPresence                    presence;
-        private XmppSessionEntityCapabilities   capabilities;
-        private XmppSessionState                state;
-        private XmppServiceDiscovery            serviceDiscovery;
-        private XmppPersonalEventing            personalEventing;
-        private XmppClientCapabilitiesStorage	clientCapabilitiesStorage;
-        private AvatarStorage               	avatarStorage;
-        private Dictionary<string, XmppChat>    chats;
-        private object                          syncObject;
-
-        #region · Subjects ·
-
-        private readonly Subject<XmppMessage>       messageReceivedSubject  = new Subject<XmppMessage>();
-        private readonly Subject<XmppSessionState>  stateChangedSubject     = new Subject<XmppSessionState>();
-
-        #endregion
-
-        #region · Subscriptions ·
+        private readonly Subject<XmppMessage> messageReceivedSubject = new Subject<XmppMessage>();
+        private readonly XmppPersonalEventing personalEventing;
+        private readonly XmppServiceDiscovery serviceDiscovery;
+        private readonly Subject<XmppSessionState> stateChangedSubject = new Subject<XmppSessionState>();
+        private readonly object syncObject;
+        private XmppActivity activity;
+        private XmppSessionEntityCapabilities capabilities;
 
         private IDisposable chatMessageSubscription;
         private IDisposable errorMessageSubscription;
-
-        #endregion
-
-        #endregion
-
-        #region · IObservable<T> Action Properties ·
+        private XmppPresence presence;
+        private XmppRoster roster;
+        private XmppSessionState state;
 
         /// <summary>
-        /// Occurs when a message is received.
+        ///   Initializes a new instance of the <see cref = "XmppSession" /> class
         /// </summary>
-        public IObservable<XmppMessage> MessageReceived
-        {
-            get { return this.messageReceivedSubject.AsObservable(); }
+        public XmppSession() {
+            State = XmppSessionState.LoggedOut;
+            avatarStorage = new AvatarStorage();
+            chats = new Dictionary<string, XmppChat>();
+            syncObject = new object();
+            connection = new XmppConnection();
+            serviceDiscovery = new XmppServiceDiscovery(this);
+            personalEventing = new XmppPersonalEventing(this);
+            activity = new XmppActivity(this);
+            clientCapabilitiesStorage = new XmppClientCapabilitiesStorage();
+            roster = new XmppRoster(this);
+
+            avatarStorage.Load();
+            clientCapabilitiesStorage.Load();
         }
 
         /// <summary>
-        /// Occurs when the session state changes.
+        ///   Gets the <see cref = "XmppConnection" /> instance associated to the session
         /// </summary>
-        public IObservable<XmppSessionState> StateChanged
-        {
-            get { return this.stateChangedSubject.AsObservable(); }
+        internal XmppConnection Connection {
+            get { return connection; }
         }
 
-        #endregion
+        /// <summary>
+        ///   Gets the client capabilities storage
+        /// </summary>
+        internal XmppClientCapabilitiesStorage ClientCapabilitiesStorage {
+            get { return clientCapabilitiesStorage; }
+        }
 
-        #region · Properties ·
+        #region IXmppSession Members
 
         /// <summary>
-        /// Gets the User <see cref="XmppJid">JID</see>
+        ///   Occurs when the authentications fails.
         /// </summary>
-        public XmppJid UserId
-        {
-            get
-            {
-                if (this.connection != null)
+        public event EventHandler<XmppAuthenticationFailiureEventArgs> AuthenticationFailed;
+
+        /// <summary>
+        ///   Occurs when a message is received.
+        /// </summary>
+        public IObservable<XmppMessage> MessageReceived {
+            get { return messageReceivedSubject.AsObservable(); }
+        }
+
+        /// <summary>
+        ///   Occurs when the session state changes.
+        /// </summary>
+        public IObservable<XmppSessionState> StateChanged {
+            get { return stateChangedSubject.AsObservable(); }
+        }
+
+        /// <summary>
+        ///   Gets the User <see cref = "XmppJid">JID</see>
+        /// </summary>
+        public XmppJid UserId {
+            get {
+                if (connection != null)
                 {
-                    return this.connection.UserId;
+                    return connection.UserId;
                 }
 
                 return null;
@@ -131,341 +138,264 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
         }
 
         /// <summary>
-        /// Gets the session <see cref="XmppRoster">Roster</see>
+        ///   Gets the session <see cref = "XmppRoster">Roster</see>
         /// </summary>
-        public XmppRoster Roster
-        {
-            get 
-            { 
-                if (this.roster == null)
+        public XmppRoster Roster {
+            get {
+                if (roster == null)
                 {
-                    this.roster = new XmppRoster(this);
+                    roster = new XmppRoster(this);
                 }
 
-                return this.roster; 
-            }
-        }
-        
-        /// <summary>
-        /// Gets the list of <see cref="XmppActivity">activities</see>
-        /// </summary>
-        public XmppActivity Activity
-        {
-            get
-            {
-                if (this.activity == null)
-                {
-                    this.activity = new XmppActivity(this);
-                }
-                
-                return this.activity;
+                return roster;
             }
         }
 
         /// <summary>
-        /// Gets the client session supported features
+        ///   Gets the list of <see cref = "XmppActivity">activities</see>
         /// </summary>
-        public XmppSessionEntityCapabilities Capabilities
-        {
-            get
-            {
-                if (this.capabilities == null)
+        public XmppActivity Activity {
+            get {
+                if (activity == null)
                 {
-                    this.capabilities = new XmppSessionEntityCapabilities(this);
+                    activity = new XmppActivity(this);
                 }
 
-                return this.capabilities;
+                return activity;
             }
         }
 
         /// <summary>
-        /// Gets the session state
+        ///   Gets the client session supported features
         /// </summary>
-        public XmppSessionState State
-        {
-            get { return this.state; }
-            private set
-            {
-                if (this.state != value)
+        public XmppSessionEntityCapabilities Capabilities {
+            get {
+                if (capabilities == null)
                 {
-                    this.state = value;
-                    this.stateChangedSubject.OnNext(this.state);
+                    capabilities = new XmppSessionEntityCapabilities(this);
+                }
+
+                return capabilities;
+            }
+        }
+
+        /// <summary>
+        ///   Gets the session state
+        /// </summary>
+        public XmppSessionState State {
+            get { return state; }
+            private set {
+                if (state != value)
+                {
+                    state = value;
+                    stateChangedSubject.OnNext(state);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the presence
+        ///   Gets the presence
         /// </summary>
-        public XmppPresence Presence
-        {
-            get
-            {
-                if (this.presence == null)
+        public XmppPresence Presence {
+            get {
+                if (presence == null)
                 {
-                    this.presence = new XmppPresence(this);
+                    presence = new XmppPresence(this);
                 }
 
-                return this.presence;
+                return presence;
             }
         }
 
         /// <summary>
-        /// Gets the <see cref="XmppSession">service discovery </see> instance associated to the session
+        ///   Gets the <see cref = "XmppSession">service discovery </see> instance associated to the session
         /// </summary>
-        public XmppServiceDiscovery ServiceDiscovery
-        {
-            get { return this.serviceDiscovery; }
+        public XmppServiceDiscovery ServiceDiscovery {
+            get { return serviceDiscovery; }
         }
 
         /// <summary>
-        /// Gets the avatar storage
+        ///   Gets the avatar storage
         /// </summary>
-        public AvatarStorage AvatarStorage
-        {
-            get { return this.avatarStorage; }
+        public AvatarStorage AvatarStorage {
+            get { return avatarStorage; }
         }
 
         /// <summary>
-        /// Gets the <see cref="XmppPersonalEventing">personal eventing</see> instance associated to the session
+        ///   Gets the <see cref = "XmppPersonalEventing">personal eventing</see> instance associated to the session
         /// </summary>
-        public XmppPersonalEventing PersonalEventing
-        {
-            get { return this.personalEventing; }
-        }
-        
-        #endregion
-
-        #region · Internal Properties ·
-
-        /// <summary>
-        /// Gets the <see cref="XmppConnection" /> instance associated to the session
-        /// </summary>
-        internal XmppConnection Connection
-        {
-            get { return this.connection; }
-        }
-        
-        /// <summary>
-        /// Gets the client capabilities storage
-        /// </summary>
-        internal XmppClientCapabilitiesStorage ClientCapabilitiesStorage
-        {
-            get { return this.clientCapabilitiesStorage; }
-        }
-                
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmppSession"/> class
-        /// </summary>
-        public XmppSession()
-        {
-            this.State                      = XmppSessionState.LoggedOut;
-            this.avatarStorage              = new AvatarStorage();
-            this.chats                      = new Dictionary<string, XmppChat>();
-            this.syncObject                 = new object();
-            this.connection                 = new XmppConnection();
-            this.serviceDiscovery           = new XmppServiceDiscovery(this);
-            this.personalEventing           = new XmppPersonalEventing(this);
-            this.activity                   = new XmppActivity(this);
-            this.clientCapabilitiesStorage	= new XmppClientCapabilitiesStorage();
-            this.roster                     = new XmppRoster(this);
-            
-            this.avatarStorage.Load();
-            this.clientCapabilitiesStorage.Load();
+        public XmppPersonalEventing PersonalEventing {
+            get { return personalEventing; }
         }
 
-        #endregion
-
-        #region · Methods ·
-
         /// <summary>
-        /// Opens a new Session with the given connection parameters
+        ///   Opens a new Session with the given connection parameters
         /// </summary>
-        /// <param name="connectionString">Connection parameters</param>
-        public IXmppSession Open(string connectionString)
-        {
-            if (this.connection != null && this.connection.State == XmppConnectionState.Open)
+        /// <param name = "connectionString">Connection parameters</param>
+        public IXmppSession Open(string connectionString) {
+            if (connection != null && connection.State == XmppConnectionState.Open)
             {
                 throw new XmppException("The session is already open");
             }
 
-            this.State = XmppSessionState.LoggingIn;
+            State = XmppSessionState.LoggingIn;
 
             // Wire XmppConnection events
-            this.Subscribe();
+            Subscribe();
 
             // Perform the authentication
-            this.connection.Open(connectionString);
+            connection.Open(connectionString);
 
-            if (this.connection != null && this.connection.State == XmppConnectionState.Open)
+            if (connection != null && connection.State == XmppConnectionState.Open)
             {
                 // Send Roster Request
-                this.Roster.RequestRosterList();
+                Roster.RequestRosterList();
 
                 // Set initial Presence status
-                this.Presence.SetInitialPresence();
+                Presence.SetInitialPresence();
 
                 // Advertise Capabilities
-                this.Capabilities.AdvertiseCapabilities();
+                Capabilities.AdvertiseCapabilities();
 
                 // Discover server services
-                this.ServiceDiscovery.DiscoverServices();
+                ServiceDiscovery.DiscoverServices();
 
                 // Discover personal eventing support
-                this.PersonalEventing.DiscoverSupport();
+                PersonalEventing.DiscoverSupport();
 
                 // Set as Logged In
-                this.State = XmppSessionState.LoggedIn;
+                State = XmppSessionState.LoggedIn;
             }
             else
             {
-                this.State = XmppSessionState.Error;
+                State = XmppSessionState.Error;
             }
 
             return this;
         }
 
         /// <summary>
-        /// Closes the Session
+        ///   Closes the Session
         /// </summary>
-        public IXmppSession Close()
-        {
-            if (this.connection != null && 
-                (this.connection.State == XmppConnectionState.Opening ||
-                this.connection.State == XmppConnectionState.Open))
+        public IXmppSession Close() {
+            if (connection != null &&
+                (connection.State == XmppConnectionState.Opening ||
+                 connection.State == XmppConnectionState.Open))
             {
                 try
                 {
-                    this.State = XmppSessionState.LoggingOut;
+                    State = XmppSessionState.LoggingOut;
 
-                    if (this.connection.State == XmppConnectionState.Open)
+                    if (connection.State == XmppConnectionState.Open)
                     {
                         // Save session configuration
-                        this.AvatarStorage.Save();
+                        AvatarStorage.Save();
 
                         // Change presence to unavailable
-                        this.SetUnavailable();
+                        SetUnavailable();
 
                         // Clear all chats
-                        this.chats.Clear();
+                        chats.Clear();
                     }
 
                     // Close connection
-                    this.connection.Close();
+                    connection.Close();
 
                     // Unwire XmppConnection events
-                    this.Unsubscribe();
+                    Unsubscribe();
                 }
                 catch
                 {
                 }
                 finally
                 {
-                    this.State = XmppSessionState.LoggedOut;
+                    State = XmppSessionState.LoggedOut;
                 }
             }
 
             return this;
         }
-        
-        #endregion
-        
-        #region · Chat Methods ·
 
         /// <summary>
-        /// Checks if a given user has an open chat session
+        ///   Checks if a given user has an open chat session
         /// </summary>
-        /// <param name="contactId"></param>
+        /// <param name = "contactId"></param>
         /// <returns></returns>
-        public bool HasOpenChat(string contactId)
-        {
-            return (this.chats != null && this.chats.ContainsKey(contactId));
+        public bool HasOpenChat(string contactId) {
+            return (chats != null && chats.ContainsKey(contactId));
         }
 
         /// <summary>
-        /// Checks if a given user has an open chat session
+        ///   Checks if a given user has an open chat session
         /// </summary>
-        /// <param name="contactId"></param>
+        /// <param name = "contactId"></param>
         /// <returns></returns>
-        public bool HasOpenChat(XmppJid contactId)
-        {
-            return this.HasOpenChat(contactId.BareIdentifier);
-        }
-        
-        /// <summary>
-        /// Creates the chat.
-        /// </summary>
-        /// <param name="contactId">The contact id.</param>
-        /// <returns></returns>
-        public XmppChat CreateChat(string contactId)
-        {
-            return this.CreateChat(new XmppJid(contactId));
+        public bool HasOpenChat(XmppJid contactId) {
+            return HasOpenChat(contactId.BareIdentifier);
         }
 
         /// <summary>
-        /// Creates the chat.
+        ///   Creates the chat.
         /// </summary>
-        /// <param name="contactId">The contact id.</param>
+        /// <param name = "contactId">The contact id.</param>
         /// <returns></returns>
-        public XmppChat CreateChat(XmppJid contactId)
-        {
-            this.CheckSessionState();
+        public XmppChat CreateChat(string contactId) {
+            return CreateChat(new XmppJid(contactId));
+        }
+
+        /// <summary>
+        ///   Creates the chat.
+        /// </summary>
+        /// <param name = "contactId">The contact id.</param>
+        /// <returns></returns>
+        public XmppChat CreateChat(XmppJid contactId) {
+            CheckSessionState();
 
             XmppChat chat = null;
 
-            lock (this.syncObject)
+            lock (syncObject)
             {
-                if (!this.chats.ContainsKey(contactId.BareIdentifier))
+                if (!chats.ContainsKey(contactId.BareIdentifier))
                 {
-                    chat = new XmppChat(this, this.Roster[contactId.BareIdentifier]);
-                    this.chats.Add(contactId.BareIdentifier, chat);
+                    chat = new XmppChat(this, Roster[contactId.BareIdentifier]);
+                    chats.Add(contactId.BareIdentifier, chat);
 
-                    chat.ChatClosed += new EventHandler(OnChatClosed);
+                    chat.ChatClosed += OnChatClosed;
                 }
                 else
                 {
-                    chat = this.chats[contactId.BareIdentifier];
+                    chat = chats[contactId.BareIdentifier];
                 }
             }
 
             return chat;
         }
-        
-        #endregion
-        
-        #region · MUC Methods ·
 
         /// <summary>
-        /// Creates the chat room.
+        ///   Creates the chat room.
         /// </summary>
-        /// <param name="chatRoomName">Name of the chat room.</param>
+        /// <param name = "chatRoomName">Name of the chat room.</param>
         /// <returns></returns>
-        public XmppChatRoom EnterChatRoom()
-        {
-            return this.EnterChatRoom(XmppIdentifierGenerator.Generate());
+        public XmppChatRoom EnterChatRoom() {
+            return EnterChatRoom(XmppIdentifierGenerator.Generate());
         }
 
         /// <summary>
-        /// Creates the chat room.
+        ///   Creates the chat room.
         /// </summary>
-        /// <param name="chatRoomName">Name of the chat room.</param>
+        /// <param name = "chatRoomName">Name of the chat room.</param>
         /// <returns></returns>
-        public XmppChatRoom EnterChatRoom(string chatRoomName)
-        {
-            this.CheckSessionState();
+        public XmppChatRoom EnterChatRoom(string chatRoomName) {
+            CheckSessionState();
 
-            XmppService     service     = this.ServiceDiscovery.GetService(XmppServiceCategory.Conference);
-            XmppChatRoom    chatRoom    = null;
-            XmppJid         chatRoomId  = new XmppJid
-            (
+            XmppService service = ServiceDiscovery.GetService(XmppServiceCategory.Conference);
+            XmppChatRoom chatRoom = null;
+            var chatRoomId = new XmppJid
+                (
                 chatRoomName,
                 service.Identifier,
-                this.UserId.UserName
-            );
+                UserId.UserName
+                );
 
             if (service != null)
             {
@@ -475,170 +405,160 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
 
             return chatRoom;
         }
-        
-        #endregion
-                       
-        #region · Publish Methods ·
-        
+
         /// <summary>
-        /// Publishes user tune information
+        ///   Publishes user tune information
         /// </summary>
-        public IXmppSession PublishTune(XmppUserTuneEvent tuneEvent)
-        {
-            IQ 				iq 		= new IQ();
-            PubSub			pubsub	= new PubSub();
-            PubSubPublish 	publish = new PubSubPublish();
-            PubSubItem		item	= new PubSubItem();
-            Tune			tune	= new Tune();
-            
+        public IXmppSession PublishTune(XmppUserTuneEvent tuneEvent) {
+            var iq = new IQ();
+            var pubsub = new PubSub();
+            var publish = new PubSubPublish();
+            var item = new PubSubItem();
+            var tune = new Tune();
+
             iq.Items.Add(pubsub);
             pubsub.Items.Add(publish);
-            publish.Items.Add(item);       	
-            
-            iq.From			= this.UserId.ToString();
-            iq.ID			= XmppIdentifierGenerator.Generate();
-            iq.Type 		= IQType.Set;
-            publish.Node	= XmppFeatures.UserMood;
-            item.Item		= tune;
-            tune.Artist		= tuneEvent.Artist;
-            tune.Length		= tuneEvent.Length;
-            tune.Rating		= tuneEvent.Rating;
-            tune.Source		= tuneEvent.Source;
-            tune.Title		= tuneEvent.Title;
-            tune.Track		= tuneEvent.Track;
-            tune.Uri		= tuneEvent.Uri;
-            
-            this.Send(iq);
+            publish.Items.Add(item);
 
-            return this;
-        }
-        
-        /// <summary>
-        /// Stops user tune publications
-        /// </summary>
-        public IXmppSession StopTunePublication()
-        {        
-            IQ 				iq 		= new IQ();
-            PubSub			pubsub	= new PubSub();
-            PubSubPublish 	publish = new PubSubPublish();
-            PubSubItem		item	= new PubSubItem();
-            Tune			tune	= new Tune();
-            
-            iq.Items.Add(pubsub);
-            pubsub.Items.Add(publish);
-            publish.Items.Add(item);       	
-            
-            iq.From			= this.UserId.ToString();
-            iq.ID			= XmppIdentifierGenerator.Generate();
-            iq.Type 		= IQType.Set;
-            publish.Node	= XmppFeatures.UserMood;
-            item.Item		= tune;
-            
-            this.Send(iq);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Publishes user mood information
-        /// </summary>
-        public IXmppSession PublishMood(MoodType mood, string description)
-        {
-            Mood instance = new Mood();
-
-            instance.MoodType   = mood;
-            instance.Text       = description;
-
-            this.PublishMood(new XmppUserMoodEvent(null, instance));
-
-            return this;
-        }
-
-        /// <summary>
-        /// Publishes user mood information
-        /// </summary>
-        public IXmppSession PublishMood(XmppUserMoodEvent moodEvent)
-        {
-            IQ 				iq 		= new IQ();
-            PubSub			pubsub	= new PubSub();
-            PubSubPublish 	publish = new PubSubPublish();
-            PubSubItem		item	= new PubSubItem();
-            Mood 			mood 	= new Mood();
-            
-            iq.Items.Add(pubsub);
-            pubsub.Items.Add(publish);
-            publish.Items.Add(item);       	
-            
-            iq.From			= this.UserId.ToString();
-            iq.ID			= XmppIdentifierGenerator.Generate();
-            iq.Type 		= IQType.Set;
-            publish.Node	= XmppFeatures.UserMood;
-            item.Item		= mood;
-            mood.MoodType	= (MoodType)Enum.Parse(typeof(MoodType), moodEvent.Mood);
-            mood.Text		= moodEvent.Text;
-            
-            this.Send(iq);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Publishes the display name.
-        /// </summary>
-        /// <param name="displayName">The display name.</param>
-        public IXmppSession PublishDisplayName(string displayName)
-        {
-            // Publish the display name ( nickname )
-            IQ          iq      = new IQ();
-            VCardData   vcard   = new VCardData();
-
-            iq.ID   = XmppIdentifierGenerator.Generate();
+            iq.From = UserId.ToString();
+            iq.ID = XmppIdentifierGenerator.Generate();
             iq.Type = IQType.Set;
-            iq.From = this.UserId.ToString();
+            publish.Node = XmppFeatures.UserMood;
+            item.Item = tune;
+            tune.Artist = tuneEvent.Artist;
+            tune.Length = tuneEvent.Length;
+            tune.Rating = tuneEvent.Rating;
+            tune.Source = tuneEvent.Source;
+            tune.Title = tuneEvent.Title;
+            tune.Track = tuneEvent.Track;
+            tune.Uri = tuneEvent.Uri;
+
+            Send(iq);
+
+            return this;
+        }
+
+        /// <summary>
+        ///   Stops user tune publications
+        /// </summary>
+        public IXmppSession StopTunePublication() {
+            var iq = new IQ();
+            var pubsub = new PubSub();
+            var publish = new PubSubPublish();
+            var item = new PubSubItem();
+            var tune = new Tune();
+
+            iq.Items.Add(pubsub);
+            pubsub.Items.Add(publish);
+            publish.Items.Add(item);
+
+            iq.From = UserId.ToString();
+            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.Type = IQType.Set;
+            publish.Node = XmppFeatures.UserMood;
+            item.Item = tune;
+
+            Send(iq);
+
+            return this;
+        }
+
+        /// <summary>
+        ///   Publishes user mood information
+        /// </summary>
+        public IXmppSession PublishMood(MoodType mood, string description) {
+            var instance = new Mood();
+
+            instance.MoodType = mood;
+            instance.Text = description;
+
+            PublishMood(new XmppUserMoodEvent(null, instance));
+
+            return this;
+        }
+
+        /// <summary>
+        ///   Publishes user mood information
+        /// </summary>
+        public IXmppSession PublishMood(XmppUserMoodEvent moodEvent) {
+            var iq = new IQ();
+            var pubsub = new PubSub();
+            var publish = new PubSubPublish();
+            var item = new PubSubItem();
+            var mood = new Mood();
+
+            iq.Items.Add(pubsub);
+            pubsub.Items.Add(publish);
+            publish.Items.Add(item);
+
+            iq.From = UserId.ToString();
+            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.Type = IQType.Set;
+            publish.Node = XmppFeatures.UserMood;
+            item.Item = mood;
+            mood.MoodType = (MoodType) Enum.Parse(typeof (MoodType), moodEvent.Mood);
+            mood.Text = moodEvent.Text;
+
+            Send(iq);
+
+            return this;
+        }
+
+        /// <summary>
+        ///   Publishes the display name.
+        /// </summary>
+        /// <param name = "displayName">The display name.</param>
+        public IXmppSession PublishDisplayName(string displayName) {
+            // Publish the display name ( nickname )
+            var iq = new IQ();
+            var vcard = new VCardData();
+
+            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.Type = IQType.Set;
+            iq.From = UserId.ToString();
 
             vcard.NickName = displayName;
 
             iq.Items.Add(vcard);
 
-            this.Send(iq);
+            Send(iq);
 
             return this;
         }
 
         /// <summary>
-        /// Publishes the avatar.
+        ///   Publishes the avatar.
         /// </summary>
-        /// <param name="mimetype">The mimetype.</param>
-        /// <param name="hash">The hash.</param>
-        /// <param name="avatarImage">The avatar image.</param>
-        public IXmppSession PublishAvatar(string mimetype, string hash, Image avatarImage)
-        {
-            MemoryStream avatarData = new MemoryStream();
+        /// <param name = "mimetype">The mimetype.</param>
+        /// <param name = "hash">The hash.</param>
+        /// <param name = "avatarImage">The avatar image.</param>
+        public IXmppSession PublishAvatar(string mimetype, string hash, Image avatarImage) {
+            var avatarData = new MemoryStream();
 
             try
             {
                 avatarImage.Save(avatarData, ImageFormat.Png);
 
                 // Publish the avatar
-                IQ          iq      = new IQ();
-                VCardData   vcard   = new VCardData();
+                var iq = new IQ();
+                var vcard = new VCardData();
 
-                iq.ID   = XmppIdentifierGenerator.Generate();
+                iq.ID = XmppIdentifierGenerator.Generate();
                 iq.Type = IQType.Set;
-                iq.From = this.UserId.ToString();
+                iq.From = UserId.ToString();
 
-                vcard.Photo.Type    = mimetype;
-                vcard.Photo.Photo   = avatarData.ToArray();
+                vcard.Photo.Type = mimetype;
+                vcard.Photo.Photo = avatarData.ToArray();
 
                 iq.Items.Add(vcard);
 
-                this.Send(iq);
+                Send(iq);
 
                 // Save the avatar
-                this.avatarStorage.SaveAvatar(this.UserId.BareIdentifier, hash, avatarData);
+                avatarStorage.SaveAvatar(UserId.BareIdentifier, hash, avatarData);
 
                 // Update session configuration
-                this.avatarStorage.Save();
+                avatarStorage.Save();
             }
             catch
             {
@@ -657,51 +577,44 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
             return this;
         }
 
-        #endregion
-
-        #region · Presence Methods ·
-
         /// <summary>
-        /// Sets as unavailable.
+        ///   Sets as unavailable.
         /// </summary>
-        public IXmppSession SetUnavailable()
-        {
-            this.CheckSessionState();
+        public IXmppSession SetUnavailable() {
+            CheckSessionState();
 
-            this.Presence.SetUnavailable();
+            Presence.SetUnavailable();
 
             return this;
         }
 
         /// <summary>
-        /// Sets the presence.
+        ///   Sets the presence.
         /// </summary>
-        /// <param name="showAs">The show as.</param>
-        public IXmppSession SetPresence(XmppPresenceState newPresence)
-        {
-            this.SetPresence(newPresence, null);
+        /// <param name = "showAs">The show as.</param>
+        public IXmppSession SetPresence(XmppPresenceState newPresence) {
+            SetPresence(newPresence, null);
 
             return this;
         }
 
         /// <summary>
-        /// Sets the presence.
+        ///   Sets the presence.
         /// </summary>
-        /// <param name="newPresence">The new presence state.</param>
-        /// <param name="status">The status.</param>
-        public IXmppSession SetPresence(XmppPresenceState newPresence, string status)
-        {
+        /// <param name = "newPresence">The new presence state.</param>
+        /// <param name = "status">The status.</param>
+        public IXmppSession SetPresence(XmppPresenceState newPresence, string status) {
             switch (newPresence)
             {
                 case XmppPresenceState.Invisible:
                     throw new NotImplementedException();
 
                 case XmppPresenceState.Offline:
-                    this.Close();
+                    Close();
                     break;
 
                 default:
-                    this.SetPresence(newPresence, status, 0);
+                    SetPresence(newPresence, status, 0);
                     break;
             }
 
@@ -709,147 +622,121 @@ namespace BabelIm.Net.Xmpp.InstantMessaging
         }
 
         /// <summary>
-        /// Sets the presence.
+        ///   Sets the presence.
         /// </summary>
-        /// <param name="newPresence">The new presence state.</param>
-        /// <param name="status">The status.</param>
-        /// <param name="priority">The priority.</param>
-        public IXmppSession SetPresence(XmppPresenceState newPresence, string status, int priority)
-        {
-            this.CheckSessionState();
+        /// <param name = "newPresence">The new presence state.</param>
+        /// <param name = "status">The status.</param>
+        /// <param name = "priority">The priority.</param>
+        public IXmppSession SetPresence(XmppPresenceState newPresence, string status, int priority) {
+            CheckSessionState();
 
-            this.Presence.SetPresence(newPresence, status);
+            Presence.SetPresence(newPresence, status);
 
             return this;
         }
 
         #endregion
 
-        #region · Internal Methods ·
-
         /// <summary>
-        /// Sends a XMPP message to the server
+        ///   Sends a XMPP message to the server
         /// </summary>
-        /// <param name="message">The message to be sent</param>
-        internal void Send(object message)
-        {
-            this.connection.Send(message);
+        /// <param name = "message">The message to be sent</param>
+        internal void Send(object message) {
+            connection.Send(message);
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private void CheckSessionState()
-        {
-            if (this.connection == null || this.connection.State != XmppConnectionState.Open)
+        private void CheckSessionState() {
+            if (connection == null || connection.State != XmppConnectionState.Open)
             {
                 throw new XmppException("The session is not valid.");
             }
         }
 
-        #endregion
+        private void Subscribe() {
+            chatMessageSubscription = connection.OnMessageReceived
+                .Where(m => m.Type == MessageType.Chat && m.ChatStateNotification != XmppChatStateNotification.None)
+                .Subscribe
+                (
+                    message => { OnChatMessageReceived(message); }
+                );
+            errorMessageSubscription = connection.OnMessageReceived
+                .Where(m => m.Type == MessageType.Error)
+                .Subscribe
+                (
+                    message => { OnChatMessageReceived(message); }
+                );
 
-        #region · Message Subscriptions ·
-        
-        private void Subscribe()
-        {
-            this.chatMessageSubscription = this.connection.OnMessageReceived
-                           .Where(m => m.Type == MessageType.Chat && m.ChatStateNotification != XmppChatStateNotification.None)
-                           .Subscribe
-            (
-                message => { this.OnChatMessageReceived(message); }
-            );
-            this.errorMessageSubscription = this.connection.OnMessageReceived
-                           .Where(m => m.Type == MessageType.Error)
-                           .Subscribe
-            (
-                message => { this.OnChatMessageReceived(message); }
-            );
-
-            this.connection.AuthenticationFailiure	+= new EventHandler<XmppAuthenticationFailiureEventArgs>(OnAuthenticationFailiure);
-            this.connection.ConnectionClosed        += new EventHandler(OnConnectionClosed);
+            connection.AuthenticationFailiure += OnAuthenticationFailiure;
+            connection.ConnectionClosed += OnConnectionClosed;
         }
 
-        private void Unsubscribe()
-        {
-            if (this.chatMessageSubscription != null)
+        private void Unsubscribe() {
+            if (chatMessageSubscription != null)
             {
-                this.chatMessageSubscription.Dispose();
-                this.chatMessageSubscription = null;
+                chatMessageSubscription.Dispose();
+                chatMessageSubscription = null;
             }
-            if (this.errorMessageSubscription != null)
+            if (errorMessageSubscription != null)
             {
-                this.errorMessageSubscription.Dispose();
-                this.errorMessageSubscription = null;
+                errorMessageSubscription.Dispose();
+                errorMessageSubscription = null;
             }
 
-            this.connection.AuthenticationFailiure  -= new EventHandler<XmppAuthenticationFailiureEventArgs>(OnAuthenticationFailiure);
-            this.connection.ConnectionClosed        -= new EventHandler(OnConnectionClosed);
+            connection.AuthenticationFailiure -= OnAuthenticationFailiure;
+            connection.ConnectionClosed -= OnConnectionClosed;
         }
-        
-        #endregion
-        
-        #region · Message Handlers ·
 
-        private void OnAuthenticationFailiure(object sender, XmppAuthenticationFailiureEventArgs e)
-        {
-            this.Close();
+        private void OnAuthenticationFailiure(object sender, XmppAuthenticationFailiureEventArgs e) {
+            Close();
 
-            if (this.AuthenticationFailed != null)
+            if (AuthenticationFailed != null)
             {
-                this.AuthenticationFailed(this, e);
+                AuthenticationFailed(this, e);
             }
         }
 
-        private void OnChatMessageReceived(XmppMessage message)
-        {
+        private void OnChatMessageReceived(XmppMessage message) {
             XmppChat chat = null;
 
             if (String.IsNullOrEmpty(message.Body) &&
-                !this.chats.ContainsKey(message.From.BareIdentifier))
+                !chats.ContainsKey(message.From.BareIdentifier))
             {
             }
             else
             {
-                if (!this.chats.ContainsKey(message.From.BareIdentifier))
+                if (!chats.ContainsKey(message.From.BareIdentifier))
                 {
-                    chat = this.CreateChat(message.From);
+                    chat = CreateChat(message.From);
                 }
                 else
                 {
-                    chat = this.chats[message.From.BareIdentifier];
+                    chat = chats[message.From.BareIdentifier];
                 }
 
-                this.messageReceivedSubject.OnNext(message);
+                messageReceivedSubject.OnNext(message);
             }
         }
 
-        private void OnErrorMessageReceived(XmppMessage message)
-        {
-            this.messageReceivedSubject.OnNext(message);
+        private void OnErrorMessageReceived(XmppMessage message) {
+            messageReceivedSubject.OnNext(message);
         }
 
-        private void OnChatClosed(object sender, EventArgs e)
-        {
-            XmppChat chat = (XmppChat)sender;
+        private void OnChatClosed(object sender, EventArgs e) {
+            var chat = (XmppChat) sender;
 
             if (chat != null)
             {
-                chat.ChatClosed -= new EventHandler(OnChatClosed);
+                chat.ChatClosed -= OnChatClosed;
 
                 if (chat.Contact != null)
                 {
-                    this.chats.Remove(chat.Contact.ContactId.BareIdentifier);
+                    chats.Remove(chat.Contact.ContactId.BareIdentifier);
                 }
             }
         }
 
-        private void OnConnectionClosed(object sender, EventArgs e)
-        {
-            this.Close();
+        private void OnConnectionClosed(object sender, EventArgs e) {
+            Close();
         }
-
-        #endregion
-    }
+        }
 }
