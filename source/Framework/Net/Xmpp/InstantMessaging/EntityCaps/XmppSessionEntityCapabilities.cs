@@ -36,7 +36,7 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>
     ///   Client capabilities (XEP-0115)
     /// </summary>

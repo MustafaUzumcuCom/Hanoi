@@ -31,7 +31,7 @@ using System;
 using System.Linq;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>
     ///   Client capabilities (XEP-0115)
     /// </summary>

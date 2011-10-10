@@ -30,7 +30,7 @@
 using System;
 using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Core.Authentication;
-using BabelIm.Net.Xmpp.InstantMessaging.Configuration;
+using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat;
 using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;

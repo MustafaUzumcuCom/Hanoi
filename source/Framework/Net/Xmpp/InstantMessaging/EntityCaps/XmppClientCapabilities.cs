@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>
     ///   Client capabilities (XEP-0115)
     /// </summary>

@@ -36,7 +36,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>
     ///   Entity capabilities store
     /// </summary>

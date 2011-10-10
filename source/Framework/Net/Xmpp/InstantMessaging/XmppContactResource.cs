@@ -33,6 +33,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using BabelIm.Net.Xmpp.Core;
+using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
