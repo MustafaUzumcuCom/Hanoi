@@ -35,7 +35,6 @@ using BabelIm.Net.Xmpp.Serialization.Core.Streams;
 using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCard;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.Extensions.XmppPing;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register;

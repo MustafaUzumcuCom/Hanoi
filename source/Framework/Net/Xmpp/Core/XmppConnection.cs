@@ -38,11 +38,10 @@ using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 using BabelIm.Net.Xmpp.Serialization.Core.Streams;
 using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCard;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.Extensions.XmppPing;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
+using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
 

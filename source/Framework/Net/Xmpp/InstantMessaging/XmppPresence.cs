@@ -28,7 +28,10 @@
 */
 
 using BabelIm.Net.Xmpp.Core;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
+using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
+using ShowType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.ShowType;
+using PresenceType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
+using Status = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Status;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>
