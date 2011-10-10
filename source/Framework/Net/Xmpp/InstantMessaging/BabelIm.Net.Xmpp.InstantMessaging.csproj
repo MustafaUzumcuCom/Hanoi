@@ -73,10 +73,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AMIPClientWrapper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\AMIP\AMIPClientWrapper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -98,7 +94,6 @@
     <Compile Include="Avatar.cs" />
     <Compile Include="AvatarStorage.cs" />
     <Compile Include="MultiUserChat\XmppChatRoomStatusCode.cs" />
-    <Compile Include="PersonalEventing\AmipNowPlayingListerner.cs" />
     <Compile Include="IXmppSession.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="PropertyExtensions.cs" />

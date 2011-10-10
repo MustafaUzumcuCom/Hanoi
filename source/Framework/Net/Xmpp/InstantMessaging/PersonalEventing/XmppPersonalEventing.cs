@@ -41,7 +41,6 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     public sealed class XmppPersonalEventing
         : ObservableObject {
         private readonly List<string> features;
-        private readonly AmipNowPlayingListerner nowPlayingListener;
         private readonly List<string> pendingMessages;
         private readonly XmppSession session;
         private IDisposable infoQueryErrorSubscription;
@@ -57,7 +56,6 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
             this.session = session;
             pendingMessages = new List<string>();
             features = new List<string>();
-            nowPlayingListener = new AmipNowPlayingListerner(this.session);
 
             SubscribeToSessionState();
         }
@@ -147,7 +145,6 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
                             {
                                 features.Clear();
                                 pendingMessages.Clear();
-                                nowPlayingListener.Stop();
                                 Unsubscribe();
                             }
                         }
@@ -195,7 +192,7 @@ namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
 
                 if (SupportsUserTune)
                 {
-                    nowPlayingListener.Start();
+
                 }
             }
         }
