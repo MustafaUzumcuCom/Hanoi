@@ -32,7 +32,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Org.Mentalis.Network.ProxySocket.Authentication {
+namespace BabelIm.Net.Xmpp.Core.Sockets {
     /// <summary>
     ///   Implements a SOCKS authentication scheme.
     /// </summary>

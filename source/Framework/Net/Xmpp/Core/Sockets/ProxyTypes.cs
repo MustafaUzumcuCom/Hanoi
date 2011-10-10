@@ -30,7 +30,7 @@
 
 // Implements a number of classes to allow Sockets to connect trough a firewall.
 
-namespace Org.Mentalis.Network.ProxySocket {
+namespace BabelIm.Net.Xmpp.Core.Sockets {
     /// <summary>
     ///   Specifies the type of proxy servers that an instance of the ProxySocket class can use.
     /// </summary>

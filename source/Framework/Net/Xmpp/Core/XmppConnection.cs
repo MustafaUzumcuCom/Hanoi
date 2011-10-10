@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using BabelIm.Net.Xmpp.Core.Authentication;
 using BabelIm.Net.Xmpp.Core.Transports;
 using BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;

@@ -31,7 +31,7 @@
 using System;
 using System.Threading;
 
-namespace Org.Mentalis.Network.ProxySocket {
+namespace BabelIm.Net.Xmpp.Core.Sockets {
     /// <summary>
     ///   A class that implements the IAsyncResult interface. Objects from this class are returned by the BeginConnect method of the ProxySocket class.
     /// </summary>

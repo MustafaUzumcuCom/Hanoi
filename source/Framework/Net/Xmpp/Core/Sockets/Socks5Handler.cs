@@ -32,9 +32,8 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Org.Mentalis.Network.ProxySocket.Authentication;
 
-namespace Org.Mentalis.Network.ProxySocket {
+namespace BabelIm.Net.Xmpp.Core.Sockets {
     /// <summary>
     ///   Implements the SOCKS5 protocol.
     /// </summary>

@@ -30,7 +30,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace BabelIm.Net.Xmpp.Core.Authentication {
     /// <summary>
     ///   Base class for authentication mechanims implementations.
     /// </summary>
@@ -103,7 +103,7 @@ namespace BabelIm.Net.Xmpp.Core {
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:BabelIm.Net.Xmpp.Core.XmppAuthenticator" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:BabelIm.Net.Xmpp.Core.Authentication.XmppAuthenticator" /> is reclaimed by garbage collection.
         /// </summary>
         ~XmppAuthenticator() {
             Dispose(false);
@@ -156,7 +156,7 @@ namespace BabelIm.Net.Xmpp.Core {
         ///   Called when an authentication failiure occurs.
         /// </summary>
         /// <param name = "sender">The sender.</param>
-        /// <param name = "e">The <see cref = "BabelIm.Net.Xmpp.Core.XmppAuthenticationFailiureEventArgs" /> instance containing the event data.</param>
+        /// <param name = "e">The <see cref = "XmppAuthenticationFailiureEventArgs" /> instance containing the event data.</param>
         protected virtual void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
             if (pendingMessages != null)
             {

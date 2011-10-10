@@ -29,7 +29,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace BabelIm.Net.Xmpp.Core.Authentication {
     /// <summary>
     ///   EventArgs for the <see cref = "XmppConnection.AuthenticationFailiure" /> event.
     /// </summary>

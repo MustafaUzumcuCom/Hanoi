@@ -33,7 +33,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Org.Mentalis.Network.ProxySocket {
+namespace BabelIm.Net.Xmpp.Core.Sockets {
     /// <summary>
     ///   Implements the SOCKS4[A] protocol.
     /// </summary>

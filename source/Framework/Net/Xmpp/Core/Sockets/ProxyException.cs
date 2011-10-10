@@ -30,7 +30,7 @@
 
 using System;
 
-namespace Org.Mentalis.Network.ProxySocket {
+namespace BabelIm.Net.Xmpp.Core.Sockets {
     /// <summary>
     ///   The exception that is thrown when a proxy error occurs.
     /// </summary>

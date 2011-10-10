@@ -30,7 +30,7 @@
 
 using System;
 
-namespace Org.Mentalis.Network.ProxySocket {
+namespace BabelIm.Net.Xmpp.Core.Sockets {
     /// <summary>
     ///   References the callback method to be called when the protocol negotiation is completed.
     /// </summary>
