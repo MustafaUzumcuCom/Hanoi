@@ -1,27 +1,20 @@
-﻿using BabelIm.Controls.PivotControl;
-
-namespace System.Windows.Controls
-{
-    public static class ItemCollectionExtensions
-    {
-        public static FrameworkElement GetItem(this ItemCollection items, int index)
-        {
+﻿namespace System.Windows.Controls {
+    public static class ItemCollectionExtensions {
+        public static FrameworkElement GetItem(this ItemCollection items, int index) {
             if ((index >= 0) && (index < items.Count))
-                return (FrameworkElement)items[index];
+                return (FrameworkElement) items[index];
 
             return null;
         }
 
-        public static FrameworkElement GetLastItem(this ItemCollection items)
-        {
+        public static FrameworkElement GetLastItem(this ItemCollection items) {
             if (items.Count == 0)
                 return null;
 
-            return (FrameworkElement)items[items.Count - 1];
+            return (FrameworkElement) items[items.Count - 1];
         }
 
-        public static int GetIndexOfPosition(this ItemCollection items, double position)
-        {
+        public static int GetIndexOfPosition(this ItemCollection items, double position) {
             if (items.Count == 0)
                 return -1;
 
@@ -32,7 +25,7 @@ namespace System.Windows.Controls
             double start = 0.0;
             for (int i = 0; i < items.Count; i++)
             {
-                FrameworkElement item = (FrameworkElement)items[i];
+                var item = (FrameworkElement) items[i];
                 if ((position >= start) && (position < start + item.Width))
                     return i;
 
@@ -43,8 +36,7 @@ namespace System.Windows.Controls
             return 0;
         }
 
-        public static double GetItemPosition(this ItemCollection items, int index)
-        {
+        public static double GetItemPosition(this ItemCollection items, int index) {
             double position = 0.0;
             if ((index >= 0) && (index < items.Count))
             {
@@ -59,13 +51,11 @@ namespace System.Windows.Controls
             return position;
         }
 
-        public static double GetLastItemPosition(this ItemCollection items)
-        {
+        public static double GetLastItemPosition(this ItemCollection items) {
             return items.GetItemPosition(items.Count - 1);
         }
 
-        public static double GetItemWidth(this ItemCollection items, int index)
-        {
+        public static double GetItemWidth(this ItemCollection items, int index) {
             FrameworkElement item = items.GetItem(index);
             if (null != item)
                 return item.Width;
@@ -73,8 +63,7 @@ namespace System.Windows.Controls
             return 0.0;
         }
 
-        public static double GetTotalWidth(this ItemCollection items)
-        {
+        public static double GetTotalWidth(this ItemCollection items) {
             FrameworkElement item = items.GetLastItem();
             if (null == item)
                 return 0.0;

@@ -1,58 +1,90 @@
 ﻿using System;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Windows.Media.Imaging;
 
-namespace BabelIm.Controls.PivotControl
-{
+namespace BabelIm.Controls.PivotControl {
     /// <summary>
-    /// Helper class for PivotControl.
-    /// Implements the UI logic.
+    ///   Helper class for PivotControl.
+    ///   Implements the UI logic.
     /// </summary>
-    internal class PivotView
-    {
-        private const string HeadersPanelHostName   = "HeadersPanelHost";
-        private const string ItemsPanelName         = "ItemsPanelHost";
-        private const double AnimationDuration      = 500.0;
+    internal class PivotView {
+        private const string HeadersPanelHostName = "HeadersPanelHost";
+        private const string ItemsPanelName = "ItemsPanelHost";
+        private const double AnimationDuration = 500.0;
+
+        private readonly UIElementCollection Headers;
+        private readonly Panel HeadersPanel;
+        private readonly ItemCollection Items;
+        private readonly Panel LayoutRoot;
+        private readonly PivotControl Parent;
+        private ScrollHost HeadersHost;
+        private ScrollHost ItemsHost;
+        private Storyboard Storyboard;
+        private int _newindex = -1;
+        private bool _ready;
+
+        public PivotView(PivotControl parent) {
+            Parent = parent;
+            LayoutRoot = Parent.LayoutRoot;
+            HeadersPanel = Parent.HeadersPanel;
+            Headers = HeadersPanel.Children;
+            Items = Parent.Items;
+
+            HeadersHost.Transform = new TranslateTransform();
+            ItemsHost.Transform = new TranslateTransform();
+        }
+
+        public double HeaderPosition {
+            get {
+                Initialize();
+
+                return -HeadersHost.Transform.X/HeadersHost.Speed;
+            }
+            set {
+                Initialize();
+
+                // nothing to do
+                if (Items.Count == 0)
+                    return;
+
+                // complete current animation
+                ScrollSkip();
+
+                // adjust transforms
+                HeadersHost.Transform.X = -value*HeadersHost.Speed;
+            }
+        }
+
+        public double Position {
+            get {
+                Initialize();
+
+                return -ItemsHost.Transform.X/ItemsHost.Speed;
+            }
+            set {
+                Initialize();
+
+                // nothing to do
+                if (Items.Count == 0)
+                    return;
+
+                // complete current animation
+                ScrollSkip();
+
+                // adjust transforms
+                ItemsHost.Transform.X = -value*ItemsHost.Speed;
+            }
+        }
 
         public event ScrollCompletedEventHandler ScrollCompleted;
 
-        private PivotControl        Parent;
-        private Panel               LayoutRoot;
-        private Panel               HeadersPanel;
-        private UIElementCollection Headers;
-        private ItemCollection      Items;
-        private ScrollHost          HeadersHost;
-        private ScrollHost          ItemsHost;        
-        private Storyboard          Storyboard;        
-        private bool                _ready      = false;
-        private int                 _newindex   = -1;
-
-        public PivotView(PivotControl parent)
-        {
-            Parent          = parent;
-            LayoutRoot      = Parent.LayoutRoot;
-            HeadersPanel    = Parent.HeadersPanel;
-            Headers         = HeadersPanel.Children;
-            Items           = Parent.Items;
-
-            HeadersHost.Transform   = new TranslateTransform();
-            ItemsHost.Transform     = new TranslateTransform();
-        }
-
-        private void Initialize()
-        {
+        private void Initialize() {
             if (!_ready)
             {
                 // fetch template elements
-                Panel HeadersPanelHost = LayoutRoot.FindName(HeadersPanelHostName) as Panel;
+                var HeadersPanelHost = LayoutRoot.FindName(HeadersPanelHostName) as Panel;
 
                 if (null == HeadersPanelHost)
                 {
@@ -76,7 +108,7 @@ namespace BabelIm.Controls.PivotControl
                     // unselect all headers
                     UpdateHeadersVisuals(-1);
                     HeadersPanel.UpdateLayout();
-                    
+
                     //// insert left/right bitmap duplicates
                     //double width    = HeadersPanel.ActualWidth;
                     //double height   = HeadersPanel.ActualHeight;
@@ -113,17 +145,15 @@ namespace BabelIm.Controls.PivotControl
             }
         }
 
-        public void Invalidate(bool lazy = true)
-        {
+        public void Invalidate(bool lazy = true) {
             _ready = false;
 
             // reset now ?
             if (!lazy) Initialize();
         }
 
-        public void UpdateVisuals(int index)
-        {
-            PivotItem item = (PivotItem)Items.GetItem(index);
+        public void UpdateVisuals(int index) {
+            var item = (PivotItem) Items.GetItem(index);
 
             if (null != item)
             {
@@ -132,9 +162,8 @@ namespace BabelIm.Controls.PivotControl
             }
         }
 
-        private void UpdateVisuals(int index, double pos)
-        {
-            PivotItem item = (PivotItem)Items.GetItem(index);
+        private void UpdateVisuals(int index, double pos) {
+            var item = (PivotItem) Items.GetItem(index);
             if (null != item)
             {
                 // update title
@@ -142,8 +171,7 @@ namespace BabelIm.Controls.PivotControl
             }
         }
 
-        public void UpdateHeadersVisuals(int index)
-        {
+        public void UpdateHeadersVisuals(int index) {
             // reset header template for each item
             foreach (ContentPresenter item in Headers)
             {
@@ -153,13 +181,12 @@ namespace BabelIm.Controls.PivotControl
             // highlight selected header template
             if ((index >= 0) && (index < Headers.Count))
             {
-                ContentPresenter item0 = (ContentPresenter)Headers[index];
+                var item0 = (ContentPresenter) Headers[index];
                 item0.ContentTemplate = Parent.SelectedHeaderTemplate;
             }
         }
 
-        public void MoveTo(int index)
-        {
+        public void MoveTo(int index) {
             Initialize();
 
             // nothing to do
@@ -179,8 +206,7 @@ namespace BabelIm.Controls.PivotControl
             Position = Items.GetItemPosition(index);
         }
 
-        public void ScrollTo(int index)
-        {
+        public void ScrollTo(int index) {
             Initialize();
 
             // nothing to do
@@ -188,11 +214,10 @@ namespace BabelIm.Controls.PivotControl
                 return;
 
             // animate to new position
-            this.AnimateStart(index, AnimationDuration);
+            AnimateStart(index, AnimationDuration);
         }
 
-        public void ScrollSkip()
-        {
+        public void ScrollSkip() {
             Initialize();
 
             // nothing to do
@@ -210,56 +235,7 @@ namespace BabelIm.Controls.PivotControl
             }
         }
 
-        public double HeaderPosition
-        {
-            get
-            {
-                Initialize();
-
-                return -HeadersHost.Transform.X / HeadersHost.Speed;
-            }
-            set
-            {
-                Initialize();
-
-                // nothing to do
-                if (Items.Count == 0)
-                    return;
-
-                // complete current animation
-                ScrollSkip();
-
-                // adjust transforms
-                HeadersHost.Transform.X = -value * HeadersHost.Speed;
-            }
-        }
-
-        public double Position
-        {
-            get
-            {
-                Initialize();
-
-                return -ItemsHost.Transform.X / ItemsHost.Speed;
-            }
-            set
-            {
-                Initialize();
-
-                // nothing to do
-                if (Items.Count == 0)
-                    return;
-
-                // complete current animation
-                ScrollSkip();
-
-                // adjust transforms
-                ItemsHost.Transform.X = -value * ItemsHost.Speed;
-            }
-        }
-
-        private void AnimateStart(int index, double milliseconds = 0)
-        {
+        private void AnimateStart(int index, double milliseconds = 0) {
             Initialize();
 
             // items positions
@@ -267,7 +243,7 @@ namespace BabelIm.Controls.PivotControl
             double offsetItems = 0;
 
             // items
-            PivotItem item = (PivotItem)Items.GetItem(Parent.SelectedIndex);
+            var item = (PivotItem) Items.GetItem(Parent.SelectedIndex);
             PivotItem itemX = null;
 
             // item limits
@@ -284,9 +260,9 @@ namespace BabelIm.Controls.PivotControl
                 UpdateVisuals(indexN, offsetItems);
                 UpdateHeadersVisuals(indexN);
                 index = indexN;
-                itemX = (PivotItem)Items.GetItem(indexN);
+                itemX = (PivotItem) Items.GetItem(indexN);
             }
-            // back to first
+                // back to first
             else if (index > indexN)
             {
                 HeaderPosition -= HeadersPanel.ActualWidth;
@@ -296,9 +272,9 @@ namespace BabelIm.Controls.PivotControl
                 UpdateVisuals(index0, offsetItems);
                 UpdateHeadersVisuals(index0);
                 index = index0;
-                itemX = (PivotItem)Items.GetItem(index0);
+                itemX = (PivotItem) Items.GetItem(index0);
             }
-            // normal scroll
+                // normal scroll
             else
             {
                 offsetHeaders = Headers.GetItemPosition(index);
@@ -306,7 +282,7 @@ namespace BabelIm.Controls.PivotControl
                 offsetItems = Position - Items.GetItemPosition(Parent.SelectedIndex) + Items.GetItemPosition(index);
                 UpdateVisuals(index, offsetItems);
                 UpdateHeadersVisuals(index);
-                itemX = (PivotItem)Items.GetItem(index);
+                itemX = (PivotItem) Items.GetItem(index);
             }
 
             // target index
@@ -315,9 +291,11 @@ namespace BabelIm.Controls.PivotControl
 
             // start a new storyboard
             Storyboard = new Storyboard();
-            Storyboard.Completed += new EventHandler(Storyboard_Completed);
-            Storyboard.Children.Add(CreateAnimation(HeadersHost.Transform, TranslateTransform.XProperty, -offsetHeaders, milliseconds));
-            Storyboard.Children.Add(CreateAnimation(ItemsHost.Transform, TranslateTransform.XProperty, -offsetItems, milliseconds));
+            Storyboard.Completed += Storyboard_Completed;
+            Storyboard.Children.Add(CreateAnimation(HeadersHost.Transform, TranslateTransform.XProperty, -offsetHeaders,
+                                                    milliseconds));
+            Storyboard.Children.Add(CreateAnimation(ItemsHost.Transform, TranslateTransform.XProperty, -offsetItems,
+                                                    milliseconds));
             if (item != itemX)
             {
                 item.Opacity = 1.0;
@@ -331,32 +309,31 @@ namespace BabelIm.Controls.PivotControl
             Parent.Title = itemX.Title;
         }
 
-        public DoubleAnimation CreateAnimation(DependencyObject obj, DependencyProperty prop, double value, double milliseconds, EasingMode easing = EasingMode.EaseOut)
-        {
-            CubicEase ease = new CubicEase() { EasingMode = easing };
-            DoubleAnimation animation = new DoubleAnimation
-            {
-                Duration = new Duration(TimeSpan.FromMilliseconds(milliseconds)),
-                From = Convert.ToDouble(obj.GetValue(prop)),
-                To = Convert.ToDouble(value),
-                FillBehavior = FillBehavior.HoldEnd,
-                EasingFunction = ease
-            };
+        public DoubleAnimation CreateAnimation(DependencyObject obj, DependencyProperty prop, double value,
+                                               double milliseconds, EasingMode easing = EasingMode.EaseOut) {
+            var ease = new CubicEase {EasingMode = easing};
+            var animation = new DoubleAnimation
+                                {
+                                    Duration = new Duration(TimeSpan.FromMilliseconds(milliseconds)),
+                                    From = Convert.ToDouble(obj.GetValue(prop)),
+                                    To = Convert.ToDouble(value),
+                                    FillBehavior = FillBehavior.HoldEnd,
+                                    EasingFunction = ease
+                                };
             Storyboard.SetTarget(animation, obj);
             Storyboard.SetTargetProperty(animation, new PropertyPath(prop));
 
             return animation;
         }
 
-        private void Storyboard_Completed(object sender, EventArgs e)
-        {
-            Storyboard sb = sender as Storyboard;
+        private void Storyboard_Completed(object sender, EventArgs e) {
+            var sb = sender as Storyboard;
             if (null != sb)
-                sb.Completed -= new EventHandler(Storyboard_Completed);
+                sb.Completed -= Storyboard_Completed;
 
             // raise event for any listener out there
             if (null != ScrollCompleted)
-                ScrollCompleted(this, new ScrollCompletedEventArgs() { SelectedIndex = _newindex });
+                ScrollCompleted(this, new ScrollCompletedEventArgs {SelectedIndex = _newindex});
         }
     }
 }

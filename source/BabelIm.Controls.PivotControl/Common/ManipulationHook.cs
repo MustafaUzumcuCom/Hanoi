@@ -1,30 +1,26 @@
 ﻿using System;
-using System.Net;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Windows.Controls.Primitives;
 
-namespace BabelIm.Controls.PivotControl
-{
-    public class ManipulationHook
-    {
-        public delegate void OnManipulationDeltaHandler(ManipulationDeltaEventArgs e);
+namespace BabelIm.Controls.PivotControl {
+    public class ManipulationHook {
+        #region Delegates
+
         public delegate void OnManipulationCompletedHandler(ManipulationCompletedEventArgs e);
 
-        private UIElement _source;
-        private bool _is_thumb;
-        private bool _is_button;
-        private OnManipulationDeltaHandler _delta;
-        private OnManipulationCompletedHandler _completed;
+        public delegate void OnManipulationDeltaHandler(ManipulationDeltaEventArgs e);
 
-        public bool Hook(UIElement source)
-        {
+        #endregion
+
+        private OnManipulationCompletedHandler _completed;
+        private OnManipulationDeltaHandler _delta;
+        private bool _is_button;
+        private bool _is_thumb;
+        private UIElement _source;
+
+        public bool Hook(UIElement source) {
             // clear existing hooks
             UnHook();
 
@@ -32,14 +28,13 @@ namespace BabelIm.Controls.PivotControl
             _source = source;
 
             // derived from type ?
-            _is_button = IsSubClassOf(_source, typeof(ButtonBase));
-            _is_thumb = IsSubClassOf(_source, typeof(Thumb));
+            _is_button = IsSubClassOf(_source, typeof (ButtonBase));
+            _is_thumb = IsSubClassOf(_source, typeof (Thumb));
 
             return true;
         }
 
-        public bool HookDeltaHandler(OnManipulationDeltaHandler callback)
-        {
+        public bool HookDeltaHandler(OnManipulationDeltaHandler callback) {
             if (null == _source) return false;
             if (null != _delta) return false;
 
@@ -49,8 +44,7 @@ namespace BabelIm.Controls.PivotControl
             return true;
         }
 
-        public bool HookCompletedHandler(OnManipulationCompletedHandler callback)
-        {
+        public bool HookCompletedHandler(OnManipulationCompletedHandler callback) {
             if (null == _source) return false;
             if (null != _completed) return false;
 
@@ -59,8 +53,7 @@ namespace BabelIm.Controls.PivotControl
             return true;
         }
 
-        public bool UnHook()
-        {
+        public bool UnHook() {
             if (null != _source)
             {
                 if (null != _delta) _source.ManipulationDelta -= ManipulationDelta;
@@ -73,8 +66,7 @@ namespace BabelIm.Controls.PivotControl
             return true;
         }
 
-        private bool IsSubClassOf(UIElement ui, Type type)
-        {
+        private bool IsSubClassOf(UIElement ui, Type type) {
             while (null != ui)
             {
                 if ((ui.GetType() == type) ||
@@ -87,8 +79,7 @@ namespace BabelIm.Controls.PivotControl
             return false;
         }
 
-        private void ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
-        {
+        private void ManipulationDelta(object sender, ManipulationDeltaEventArgs e) {
             // ignore delta event for Thumb
             // and derived.
             if (!_is_thumb)
@@ -98,8 +89,7 @@ namespace BabelIm.Controls.PivotControl
             }
         }
 
-        private void ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
-        {
+        private void ManipulationCompleted(object sender, ManipulationCompletedEventArgs e) {
             // mark event as handled for ButtonBase
             // and derived. this will disable clicks.
             if (_is_button)

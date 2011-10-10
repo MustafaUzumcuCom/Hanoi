@@ -1,24 +1,21 @@
 ﻿using System.Windows.Media;
 
-namespace BabelIm.Controls.PivotControl
-{
+namespace BabelIm.Controls.PivotControl {
     internal delegate void ScrollCompletedEventHandler(object sender, ScrollCompletedEventArgs e);
 
-    internal class ScrollCompletedEventArgs
-    {
+    internal class ScrollCompletedEventArgs {
         public int SelectedIndex;
-        public ScrollCompletedEventArgs()
-        {
-        }
     }
 
-    internal struct ScrollHost
-    {
-        public TranslateTransform Transform;
-        public double Width;
+    internal struct ScrollHost {
         public double Padding;
         public double Speed;
-        public void Reset() { Width = 0.0; Speed = 1.0; }
-    }
+        public TranslateTransform Transform;
+        public double Width;
 
+        public void Reset() {
+            Width = 0.0;
+            Speed = 1.0;
+        }
+    }
 }

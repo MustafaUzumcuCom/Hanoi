@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using System.Windows.Markup;
-using System.Collections.Specialized;
+using System.Windows.Media;
 
-
-namespace BabelIm.Controls.PivotControl
-{
-    [ContentPropertyAttribute("Items")]
-    public class PivotControl : ItemsControl
-    {
+namespace BabelIm.Controls.PivotControl {
+    [ContentProperty("Items")]
+    public class PivotControl : ItemsControl {
         // child controls
         private const string LayoutRootName = "LayoutRoot";
         internal Panel LayoutRoot { get; set; }
@@ -25,10 +18,9 @@ namespace BabelIm.Controls.PivotControl
         // scroll view
         private PivotView ScrollView;
 
-        public PivotControl()
-        {
+        public PivotControl() {
             // apply default style
-            this.DefaultStyleKey = typeof(PivotControl);
+            DefaultStyleKey = typeof (PivotControl);
 
             // create the headers panel
             HeadersPanel = new StackPanel();
@@ -38,8 +30,7 @@ namespace BabelIm.Controls.PivotControl
             SelectedIndex = -1;
         }
 
-        public override void OnApplyTemplate()
-        {
+        public override void OnApplyTemplate() {
             base.OnApplyTemplate();
 
             // get the parts
@@ -47,59 +38,52 @@ namespace BabelIm.Controls.PivotControl
 
             // scroll view
             ScrollView = new PivotView(this);
-            ScrollView.ScrollCompleted += new ScrollCompletedEventHandler(ScrollView_ScrollCompleted);
+            ScrollView.ScrollCompleted += ScrollView_ScrollCompleted;
 
             // control events
-            SizeChanged += new SizeChangedEventHandler(OnSizeChanged);
+            SizeChanged += OnSizeChanged;
         }
 
-        void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
             // clip to control layout
-            LayoutRoot.SetValue(Panel.ClipProperty, new RectangleGeometry() { Rect = new Rect(0, 0, this.Width, this.Height) });
+            LayoutRoot.SetValue(UIElement.ClipProperty, new RectangleGeometry {Rect = new Rect(0, 0, Width, Height)});
 
             // reset scroll viewer
             Dispatcher.BeginInvoke
-            (
-                (Action)delegate
-                {
-                    ScrollView.Invalidate(false);
-                }
-            );
+                (
+                    (Action) delegate { ScrollView.Invalidate(false); }
+                );
         }
 
-        public void Invalidate()
-        {
+        public void Invalidate() {
             ScrollView.Invalidate();
         }
 
         #region Navigation
-        public void ScrollPrev()
-        {
+
+        public void ScrollPrev() {
             if (null != ScrollView)
             {
                 // complete current animation
                 ScrollView.ScrollSkip();
 
                 // move to previous item
-                ScrollView.ScrollTo(this.SelectedIndex - 1);
+                ScrollView.ScrollTo(SelectedIndex - 1);
             }
         }
 
-        public void ScrollNext()
-        {
+        public void ScrollNext() {
             if (null != ScrollView)
             {
                 // complete current animation
                 ScrollView.ScrollSkip();
 
                 // move to next item
-                ScrollView.ScrollTo(this.SelectedIndex + 1);
+                ScrollView.ScrollTo(SelectedIndex + 1);
             }
         }
 
-        private void MoveTo(int index)
-        {
+        private void MoveTo(int index) {
             if (null != ScrollView)
             {
                 // complete current animation
@@ -110,25 +94,25 @@ namespace BabelIm.Controls.PivotControl
             }
         }
 
-        void ScrollView_ScrollCompleted(object sender, ScrollCompletedEventArgs e)
-        {
+        private void ScrollView_ScrollCompleted(object sender, ScrollCompletedEventArgs e) {
             // find out where we landed
             SelectedIndex = e.SelectedIndex;
 
             // special case for when we only have 1 item :
             // the above code will not trigger the SelectedIndex change
             // since we'll be staying on item(0).
-            if (this.Items.Count == 1)
+            if (Items.Count == 1)
             {
                 // reset visuals
                 MoveTo(SelectedIndex);
             }
         }
+
         #endregion
 
         #region Keyboard events
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
+
+        protected override void OnKeyUp(KeyEventArgs e) {
             switch (e.Key)
             {
                 case Key.Up:
@@ -141,16 +125,16 @@ namespace BabelIm.Controls.PivotControl
                     break;
             }
         }
+
         #endregion
 
-        private int GetHeadersIndexOf(UIElement ui)
-        {
+        private int GetHeadersIndexOf(UIElement ui) {
             UIElementCollection Headers = HeadersPanel.Children;
 
             while (null != ui)
             {
                 // UI element is ContentPresenter
-                if (ui.GetType() == typeof(ContentPresenter))
+                if (ui.GetType() == typeof (ContentPresenter))
                 {
                     // find it's index in Headers panel
                     int index = Headers.IndexOf(ui);
@@ -170,13 +154,12 @@ namespace BabelIm.Controls.PivotControl
             return -1;
         }
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
+        protected override void OnMouseDown(MouseButtonEventArgs e) {
             int index = GetHeadersIndexOf(e.OriginalSource as UIElement);
             if (index != -1)
             {
                 ScrollView.ScrollTo(index);
-    
+
                 e.Handled = true;
             }
 
@@ -184,6 +167,7 @@ namespace BabelIm.Controls.PivotControl
         }
 
         #region Multitouch events
+
 #if WINDOWS_PHONE
         ManipulationHook _hook = new ManipulationHook();
         ManipulationTracker _tracker;
@@ -350,181 +334,178 @@ namespace BabelIm.Controls.PivotControl
             ScrollView.ScrollTo(this.Items.GetIndexOfPosition(center));
         }
 #endif
+
         #endregion
 
         #region Title
+
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register(
                 "Title",
-                typeof(object),
-                typeof(PivotControl),
+                typeof (object),
+                typeof (PivotControl),
                 new PropertyMetadata(OnTitleChanged));
 
-        public object Title
-        {
+        public object Title {
             get { return GetValue(TitleProperty); }
             set { SetValue(TitleProperty, value); }
         }
 
-        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            PivotControl ctrl = (PivotControl)d;
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            var ctrl = (PivotControl) d;
             ctrl.OnTitleChanged(e.OldValue, e.NewValue);
         }
 
-        protected virtual void OnTitleChanged(object oldHeader, object newHeader)
-        {
+        protected virtual void OnTitleChanged(object oldHeader, object newHeader) {
         }
+
         #endregion Title
 
         #region DefaultItemWidth Property
+
         public static readonly DependencyProperty DefaultItemWidthProperty = DependencyProperty.Register(
             "DefaultItemWidth",
-            typeof(double),
-            typeof(PivotControl),
+            typeof (double),
+            typeof (PivotControl),
             new PropertyMetadata(OnDefaultItemWidthChanged));
 
-        public double DefaultItemWidth
-        {
-            get { return (double)GetValue(DefaultItemWidthProperty); }
+        public double DefaultItemWidth {
+            get { return (double) GetValue(DefaultItemWidthProperty); }
             set { SetValue(DefaultItemWidthProperty, value); }
         }
 
-        private static void OnDefaultItemWidthChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            PivotControl ctrl = (PivotControl)sender;
+        private static void OnDefaultItemWidthChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            var ctrl = (PivotControl) sender;
             ctrl.UpdateItemWidth();
         }
 
-        private void UpdateItemWidth()
-        {
-            foreach (object o in this.Items)
+        private void UpdateItemWidth() {
+            foreach (object o in Items)
             {
-                PivotItem item = o as PivotItem;
+                var item = o as PivotItem;
                 if (null != item)
                 {
                     // reset width for each item
-                    double width = (double)item.GetValue(PivotItem.WidthProperty);
+                    var width = (double) item.GetValue(FrameworkElement.WidthProperty);
                     if (double.IsNaN(width)) width = 0;
-                    item.SetValue(PivotItem.WidthProperty, Math.Max(width, DefaultItemWidth));
+                    item.SetValue(FrameworkElement.WidthProperty, Math.Max(width, DefaultItemWidth));
                 }
             }
         }
+
         #endregion
 
         #region DefaultItemHeight Property
+
         public static readonly DependencyProperty DefaultItemHeightProperty = DependencyProperty.Register(
             "DefaultItemHeight",
-            typeof(double),
-            typeof(PivotControl),
+            typeof (double),
+            typeof (PivotControl),
             new PropertyMetadata(OnDefaultItemHeightChanged));
 
-        public double DefaultItemHeight
-        {
-            get { return (double)GetValue(DefaultItemHeightProperty); }
+        public double DefaultItemHeight {
+            get { return (double) GetValue(DefaultItemHeightProperty); }
             set { SetValue(DefaultItemHeightProperty, value); }
         }
 
-        private static void OnDefaultItemHeightChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            PivotControl ctrl = (PivotControl)sender;
+        private static void OnDefaultItemHeightChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            var ctrl = (PivotControl) sender;
             ctrl.UpdateItemHeight();
         }
 
-        private void UpdateItemHeight()
-        {
-            foreach (object o in this.Items)
+        private void UpdateItemHeight() {
+            foreach (object o in Items)
             {
-                PivotItem item = o as PivotItem;
+                var item = o as PivotItem;
                 if (null != item)
                 {
                     // reset height for each item
-                    double height = (double)item.GetValue(PivotItem.HeightProperty);
+                    var height = (double) item.GetValue(FrameworkElement.HeightProperty);
                     if (double.IsNaN(height)) height = 0;
-                    item.SetValue(PivotItem.HeightProperty, Math.Max(height, DefaultItemHeight));
+                    item.SetValue(FrameworkElement.HeightProperty, Math.Max(height, DefaultItemHeight));
                 }
             }
         }
+
         #endregion
 
         #region TitleTemplate
+
         public static readonly DependencyProperty TitleTemplateProperty =
             DependencyProperty.Register(
                 "TitleTemplate",
-                typeof(DataTemplate),
-                typeof(PivotControl),
+                typeof (DataTemplate),
+                typeof (PivotControl),
                 new PropertyMetadata(OnTitleTemplateChanged));
 
-        public DataTemplate TitleTemplate
-        {
-            get { return (DataTemplate)GetValue(TitleTemplateProperty); }
+        public DataTemplate TitleTemplate {
+            get { return (DataTemplate) GetValue(TitleTemplateProperty); }
             set { SetValue(TitleTemplateProperty, value); }
         }
 
-        private static void OnTitleTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            PivotControl ctrl = (PivotControl)d;
-            ctrl.OnTitleTemplateChanged((DataTemplate)e.OldValue, (DataTemplate)e.NewValue);
+        private static void OnTitleTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            var ctrl = (PivotControl) d;
+            ctrl.OnTitleTemplateChanged((DataTemplate) e.OldValue, (DataTemplate) e.NewValue);
         }
 
-        protected virtual void OnTitleTemplateChanged(DataTemplate oldHeaderTemplate, DataTemplate newHeaderTemplate)
-        {
+        protected virtual void OnTitleTemplateChanged(DataTemplate oldHeaderTemplate, DataTemplate newHeaderTemplate) {
         }
+
         #endregion TitlTemplate
 
         #region UnselectedHeaderTemplate
+
         public static readonly DependencyProperty UnselectedHeaderTemplateProperty =
             DependencyProperty.Register(
                 "UnselectedHeaderTemplate",
-                typeof(DataTemplate),
-                typeof(PivotControl),
+                typeof (DataTemplate),
+                typeof (PivotControl),
                 new PropertyMetadata(OnUnselectedHeaderTemplateChanged));
 
-        public DataTemplate UnselectedHeaderTemplate
-        {
-            get { return (DataTemplate)GetValue(UnselectedHeaderTemplateProperty); }
+        public DataTemplate UnselectedHeaderTemplate {
+            get { return (DataTemplate) GetValue(UnselectedHeaderTemplateProperty); }
             set { SetValue(UnselectedHeaderTemplateProperty, value); }
         }
 
-        private static void OnUnselectedHeaderTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            PivotControl ctrl = (PivotControl)d;
-            ctrl.OnUnselectedHeaderTemplateChanged((DataTemplate)e.OldValue, (DataTemplate)e.NewValue);
+        private static void OnUnselectedHeaderTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            var ctrl = (PivotControl) d;
+            ctrl.OnUnselectedHeaderTemplateChanged((DataTemplate) e.OldValue, (DataTemplate) e.NewValue);
         }
 
-        protected virtual void OnUnselectedHeaderTemplateChanged(DataTemplate oldHeaderTemplate, DataTemplate newHeaderTemplate)
-        {
+        protected virtual void OnUnselectedHeaderTemplateChanged(DataTemplate oldHeaderTemplate,
+                                                                 DataTemplate newHeaderTemplate) {
         }
+
         #endregion UnselectedHeaderTemplate
 
         #region SelectedHeaderTemplate
+
         public static readonly DependencyProperty SelectedHeaderTemplateProperty =
             DependencyProperty.Register(
                 "SelectedHeaderTemplate",
-                typeof(DataTemplate),
-                typeof(PivotControl),
+                typeof (DataTemplate),
+                typeof (PivotControl),
                 new PropertyMetadata(OnSelectedHeaderTemplateChanged));
 
-        public DataTemplate SelectedHeaderTemplate
-        {
-            get { return (DataTemplate)GetValue(SelectedHeaderTemplateProperty); }
+        public DataTemplate SelectedHeaderTemplate {
+            get { return (DataTemplate) GetValue(SelectedHeaderTemplateProperty); }
             set { SetValue(SelectedHeaderTemplateProperty, value); }
         }
 
-        private static void OnSelectedHeaderTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            PivotControl ctrl = (PivotControl)d;
-            ctrl.OnSelectedHeaderTemplateChanged((DataTemplate)e.OldValue, (DataTemplate)e.NewValue);
+        private static void OnSelectedHeaderTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            var ctrl = (PivotControl) d;
+            ctrl.OnSelectedHeaderTemplateChanged((DataTemplate) e.OldValue, (DataTemplate) e.NewValue);
         }
 
-        protected virtual void OnSelectedHeaderTemplateChanged(DataTemplate oldHeaderTemplate, DataTemplate newHeaderTemplate)
-        {
+        protected virtual void OnSelectedHeaderTemplateChanged(DataTemplate oldHeaderTemplate,
+                                                               DataTemplate newHeaderTemplate) {
         }
+
         #endregion SelectedHeaderTemplate
 
         #region Items
-        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
-        {
+
+        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
             base.OnItemsChanged(e);
 
             switch (e.Action)
@@ -545,9 +526,9 @@ namespace BabelIm.Controls.PivotControl
             Headers.Clear();
             foreach (PivotItem item in Items)
             {
-                ContentPresenter ctrl = new ContentPresenter();
+                var ctrl = new ContentPresenter();
                 ctrl.Content = item.Header;
-                ctrl.ContentTemplate = this.UnselectedHeaderTemplate;
+                ctrl.ContentTemplate = UnselectedHeaderTemplate;
                 ctrl.UpdateLayout();
                 Headers.Add(ctrl);
             }
@@ -564,29 +545,29 @@ namespace BabelIm.Controls.PivotControl
             if (!Items.Contains(SelectedItem) && (Items.Count > 0))
                 SelectedIndex = 0;
         }
+
         #endregion
 
         #region SelectedItem
+
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
             "SelectedItem",
-            typeof(PivotItem),
-            typeof(PivotControl),
+            typeof (PivotItem),
+            typeof (PivotControl),
             new PropertyMetadata(OnSelectedItemChanged));
 
-        public PivotItem SelectedItem
-        {
-            get { return (PivotItem)GetValue(SelectedItemProperty); }
+        public PivotItem SelectedItem {
+            get { return (PivotItem) GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
         }
 
-        private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
+        private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             // this is a wrapper method for selection changes
             // the real work occurs in OnSelectedIndexChanges
 
-            PivotControl ctrl = (PivotControl)d;
-            PivotItem oldItem = (PivotItem)e.OldValue;
-            PivotItem newItem = (PivotItem)e.NewValue;
+            var ctrl = (PivotControl) d;
+            var oldItem = (PivotItem) e.OldValue;
+            var newItem = (PivotItem) e.NewValue;
 
             // find out the index for new items
             int index = ctrl.Items.IndexOf(newItem);
@@ -598,31 +579,31 @@ namespace BabelIm.Controls.PivotControl
             // change selection
             ctrl.SelectedIndex = index;
         }
+
         #endregion
 
         #region SelectedIndex
+
         public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
-            "SelectionChanged", RoutingStrategy.Bubble, typeof(SelectionChangedEventHandler), typeof(PivotControl));
+            "SelectionChanged", RoutingStrategy.Bubble, typeof (SelectionChangedEventHandler), typeof (PivotControl));
 
         public event SelectionChangedEventHandler SelectionChanged;
 
         public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(
             "SelectedIndex",
-            typeof(int),
-            typeof(PivotControl),
+            typeof (int),
+            typeof (PivotControl),
             new PropertyMetadata(OnSelectedIndexChanged));
 
-        public int SelectedIndex
-        {
-            get { return (int)GetValue(SelectedIndexProperty); }
+        public int SelectedIndex {
+            get { return (int) GetValue(SelectedIndexProperty); }
             set { SetValue(SelectedIndexProperty, value); }
         }
 
-        private static void OnSelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            PivotControl ctrl = (PivotControl)d;
-            int oldIndex = (int)e.OldValue;
-            int newIndex = (int)e.NewValue;
+        private static void OnSelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            var ctrl = (PivotControl) d;
+            var oldIndex = (int) e.OldValue;
+            var newIndex = (int) e.NewValue;
 
             // nothing to do
             if (newIndex == oldIndex)
@@ -633,30 +614,30 @@ namespace BabelIm.Controls.PivotControl
 
             // change selection
             ctrl.SelectedIndex = newIndex;
-            ctrl.SelectedItem = (PivotItem)ctrl.Items.GetItem(newIndex);
+            ctrl.SelectedItem = (PivotItem) ctrl.Items.GetItem(newIndex);
 
             // change visuals
             ctrl.MoveTo(ctrl.SelectedIndex);
 
             // raise event
-            PivotItem oldItem = (PivotItem)ctrl.Items.GetItem(oldIndex);
-            PivotItem newItem = (PivotItem)ctrl.Items.GetItem(newIndex);
-         
-            SelectionChangedEventArgs args = new SelectionChangedEventArgs
-            (
+            var oldItem = (PivotItem) ctrl.Items.GetItem(oldIndex);
+            var newItem = (PivotItem) ctrl.Items.GetItem(newIndex);
+
+            var args = new SelectionChangedEventArgs
+                (
                 SelectionChangedEvent,
-                (null == oldItem) ? new List<PivotItem> { } : new List<PivotItem> { oldItem },
-                (null == newItem) ? new List<PivotItem> { } : new List<PivotItem> { newItem }
-            );
+                (null == oldItem) ? new List<PivotItem> {} : new List<PivotItem> {oldItem},
+                (null == newItem) ? new List<PivotItem> {} : new List<PivotItem> {newItem}
+                );
 
             ctrl.OnSelectionChanged(args);
         }
 
-        protected virtual void OnSelectionChanged(SelectionChangedEventArgs args)
-        {
+        protected virtual void OnSelectionChanged(SelectionChangedEventArgs args) {
             if (null != SelectionChanged)
                 SelectionChanged(this, args);
         }
+
         #endregion
     }
 }
