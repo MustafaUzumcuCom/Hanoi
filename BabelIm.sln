@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Configuration", "so
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Controls", "source\UserInterface\BabelIm\Controls\BabelIm.Controls.csproj", "{E0F0A66D-A932-4167-A8E6-F3D7B7390B36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Controls.PivotControl", "source\BabelIm.Controls.PivotControl\BabelIm.Controls.PivotControl.csproj", "{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,14 +71,6 @@ Global
 		{E0F0A66D-A932-4167-A8E6-F3D7B7390B36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E0F0A66D-A932-4167-A8E6-F3D7B7390B36}.Release|x64.ActiveCfg = Release|Any CPU
 		{E0F0A66D-A932-4167-A8E6-F3D7B7390B36}.Release|x86.ActiveCfg = Release|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Release|x64.ActiveCfg = Release|Any CPU
-		{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
