@@ -32,44 +32,24 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "login"), Serializable]
-    public sealed class Login
-    {
-        #region · Fields ·
-
-        private string username;
+    public sealed class Login {
         private string password;
-
-        #endregion
-
-        #region · Properties ·
+        private string username;
 
         [XmlElement(ElementName = "username", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Username
-        {
-            get { return this.username; }
-            set { this.username = value; }
+        public string Username {
+            get { return username; }
+            set { username = value; }
         }
 
         [XmlElement(ElementName = "password", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Password
-        {
-            get { return this.password; }
-            set { this.password = value; }
+        public string Password {
+            get { return password; }
+            set { password = value; }
         }
-
-        #endregion
-
-        #region · Constuctors ·
-
-        public Login()
-        {
-        }
-
-        #endregion
     }
 }

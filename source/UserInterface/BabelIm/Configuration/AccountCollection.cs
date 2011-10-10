@@ -31,47 +31,32 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [Serializable]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public class AccountCollection 
-        : CollectionBase
-    {
-        #region · Indexers ·
-
-        public Account this[int index]
-        {
-            get { return (Account)this.List[index]; }
-            set { this.List[index] = value; }
+    public class AccountCollection
+        : CollectionBase {
+        public Account this[int index] {
+            get { return (Account) List[index]; }
+            set { List[index] = value; }
         }
 
-        #endregion
-
-        #region · Properties ·
-
-        public Account Add(Account obj)
-        {
-            this.List.Add(obj);
+        public Account Add(Account obj) {
+            List.Add(obj);
 
             return obj;
         }
 
-        public Account Add()
-        {
-            return this.Add(new Account());
+        public Account Add() {
+            return Add(new Account());
         }
 
-        public void Insert(int index, Account obj)
-        {
-            this.List.Insert(index, obj);
+        public void Insert(int index, Account obj) {
+            List.Insert(index, obj);
         }
 
-        public void Remove(Account obj)
-        {
-            this.List.Remove(obj);
+        public void Remove(Account obj) {
+            List.Remove(obj);
         }
-
-        #endregion
-    }
+        }
 }

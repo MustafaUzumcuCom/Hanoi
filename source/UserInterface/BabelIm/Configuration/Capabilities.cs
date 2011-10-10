@@ -32,71 +32,50 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "capabilities"), Serializable]
-    public sealed class Capabilities
-    {
-        #region · Fields ·
-
-        private string uri;
+    public sealed class Capabilities {
         private string identityCategory;
         private string identityType;
         private string name;
+        private string uri;
         private string version;
-
-        #endregion
-
-        #region · Properties ·
 
         [XmlElement(ElementName = "uri", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string URI
-        {
-            get { return this.uri; }
-            set { this.uri = value; }
+        public string URI {
+            get { return uri; }
+            set { uri = value; }
         }
 
-        [XmlElement(ElementName = "identityCategory", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
+        [XmlElement(ElementName = "identityCategory", IsNullable = false, Form = XmlSchemaForm.Qualified,
+            DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string IdentityCategory
-        {
-            get { return this.identityCategory; }
-            set { this.identityCategory = value; }
+        public string IdentityCategory {
+            get { return identityCategory; }
+            set { identityCategory = value; }
         }
 
-        [XmlElement(ElementName = "identityType", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
+        [XmlElement(ElementName = "identityType", IsNullable = false, Form = XmlSchemaForm.Qualified,
+            DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string IdentityType
-        {
-            get { return this.identityType; }
-            set { this.identityType = value; }
+        public string IdentityType {
+            get { return identityType; }
+            set { identityType = value; }
         }
 
         [XmlElement(ElementName = "name", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; }
+        public string Name {
+            get { return name; }
+            set { name = value; }
         }
 
         [XmlElement(ElementName = "version", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Version
-        {
-            get { return this.version; }
-            set { this.version = value; }
+        public string Version {
+            get { return version; }
+            set { version = value; }
         }
-
-        #endregion
-
-        #region · Constuctors ·
-
-        public Capabilities()
-        {
-        }
-
-        #endregion
     }
 }

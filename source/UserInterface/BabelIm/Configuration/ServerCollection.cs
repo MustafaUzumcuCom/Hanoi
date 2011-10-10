@@ -31,26 +31,19 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [Serializable]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public sealed class ServerCollection 
-        : CollectionBase
-    {
-        #region · Indexers ·
-
-        public Server this[int index]
-        {
-            get { return (Server)this.List[index]; }
-            set { this.List[index] = value; }
+    public sealed class ServerCollection
+        : CollectionBase {
+        public Server this[int index] {
+            get { return (Server) List[index]; }
+            set { List[index] = value; }
         }
 
-        public Server this[string name]
-        {
-            get
-            {
-                int index = this.IndexOf(name);
+        public Server this[string name] {
+            get {
+                int index = IndexOf(name);
 
                 if (index == -1)
                 {
@@ -63,48 +56,30 @@ namespace BabelIm.Configuration
             set { this[name] = value; }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
-        public ServerCollection()
-        {
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        public Server Add()
-        {
+        public Server Add() {
             return Add(new Server());
         }
 
-        public Server Add(Server obj)
-        {
-            this.List.Add(obj);
+        public Server Add(Server obj) {
+            List.Add(obj);
 
             return obj;
         }
 
-        public void Insert(int index, Server obj)
-        {
-            this.List.Insert(index, obj);
+        public void Insert(int index, Server obj) {
+            List.Insert(index, obj);
         }
 
-        public void Remove(Server obj)
-        {
-            this.List.Remove(obj);
+        public void Remove(Server obj) {
+            List.Remove(obj);
         }
 
-        public int IndexOf(Server obj)
-        {
-            return this.List.IndexOf(obj);
+        public int IndexOf(Server obj) {
+            return List.IndexOf(obj);
         }
 
-        public int IndexOf(string name)
-        {
-            for (int i = 0; i < this.List.Count; i++)
+        public int IndexOf(string name) {
+            for (int i = 0; i < List.Count; i++)
             {
                 if (this[i].Name == name)
                 {
@@ -114,7 +89,5 @@ namespace BabelIm.Configuration
 
             return -1;
         }
-
-        #endregion
-    }
+        }
 }

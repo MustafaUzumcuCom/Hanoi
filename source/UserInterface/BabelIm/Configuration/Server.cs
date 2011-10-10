@@ -32,143 +32,112 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "server"), Serializable]
-    public sealed class Server
-    {
-        #region · Fields ·
-
-        private string  name;
-        private string  serverName;
-        private string  domainName;
-        private int     portNumber;
-        private int     timeout;
-        private bool    useProxy;
-        private string  proxyType;
-        private string  proxyServer;
-        private int     proxyPortNumber;
-        private string  proxyUserName;
-        private string  proxyPassword;
-        private bool    resolveHostName;
-        private bool    useHttpBinding;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class Server {
+        private string domainName;
+        private string name;
+        private int portNumber;
+        private string proxyPassword;
+        private int proxyPortNumber;
+        private string proxyServer;
+        private string proxyType;
+        private string proxyUserName;
+        private bool resolveHostName;
+        private string serverName;
+        private int timeout;
+        private bool useHttpBinding;
+        private bool useProxy;
 
         [XmlAttribute(AttributeName = "name", Form = XmlSchemaForm.Unqualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; }
+        public string Name {
+            get { return name; }
+            set { name = value; }
         }
 
         [XmlElement(ElementName = "server", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string ServerName
-        {
-            get { return this.serverName; }
-            set { this.serverName = value; }
+        public string ServerName {
+            get { return serverName; }
+            set { serverName = value; }
         }
 
         [XmlElement(ElementName = "domain", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string DomainName
-        {
-            get { return this.domainName; }
-            set { this.domainName = value; }
+        public string DomainName {
+            get { return domainName; }
+            set { domainName = value; }
         }
 
         [XmlElement(ElementName = "portnumber", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public int PortNumber
-        {
-            get { return this.portNumber; }
-            set { this.portNumber = value; }
+        public int PortNumber {
+            get { return portNumber; }
+            set { portNumber = value; }
         }
 
         [XmlElement(ElementName = "timeout", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public int Timeout
-        {
-            get { return this.timeout; }
-            set { this.timeout = value; }
+        public int Timeout {
+            get { return timeout; }
+            set { timeout = value; }
         }
 
         [XmlElement(ElementName = "useproxy", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "boolean")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool UseProxy
-        {
-            get { return this.useProxy; }
-            set { this.useProxy = value; }
+        public bool UseProxy {
+            get { return useProxy; }
+            set { useProxy = value; }
         }
 
         [XmlElement(ElementName = "proxytype", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string ProxyType
-        {
-            get { return this.proxyType; }
-            set { this.proxyType = value; }
+        public string ProxyType {
+            get { return proxyType; }
+            set { proxyType = value; }
         }
 
         [XmlElement(ElementName = "proxyserver", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string ProxyServer
-        {
-            get { return this.proxyServer; }
-            set { this.proxyServer = value; }
+        public string ProxyServer {
+            get { return proxyServer; }
+            set { proxyServer = value; }
         }
 
         [XmlElement(ElementName = "proxyportnumber", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public int ProxyPortNumber
-        {
-            get { return this.proxyPortNumber; }
-            set { this.proxyPortNumber = value; }
+        public int ProxyPortNumber {
+            get { return proxyPortNumber; }
+            set { proxyPortNumber = value; }
         }
 
         [XmlElement(ElementName = "proxyusername", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string ProxyUserName
-        {
-            get { return this.proxyUserName; }
-            set { this.proxyUserName = value; }
+        public string ProxyUserName {
+            get { return proxyUserName; }
+            set { proxyUserName = value; }
         }
 
         [XmlElement(ElementName = "proxypassword", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string ProxyPassword
-        {
-            get { return this.proxyPassword; }
-            set { this.proxyPassword = value; }
+        public string ProxyPassword {
+            get { return proxyPassword; }
+            set { proxyPassword = value; }
         }
 
         [XmlElement(ElementName = "resolvehostname", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool ResolveHostName
-        {
-            get { return this.resolveHostName; }
-            set { this.resolveHostName = value; }
+        public bool ResolveHostName {
+            get { return resolveHostName; }
+            set { resolveHostName = value; }
         }
 
         [XmlElement(ElementName = "usehttpbinding", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool UseHttpBinding
-        {
-            get { return this.useHttpBinding; }
-            set { this.useHttpBinding = value; }
+        public bool UseHttpBinding {
+            get { return useHttpBinding; }
+            set { useHttpBinding = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Server()
-        {
-        }
-
-        #endregion
     }
 }

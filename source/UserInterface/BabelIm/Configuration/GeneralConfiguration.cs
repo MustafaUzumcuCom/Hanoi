@@ -32,61 +32,41 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "general"), Serializable]
-    public sealed class GeneralConfiguration
-    {
-        #region · Fields ·
-
-        private int             inactiveafter;
-        private bool			userTuneEnabled;
-        private Capabilities    capabilities;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class GeneralConfiguration {
+        private Capabilities capabilities;
+        private int inactiveafter;
+        private bool userTuneEnabled;
 
         [XmlElement(ElementName = "usertune", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "boolean")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool UserTuneEnabled
-        {
-        	get { return this.userTuneEnabled; }
-        	set { this.userTuneEnabled = value; }
-        }
-        
-        [XmlElement(ElementName = "inactiveafter", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "int")]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public int Inactiveafter
-        {
-            get { return this.inactiveafter; }
-            set { this.inactiveafter = value; }
+        public bool UserTuneEnabled {
+            get { return userTuneEnabled; }
+            set { userTuneEnabled = value; }
         }
 
-        [XmlElement(Type = typeof(Capabilities), ElementName = "capabilities", IsNullable = false, Form = XmlSchemaForm.Qualified)]
+        [XmlElement(ElementName = "inactiveafter", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "int")
+        ]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Capabilities Capabilities
-        {
-            get
-            {
-                if (this.capabilities == null)
+        public int Inactiveafter {
+            get { return inactiveafter; }
+            set { inactiveafter = value; }
+        }
+
+        [XmlElement(Type = typeof (Capabilities), ElementName = "capabilities", IsNullable = false,
+            Form = XmlSchemaForm.Qualified)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public Capabilities Capabilities {
+            get {
+                if (capabilities == null)
                 {
-                    this.capabilities = new Capabilities();
+                    capabilities = new Capabilities();
                 }
 
-                return this.capabilities;
+                return capabilities;
             }
-            set { this.capabilities = value; }
+            set { capabilities = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public GeneralConfiguration()
-        {
-        }
-
-        #endregion
     }
 }

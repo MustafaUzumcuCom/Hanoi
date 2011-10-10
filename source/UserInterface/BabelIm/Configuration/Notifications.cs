@@ -32,90 +32,56 @@ using System.Collections;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "notifications"), Serializable]
-    public sealed class Notifications
-    {
-    	#region · Fields ·
-    	
-    	private NotificationCollection notificationCollection;
-    	
-    	#endregion
-
-        #region · Indexers ·
+    public sealed class Notifications {
+        private NotificationCollection notificationCollection;
 
         [XmlIgnore]
-        public Notification this[int index]
-        {
-            get { return (Notification)NotificationCollection[index]; }
+        public Notification this[int index] {
+            get { return NotificationCollection[index]; }
         }
-        
-        #endregion
-    	
-        #region · Properties ·
 
         [XmlIgnore]
-        public int Count
-        {
+        public int Count {
             get { return NotificationCollection.Count; }
         }
-        
-        [XmlElement(Type = typeof(Notification), ElementName = "Notification", IsNullable = false, Form = XmlSchemaForm.Qualified)]
-        public NotificationCollection NotificationCollection
-        {
-            get
-            {
-                if (this.notificationCollection == null) 
+
+        [XmlElement(Type = typeof (Notification), ElementName = "Notification", IsNullable = false,
+            Form = XmlSchemaForm.Qualified)]
+        public NotificationCollection NotificationCollection {
+            get {
+                if (notificationCollection == null)
                 {
-                	this.notificationCollection = new NotificationCollection();
+                    notificationCollection = new NotificationCollection();
                 }
-                
-                return this.notificationCollection;
+
+                return notificationCollection;
             }
-            set { this.notificationCollection = value; }
+            set { notificationCollection = value; }
         }
-        
-        #endregion
-    	
-        #region · Constructors ·
-        
-        public Notifications()
-        {
-        }
-        
-        #endregion
-        
-    	#region · Methods ·
-    	
+
         [System.Runtime.InteropServices.DispIdAttribute(-4)]
-        public IEnumerator GetEnumerator()
-        {
+        public IEnumerator GetEnumerator() {
             return NotificationCollection.GetEnumerator();
         }
 
-        public Notification Add(Notification obj)
-        {
+        public Notification Add(Notification obj) {
             return NotificationCollection.Add(obj);
         }
 
-        public void Clear()
-        {
+        public void Clear() {
             NotificationCollection.Clear();
         }
 
-        public Notification Remove(int index)
-        {
+        public Notification Remove(int index) {
             Notification obj = NotificationCollection[index];
             NotificationCollection.Remove(obj);
             return obj;
         }
 
-        public void Remove(object obj)
-        {
+        public void Remove(object obj) {
             NotificationCollection.Remove(obj);
         }
-        
-        #endregion        
     }
 }

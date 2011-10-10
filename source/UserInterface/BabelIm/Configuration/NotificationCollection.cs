@@ -31,46 +31,31 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [Serializable]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public class NotificationCollection 
-        : ArrayList
-    {
-        #region · Indexers ·
-
-        public new Notification this[int index]
-        {
-            get { return (Notification)base[index]; }
+    public class NotificationCollection
+        : ArrayList {
+        public new Notification this[int index] {
+            get { return (Notification) base[index]; }
             set { base[index] = value; }
         }
 
-        #endregion
-
-        #region · Methods ·
-
-        public Notification Add(Notification obj)
-        {
+        public Notification Add(Notification obj) {
             base.Add(obj);
             return obj;
         }
 
-        public Notification Add()
-        {
+        public Notification Add() {
             return Add(new Notification());
         }
 
-        public void Insert(int index, Notification obj)
-        {
+        public void Insert(int index, Notification obj) {
             base.Insert(index, obj);
         }
 
-        public void Remove(Notification obj)
-        {
+        public void Remove(Notification obj) {
             base.Remove(obj);
         }
-
-        #endregion
-    }
+        }
 }

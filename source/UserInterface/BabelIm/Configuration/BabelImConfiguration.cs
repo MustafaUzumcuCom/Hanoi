@@ -35,33 +35,84 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [Serializable]
-    [XmlRoot(ElementName="babelim",IsNullable=false)]
-    public sealed class BabelImConfiguration
-    {
-        #region · Consts ·
+    [XmlRoot(ElementName = "babelim", IsNullable = false)]
+    public sealed class BabelImConfiguration {
+        private static readonly string ConfigurationFilename = "BabelIm.xml";
 
-        static readonly string ConfigurationFilename = "BabelIm.xml";
+        private static XmlSerializer Serializer = new XmlSerializer(typeof (BabelImConfiguration));
+        private Accounts accounts;
 
-        #endregion
+        private GeneralConfiguration general;
+        private Notifications notifications;
+        private Servers servers;
 
-        #region · Static Members ·
+        [XmlElement(Type = typeof (GeneralConfiguration), ElementName = "general", IsNullable = false,
+            Form = XmlSchemaForm.Qualified)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public GeneralConfiguration General {
+            get {
+                if (general == null)
+                {
+                    general = new GeneralConfiguration();
+                }
+                return general;
+            }
+            set { general = value; }
+        }
 
-        private static XmlSerializer Serializer = new XmlSerializer(typeof(BabelImConfiguration));
+        [XmlElement(Type = typeof (Notifications), ElementName = "notifications", IsNullable = false,
+            Form = XmlSchemaForm.Qualified)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public Notifications Notifications {
+            get {
+                if (notifications == null)
+                {
+                    notifications = new Notifications();
+                }
+                return notifications;
+            }
+            set { notifications = value; }
+        }
 
-        public static BabelImConfiguration GetConfiguration()
-        {
+        [XmlElement(Type = typeof (Servers), ElementName = "servers", IsNullable = false, Form = XmlSchemaForm.Qualified
+            )]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public Servers Servers {
+            get {
+                if (servers == null)
+                {
+                    servers = new Servers();
+                }
+                return servers;
+            }
+            set { servers = value; }
+        }
+
+        [XmlElement(Type = typeof (Accounts), ElementName = "accounts", IsNullable = false,
+            Form = XmlSchemaForm.Qualified)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public Accounts Accounts {
+            get {
+                if (accounts == null)
+                {
+                    accounts = new Accounts();
+                }
+                return accounts;
+            }
+            set { accounts = value; }
+        }
+
+        public static BabelImConfiguration GetConfiguration() {
             String appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             return GetConfiguration(String.Format("{0}\\{1}", Path.GetDirectoryName(appPath), ConfigurationFilename));
         }
 
-        public static BabelImConfiguration GetConfiguration(string configurationFilename)
-        {
-            FileStream              stream          = null;
-            BabelImConfiguration    configuration   = null;
+        public static BabelImConfiguration GetConfiguration(string configurationFilename) {
+            FileStream stream = null;
+            BabelImConfiguration configuration = null;
 
             if (!Directory.Exists(Path.GetPathRoot(configurationFilename)))
             {
@@ -69,15 +120,15 @@ namespace BabelIm.Configuration
             }
             if (!File.Exists(configurationFilename))
             {
-                BabelImConfiguration tmpCfg = new BabelImConfiguration();
+                var tmpCfg = new BabelImConfiguration();
 
                 tmpCfg.Save(configurationFilename);
             }
 
             try
             {
-                stream          = new FileStream(configurationFilename, FileMode.Open, FileAccess.Read);
-                configuration   = (BabelImConfiguration)Serializer.Deserialize(stream);
+                stream = new FileStream(configurationFilename, FileMode.Open, FileAccess.Read);
+                configuration = (BabelImConfiguration) Serializer.Deserialize(stream);
             }
             catch
             {
@@ -94,102 +145,15 @@ namespace BabelIm.Configuration
             return configuration;
         }
 
-        #endregion
-
-        #region · Fields ·
-
-        private GeneralConfiguration    general;
-        private Notifications           notifications;
-        private Servers                 servers;
-        private Accounts                accounts;
-
-        #endregion
-
-        #region · Properties ·
-
-        [XmlElement(Type = typeof(GeneralConfiguration), ElementName = "general", IsNullable = false, Form = XmlSchemaForm.Qualified)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public GeneralConfiguration General
-        {
-            get
-            {
-                if (this.general == null)
-                {
-                    this.general = new GeneralConfiguration();
-                }
-                return general;
-            }
-            set { this.general = value; }
-        }
-
-        [XmlElement(Type = typeof(Notifications), ElementName = "notifications", IsNullable = false, Form = XmlSchemaForm.Qualified)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Notifications Notifications
-        {
-            get
-            {
-                if (this.notifications == null)
-                {
-                    this.notifications = new Notifications();
-                }
-                return this.notifications;
-            }
-            set { this.notifications = value; }
-        }
-
-        [XmlElement(Type = typeof(Servers), ElementName = "servers", IsNullable = false, Form = XmlSchemaForm.Qualified)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Servers Servers
-        {
-            get
-            {
-                if (this.servers == null)
-                {
-                    this.servers = new Servers();
-                }
-                return this.servers;
-            }
-            set { this.servers = value; }
-        }
-
-        [XmlElement(Type = typeof(Accounts), ElementName = "accounts", IsNullable = false, Form = XmlSchemaForm.Qualified)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Accounts Accounts
-        {
-            get
-            {
-                if (this.accounts == null)
-                {
-                    this.accounts = new Accounts();
-                }
-                return this.accounts;
-            }
-            set { this.accounts = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public BabelImConfiguration()
-        {
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        public void Save()
-        {
+        public void Save() {
             String appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
-            this.Save(String.Format("{0}\\{1}", Path.GetDirectoryName(appPath), ConfigurationFilename));
+            Save(String.Format("{0}\\{1}", Path.GetDirectoryName(appPath), ConfigurationFilename));
         }
 
-        public void Save(string filename)
-        {
-            FileStream      stream      = new FileStream(filename, FileMode.Create, FileAccess.Write);
-            XmlTextWriter   xmlWriter   = new XmlTextWriter(stream, Encoding.UTF8);
+        public void Save(string filename) {
+            var stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
+            var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8);
 
             try
             {
@@ -207,9 +171,7 @@ namespace BabelIm.Configuration
             {
                 xmlWriter.Close();
                 stream.Close();
-            }        
+            }
         }
-
-        #endregion
     }
 }

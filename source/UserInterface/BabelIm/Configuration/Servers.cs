@@ -33,96 +33,60 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "servers"), Serializable]
-    public sealed class Servers
-    {
-        #region · Indexers ·
-
-        [XmlIgnore]
-        public Server this[int index]
-        {
-            get { return (Server)this.ServerCollection[index]; }
-        }
-
-        [XmlIgnore]
-        public Server this[string name]
-        {
-            get { return (Server)this.ServerCollection[name]; }
-        }
-
-        #endregion
-
-        #region · Fields ·
-
+    public sealed class Servers {
         private ServerCollection serverCollection;
 
-        #endregion
+        [XmlIgnore]
+        public Server this[int index] {
+            get { return ServerCollection[index]; }
+        }
 
-        #region · Properties ·
+        [XmlIgnore]
+        public Server this[string name] {
+            get { return ServerCollection[name]; }
+        }
 
-        [XmlElement(Type = typeof(Server), ElementName = "server", IsNullable = false, Form = XmlSchemaForm.Qualified)]
+        [XmlElement(Type = typeof (Server), ElementName = "server", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public ServerCollection ServerCollection
-        {
-            get
-            {
-                if (this.serverCollection == null)
+        public ServerCollection ServerCollection {
+            get {
+                if (serverCollection == null)
                 {
-                    this.serverCollection = new ServerCollection();
+                    serverCollection = new ServerCollection();
                 }
-                return this.serverCollection;
+                return serverCollection;
             }
         }
 
         [XmlIgnore]
-        public int Count
-        {
-            get { return this.ServerCollection.Count; }
+        public int Count {
+            get { return ServerCollection.Count; }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
-        public Servers()
-        {
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        public void Clear()
-        {
-            this.ServerCollection.Clear();
+        public void Clear() {
+            ServerCollection.Clear();
         }
 
         [System.Runtime.InteropServices.DispIdAttribute(-4)]
-        public IEnumerator GetEnumerator()
-        {
-            return this.ServerCollection.GetEnumerator();
+        public IEnumerator GetEnumerator() {
+            return ServerCollection.GetEnumerator();
         }
 
-        public Server Add(Server obj)
-        {
-            return this.ServerCollection.Add(obj);
+        public Server Add(Server obj) {
+            return ServerCollection.Add(obj);
         }
 
-        public Server Remove(int index)
-        {
-            Server obj = this.ServerCollection[index];
-            this.ServerCollection.Remove(obj);
+        public Server Remove(int index) {
+            Server obj = ServerCollection[index];
+            ServerCollection.Remove(obj);
 
             return obj;
         }
 
-        public void Remove(Server obj)
-        {
-            this.ServerCollection.Remove(obj);
+        public void Remove(Server obj) {
+            ServerCollection.Remove(obj);
         }
-
-        #endregion
     }
 }

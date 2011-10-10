@@ -32,57 +32,35 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "notification"), Serializable]
-    public sealed class Notification
-    {
-        #region · Fields ·
-
-        private string  type;
-        private bool    value;
-        private bool    valueSpecified;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class Notification {
+        private string type;
+        private bool value;
+        private bool valueSpecified;
 
         [XmlAttribute(AttributeName = "type", Form = XmlSchemaForm.Unqualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Type
-        {
-            get { return this.type; }
-            set { this.type = value; }
+        public string Type {
+            get { return type; }
+            set { type = value; }
         }
 
         [XmlIgnore]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool ValueSpecified
-        {
-            get { return this.ValueSpecified; }
-            set { this.valueSpecified = value;  }
+        public bool ValueSpecified {
+            get { return ValueSpecified; }
+            set { valueSpecified = value; }
         }
 
         [XmlText(DataType = "boolean")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool Value
-        {
-            get { return this.value; }
-            set
-            {
-                this.value = value; 
-                this.ValueSpecified = true;
+        public bool Value {
+            get { return value; }
+            set {
+                this.value = value;
+                ValueSpecified = true;
             }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Notification()
-        {
-        }
-
-        #endregion
     }
 }

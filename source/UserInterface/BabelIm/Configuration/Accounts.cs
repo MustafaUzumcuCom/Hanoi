@@ -34,86 +34,53 @@ using System.Runtime.InteropServices;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "accounts"), Serializable]
-    public sealed class Accounts
-    {
-        #region · Fields ·
-
+    public sealed class Accounts {
         private AccountCollection accountCollection;
 
-        #endregion
-
-        #region · Indexers ·
-
         [XmlIgnore]
-        public Account this[int index]
-        {
-            get { return (Account)this.AccountCollection[index]; }
+        public Account this[int index] {
+            get { return AccountCollection[index]; }
         }
 
-        #endregion
-
-        #region · Properties ·
-
         [XmlIgnore]
-        public int Count
-        {
+        public int Count {
             get { return AccountCollection.Count; }
         }
 
-        [XmlElement(Type = typeof(Account), ElementName = "account", IsNullable = false, Form = XmlSchemaForm.Qualified)]
+        [XmlElement(Type = typeof (Account), ElementName = "account", IsNullable = false, Form = XmlSchemaForm.Qualified
+            )]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public AccountCollection AccountCollection
-        {
-            get
-            {
-                if (this.accountCollection == null)
+        public AccountCollection AccountCollection {
+            get {
+                if (accountCollection == null)
                 {
-                    this.accountCollection = new AccountCollection();
+                    accountCollection = new AccountCollection();
                 }
-                return this.accountCollection;
+                return accountCollection;
             }
-            set { this.accountCollection = value; }
+            set { accountCollection = value; }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
-        public Accounts()
-        {
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        [DispIdAttribute(-4)]
-        public IEnumerator GetEnumerator()
-        {
+        [DispId(-4)]
+        public IEnumerator GetEnumerator() {
             return AccountCollection.GetEnumerator();
         }
 
-        public Account Add(Account obj)
-        {
-            return this.AccountCollection.Add(obj);
+        public Account Add(Account obj) {
+            return AccountCollection.Add(obj);
         }
 
-        public void Clear()
-        {
-            this.AccountCollection.Clear();
+        public void Clear() {
+            AccountCollection.Clear();
         }
 
-        public Account Remove(int index)
-        {
-            Account obj = this.AccountCollection[index];
-            this.AccountCollection.Remove(obj);
+        public Account Remove(int index) {
+            Account obj = AccountCollection[index];
+            AccountCollection.Remove(obj);
 
             return obj;
         }
-
-        #endregion
     }
 }

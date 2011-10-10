@@ -32,105 +32,79 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace BabelIm.Configuration
-{
+namespace BabelIm.Configuration {
     [XmlType(TypeName = "account"), Serializable]
-    public sealed class Account
-    {
-        #region · Fields ·
-
-        private string  name;
-        private string  server;
-        private Login   login;
-        private string  nickname;
-        private string  avatar;
-        private string  status;
-        private string  presence;
-        private string  resource;
-
-        #endregion
-
-        #region · Properties ·
+    public sealed class Account {
+        private string avatar;
+        private Login login;
+        private string name;
+        private string nickname;
+        private string presence;
+        private string resource;
+        private string server;
+        private string status;
 
         [XmlAttribute(AttributeName = "name", Form = XmlSchemaForm.Unqualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; }
+        public string Name {
+            get { return name; }
+            set { name = value; }
         }
 
         [XmlAttribute(AttributeName = "server", Form = XmlSchemaForm.Unqualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Server
-        {
-            get { return this.server; }
-            set { this.server = value; }
+        public string Server {
+            get { return server; }
+            set { server = value; }
         }
 
-        [XmlElement(Type = typeof(Login), ElementName = "login", IsNullable = false, Form = XmlSchemaForm.Qualified)]
+        [XmlElement(Type = typeof (Login), ElementName = "login", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Login Login
-        {
-            get
-            {
-                if (this.login == null)
+        public Login Login {
+            get {
+                if (login == null)
                 {
-                    this.login = new Login();
+                    login = new Login();
                 }
-                return this.login;
+                return login;
             }
-            set { this.login = value; }
+            set { login = value; }
         }
 
-        [XmlElement(ElementName = "displayName", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
+        [XmlElement(ElementName = "displayName", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string"
+            )]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string DisplayName
-        {
-            get { return this.nickname; }
-            set { this.nickname = value; }
+        public string DisplayName {
+            get { return nickname; }
+            set { nickname = value; }
         }
 
         [XmlElement(ElementName = "avatar", IsNullable = false, Form = XmlSchemaForm.Qualified)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Avatar
-        {
-            get { return this.avatar; }
-            set { this.avatar = value; }
+        public string Avatar {
+            get { return avatar; }
+            set { avatar = value; }
         }
 
         [XmlElement(ElementName = "presence", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Presence
-        {
-            get { return this.presence; }
-            set { this.presence = value; }
+        public string Presence {
+            get { return presence; }
+            set { presence = value; }
         }
 
         [XmlElement(ElementName = "status", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Status
-        {
-            get { return this.status; }
-            set { this.status = value; }
+        public string Status {
+            get { return status; }
+            set { status = value; }
         }
 
         [XmlElement(ElementName = "resource", IsNullable = false, Form = XmlSchemaForm.Qualified, DataType = "string")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public string Resource
-        {
-            get { return this.resource; }
-            set { this.resource = value; }
+        public string Resource {
+            get { return resource; }
+            set { resource = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Account()
-        {
-        }
-
-        #endregion
     }
 }
