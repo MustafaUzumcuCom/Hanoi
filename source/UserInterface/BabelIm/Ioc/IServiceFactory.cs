@@ -1,10 +1,12 @@
 ﻿using System;
 
-namespace BabelIm.IoC {
+namespace BabelIm.IoC
+{
     /// <summary>
     ///   Base contract for locator and register dependencies
     /// </summary>
-    public interface IServiceFactory {
+    public interface IServiceFactory
+    {
         /// <summary>
         ///   Solve TService dependency
         /// </summary>

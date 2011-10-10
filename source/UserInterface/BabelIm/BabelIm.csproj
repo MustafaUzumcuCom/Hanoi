@@ -233,10 +233,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BabelIm.Controls.PivotControl\BabelIm.Controls.PivotControl.csproj">
-      <Project>{88E8F12D-985B-4CE7-B150-22D7B87FB8EE}</Project>
-      <Name>BabelIm.Controls.PivotControl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Framework\Net\Xmpp\Core\BabelIm.Net.Xmpp.Core.csproj">
       <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
       <Name>BabelIm.Net.Xmpp.Core</Name>
@@ -252,10 +248,6 @@
     <ProjectReference Include="Configuration\BabelIm.Configuration.csproj">
       <Project>{188FEBCD-17E2-4950-8A13-0588D7B5621D}</Project>
       <Name>BabelIm.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="Controls\BabelIm.Controls.csproj">
-      <Project>{E0F0A66D-A932-4167-A8E6-F3D7B7390B36}</Project>
-      <Name>BabelIm.Controls</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -395,9 +387,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\notifyicon.ico" />

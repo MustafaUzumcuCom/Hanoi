@@ -155,11 +155,12 @@
         <!-- Active chats -->
         <Grid x:Name="ActiveChatsZone" Grid.Column="2"
               SizeChanged="ActiveChatsZone_SizeChanged">
-            <pivot:PivotControl x:Name="PivotControl" 
+            
+            <!--<pivot:PivotControl x:Name="PivotControl" 
                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                             VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
                             babelim:ChatViewManager.IsChatContainer="True">
-            </pivot:PivotControl>
+            </pivot:PivotControl>-->
         </Grid>        
     </Grid>
 </UserControl>
