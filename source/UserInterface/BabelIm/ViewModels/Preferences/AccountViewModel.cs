@@ -31,103 +31,90 @@ using System;
 using BabelIm.Configuration;
 using BabelIm.Infrastructure;
 
-namespace BabelIm.ViewModels.Preferences
-{
-    public class AccountViewModel : ViewModel<Account>
-    {
-        #region · Fields ·
+namespace BabelIm.ViewModels.Preferences {
+    public class AccountViewModel : ViewModel<Account> {
+        private readonly BabelImConfiguration configuration;
+        private ConfigurationManager configurationManager;
+        private Account selectedAccount;
+        private Server selectedServer;
 
-        private ConfigurationManager    configurationManager;
-        private BabelImConfiguration    configuration;
-        private Account                 selectedAccount;
-        private Server                  selectedServer;
-        private bool                    isNew;
+        public AccountViewModel(ConfigurationManager configurationManager) {
+            this.configurationManager = configurationManager;
+            configuration = configurationManager.GetConfiguration();
 
-        #endregion
-        
-        #region · Properties ·
-
-        public bool IsNew
-        {
-            get { return this.isNew; }
-            set { this.isNew = value; }
-        }
-
-        public AccountCollection Accounts
-        {
-             get { return this.configuration.Accounts.AccountCollection; }
-        }
-
-        public ServerCollection Servers
-        {
-            get { return this.configuration.Servers.ServerCollection; }
-        }
-
-        public Account SelectedAccount
-        {
-            get { return this.selectedAccount; }
-            set
+            if (configuration.Accounts.Count == 0)
             {
-                if (this.selectedAccount != value)
+                selectedAccount = new Account();
+                selectedAccount.Name = "New Account";
+                IsNew = true;
+            }
+        }
+
+        public bool IsNew { get; set; }
+
+        public AccountCollection Accounts {
+            get { return configuration.Accounts.AccountCollection; }
+        }
+
+        public ServerCollection Servers {
+            get { return configuration.Servers.ServerCollection; }
+        }
+
+        public Account SelectedAccount {
+            get { return selectedAccount; }
+            set {
+                if (selectedAccount != value)
                 {
-                    this.selectedAccount = value;
-                    this.selectedServer = this.Servers[this.selectedAccount.Server];
+                    selectedAccount = value;
+                    selectedServer = Servers[selectedAccount.Server];
                 }
             }
         }
 
-        public Server SelectedServer
-        {
-            get { return this.selectedServer; }
-            set
-            {
-                if (this.selectedServer!= value)
+        public Server SelectedServer {
+            get { return selectedServer; }
+            set {
+                if (selectedServer != value)
                 {
-                    this.selectedServer = value;
-                    this.selectedAccount.Server = this.selectedServer.Name;
+                    selectedServer = value;
+                    selectedAccount.Server = selectedServer.Name;
                 }
             }
         }
 
-        public string Name
-        {
-            get
-            {
-                if (this.selectedAccount != null)
+        public string Name {
+            get {
+                if (selectedAccount != null)
                 {
-                    return this.selectedAccount.Name;
+                    return selectedAccount.Name;
                 }
 
                 return String.Empty;
             }
-            set { this.selectedAccount.Name = value; }
+            set { selectedAccount.Name = value; }
         }
 
-        public Login Login
-        {
-            get
-            {
-                if (this.selectedAccount != null)
+        public Login Login {
+            get {
+                if (selectedAccount != null)
                 {
-                    return this.selectedAccount.Login;
+                    return selectedAccount.Login;
                 }
 
                 return null;
             }
         }
 
-        public string DisplayName
-        {
-            get
-            {
-                if (this.selectedAccount != null)
+        public string DisplayName {
+            get {
+                if (selectedAccount != null)
                 {
-                    return this.selectedAccount.DisplayName;
+                    return selectedAccount.DisplayName;
                 }
 
                 return String.Empty;
             }
-            set { this.selectedAccount.DisplayName = value; }
+            set { selectedAccount.DisplayName = value; }
         }
 
         /*
@@ -138,66 +125,40 @@ namespace BabelIm.ViewModels.Preferences
         }
         */
 
-        public string Presence
-        {
-            get
-            {
-                if (this.selectedAccount != null)
+        public string Presence {
+            get {
+                if (selectedAccount != null)
                 {
-                    return this.selectedAccount.Presence;
+                    return selectedAccount.Presence;
                 }
 
                 return String.Empty;
             }
-            set { this.selectedAccount.Presence = value; }
+            set { selectedAccount.Presence = value; }
         }
 
-        public string Status
-        {
-            get
-            {
-                if (this.selectedAccount != null)
+        public string Status {
+            get {
+                if (selectedAccount != null)
                 {
-                    return this.selectedAccount.Status;
+                    return selectedAccount.Status;
                 }
 
                 return String.Empty;
             }
-            set { this.selectedAccount.Status = value; }
+            set { selectedAccount.Status = value; }
         }
 
-        public string Resource
-        {
-            get
-            {
-                if (this.selectedAccount != null)
+        public string Resource {
+            get {
+                if (selectedAccount != null)
                 {
-                    return this.selectedAccount.Resource;
+                    return selectedAccount.Resource;
                 }
 
                 return String.Empty;
             }
-            set { this.selectedAccount.Resource = value; }
+            set { selectedAccount.Resource = value; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public AccountViewModel(ConfigurationManager configurationManager)
-            : base()
-        {
-            this.configurationManager   = configurationManager;
-            this.configuration          = configurationManager.GetConfiguration();
-
-            if (this.configuration.Accounts.Count == 0)
-            {
-                this.selectedAccount        = new Account();
-                this.selectedAccount.Name   = "New Account";
-                this.IsNew                  = true;
-            }
-        }
-
-        #endregion
     }
 }

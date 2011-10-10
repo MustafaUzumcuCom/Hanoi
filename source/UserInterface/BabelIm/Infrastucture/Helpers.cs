@@ -30,17 +30,12 @@
 using System;
 using System.Drawing;
 
-namespace BabelIm.Infrastructure
-{
+namespace BabelIm.Infrastructure {
     /// <summary>
-    /// http://www.codeproject.com/KB/WPF/FillComboboxWSortedEnum.aspx
+    ///   http://www.codeproject.com/KB/WPF/FillComboboxWSortedEnum.aspx
     /// </summary>
-    public class Helpers
-    {
-        #region · Methods ·
-
-        public string[] GetSortedEnumNames(Type enumType)
-        {
+    public class Helpers {
+        public string[] GetSortedEnumNames(Type enumType) {
             // first do a sanity check, make sure the developer 
             // is passing us an enum
             if (enumType.IsEnum)
@@ -53,11 +48,8 @@ namespace BabelIm.Infrastructure
             }
         }
 
-        public static Icon GetIconFromAplicationResource(string uri)
-        {
+        public static Icon GetIconFromAplicationResource(string uri) {
             return new Icon(System.Windows.Application.GetResourceStream(new Uri(uri)).Stream);
         }
-
-        #endregion
     }
 }

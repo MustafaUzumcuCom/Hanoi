@@ -7,102 +7,69 @@ using BabelIm.IoC;
 using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.ViewModels;
 
-namespace BabelIm.Views
-{
+namespace BabelIm.Views {
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    ///   Interaction logic for MainView.xaml
     /// </summary>
-    public partial class LayoutView : UserControl
-    {
-        #region · Fields ·
-
+    public partial class LayoutView : UserControl {
+        private IDisposable sessionStateSubscription;
         private LayoutViewModel viewModel;
 
-        #region · Subscriptions ·
+        public LayoutView() {
+            InitializeComponent();
 
-        private IDisposable sessionStateSubscription;
+            DataContext = new LayoutViewModel();
 
-        #endregion
+            Subscribe();
+        }
 
-        #endregion
-
-        #region · Properties ·
-
-        public LayoutViewModel ViewModel
-        {
-            get { return this.viewModel; }
-            private set
-            {
-                this.viewModel = value;
-                this.DataContext = value;
+        public LayoutViewModel ViewModel {
+            get { return viewModel; }
+            private set {
+                viewModel = value;
+                DataContext = value;
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
-        public LayoutView()
-        {
-            InitializeComponent();
-
-            this.DataContext = new LayoutViewModel();
-
-            this.Subscribe();
-        }
-
-        #endregion
-
-        #region · Private Methods ·
-
-        private void Subscribe()
-        {
-            this.sessionStateSubscription = ServiceFactory.Current.Resolve<IXmppSession>()
+        private void Subscribe() {
+            sessionStateSubscription = ServiceFactory.Current.Resolve<IXmppSession>()
                 .StateChanged
-                .Subscribe(newState => { this.OnSessionStateChanged(newState); });
+                .Subscribe(newState => { OnSessionStateChanged(newState); });
         }
 
-        #endregion
-
-        #region · Event Handlers ·
-
-        private void OnShowLogin(object sender, RoutedEventArgs e)
-        {
+        private void OnShowLogin(object sender, RoutedEventArgs e) {
             VisualStateManager.GoToState(this, "ShowLogin", true);
         }
 
-        private void OnSessionStateChanged(XmppSessionState newState)
-        {
-            this.Dispatcher.BeginInvoke
-            (
-                DispatcherPriority.ApplicationIdle,
-                new ThreadStart
+        private void OnSessionStateChanged(XmppSessionState newState) {
+            Dispatcher.BeginInvoke
                 (
-                    delegate
-                    {
-                        switch (newState)
-                        {
-                            case XmppSessionState.LoggedIn:
-                                VisualStateManager.GoToState(this, "LoggedIn", true);
-                                break;
+                    DispatcherPriority.ApplicationIdle,
+                    new ThreadStart
+                        (
+                        delegate
+                            {
+                                switch (newState)
+                                {
+                                    case XmppSessionState.LoggedIn:
+                                        VisualStateManager.GoToState(this, "LoggedIn", true);
+                                        break;
 
-                            case XmppSessionState.LoggingIn:
-                                VisualStateManager.GoToState(this, "LoggingIn", false);
-                                break;
+                                    case XmppSessionState.LoggingIn:
+                                        VisualStateManager.GoToState(this, "LoggingIn", false);
+                                        break;
 
-                            case XmppSessionState.LoggingOut:
-                                VisualStateManager.GoToState(this, "LoggingOut", true);
-                                break;
+                                    case XmppSessionState.LoggingOut:
+                                        VisualStateManager.GoToState(this, "LoggingOut", true);
+                                        break;
 
-                            case XmppSessionState.Error:
-                                VisualStateManager.GoToState(this, "Error", true);
-                                break;
-                        }
-                    }
-                )
-            );
+                                    case XmppSessionState.Error:
+                                        VisualStateManager.GoToState(this, "Error", true);
+                                        break;
+                                }
+                            }
+                        )
+                );
         }
-
-        #endregion
     }
 }

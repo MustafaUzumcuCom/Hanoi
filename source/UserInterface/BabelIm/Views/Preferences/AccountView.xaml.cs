@@ -1,20 +1,12 @@
 ﻿using System.Windows.Controls;
-using BabelIm.Infrastructure;
 
-namespace BabelIm.Views.Preferences
-{
+namespace BabelIm.Views.Preferences {
     /// <summary>
-    /// Interaction logic for AccountView.xaml
+    ///   Interaction logic for AccountView.xaml
     /// </summary>
-    public partial class AccountView : UserControl
-    {
-        #region · Constructors ·
-
-        public AccountView()
-        {
+    public partial class AccountView : UserControl {
+        public AccountView() {
             InitializeComponent();
         }
-
-        #endregion
     }
 }

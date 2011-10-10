@@ -1,23 +1,16 @@
 ﻿using System.Windows.Controls;
 using BabelIm.ViewModels;
 
-namespace BabelIm.Views
-{
+namespace BabelIm.Views {
     /// <summary>
-    /// Activity view
+    ///   Activity view
     /// </summary>
-    public partial class ServicesView 
-        : UserControl
-    {
-        #region · Constructors ·
-
-        public ServicesView()
-        {
+    public partial class ServicesView
+        : UserControl {
+        public ServicesView() {
             InitializeComponent();
 
-            this.DataContext = new ServicesViewModel();
+            DataContext = new ServicesViewModel();
         }
-
-        #endregion
-    }
+        }
 }

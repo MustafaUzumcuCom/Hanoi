@@ -27,106 +27,78 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using BabelIm.Configuration;
 using BabelIm.Infrastructure;
 
-namespace BabelIm.ViewModels.Preferences
-{
-    public sealed class ConnectionViewModel : ViewModel<Server>
-    {
-        #region · Fields ·
+namespace BabelIm.ViewModels.Preferences {
+    public sealed class ConnectionViewModel : ViewModel<Server> {
+        private readonly BabelImConfiguration configuration;
+        private readonly Server selectedServer;
+        private ConfigurationManager configurationManager;
 
-        private ConfigurationManager    configurationManager;
-        private BabelImConfiguration    configuration;
-        private Server                  selectedServer;
+        public ConnectionViewModel(ConfigurationManager configurationManager) {
+            this.configurationManager = configurationManager;
+            configuration = configurationManager.GetConfiguration();
 
-        #endregion
-
-        #region · Properties ·
-
-        public string Name
-        {
-            get { return this.selectedServer.Name; }
-            set { this.selectedServer.Name = value; }
-        }
-
-        public string ServerName
-        {
-            get { return this.selectedServer.ServerName; }
-            set { this.selectedServer.ServerName = value; }
-        }
-
-        public string DomainName
-        {
-            get { return this.selectedServer.DomainName; }
-            set { this.selectedServer.DomainName = value; }
-        }
-
-        public int PortNumber
-        {
-            get { return this.selectedServer.PortNumber; }
-            set { this.selectedServer.PortNumber = value; }
-        }
-
-        public int Timeout
-        {
-            get { return this.selectedServer.Timeout; }
-            set { this.selectedServer.Timeout = value; }
-        }
-
-        public bool UseProxy
-        {
-            get { return this.selectedServer.UseProxy; }
-            set { this.selectedServer.UseProxy = value; }
-        }
-
-        public string ProxyType
-        {
-            get { return this.selectedServer.ProxyType; }
-            set { this.selectedServer.ProxyType = value; }
-        }
-
-        public string ProxyServer
-        {
-            get { return this.selectedServer.ProxyServer; }
-            set { this.selectedServer.ProxyServer = value; }
-        }
-
-        public int ProxyPortNumber
-        {
-            get { return this.selectedServer.ProxyPortNumber; }
-            set { this.selectedServer.ProxyPortNumber = value; }
-        }
-
-        public string ProxyUserName
-        {
-            get { return this.selectedServer.ProxyUserName; }
-            set { this.selectedServer.ProxyUserName = value; }
-        }
-
-        public string ProxyPassword
-        {
-            get { return this.selectedServer.ProxyPassword; }
-            set { this.selectedServer.ProxyPassword = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public ConnectionViewModel(ConfigurationManager configurationManager)
-            : base()
-        {
-            this.configurationManager   = configurationManager;
-            this.configuration          = configurationManager.GetConfiguration();
-
-            if (this.configuration.Servers.Count == 0)
+            if (configuration.Servers.Count == 0)
             {
-                this.selectedServer = new Server();
+                selectedServer = new Server();
             }
         }
 
-        #endregion
+        public string Name {
+            get { return selectedServer.Name; }
+            set { selectedServer.Name = value; }
+        }
+
+        public string ServerName {
+            get { return selectedServer.ServerName; }
+            set { selectedServer.ServerName = value; }
+        }
+
+        public string DomainName {
+            get { return selectedServer.DomainName; }
+            set { selectedServer.DomainName = value; }
+        }
+
+        public int PortNumber {
+            get { return selectedServer.PortNumber; }
+            set { selectedServer.PortNumber = value; }
+        }
+
+        public int Timeout {
+            get { return selectedServer.Timeout; }
+            set { selectedServer.Timeout = value; }
+        }
+
+        public bool UseProxy {
+            get { return selectedServer.UseProxy; }
+            set { selectedServer.UseProxy = value; }
+        }
+
+        public string ProxyType {
+            get { return selectedServer.ProxyType; }
+            set { selectedServer.ProxyType = value; }
+        }
+
+        public string ProxyServer {
+            get { return selectedServer.ProxyServer; }
+            set { selectedServer.ProxyServer = value; }
+        }
+
+        public int ProxyPortNumber {
+            get { return selectedServer.ProxyPortNumber; }
+            set { selectedServer.ProxyPortNumber = value; }
+        }
+
+        public string ProxyUserName {
+            get { return selectedServer.ProxyUserName; }
+            set { selectedServer.ProxyUserName = value; }
+        }
+
+        public string ProxyPassword {
+            get { return selectedServer.ProxyPassword; }
+            set { selectedServer.ProxyPassword = value; }
+        }
     }
 }

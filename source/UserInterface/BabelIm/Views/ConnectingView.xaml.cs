@@ -1,16 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace BabelIm.Views
-{
+namespace BabelIm.Views {
     /// <summary>
-    /// Interaction logic for ConnectingView.xaml
+    ///   Interaction logic for ConnectingView.xaml
     /// </summary>
-    public partial class ConnectingView 
-        : UserControl
-    {
-        public ConnectingView()
-        {
+    public partial class ConnectingView
+        : UserControl {
+        public ConnectingView() {
             InitializeComponent();
         }
-    }
+        }
 }

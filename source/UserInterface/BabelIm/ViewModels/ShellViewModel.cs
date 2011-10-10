@@ -26,126 +26,86 @@ using System.Windows;
 using System.Windows.Input;
 using BabelIm.Infrastructure;
 
-namespace BabelIm.ViewModels
-{
+namespace BabelIm.ViewModels {
     /// <summary>
-    /// Shell Window ViewModel
+    ///   Shell Window ViewModel
     /// </summary>
-    public sealed class ShellViewModel 
-        : ViewModelBase
-    {
-        #region · Fields ·
-
-        private ICommand    shutdownCommand;
-        private ICommand    minimizeCommand;
+    public sealed class ShellViewModel
+        : ViewModelBase {
+        private ICommand minimizeCommand;
+        private ResizeMode resizeMode;
+        private ICommand shutdownCommand;
         private WindowState windowState;
-        private ResizeMode  resizeMode;
-
-        #endregion
-
-        #region · Commands ·
 
         /// <summary>
-        /// Gets the minimize command.
+        ///   Gets the minimize command.
         /// </summary>
         /// <value>The minimize command.</value>
-        public ICommand MinimizeCommand
-        {
-            get
-            {
-                if (this.minimizeCommand == null)
+        public ICommand MinimizeCommand {
+            get {
+                if (minimizeCommand == null)
                 {
-                    this.minimizeCommand = new RelayCommand(() => OnMinimizeWindow());
+                    minimizeCommand = new RelayCommand(() => OnMinimizeWindow());
                 }
 
-                return this.minimizeCommand;
+                return minimizeCommand;
             }
         }
 
         /// <summary>
-        /// Gets the shutdown command
+        ///   Gets the shutdown command
         /// </summary>
-        public ICommand ShutdownCommand
-        {
-            get
-            {
-                if (this.shutdownCommand == null)
+        public ICommand ShutdownCommand {
+            get {
+                if (shutdownCommand == null)
                 {
-                    this.shutdownCommand = new RelayCommand(() => OnShutdown());
+                    shutdownCommand = new RelayCommand(() => OnShutdown());
                 }
 
-                return this.shutdownCommand;
+                return shutdownCommand;
             }
         }
-        
-        #endregion
-
-        #region · Properties ·
 
         /// <summary>
-        /// Gets the Window display name
+        ///   Gets the Window display name
         /// </summary>
-        public string DisplayName
-        {
+        public string DisplayName {
             get { return "babel - XMPP IM Client"; }
         }
 
         /// <summary>
-        /// Gets or sets the state of the window.
+        ///   Gets or sets the state of the window.
         /// </summary>
         /// <value>The state of the window.</value>
-        public WindowState WindowState
-        {
-            get { return this.windowState; }
-            set
-            {
-                if (this.windowState != value)
+        public WindowState WindowState {
+            get { return windowState; }
+            set {
+                if (windowState != value)
                 {
-                    this.windowState = value;
-                    this.NotifyPropertyChanged(() => WindowState);
+                    windowState = value;
+                    NotifyPropertyChanged(() => WindowState);
                 }
             }
         }
 
         /// <summary>
-        /// Gets or sets the resize mode.
+        ///   Gets or sets the resize mode.
         /// </summary>
         /// <value>The resize mode.</value>
-        public ResizeMode ResizeMode
-        {
-            get { return this.resizeMode; }
-            set
-            {
-                this.resizeMode = value;
-                this.NotifyPropertyChanged(() => ResizeMode);
+        public ResizeMode ResizeMode {
+            get { return resizeMode; }
+            set {
+                resizeMode = value;
+                NotifyPropertyChanged(() => ResizeMode);
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShellViewModel"/> class.
-        /// </summary>
-        public ShellViewModel()
-        {
-        }
-
-        #endregion
-
-        #region · Command Actions ·
-
-        private void OnShutdown()
-        {
+        private void OnShutdown() {
             Application.Current.Shutdown();
         }
 
-        private void OnMinimizeWindow()
-        {
-            this.WindowState = WindowState.Minimized;
+        private void OnMinimizeWindow() {
+            WindowState = WindowState.Minimized;
         }
-
-        #endregion
-    }
+        }
 }

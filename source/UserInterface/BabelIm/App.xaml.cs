@@ -1,28 +1,20 @@
 ﻿using System;
 using System.Windows;
 
-namespace BabelIm
-{
+namespace BabelIm {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///   Interaction logic for App.xaml
     /// </summary>
-    public partial class App 
-        : Application
-    {
-        #region · Static Members ·
-
+    public partial class App
+        : Application {
         /// <summary>
-        /// Determines if the application is running on Windows 7
+        ///   Determines if the application is running on Windows 7
         /// </summary>
-        public static bool RunningOnWin7
-        {
-            get
-            {
+        public static bool RunningOnWin7 {
+            get {
                 return (Environment.OSVersion.Version.Major > 6) ||
-                    (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1);
+                       (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1);
             }
         }
-
-        #endregion
-    }
+        }
 }

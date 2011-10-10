@@ -30,128 +30,115 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace BabelIm.Infrastructure
-{
-    public static class Win32NativeMethods
-    {
-        #region · Inner Types ·
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct FLASHWINFO
-        {
-            public UInt32 cbSize;
-            public IntPtr hwnd;
-            public UInt32 dwFlags;
-            public UInt32 uCount;
-            public UInt32 dwTimeout;
-        } 
-
-		// Struct we'll need to pass to the function
-		[StructLayout(LayoutKind.Sequential)]
-		private struct LASTINPUTINFO
-		{
-		    public UInt32 cbSize;
-		    public UInt32 dwTime;
-		}
-
-        #endregion
-
-        #region · Constants ·
-
+namespace BabelIm.Infrastructure {
+    public static class Win32NativeMethods {
         /// <summary>
-        /// Stop flashing. The system restores the window to its original state.
+        ///   Stop flashing. The system restores the window to its original state.
         /// </summary>
         public const UInt32 FLASHW_STOP = 0;
 
         /// <summary>
-        /// Flash the window caption.
+        ///   Flash the window caption.
         /// </summary>
         public const UInt32 FLASHW_CAPTION = 1;
 
         /// <summary>
-        /// Flash the taskbar button.
+        ///   Flash the taskbar button.
         /// </summary>
         public const UInt32 FLASHW_TRAY = 2;
 
         /// <summary>
-        /// Flash both the window caption and taskbar button. 
-        /// This is equivalent to setting the FLASHW_CAPTION | FLASHW_TRAY flags.
+        ///   Flash both the window caption and taskbar button. 
+        ///   This is equivalent to setting the FLASHW_CAPTION | FLASHW_TRAY flags.
         /// </summary>
         public const UInt32 FLASHW_ALL = 3;
 
         /// <summary>
-        /// Flash continuously, until the FLASHW_STOP flag is set.
+        ///   Flash continuously, until the FLASHW_STOP flag is set.
         /// </summary>
         public const UInt32 FLASHW_TIMER = 4;
 
         /// <summary>
-        /// Flash continuously until the window comes to the foreground.
+        ///   Flash continuously until the window comes to the foreground.
         /// </summary>
         public const UInt32 FLASHW_TIMERNOFG = 12;
 
-        #endregion
-
-        #region · PInvoke Functions ·
+        [DllImport("user32.dll")]
+        private static extern Int32 FlashWindowEx(ref FLASHWINFO pwfi);
 
         [DllImport("user32.dll")]
-        static extern Int32 FlashWindowEx(ref FLASHWINFO pwfi);
+        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 
-		[DllImport("user32.dll")]
-		static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-        
-        #endregion
-
-        #region · Static Members ·
-
-        public static void FlashWindow(IntPtr handle)
-        {
+        public static void FlashWindow(IntPtr handle) {
             IntPtr hWnd = handle;
-            Win32NativeMethods.FLASHWINFO fInfo = new Win32NativeMethods.FLASHWINFO();
+            var fInfo = new Win32NativeMethods.FLASHWINFO();
 
-            fInfo.cbSize    = Convert.ToUInt32(Marshal.SizeOf(fInfo));
-            fInfo.hwnd      = hWnd;
-            fInfo.dwFlags   = Win32NativeMethods.FLASHW_ALL |
-                              Win32NativeMethods.FLASHW_TIMERNOFG |
-                              Win32NativeMethods.FLASHW_CAPTION;
-            fInfo.uCount    = UInt32.MaxValue;
+            fInfo.cbSize = Convert.ToUInt32(Marshal.SizeOf(fInfo));
+            fInfo.hwnd = hWnd;
+            fInfo.dwFlags = Win32NativeMethods.FLASHW_ALL |
+                            Win32NativeMethods.FLASHW_TIMERNOFG |
+                            Win32NativeMethods.FLASHW_CAPTION;
+            fInfo.uCount = UInt32.MaxValue;
             fInfo.dwTimeout = 0;
 
             FlashWindowEx(ref fInfo);
         }
 
         /// <summary>
-        /// Gets the application idle time
+        ///   Gets the application idle time
         /// </summary>
         /// <remarks>
-        /// http://www.geekpedia.com/tutorial210_Retrieving-the-Operating-System-Idle-Time-Uptime-and-Last-Input-Time.html
+        ///   http://www.geekpedia.com/tutorial210_Retrieving-the-Operating-System-Idle-Time-Uptime-and-Last-Input-Time.html
         /// </remarks>
         /// <returns></returns>
-        public static int GetIdleTime()
-        {
-		    // Get the system uptime		
-		    int systemUptime	= Environment.TickCount;
-		    // The tick at which the last input was recorded		
-		    int lastInputTicks 	= 0;
-		    // The number of ticks that passed since last input
-		    int idleTicks 		= 0;				 
-		
-		    // Set the struct		
-		    LASTINPUTINFO lastInputInfo = new LASTINPUTINFO();		
-		    lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
-		    lastInputInfo.dwTime = 0;
-						
-		    // If we have a value from the function		
-		    if (GetLastInputInfo(ref lastInputInfo))
-		    {
-		        // Get the number of ticks at the point when the last activity was seen		
-		        lastInputTicks = (int)lastInputInfo.dwTime;		
-		        // Number of idle ticks = system uptime ticks - number of ticks at last input		
-		        idleTicks       = systemUptime - lastInputTicks;		
-		    }
-		    
-		    return (idleTicks / 1000);
+        public static int GetIdleTime() {
+            // Get the system uptime		
+            int systemUptime = Environment.TickCount;
+            // The tick at which the last input was recorded		
+            int lastInputTicks = 0;
+            // The number of ticks that passed since last input
+            int idleTicks = 0;
+
+            // Set the struct		
+            var lastInputInfo = new LASTINPUTINFO();
+            lastInputInfo.cbSize = (uint) Marshal.SizeOf(lastInputInfo);
+            lastInputInfo.dwTime = 0;
+
+            // If we have a value from the function		
+            if (GetLastInputInfo(ref lastInputInfo))
+            {
+                // Get the number of ticks at the point when the last activity was seen		
+                lastInputTicks = (int) lastInputInfo.dwTime;
+                // Number of idle ticks = system uptime ticks - number of ticks at last input		
+                idleTicks = systemUptime - lastInputTicks;
+            }
+
+            return (idleTicks/1000);
         }
-        
+
+        #region Nested type: FLASHWINFO
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct FLASHWINFO {
+            public UInt32 cbSize;
+            public IntPtr hwnd;
+            public UInt32 dwFlags;
+            public UInt32 uCount;
+            public UInt32 dwTimeout;
+        }
+
+        #endregion
+
+        // Struct we'll need to pass to the function
+
+        #region Nested type: LASTINPUTINFO
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct LASTINPUTINFO {
+            public UInt32 cbSize;
+            public UInt32 dwTime;
+        }
+
         #endregion
     }
 }

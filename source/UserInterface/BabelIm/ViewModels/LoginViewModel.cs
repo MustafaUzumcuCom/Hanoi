@@ -39,220 +39,174 @@ using BabelIm.IoC;
 using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.ViewModels
-{
+namespace BabelIm.ViewModels {
     /// <summary>
-    /// ViewModel for login views
+    ///   ViewModel for login views
     /// </summary>
-    public sealed class LoginViewModel 
-        : ViewModelBase
-    {
-        #region · Fields ·
+    public sealed class LoginViewModel
+        : ViewModelBase {
+        private string login;
+        private ICommand loginCommand;
+        private string password;
+        private Account selectedAccount;
 
-        private string      login;
-        private string      password;
-        private Account     selectedAccount;
-        private ICommand    loginCommand;
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "LoginViewModel" /> class.
+        /// </summary>
+        /// <param name = "container"></param>
+        /// <param name = "session"></param>
+        public LoginViewModel() {
+            Subscribe();
+        }
 
-        #endregion
-
-        #region · Commands ·
-
-        public ICommand LoginCommand
-        {
-            get
-            {
-                if (this.loginCommand == null)
+        public ICommand LoginCommand {
+            get {
+                if (loginCommand == null)
                 {
-                    this.loginCommand = new RelayCommand(() => OnLogin());
+                    loginCommand = new RelayCommand(() => OnLogin());
                 }
 
-                return this.loginCommand;
+                return loginCommand;
             }
         }
 
-        #endregion
-
-        #region · Properties ·
-
         /// <summary>
-        /// Gets the available accounts
+        ///   Gets the available accounts
         /// </summary>
-        public AccountCollection Accounts
-        {
+        public AccountCollection Accounts {
             get { return ServiceFactory.Current.Resolve<IConfigurationManager>().Configuration.Accounts.AccountCollection; }
         }
 
         /// <summary>
-        /// Gets the selected account
+        ///   Gets the selected account
         /// </summary>
-        public Account SelectedAccount
-        {
-            get { return this.selectedAccount; }
-            set
-            {
-                if (this.selectedAccount != value)
+        public Account SelectedAccount {
+            get { return selectedAccount; }
+            set {
+                if (selectedAccount != value)
                 {
-                    this.selectedAccount    = value;
-                    this.Login              = this.SelectedAccount.Login.Username;
-                    this.Password           = this.SelectedAccount.Login.Password;
+                    selectedAccount = value;
+                    Login = SelectedAccount.Login.Username;
+                    Password = SelectedAccount.Login.Password;
 
-                    ServiceFactory.Current.Resolve<IConfigurationManager>().SelectedAccount = this.SelectedAccount;
+                    ServiceFactory.Current.Resolve<IConfigurationManager>().SelectedAccount = SelectedAccount;
 
-                    this.NotifyPropertyChanged(() => SelectedAccount);
+                    NotifyPropertyChanged(() => SelectedAccount);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the login name
+        ///   Gets the login name
         /// </summary>
-        public String Login
-        {
-            get { return this.login; }
-            set
-            {
-                if (this.login != value)
+        public String Login {
+            get { return login; }
+            set {
+                if (login != value)
                 {
-                    this.login = value;
-                    this.NotifyPropertyChanged(() => Login);
+                    login = value;
+                    NotifyPropertyChanged(() => Login);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the password
+        ///   Gets the password
         /// </summary>
-        public String Password
-        {
-            get { return this.password; }
-            set
-            {
-                if (this.password != value)
+        public String Password {
+            get { return password; }
+            set {
+                if (password != value)
                 {
-                    this.password = value;
-                    this.NotifyPropertyChanged(() => Password);
+                    password = value;
+                    NotifyPropertyChanged(() => Password);
                 }
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoginViewModel" /> class.
+        ///   Performs the user login
         /// </summary>
-        /// <param name="container"></param>
-        /// <param name="session"></param>
-        public LoginViewModel()
-            : base()
-        {
-            this.Subscribe();
-        }
-
-        #endregion
-
-        #region · Command Actions ·
-
-        /// <summary>
-        /// Performs the user login
-        /// </summary>
-        private void OnLogin()
-        {
+        private void OnLogin() {
             ThreadPool.QueueUserWorkItem
-            (
-                new WaitCallback
                 (
                     delegate
-                    {
-                        // Build the connection string
-                        IXmppSession                session         = ServiceFactory.Current.Resolve<IXmppSession>();
-                        XmppConnectionStringBuilder builder         = new XmppConnectionStringBuilder();
-                        BabelImConfiguration        configuration   = ServiceFactory.Current.Resolve<IConfigurationManager>().GetConfiguration();
-
-                        if (this.selectedAccount != null &&
-                            configuration.Servers[this.selectedAccount.Server] != null)
                         {
-                            builder.UserId = String.Format
-                            (
-                                "{0}@{1}/{2}", 
-                                this.Login, 
-                                configuration.Servers[this.selectedAccount.Server].DomainName, 
-                                this.selectedAccount.Resource
-                            );
+                            // Build the connection string
+                            var session = ServiceFactory.Current.Resolve<IXmppSession>();
+                            var builder = new XmppConnectionStringBuilder();
+                            BabelImConfiguration configuration =
+                                ServiceFactory.Current.Resolve<IConfigurationManager>().GetConfiguration();
 
-                            Server serverInfo = configuration.Servers[this.selectedAccount.Server];
+                            if (selectedAccount != null &&
+                                configuration.Servers[selectedAccount.Server] != null)
+                            {
+                                builder.UserId = String.Format
+                                    (
+                                        "{0}@{1}/{2}",
+                                        Login,
+                                        configuration.Servers[selectedAccount.Server].DomainName,
+                                        selectedAccount.Resource
+                                    );
 
-                            builder.HostName          = serverInfo.ServerName;
-                            builder.Port            = serverInfo.PortNumber;
-                            builder.Password        = this.Password;
-                            builder.UseProxy        = serverInfo.UseProxy;
-                            builder.ProxyServer     = serverInfo.ProxyServer;
-                            builder.ProxyPortNumber = serverInfo.ProxyPortNumber;
-                            builder.ProxyType       = serverInfo.ProxyType;
-                            builder.ProxyUserName   = serverInfo.ProxyUserName;
-                            builder.ProxyPassword   = serverInfo.ProxyPassword;
-                            builder.ResolveHostName = serverInfo.ResolveHostName;
-                            builder.UseHttpBinding  = serverInfo.UseHttpBinding;
+                                Server serverInfo = configuration.Servers[selectedAccount.Server];
 
-                            // Set client capabilities
-                            session.Capabilities.Node                  = configuration.General.Capabilities.URI;
-                            session.Capabilities.Name                  = configuration.General.Capabilities.Name;
-                            session.Capabilities.Version               = configuration.General.Capabilities.Version;
-                            session.PersonalEventing.IsUserTuneEnabled = configuration.General.UserTuneEnabled;
+                                builder.HostName = serverInfo.ServerName;
+                                builder.Port = serverInfo.PortNumber;
+                                builder.Password = Password;
+                                builder.UseProxy = serverInfo.UseProxy;
+                                builder.ProxyServer = serverInfo.ProxyServer;
+                                builder.ProxyPortNumber = serverInfo.ProxyPortNumber;
+                                builder.ProxyType = serverInfo.ProxyType;
+                                builder.ProxyUserName = serverInfo.ProxyUserName;
+                                builder.ProxyPassword = serverInfo.ProxyPassword;
+                                builder.ResolveHostName = serverInfo.ResolveHostName;
+                                builder.UseHttpBinding = serverInfo.UseHttpBinding;
 
-                            session.Capabilities.Identities.Add
-                            (
-                                new XmppServiceIdentity
-                                (
-                                    configuration.General.Capabilities.Name,
-                                    configuration.General.Capabilities.IdentityCategory,
-                                    configuration.General.Capabilities.IdentityType
-                                )
-                            );
+                                // Set client capabilities
+                                session.Capabilities.Node = configuration.General.Capabilities.URI;
+                                session.Capabilities.Name = configuration.General.Capabilities.Name;
+                                session.Capabilities.Version = configuration.General.Capabilities.Version;
+                                session.PersonalEventing.IsUserTuneEnabled = configuration.General.UserTuneEnabled;
 
-                            session.Open(builder.ToString());
+                                session.Capabilities.Identities.Add
+                                    (
+                                        new XmppServiceIdentity
+                                            (
+                                            configuration.General.Capabilities.Name,
+                                            configuration.General.Capabilities.IdentityCategory,
+                                            configuration.General.Capabilities.IdentityType
+                                            )
+                                    );
+
+                                session.Open(builder.ToString());
+                            }
                         }
-                    }
-                )
-            );
+                );
         }
 
-        #endregion
-
-        #region · Actions Subscriptions ·
-
-        private void Subscribe()
-        {
+        private void Subscribe() {
             ServiceFactory.Current.Resolve<IXmppSession>()
                 .StateChanged
                 .Where(state => state == XmppSessionState.LoggedIn || state == XmppSessionState.LoggedOut)
-                .Subscribe(newState => { this.OnSessionStateChanged(newState); });
+                .Subscribe(newState => { OnSessionStateChanged(newState); });
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        private void OnSessionStateChanged(XmppSessionState newState)
-        {
+        private void OnSessionStateChanged(XmppSessionState newState) {
             Application.Current.Dispatcher.Invoke
-            (
-                (Action)delegate
-                {
-                    if (newState == XmppSessionState.LoggedIn)
-                    {
-                        this.Password = String.Empty;
-                    }
-                    else if (newState == XmppSessionState.LoggedOut)
-                    {
-                        this.NotifyPropertyChanged(() => Accounts);
-                    }
-                }
-            );
+                (
+                    (Action) delegate
+                                 {
+                                     if (newState == XmppSessionState.LoggedIn)
+                                     {
+                                         Password = String.Empty;
+                                     }
+                                     else if (newState == XmppSessionState.LoggedOut)
+                                     {
+                                         NotifyPropertyChanged(() => Accounts);
+                                     }
+                                 }
+                );
         }
-
-        #endregion
-    }
+        }
 }

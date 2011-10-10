@@ -42,89 +42,83 @@ using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.InstantMessaging;
 using Microsoft.Win32;
 
-namespace BabelIm.ViewModels
-{
+namespace BabelIm.ViewModels {
     /// <summary>
-    /// ViewModel for session views
+    ///   ViewModel for session views
     /// </summary>
-    public sealed class SessionViewModel 
-        : ViewModel<XmppSession>
-    {
-        #region · Constants ·
+    public sealed class SessionViewModel
+        : ViewModel<XmppSession> {
+        private static readonly int IdleTime = 30;
 
-        static readonly int IdleTime = 30;
-
-        #endregion
-
-        #region · Fields ·
-
-        private Account             currentAccount;
-        private XmppPresenceState   presenceState;
-        private XmppPresenceState   previousPresenceState;
-        private XmppContact         userContact;
-        private DispatcherTimer		dispatcherTimer;
-
-        #endregion
-
-        #region · Properties ·
+        private Account currentAccount;
+        private DispatcherTimer dispatcherTimer;
+        private XmppPresenceState presenceState;
+        private XmppPresenceState previousPresenceState;
+        private XmppContact userContact;
 
         /// <summary>
-        /// Gets the user display name
+        ///   Inicializes a new instance of the <see cref = "SessionViewModel" /> class.
         /// </summary>
-        public string DisplayName
-        {
-            get
-            {
+        /// <param name = "container"></param>
+        /// <param name = "regionManager"></param>
+        /// <param name = "viewManager"></param>
+        public SessionViewModel() {
+            Subscribe();
+        }
+
+        /// <summary>
+        ///   Gets the user display name
+        /// </summary>
+        public string DisplayName {
+            get {
                 if (ServiceFactory.Current.Resolve<IXmppSession>().State != XmppSessionState.LoggedIn ||
-                    this.currentAccount == null)
+                    currentAccount == null)
                 {
                     return String.Empty;
                 }
 
-                return this.currentAccount.DisplayName;
+                return currentAccount.DisplayName;
             }
         }
 
         /// <summary>
-        /// Gets the user <see cref="XmppPresenceState">presence state</see>
+        ///   Gets the user <see cref = "XmppPresenceState">presence state</see>
         /// </summary>
-        public XmppPresenceState PresenceState
-        {
-            get { return this.presenceState; }
-            set 
-            {
-                if (this.presenceState != value)
+        public XmppPresenceState PresenceState {
+            get { return presenceState; }
+            set {
+                if (presenceState != value)
                 {
                     ServiceFactory.Current.Resolve<IConfigurationManager>().Configuration.Save();
 
-                    this.previousPresenceState      = this.presenceState;
-                    this.presenceState              = value;
+                    previousPresenceState = presenceState;
+                    presenceState = value;
 
-                    if (this.currentAccount != null)
+                    if (currentAccount != null)
                     {
-                        this.currentAccount.Presence = this.presenceState.ToString();
+                        currentAccount.Presence = presenceState.ToString();
                     }
 
                     if (ServiceFactory.Current.Resolve<IXmppSession>().State == XmppSessionState.LoggedIn)
                     {
-                        ServiceFactory.Current.Resolve<IXmppSession>().SetPresence(value, this.Status);
+                        ServiceFactory.Current.Resolve<IXmppSession>().SetPresence(value, Status);
                     }
 
-                    this.NotifyPropertyChanged(() => PresenceState);
+                    NotifyPropertyChanged(() => PresenceState);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the user avatar
+        ///   Gets the user avatar
         /// </summary>
-        public Stream AvatarImage
-        {
-            get
-            {
+        public Stream AvatarImage {
+            get {
                 if (ServiceFactory.Current.Resolve<IXmppSession>().State == XmppSessionState.LoggedIn)
                 {
-                    return ServiceFactory.Current.Resolve<IXmppSession>().AvatarStorage.ReadAvatar(ServiceFactory.Current.Resolve<IXmppSession>().UserId.BareIdentifier);
+                    return
+                        ServiceFactory.Current.Resolve<IXmppSession>().AvatarStorage.ReadAvatar(
+                            ServiceFactory.Current.Resolve<IXmppSession>().UserId.BareIdentifier);
                 }
 
                 return null;
@@ -132,123 +126,83 @@ namespace BabelIm.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets the user status message
+        ///   Gets or sets the user status message
         /// </summary>
-        public string Status
-        {
-            get
-            {
+        public string Status {
+            get {
                 if (ServiceFactory.Current.Resolve<IXmppSession>().State != XmppSessionState.LoggedIn ||
-                    this.currentAccount == null)
+                    currentAccount == null)
                 {
                     return String.Empty;
                 }
-                return this.currentAccount.Status;
+                return currentAccount.Status;
             }
-            set
-            {
-                if (this.currentAccount != null)
+            set {
+                if (currentAccount != null)
                 {
-                    if (this.currentAccount.Status != value)
+                    if (currentAccount.Status != value)
                     {
                         ServiceFactory.Current.Resolve<IConfigurationManager>().Configuration.Save();
-                        this.currentAccount.Status = value;
-                        ServiceFactory.Current.Resolve<IXmppSession>().SetPresence(this.PresenceState, value);
+                        currentAccount.Status = value;
+                        ServiceFactory.Current.Resolve<IXmppSession>().SetPresence(PresenceState, value);
 
-                        this.NotifyPropertyChanged(() => Status);
+                        NotifyPropertyChanged(() => Status);
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Gets the contact list
+        ///   Gets the contact list
         /// </summary>
-        public XmppRoster Contacts
-        {
+        public XmppRoster Contacts {
             get { return ServiceFactory.Current.Resolve<IXmppSession>().Roster; }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Inicializes a new instance of the <see cref="SessionViewModel" /> class.
+        ///   Selects a new avatar image for the current user
         /// </summary>
-        /// <param name="container"></param>
-        /// <param name="regionManager"></param>
-        /// <param name="viewManager"></param>
-        public SessionViewModel()
-            : base()
-        {
-            this.Subscribe();
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        /// <summary>
-        /// Selects a new avatar image for the current user
-        /// </summary>
-        public void SelectAvatarImage()
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
+        public void SelectAvatarImage() {
+            var ofd = new OpenFileDialog();
 
             ofd.Filter = "Pictures|*.png;*.gif*;*.jpg;*.bmp|All Files|*.*";
 
             if (ofd.ShowDialog().Value)
             {
                 // Publish the avatar
-                ThreadPool.QueueUserWorkItem(new WaitCallback(PublishAvatar), ofd.FileName);
+                ThreadPool.QueueUserWorkItem(PublishAvatar, ofd.FileName);
             }
         }
 
-        #endregion
-
-        #region · Actions Subscriptions ·
-
-        private void Subscribe()
-        {
+        private void Subscribe() {
             ServiceFactory.Current.Resolve<IXmppSession>()
                 .StateChanged
                 .Where(state => state == XmppSessionState.LoggedIn || state == XmppSessionState.LoggedOut)
-                .Subscribe(newState => { this.OnSessionStateChanged(newState); });
+                .Subscribe(newState => { OnSessionStateChanged(newState); });
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        private void OnSessionStateChanged(XmppSessionState newSessionState)
-        {
+        private void OnSessionStateChanged(XmppSessionState newSessionState) {
             if (newSessionState == XmppSessionState.LoggedIn)
             {
-                this.Initialize();
+                Initialize();
             }
             else if (newSessionState == XmppSessionState.LoggedOut)
             {
-                if (this.dispatcherTimer != null)
+                if (dispatcherTimer != null)
                 {
-                    this.dispatcherTimer.Stop();
-                    this.dispatcherTimer = null;
+                    dispatcherTimer.Stop();
+                    dispatcherTimer = null;
                 }
             }
 
-            this.NotifyAllPropertiesChanged();
+            NotifyAllPropertiesChanged();
         }
-        
-        #endregion
 
-        #region · Private Methods ·
-
-        private void PublishAvatar(object state)
-        {
-            string          avatarFilePath  = (string)state;
-            MemoryStream    stream          = new MemoryStream();
-            Image           selectedImage   = Image.FromFile(avatarFilePath);
-            Image           avatarImage     = null;
+        private void PublishAvatar(object state) {
+            var avatarFilePath = (string) state;
+            var stream = new MemoryStream();
+            Image selectedImage = Image.FromFile(avatarFilePath);
+            Image avatarImage = null;
 
             try
             {
@@ -261,19 +215,19 @@ namespace BabelIm.ViewModels
                 // Publish the avatar image
                 ServiceFactory.Current.Resolve<IXmppSession>().PublishAvatar("image/png", hash, avatarImage);
 
-                this.Dispatcher.BeginInvoke(
+                Dispatcher.BeginInvoke(
                     DispatcherPriority.ApplicationIdle,
                     new ThreadStart(delegate
-                    {
-                        // Update the configuration
-                        this.currentAccount.Avatar = hash;
+                                        {
+                                            // Update the configuration
+                                            currentAccount.Avatar = hash;
 
-                        // Save configuration
-                        ServiceFactory.Current.Resolve<IConfigurationManager>().Configuration.Save();
+                                            // Save configuration
+                                            ServiceFactory.Current.Resolve<IConfigurationManager>().Configuration.Save();
 
-                        // Notify avatar change
-                        this.NotifyPropertyChanged(() => AvatarImage);
-                    }));
+                                            // Notify avatar change
+                                            NotifyPropertyChanged(() => AvatarImage);
+                                        }));
             }
             catch
             {
@@ -301,43 +255,42 @@ namespace BabelIm.ViewModels
             }
         }
 
-        private void Initialize()
-        {
-            this.currentAccount     = ServiceFactory.Current.Resolve<IConfigurationManager>().SelectedAccount;
-            this.dispatcherTimer    = new DispatcherTimer(DispatcherPriority.ApplicationIdle, this.Dispatcher);
+        private void Initialize() {
+            currentAccount = ServiceFactory.Current.Resolve<IConfigurationManager>().SelectedAccount;
+            dispatcherTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, Dispatcher);
 
-            if (this.currentAccount != null)
+            if (currentAccount != null)
             {
-                this.PresenceState = (XmppPresenceState)Enum.Parse(typeof(XmppPresenceState), this.currentAccount.Presence);
-                this.userContact   = ServiceFactory.Current.Resolve<IXmppSession>().Roster[ServiceFactory.Current.Resolve<IXmppSession>().UserId.BareIdentifier];
+                PresenceState = (XmppPresenceState) Enum.Parse(typeof (XmppPresenceState), currentAccount.Presence);
+                userContact =
+                    ServiceFactory.Current.Resolve<IXmppSession>().Roster[
+                        ServiceFactory.Current.Resolve<IXmppSession>().UserId.BareIdentifier];
             }
             else
             {
-                this.presenceState = XmppPresenceState.Offline;
+                presenceState = XmppPresenceState.Offline;
             }
 
-            this.dispatcherTimer.Interval   = new TimeSpan(0, 0, 5);
-            this.dispatcherTimer.Tick       += delegate(object s, EventArgs args)
-            {
-                if (Win32NativeMethods.GetIdleTime() >= IdleTime)
-                {
-                    if (this.PresenceState != XmppPresenceState.Idle)
-                    {
-                        this.PresenceState = XmppPresenceState.Idle;
-                    }
-                }
-                else
-                {
-                    if (this.PresenceState == XmppPresenceState.Idle)
-                    {
-                        this.PresenceState = this.previousPresenceState;
-                    }
-                }
-            };
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
+            dispatcherTimer.Tick += delegate
+                                        {
+                                            if (Win32NativeMethods.GetIdleTime() >= IdleTime)
+                                            {
+                                                if (PresenceState != XmppPresenceState.Idle)
+                                                {
+                                                    PresenceState = XmppPresenceState.Idle;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (PresenceState == XmppPresenceState.Idle)
+                                                {
+                                                    PresenceState = previousPresenceState;
+                                                }
+                                            }
+                                        };
 
-            this.dispatcherTimer.Start();
+            dispatcherTimer.Start();
         }
-
-        #endregion
-    }
+        }
 }

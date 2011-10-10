@@ -2,31 +2,28 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace BabelIm.Infrastructure
-{
+namespace BabelIm.Infrastructure {
     /// <summary>
-    /// A command whose sole purpose is to 
-    /// relay its functionality to other
-    /// objects by invoking delegates. The
-    /// default return value for the CanExecute
-    /// method is 'true'.
+    ///   A command whose sole purpose is to 
+    ///   relay its functionality to other
+    ///   objects by invoking delegates. The
+    ///   default return value for the CanExecute
+    ///   method is 'true'.
     /// </summary>
-    public class RelayCommand<T> : ICommand
-    {
-        #region Constructors
+    public class RelayCommand<T> : ICommand {
+        private readonly Predicate<T> _canExecute;
+        private readonly Action<T> _execute;
 
         public RelayCommand(Action<T> execute)
-            : this(execute, null)
-        {
+            : this(execute, null) {
         }
 
         /// <summary>
-        /// Creates a new command.
+        ///   Creates a new command.
         /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
-        {
+        /// <param name = "execute">The execution logic.</param>
+        /// <param name = "canExecute">The execution status logic.</param>
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute) {
             if (execute == null)
                 throw new ArgumentNullException("execute");
 
@@ -34,72 +31,56 @@ namespace BabelIm.Infrastructure
             _canExecute = canExecute;
         }
 
-        #endregion // Constructors
-
         #region ICommand Members
 
         [DebuggerStepThrough]
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null ? true : _canExecute((T)parameter);
+        public bool CanExecute(object parameter) {
+            return _canExecute == null ? true : _canExecute((T) parameter);
         }
 
-        public event EventHandler CanExecuteChanged
-        {
-            add
-            {
+        public event EventHandler CanExecuteChanged {
+            add {
                 if (_canExecute != null)
                     CommandManager.RequerySuggested += value;
             }
-            remove
-            {
+            remove {
                 if (_canExecute != null)
                     CommandManager.RequerySuggested -= value;
             }
         }
 
-        public void Execute(object parameter)
-        {
-            _execute((T)parameter);
+        public void Execute(object parameter) {
+            _execute((T) parameter);
         }
 
-        #endregion // ICommand Members
-
-        #region Fields
-
-        readonly Action<T> _execute = null;
-        readonly Predicate<T> _canExecute = null;
-
-        #endregion // Fields
+        #endregion
     }
 
     /// <summary>
-    /// A command whose sole purpose is to 
-    /// relay its functionality to other
-    /// objects by invoking delegates. The
-    /// default return value for the CanExecute
-    /// method is 'true'.
+    ///   A command whose sole purpose is to 
+    ///   relay its functionality to other
+    ///   objects by invoking delegates. The
+    ///   default return value for the CanExecute
+    ///   method is 'true'.
     /// </summary>
-    public class RelayCommand : ICommand
-    {
-        #region Constructors
+    public class RelayCommand : ICommand {
+        private readonly Func<bool> _canExecute;
+        private readonly Action _execute;
 
         /// <summary>
-        /// Creates a new command that can always execute.
+        ///   Creates a new command that can always execute.
         /// </summary>
-        /// <param name="execute">The execution logic.</param>
+        /// <param name = "execute">The execution logic.</param>
         public RelayCommand(Action execute)
-            : this(execute, null)
-        {
+            : this(execute, null) {
         }
 
         /// <summary>
-        /// Creates a new command.
+        ///   Creates a new command.
         /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action execute, Func<bool> canExecute)
-        {
+        /// <param name = "execute">The execution logic.</param>
+        /// <param name = "canExecute">The execution status logic.</param>
+        public RelayCommand(Action execute, Func<bool> canExecute) {
             if (execute == null)
                 throw new ArgumentNullException("execute");
 
@@ -107,42 +88,28 @@ namespace BabelIm.Infrastructure
             _canExecute = canExecute;
         }
 
-        #endregion // Constructors
-
         #region ICommand Members
 
         [DebuggerStepThrough]
-        public bool CanExecute(object parameter)
-        {
+        public bool CanExecute(object parameter) {
             return _canExecute == null ? true : _canExecute();
         }
 
-        public event EventHandler CanExecuteChanged
-        {
-            add
-            {
+        public event EventHandler CanExecuteChanged {
+            add {
                 if (_canExecute != null)
                     CommandManager.RequerySuggested += value;
             }
-            remove
-            {
+            remove {
                 if (_canExecute != null)
                     CommandManager.RequerySuggested -= value;
             }
         }
 
-        public void Execute(object parameter)
-        {
+        public void Execute(object parameter) {
             _execute();
         }
 
-        #endregion // ICommand Members
-
-        #region Fields
-
-        readonly Action _execute;
-        readonly Func<bool> _canExecute;
-
-        #endregion // Fields
+        #endregion
     }
 }

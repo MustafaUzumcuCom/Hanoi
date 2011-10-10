@@ -41,126 +41,60 @@ using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.ViewModels;
 using BabelIm.Views;
 
-namespace BabelIm
-{
+namespace BabelIm {
     /// <summary>
-    /// Chat View manager
+    ///   Chat View manager
     /// </summary>
-    public sealed class ChatViewManager 
-        : DispatcherObject, IChatViewManager
-    {
-        #region · Attached Properties ·
-
+    public sealed class ChatViewManager
+        : DispatcherObject, IChatViewManager {
         /// <summary>
-        /// Identifies the IsDesktopCanvas dependency property.
+        ///   Identifies the IsDesktopCanvas dependency property.
         /// </summary>
         public static readonly DependencyProperty IsChatContainerProperty =
-            DependencyProperty.RegisterAttached("IsChatContainer", typeof(bool), typeof(ChatViewManager),
-                new FrameworkPropertyMetadata((bool)false,
-                    new PropertyChangedCallback(OnIsChatContainer)));
+            DependencyProperty.RegisterAttached("IsChatContainer", typeof (bool), typeof (ChatViewManager),
+                                                new FrameworkPropertyMetadata(false,
+                                                                              OnIsChatContainer));
 
-        #endregion
+        private readonly object SyncObject = new object();
 
-        #region · Attached Property Get/Set Methods ·
-
-        /// <summary>
-        /// Gets the value of the IsDesktopCanvas attached property
-        /// </summary>
-        /// <param name="d"></param>
-        /// <returns></returns>
-        public static bool GetIsChatContainer(DependencyObject d)
-        {
-            return (bool)d.GetValue(IsChatContainerProperty);
-        }
-
-        /// <summary>
-        /// Sets the value of the IsDesktopCanvas attached property
-        /// </summary>
-        /// <param name="d"></param>
-        /// <param name="value"></param>
-        public static void SetIsChatContainer(DependencyObject d, bool value)
-        {
-            d.SetValue(IsChatContainerProperty, value);
-        }
-
-        #endregion
-
-        #region · Attached Properties Callbacks ·
-
-        private static void OnIsChatContainer(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d != null)
-            {
-                IChatViewManager chatViewManager = ServiceFactory.Current.Resolve<IChatViewManager>();
-
-                if (chatViewManager != null)
-                {
-                    chatViewManager.RegisterContainer(d);
-                }
-            }
-        }
-
-        #endregion
-
-        #region · Sync Object ·
-
-        object SyncObject = new object();
-
-        #endregion
-
-        #region · Fields ·
-
-        private IDictionary<string, PivotItem>  chatViews;
-        private PivotControl                    container;
-
-        #region · Subscriptions ·
+        private readonly IDictionary<string, PivotItem> chatViews;
 
         private IDisposable chatMessagesSubscription;
-
-        #endregion
-
-        #endregion
-
-        #region · Constructors ·
+        private PivotControl container;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChatViewManager"/> class
+        ///   Initializes a new instance of the <see cref = "ChatViewManager" /> class
         /// </summary>
-        public ChatViewManager()
-        {
-            this.chatViews = new Dictionary<string, PivotItem>();
+        public ChatViewManager() {
+            chatViews = new Dictionary<string, PivotItem>();
 
-            this.Subscribe();
+            Subscribe();
         }
 
-        #endregion
-
-        #region · Methods ·
+        #region IChatViewManager Members
 
         /// <summary>
-        /// Opens a new chat view for the given contact jid 
+        ///   Opens a new chat view for the given contact jid
         /// </summary>
-        /// <param name="jid">The contact jid</param>
-        public void OpenChatView(XmppJid jid)
-        {
-            this.OpenChatView(jid.BareIdentifier);
+        /// <param name = "jid">The contact jid</param>
+        public void OpenChatView(XmppJid jid) {
+            OpenChatView(jid.BareIdentifier);
         }
 
         /// <summary>
-        /// Opens a new chat view for the given contact jid 
+        ///   Opens a new chat view for the given contact jid
         /// </summary>
-        /// <param name="jid">The contact jid</param>
-        public void OpenChatView(string jid)
-        {
+        /// <param name = "jid">The contact jid</param>
+        public void OpenChatView(string jid) {
             lock (SyncObject)
             {
-                if (!this.chatViews.ContainsKey(jid))
+                if (!chatViews.ContainsKey(jid))
                 {
                     OpenChatView(ServiceFactory.Current.Resolve<IXmppSession>().CreateChat(jid), false);
                 }
                 else
                 {
-                    if (this.chatViews.ContainsKey(jid))
+                    if (chatViews.ContainsKey(jid))
                     {
                         OpenChatView(ServiceFactory.Current.Resolve<IXmppSession>().CreateChat(jid), true);
                     }
@@ -169,128 +103,139 @@ namespace BabelIm
         }
 
         /// <summary>
-        /// Opens a new chat view for the given chat instance
+        ///   Opens a new chat view for the given chat instance
         /// </summary>
-        /// <param name="chat">A <see cref="XmppChat"/> instance</param>
-        public void OpenChatView(XmppChat chat)
-        {
-            this.OpenChatView(chat, false);
-        }
-
-        /// <summary>
-        /// Opens a new chat view for the given chat instance
-        /// </summary>
-        /// <param name="chat">A <see cref="XmppChat"/> instance</param>
-        public void OpenChatView(XmppChat chat, bool activate)
-        {
-            this.Dispatcher.BeginInvoke
-            (
-                DispatcherPriority.Normal,
-                new ThreadStart
+        /// <param name = "chat">A <see cref = "XmppChat" /> instance</param>
+        public void OpenChatView(XmppChat chat, bool activate) {
+            Dispatcher.BeginInvoke
                 (
-                    delegate
-                    {
-                        lock (SyncObject)
-                        {
-                            if (!activate)
+                    DispatcherPriority.Normal,
+                    new ThreadStart
+                        (
+                        delegate
                             {
-                                ChatViewModel viewModel = new ChatViewModel(chat);
-                                ChatView view = new ChatView();
+                                lock (SyncObject)
+                                {
+                                    if (!activate)
+                                    {
+                                        var viewModel = new ChatViewModel(chat);
+                                        var view = new ChatView();
 
-                                view.DataContext = viewModel;
+                                        view.DataContext = viewModel;
 
-                                PivotItem chatViewItem = new PivotItem();
+                                        var chatViewItem = new PivotItem();
 
-                                chatViewItem.HorizontalAlignment    = HorizontalAlignment.Stretch;
-                                chatViewItem.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                                chatViewItem.Header                 = chat.Contact.DisplayName;
-                                chatViewItem.Content                = view;
+                                        chatViewItem.HorizontalAlignment = HorizontalAlignment.Stretch;
+                                        chatViewItem.HorizontalContentAlignment = HorizontalAlignment.Stretch;
+                                        chatViewItem.Header = chat.Contact.DisplayName;
+                                        chatViewItem.Content = view;
 
-                                this.chatViews.Add(chat.Contact.ContactId.BareIdentifier, chatViewItem);
+                                        chatViews.Add(chat.Contact.ContactId.BareIdentifier, chatViewItem);
 
-                                this.container.Items.Add(chatViewItem);
-                                this.container.Invalidate();
-                                this.container.SelectedItem = chatViewItem;
+                                        container.Items.Add(chatViewItem);
+                                        container.Invalidate();
+                                        container.SelectedItem = chatViewItem;
+                                    }
+                                    else
+                                    {
+                                        container.SelectedItem = chatViews[chat.Contact.ContactId.BareIdentifier];
+                                    }
+                                }
                             }
-                            else
-                            {
-                                this.container.SelectedItem = this.chatViews[chat.Contact.ContactId.BareIdentifier];
-                            }
-                        }
-                    }
-                )
-            );
+                        )
+                );
         }
 
         /// <summary>
-        /// Closes the chat view for a given <see cref="XmppChat"/> instance
+        ///   Closes the chat view for a given <see cref = "XmppChat" /> instance
         /// </summary>
-        /// <param name="chat">A <see cref="XmppChat"/> instance</param>
-        public void CloseChatView(string jid)
-        {
+        /// <param name = "chat">A <see cref = "XmppChat" /> instance</param>
+        public void CloseChatView(string jid) {
             lock (SyncObject)
             {
-                if (this.chatViews.ContainsKey(jid))
+                if (chatViews.ContainsKey(jid))
                 {
-                    PivotItem chatViewItem = this.chatViews[jid];
+                    PivotItem chatViewItem = chatViews[jid];
 #warning Remove the view from the container
-                    this.chatViews.Remove(jid);
+                    chatViews.Remove(jid);
                 }
             }
         }
 
-        public void RegisterContainer(DependencyObject d)
-        {
-            this.container = d as PivotControl;
+        public void RegisterContainer(DependencyObject d) {
+            container = d as PivotControl;
         }
 
         #endregion
 
-        #region · Private Methods ·
-        
-        private void Subscribe()
-        {
+        /// <summary>
+        ///   Gets the value of the IsDesktopCanvas attached property
+        /// </summary>
+        /// <param name = "d"></param>
+        /// <returns></returns>
+        public static bool GetIsChatContainer(DependencyObject d) {
+            return (bool) d.GetValue(IsChatContainerProperty);
+        }
+
+        /// <summary>
+        ///   Sets the value of the IsDesktopCanvas attached property
+        /// </summary>
+        /// <param name = "d"></param>
+        /// <param name = "value"></param>
+        public static void SetIsChatContainer(DependencyObject d, bool value) {
+            d.SetValue(IsChatContainerProperty, value);
+        }
+
+        private static void OnIsChatContainer(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (d != null)
+            {
+                var chatViewManager = ServiceFactory.Current.Resolve<IChatViewManager>();
+
+                if (chatViewManager != null)
+                {
+                    chatViewManager.RegisterContainer(d);
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Opens a new chat view for the given chat instance
+        /// </summary>
+        /// <param name = "chat">A <see cref = "XmppChat" /> instance</param>
+        public void OpenChatView(XmppChat chat) {
+            OpenChatView(chat, false);
+        }
+
+        private void Subscribe() {
             ServiceFactory.Current.Resolve<IXmppSession>()
                 .StateChanged
                 .Where(state => state == XmppSessionState.LoggingOut)
                 .Subscribe
-            (
-                newState =>
-                {
-                    this.OnSessionStateChanged(newState);
-                }
-            );
-            
-            this.chatMessagesSubscription = ServiceFactory.Current.Resolve<IXmppSession>()
+                (
+                    newState => { OnSessionStateChanged(newState); }
+                );
+
+            chatMessagesSubscription = ServiceFactory.Current.Resolve<IXmppSession>()
                 .MessageReceived
                 .Subscribe
-            (
-                message => 
-                {
-                    this.OnChatMessageReceived(message);
-                }
-            );
+                (
+                    message => { OnChatMessageReceived(message); }
+                );
         }
 
-        private void Unsubscribe()
-        {
+        private void Unsubscribe() {
             if (chatMessagesSubscription != null)
             {
-                this.chatMessagesSubscription.Dispose();
-                this.chatMessagesSubscription = null;
+                chatMessagesSubscription.Dispose();
+                chatMessagesSubscription = null;
             }
         }
 
-        #endregion
-
-        #region · Event Handlers ·
-
-        private void OnSessionStateChanged(XmppSessionState newState)
-        {
+        private void OnSessionStateChanged(XmppSessionState newState) {
             lock (SyncObject)
             {
-                List<string>                                    removedViews    = new List<string>();
-                IEnumerator<KeyValuePair<string, PivotItem>>    enumerator      = this.chatViews.GetEnumerator();
+                var removedViews = new List<string>();
+                IEnumerator<KeyValuePair<string, PivotItem>> enumerator = chatViews.GetEnumerator();
 
                 while (enumerator.MoveNext())
                 {
@@ -299,18 +244,15 @@ namespace BabelIm
 
                 foreach (string jid in removedViews)
                 {
-                    this.CloseChatView(jid);
+                    CloseChatView(jid);
                 }
             }
 
-            this.Unsubscribe();
+            Unsubscribe();
         }
 
-        private void OnChatMessageReceived(XmppMessage message)
-        {
-            this.OpenChatView(message.From);
+        private void OnChatMessageReceived(XmppMessage message) {
+            OpenChatView(message.From);
         }
-
-        #endregion
-    }
+        }
 }

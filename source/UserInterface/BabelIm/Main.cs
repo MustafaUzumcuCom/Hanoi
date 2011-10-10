@@ -1,15 +1,9 @@
-﻿namespace BabelIm
-{
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Windows;
+﻿using System;
 
-    public static class ChronosMain
-    {
+namespace BabelIm {
+    public static class ChronosMain {
         [STAThread]
-        public static void Main(params string[] args)
-        {
+        public static void Main(params string[] args) {
             if (SingleInstance.InitializeAsFirstInstance("BabelIM"))
             {
                 var application = new App();

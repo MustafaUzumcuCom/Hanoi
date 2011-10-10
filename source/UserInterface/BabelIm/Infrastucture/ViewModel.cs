@@ -28,62 +28,33 @@
 */
 
 using System.ComponentModel;
-using System.Windows.Threading;
 
-namespace BabelIm.Infrastructure
-{
+namespace BabelIm.Infrastructure {
     /// <summary>
-    /// Base class for ViewModel implementations
+    ///   Base class for ViewModel implementations
     /// </summary>
-    /// <typeparam name="TDataModel"></typeparam>
-    /// <remarks>Model-View-ViewModel pattern</remarks>
-    public abstract class ViewModel<TDataModel> 
-        : ViewModelBase, IDataErrorInfo
-    {
-        #region · Fields ·
-
-        private TDataModel  dataModel;
-
-        #endregion
-
-        #region · IDataErrorInfo Members ·
-
-        public string Error
-        {
-            get { return null; }
-        }
-
-        public string this[string columnName]
-        {
-            get { return null; }
-        }
-
-        #endregion
-
-        #region · Protected Properties ·
-
+    /// <typeparam name = "TDataModel"></typeparam>
+    /// <remarks>
+    ///   Model-View-ViewModel pattern
+    /// </remarks>
+    public abstract class ViewModel<TDataModel>
+        : ViewModelBase, IDataErrorInfo {
         /// <summary>
-        /// Gets the data model.
+        ///   Gets the data model.
         /// </summary>
         /// <value>The data model.</value>
-        protected TDataModel DataModel
-        {
-            get { return this.dataModel; }
-            set { this.dataModel = value; }
+        protected TDataModel DataModel { get; set; }
+
+        #region IDataErrorInfo Members
+
+        public string Error {
+            get { return null; }
+        }
+
+        public string this[string columnName] {
+            get { return null; }
         }
 
         #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModel"/> class.
-        /// </summary>
-        protected ViewModel()
-            : base()
-        {
         }
-
-        #endregion
-    }
 }

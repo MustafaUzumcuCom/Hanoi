@@ -33,44 +33,23 @@ using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.ViewModels
-{
+namespace BabelIm.ViewModels {
     /// <summary>
-    /// ViewModel for layout views
+    ///   ViewModel for layout views
     /// </summary>
-    public sealed class LayoutViewModel : ViewModel<XmppSession>
-    {
-        #region · Properties ·
-        
+    public sealed class LayoutViewModel : ViewModel<XmppSession> {
         /// <summary>
-        /// Gets the <see cref="XmppPersonalEventing">personal eventing</see> instance
+        ///   Gets the <see cref = "XmppPersonalEventing">personal eventing</see> instance
         /// </summary>
-        public XmppPersonalEventing PersonalEventing
-        {
+        public XmppPersonalEventing PersonalEventing {
             get { return ServiceFactory.Current.Resolve<IXmppSession>().PersonalEventing; }
         }
 
         /// <summary>
-        /// Gets the <see cref="XmppServiceDiscovery">service discovery</see> instance
-        /// </summary>        
-        public XmppServiceDiscovery ServiceDiscovery
-        {
+        ///   Gets the <see cref = "XmppServiceDiscovery">service discovery</see> instance
+        /// </summary>
+        public XmppServiceDiscovery ServiceDiscovery {
             get { return ServiceFactory.Current.Resolve<IXmppSession>().ServiceDiscovery; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LayoutViewModel" /> class.
-        /// </summary>
-        /// <param name="container"></param>
-        public LayoutViewModel()
-            : base()
-        {
-        }
-
-        #endregion
     }
 }

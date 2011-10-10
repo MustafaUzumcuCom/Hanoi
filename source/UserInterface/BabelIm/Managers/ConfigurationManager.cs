@@ -34,199 +34,157 @@ using BabelIm.Infrastructure;
 using BabelIm.IoC;
 using BabelIm.Net.Xmpp.InstantMessaging;
 
-namespace BabelIm
-{
+namespace BabelIm {
     /// <summary>
-    /// Configuration manager class
+    ///   Configuration manager class
     /// </summary>
-    public sealed class ConfigurationManager 
-        : IConfigurationManager
-    {
-        #region · Fields ·
-
-        private Account                 selectedAccount;
-        private BabelImConfiguration    configuration;
-        private RelayCommand            openPreferencesViewCommand;
-        private RelayCommand            openServerPreferencesViewCommand;
-        private RelayCommand            openAccountPreferencesViewCommand;
-
-        #endregion
-
-        #region · Command Properties ·
+    public sealed class ConfigurationManager
+        : IConfigurationManager {
+        private BabelImConfiguration configuration;
+        private RelayCommand openAccountPreferencesViewCommand;
+        private RelayCommand openPreferencesViewCommand;
+        private RelayCommand openServerPreferencesViewCommand;
 
         /// <summary>
-        /// Gets or sets the open preferences view command
+        ///   Initializes a new instance of the <see cref = "ConfigurationManager" /> class.
         /// </summary>
-        /// <value>The add new command.</value>
-        public ICommand OpenPreferencesViewCommand
-        {
-            get
-            {
-                if (this.openPreferencesViewCommand == null)
-                {
-                    this.openPreferencesViewCommand = new RelayCommand
-                    (
-                        () => OnOpenPreferencesView(),
-                        () => CanOpenPreferencesView()
-                    );
-                }
-
-                return this.openPreferencesViewCommand;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the open server preferences view command
-        /// </summary>
-        /// <value>The add new command.</value>
-        public ICommand OpenServerPreferencesViewCommand
-        {
-            get
-            {
-                if (this.openServerPreferencesViewCommand == null)
-                {
-                    this.openServerPreferencesViewCommand = new RelayCommand
-                    (
-                        () => OnOpenServerPreferencesView(),
-                        () => CanOpenServerPreferencesView()
-                    );
-                }
-
-                return this.openServerPreferencesViewCommand;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the open account preferences view command
-        /// </summary>
-        /// <value>The add new command.</value>
-        public ICommand OpenAccountPreferencesViewCommand
-        {
-            get
-            {
-                if (this.openAccountPreferencesViewCommand == null)
-                {
-                    this.openAccountPreferencesViewCommand = new RelayCommand
-                    (
-                        () => OnOpenAccountPreferencesView(),
-                        () => CanOpenAccountPreferencesView()
-                    );
-                }
-
-                return this.openServerPreferencesViewCommand;
-            }
-        }
-
-        #endregion
-
-        #region · Properties ·
-
-        /// <summary>
-        /// Gets the account information selected for login
-        /// </summary>
-        public Account SelectedAccount
-        {
-            get { return this.selectedAccount; }
-            set { this.selectedAccount = value; }
-        }
-
-        /// <summary>
-        /// Gets the application configuration information
-        /// </summary>
-        public BabelImConfiguration Configuration
-        {
-            get { return this.configuration; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationManager"/> class.
-        /// </summary>
-        public ConfigurationManager()
-        {
-            this.configuration = BabelImConfiguration.GetConfiguration();
+        public ConfigurationManager() {
+            configuration = BabelImConfiguration.GetConfiguration();
 #warning TODO: Receive Session chage messages
         }
 
-        #endregion
-        
-        #region · Methods ·
+        #region IConfigurationManager Members
 
         /// <summary>
-        /// Gets the configuration by reading it from the configuration file.
+        ///   Gets or sets the open preferences view command
+        /// </summary>
+        /// <value>The add new command.</value>
+        public ICommand OpenPreferencesViewCommand {
+            get {
+                if (openPreferencesViewCommand == null)
+                {
+                    openPreferencesViewCommand = new RelayCommand
+                        (
+                        () => OnOpenPreferencesView(),
+                        () => CanOpenPreferencesView()
+                        );
+                }
+
+                return openPreferencesViewCommand;
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the open server preferences view command
+        /// </summary>
+        /// <value>The add new command.</value>
+        public ICommand OpenServerPreferencesViewCommand {
+            get {
+                if (openServerPreferencesViewCommand == null)
+                {
+                    openServerPreferencesViewCommand = new RelayCommand
+                        (
+                        () => OnOpenServerPreferencesView(),
+                        () => CanOpenServerPreferencesView()
+                        );
+                }
+
+                return openServerPreferencesViewCommand;
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the open account preferences view command
+        /// </summary>
+        /// <value>The add new command.</value>
+        public ICommand OpenAccountPreferencesViewCommand {
+            get {
+                if (openAccountPreferencesViewCommand == null)
+                {
+                    openAccountPreferencesViewCommand = new RelayCommand
+                        (
+                        () => OnOpenAccountPreferencesView(),
+                        () => CanOpenAccountPreferencesView()
+                        );
+                }
+
+                return openServerPreferencesViewCommand;
+            }
+        }
+
+        /// <summary>
+        ///   Gets the account information selected for login
+        /// </summary>
+        public Account SelectedAccount { get; set; }
+
+        /// <summary>
+        ///   Gets the application configuration information
+        /// </summary>
+        public BabelImConfiguration Configuration {
+            get { return configuration; }
+        }
+
+        /// <summary>
+        ///   Gets the configuration by reading it from the configuration file.
         /// </summary>
         /// <returns></returns>
-        public BabelImConfiguration GetConfiguration()
-        {
-            this.configuration = BabelImConfiguration.GetConfiguration();
+        public BabelImConfiguration GetConfiguration() {
+            configuration = BabelImConfiguration.GetConfiguration();
 
-            return this.Configuration;
+            return Configuration;
         }
 
         #endregion
 
-        #region · Command Actions ·
-
         /// <summary>
-        /// Gets a value that indicates if the view can be closed
+        ///   Gets a value that indicates if the view can be closed
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name = "obj"></param>
         /// <returns></returns>
-        private bool CanOpenPreferencesView()
-        {
+        private bool CanOpenPreferencesView() {
             return (ServiceFactory.Current.Resolve<IXmppSession>().State == XmppSessionState.LoggedIn);
         }
 
         /// <summary>
-        /// Closes the view
+        ///   Closes the view
         /// </summary>
-        /// <param name="obj"></param>
-        private void OnOpenPreferencesView()
-        {
+        /// <param name = "obj"></param>
+        private void OnOpenPreferencesView() {
 #warning TODO: Open and Show the preferences view
         }
 
         /// <summary>
-        /// Gets a value that indicates if the view can be closed
+        ///   Gets a value that indicates if the view can be closed
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name = "obj"></param>
         /// <returns></returns>
-        private bool CanOpenServerPreferencesView()
-        {
+        private bool CanOpenServerPreferencesView() {
             return (ServiceFactory.Current.Resolve<IXmppSession>().State == XmppSessionState.LoggedOut);
         }
 
         /// <summary>
-        /// Opens the Server Preferences View
+        ///   Opens the Server Preferences View
         /// </summary>
-        /// <param name="obj"></param>
-        private void OnOpenServerPreferencesView()
-        {
+        /// <param name = "obj"></param>
+        private void OnOpenServerPreferencesView() {
 #warning TODO: Open and Show the preferences view
         }
 
         /// <summary>
-        /// Gets a value that indicates if the view can be closed
+        ///   Gets a value that indicates if the view can be closed
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name = "obj"></param>
         /// <returns></returns>
-        private bool CanOpenAccountPreferencesView()
-        {
+        private bool CanOpenAccountPreferencesView() {
             return (ServiceFactory.Current.Resolve<IXmppSession>().State == XmppSessionState.LoggedOut);
         }
 
         /// <summary>
-        /// Opens the Account preferences view
+        ///   Opens the Account preferences view
         /// </summary>
-        /// <param name="obj"></param>
-        private void OnOpenAccountPreferencesView()
-        {
+        /// <param name = "obj"></param>
+        private void OnOpenAccountPreferencesView() {
 #warning TODO: Open and Show the preferences view
         }
-
-        #endregion
-    }
+        }
 }

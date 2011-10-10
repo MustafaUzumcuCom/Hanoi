@@ -27,41 +27,26 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Windows.Threading;
 using BabelIm.IoC;
-using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.InstantMessaging;
 
-namespace BabelIm
-{
+namespace BabelIm {
     /// <summary>
-    /// Notification manager class
+    ///   Notification manager class
     /// </summary>
     public sealed class NotificationManager
-        : ObservableObject
-    {
-        #region · Fields ·
-
-        private IXmppSession    session;
-
-        #endregion
-
-        #region · Constructors ·
+        : ObservableObject {
+        private IXmppSession session;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotificationManager"/> class.
+        ///   Initializes a new instance of the <see cref = "NotificationManager" /> class.
         /// </summary>
-        public NotificationManager()
-        {
-            this.session = ServiceFactory.Current.Resolve<IXmppSession>();
+        public NotificationManager() {
+            session = ServiceFactory.Current.Resolve<IXmppSession>();
 
             //this.session.AuthenticationFailed += new System.EventHandler<XmppAuthenticationFailiureEventArgs>(session_AuthenticationFailed);
             //this.session.ErrorMessageReceived += new System.EventHandler<XmppMessageReceivedEventArgs>(session_ErrorMessageReceived);
         }
-
-        #endregion
-
-        #region · Event Handlers ·
 
         //void session_AuthenticationFailed(object sender, BabelIm.Net.Xmpp.Core.XmppAuthenticationFailiureEventArgs e)
         //{
@@ -71,7 +56,5 @@ namespace BabelIm
         //{
 
         //}
-
-        #endregion
-    }
+        }
 }

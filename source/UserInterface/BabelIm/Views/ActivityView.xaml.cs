@@ -2,33 +2,21 @@
 using System.Windows.Controls;
 using BabelIm.ViewModels;
 
-namespace BabelIm.Views
-{
+namespace BabelIm.Views {
     /// <summary>
-    /// Activity view
+    ///   Activity view
     /// </summary>
-    public partial class ActivityView 
-        : UserControl    
-    {
-        #region · Constructors ·
-
-        public ActivityView()
-        {
+    public partial class ActivityView
+        : UserControl {
+        public ActivityView() {
             InitializeComponent();
 
-            this.DataContext = new ActivityViewModel();
+            DataContext = new ActivityViewModel();
         }
 
-        #endregion
-
-        #region · Event Handlers ·
-
-        private void SetMoodButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void SetMoodButton_Click(object sender, RoutedEventArgs e) {
 #warning TODO: Move this to the ViewModel using Commands
-            ((ActivityViewModel)this.DataContext).PublishMood();
+            ((ActivityViewModel) DataContext).PublishMood();
         }
-
-        #endregion
-    }
+        }
 }

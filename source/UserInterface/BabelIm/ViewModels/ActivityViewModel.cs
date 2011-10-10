@@ -33,96 +33,62 @@ using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
 
-namespace BabelIm.ViewModels
-{
+namespace BabelIm.ViewModels {
     /// <summary>
-    /// ViewModel for activity views
+    ///   ViewModel for activity views
     /// </summary>
-    public sealed class ActivityViewModel 
-        : ViewModel<XmppSession>
-    {
-        #region · Fields ·
+    public sealed class ActivityViewModel
+        : ViewModel<XmppSession> {
+        private string moodText;
+        private MoodType moodType;
 
-        private MoodType                moodType;
-        private string                  moodText;
-
-        #endregion
-
-        #region · Properties ·
-        
         /// <summary>
-        /// Gets or sets the <see cref="MoodType">mood type</see>
+        ///   Gets or sets the <see cref = "MoodType">mood type</see>
         /// </summary>
-        public MoodType MoodType
-        {
-            get { return this.moodType; }
-            set
-            {
-                if (this.moodType != value)
+        public MoodType MoodType {
+            get { return moodType; }
+            set {
+                if (moodType != value)
                 {
-                    this.moodType = value;
-                    this.NotifyPropertyChanged(() => MoodType);
+                    moodType = value;
+                    NotifyPropertyChanged(() => MoodType);
                 }
             }
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="MoodType">mood text</see>
+        ///   Gets or sets the <see cref = "MoodType">mood text</see>
         /// </summary>
-        public string MoodText
-        {
-            get { return this.moodText; }
-            set
-            {
-                if (this.moodText != value)
+        public string MoodText {
+            get { return moodText; }
+            set {
+                if (moodText != value)
                 {
-                    this.moodText = value;
-                    this.NotifyPropertyChanged(() => MoodText);
+                    moodText = value;
+                    NotifyPropertyChanged(() => MoodText);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the activity list
+        ///   Gets the activity list
         /// </summary>
-        public XmppActivity Activity
-        {
+        public XmppActivity Activity {
             get { return ServiceFactory.Current.Resolve<IXmppSession>().Activity; }
         }
 
         /// <summary>
-        /// Gets the personal eventing instance associated to the session
+        ///   Gets the personal eventing instance associated to the session
         /// </summary>
-        public XmppPersonalEventing PersonalEventing
-        {
+        public XmppPersonalEventing PersonalEventing {
             get { return ServiceFactory.Current.Resolve<IXmppSession>().PersonalEventing; }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActivityViewModel" /> class.
+        ///   Publishes the mood information
         /// </summary>
-        /// <param name="container"></param>
-        public ActivityViewModel()
-            : base()
-        {
+        public void PublishMood() {
+            ServiceFactory.Current.Resolve<IXmppSession>().PublishMood(MoodType, MoodText);
         }
-
-        #endregion
-
-        #region · Methods ·
-
-        /// <summary>
-        /// Publishes the mood information
-        /// </summary>
-        public void PublishMood()
-        {
-            ServiceFactory.Current.Resolve<IXmppSession>().PublishMood(this.MoodType, this.MoodText);
         }
-
-        #endregion
-    }
 }

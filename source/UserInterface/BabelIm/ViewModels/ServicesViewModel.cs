@@ -32,37 +32,17 @@ using BabelIm.IoC;
 using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.ViewModels
-{
+namespace BabelIm.ViewModels {
     /// <summary>
-    /// ViewModel for service views
+    ///   ViewModel for service views
     /// </summary>
-    public sealed class ServicesViewModel 
-        : ViewModel<XmppSession>
-    {
-        #region · Properties ·
-
+    public sealed class ServicesViewModel
+        : ViewModel<XmppSession> {
         /// <summary>
-        /// Gets the <see cref="XmppServiceDiscovery">service discovery</see> instance
+        ///   Gets the <see cref = "XmppServiceDiscovery">service discovery</see> instance
         /// </summary>
-        public XmppServiceDiscovery ServiceDiscovery
-        {
+        public XmppServiceDiscovery ServiceDiscovery {
             get { return ServiceFactory.Current.Resolve<IXmppSession>().ServiceDiscovery; }
         }
-
-        #endregion
-
-        #region · Constructors ·
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServicesViewModel" /> class
-        /// </summary>
-        /// <param name="container"></param>
-        public ServicesViewModel()
-            : base()
-        {
         }
-
-        #endregion
-    }
 }

@@ -12,58 +12,47 @@ using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.ViewModels;
 
-namespace BabelIm
-{
+namespace BabelIm {
     /// <summary>
-    /// Interaction logic for Shell.xaml
+    ///   Interaction logic for Shell.xaml
     /// </summary>
     public partial class Shell
-        : Window
-    {
-        #region · Constructors ·
-
+        : Window {
         // http://weblogs.asp.net/jdanforth/archive/2006/06/21/454219.aspx
-        public Shell()
-        {
+        public Shell() {
             InitializeComponent();
 
-            this.DataContext = new ShellViewModel();
+            DataContext = new ShellViewModel();
 
             ServiceFactory.Current.Resolve<IXmppSession>()
                 .MessageReceived
                 .Where(m => m.Type == MessageType.Chat)
                 .Subscribe(message => { OnChatMessageReceived(message); });
         }
-        
-        #endregion
-        
-        #region · Event Handlers ·
 
-        private void WindowHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        private void WindowHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (e.ClickCount == 1)
             {
-                this.DragMove();
+                DragMove();
             }
             else if (e.ClickCount > 1)
             {
-                if (this.WindowState == WindowState.Maximized)
+                if (WindowState == WindowState.Maximized)
                 {
-                    this.ResizeMode = ResizeMode.CanResize;
-                    this.WindowState = WindowState.Normal;
+                    ResizeMode = ResizeMode.CanResize;
+                    WindowState = WindowState.Normal;
                 }
                 else
                 {
-                    this.ResizeMode = ResizeMode.NoResize;
-                    this.WindowState = WindowState.Maximized;
+                    ResizeMode = ResizeMode.NoResize;
+                    WindowState = WindowState.Maximized;
                 }
             }
 
             e.Handled = true;
         }
-        
-        private void ShellWindow_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
+
+        private void ShellWindow_PreviewKeyDown(object sender, KeyEventArgs e) {
             if (e.SystemKey == Key.Space && e.Key == Key.System)
             {
                 // Disable Window's ControlBox Menu
@@ -71,33 +60,30 @@ namespace BabelIm
             }
         }
 
-        private void OnChatMessageReceived(XmppMessage message)
-        {
-            this.Dispatcher.BeginInvoke
-            (
-                DispatcherPriority.Normal,
-                new ThreadStart
+        private void OnChatMessageReceived(XmppMessage message) {
+            Dispatcher.BeginInvoke
                 (
-                    delegate
-                    {
-                        WindowInteropHelper helper = new WindowInteropHelper(this);
+                    DispatcherPriority.Normal,
+                    new ThreadStart
+                        (
+                        delegate
+                            {
+                                var helper = new WindowInteropHelper(this);
 
-                        if (!this.IsVisible)
-                        {
-                            this.ShowActivated  = false;
-                            this.Visibility     = Visibility.Visible;
-                        }
+                                if (!IsVisible)
+                                {
+                                    ShowActivated = false;
+                                    Visibility = Visibility.Visible;
+                                }
 
-                        if (!this.IsActive ||
-                            this.WindowState == WindowState.Minimized)
-                        {
-                            Win32NativeMethods.FlashWindow(helper.Handle);
-                        }
-                    }
-                )
-            );
+                                if (!IsActive ||
+                                    WindowState == WindowState.Minimized)
+                                {
+                                    Win32NativeMethods.FlashWindow(helper.Handle);
+                                }
+                            }
+                        )
+                );
         }
-
-        #endregion
-    }
+        }
 }

@@ -27,22 +27,11 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BabelIm.Infrastructure;
 
-namespace BabelIm.ViewModels.Preferences
-{
-    public class NotificationViewModel : ViewModel<object>
-    {
+namespace BabelIm.ViewModels.Preferences {
+    public class NotificationViewModel : ViewModel<object> {
         #region · Constructors ·
-
-        public NotificationViewModel()
-            : base()
-        {
-        }
 
         #endregion
     }

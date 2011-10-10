@@ -28,7 +28,6 @@
 */
 
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -39,72 +38,73 @@ using BabelIm.IoC;
 using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.InstantMessaging;
 
-namespace BabelIm.ViewModels
-{
+namespace BabelIm.ViewModels {
     /// <summary>
-    /// View model for chat views
+    ///   View model for chat views
     /// </summary>
     /// <remarks>
-    /// Bring paragraphs into view seeing here:
-    /// http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/858200c8-6dc8-4a26-a1a3-9bbe7b6ea106
+    ///   Bring paragraphs into view seeing here:
+    ///   http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/858200c8-6dc8-4a26-a1a3-9bbe7b6ea106
     /// </remarks>
-    public sealed class ChatViewModel 
-        : ViewModelBase
-    {
-        #region · Fields ·
-
-        private XmppChat                    chat;
-        private FlowDocument                conversation;
-        private RelayCommand                closeCommand;
-        private bool                        hasUnreadMessages;
-        private XmppChatStateNotification   chatStateNotification;
-        
-        #endregion
-
-        #region · Commands ·
+    public sealed class ChatViewModel
+        : ViewModelBase {
+        private readonly FlowDocument conversation;
+        private XmppChat chat;
+        private XmppChatStateNotification chatStateNotification;
+        private RelayCommand closeCommand;
+        private bool hasUnreadMessages;
 
         /// <summary>
-        /// Gets the close chat command.
+        ///   Initializes a new instance of the <see cref = "ChatViewModel" /> class
+        /// </summary>
+        /// <param name = "container"></param>
+        /// <param name = "chat"></param>
+        public ChatViewModel(XmppChat chat) {
+            this.chat = chat;
+            // this.emoticonPackage    = this.ResolveEmoticonPackage();
+
+            conversation = new FlowDocument();
+            this.chat.ChatClosed += chat_ChatClosed;
+            this.chat.ReceivedMessage += chat_ReceivedMessage;
+
+            NotifyPropertyChanged(() => Contact);
+
+            ShowMessages();
+        }
+
+        /// <summary>
+        ///   Gets the close chat command.
         /// </summary>
         /// <value>The add new command.</value>
-        public RelayCommand CloseCommand
-        {
-            get
-            {
-                if (this.closeCommand == null)
+        public RelayCommand CloseCommand {
+            get {
+                if (closeCommand == null)
                 {
-                    this.closeCommand = new RelayCommand
-                    (
+                    closeCommand = new RelayCommand
+                        (
                         () => OnClose()
-                    );
+                        );
                 }
 
-                return this.closeCommand;
+                return closeCommand;
             }
         }
 
-        #endregion
-
-        #region · Properties ·
-
         /// <summary>
-        /// Gets the chat conversation as a <see cref="FlowDocument"/>
+        ///   Gets the chat conversation as a <see cref = "FlowDocument" />
         /// </summary>
-        public FlowDocument Conversation
-        {
-            get { return this.conversation; }
+        public FlowDocument Conversation {
+            get { return conversation; }
         }
 
         /// <summary>
-        /// Gets the chat contact information
+        ///   Gets the chat contact information
         /// </summary>
-        public XmppContact Contact
-        {
-            get
-            {
-                if (this.chat != null)
+        public XmppContact Contact {
+            get {
+                if (chat != null)
                 {
-                    return this.chat.Contact;
+                    return chat.Contact;
                 }
 
                 return null;
@@ -112,224 +112,165 @@ namespace BabelIm.ViewModels
         }
 
         /// <summary>
-        /// Gets a value that indicates if there are messages unreaded
+        ///   Gets a value that indicates if there are messages unreaded
         /// </summary>
-        public bool HasUnreadMessages
-        {
-            get { return this.hasUnreadMessages; }
-            private set
-            {
-                if (this.hasUnreadMessages != value)
+        public bool HasUnreadMessages {
+            get { return hasUnreadMessages; }
+            private set {
+                if (hasUnreadMessages != value)
                 {
-                    this.hasUnreadMessages = value;
-                    this.NotifyPropertyChanged(() => HasUnreadMessages);
+                    hasUnreadMessages = value;
+                    NotifyPropertyChanged(() => HasUnreadMessages);
                 }
             }
         }
 
         /// <summary>
-        /// Gets chat state notification description
+        ///   Gets chat state notification description
         /// </summary>
-        public XmppChatStateNotification ChatStateNotification
-        {
-            get { return this.chatStateNotification; }
-            set
-            {
-                if (this.chatStateNotification != value)
+        public XmppChatStateNotification ChatStateNotification {
+            get { return chatStateNotification; }
+            set {
+                if (chatStateNotification != value)
                 {
-                    this.chatStateNotification = value;
-                    this.NotifyPropertyChanged(() => ChatStateNotification);
+                    chatStateNotification = value;
+                    NotifyPropertyChanged(() => ChatStateNotification);
                 }
             }
         }
 
-        #endregion
-
-        #region · Constructors ·
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChatViewModel" /> class
+        ///   Sends the given message
         /// </summary>
-        /// <param name="container"></param>
-        /// <param name="chat"></param>
-        public ChatViewModel(XmppChat chat)
-            : base()
-        {
-            this.chat               = chat;
-            // this.emoticonPackage    = this.ResolveEmoticonPackage();
-
-            this.conversation           = new FlowDocument();
-            this.chat.ChatClosed        += new EventHandler(chat_ChatClosed);
-            this.chat.ReceivedMessage   += new EventHandler(chat_ReceivedMessage);
-
-            this.NotifyPropertyChanged(() => Contact);
-
-            this.ShowMessages();
-        }
-
-        #endregion
-
-        #region · Methods ·
-
-        /// <summary>
-        /// Sends the given message
-        /// </summary>
-        /// <param name="message">The message</param>
-        public void SendMessage(string message)
-        {
+        /// <param name = "message">The message</param>
+        public void SendMessage(string message) {
             if (!String.IsNullOrEmpty(message))
             {
                 message = message.Replace(Environment.NewLine, "");
 
                 Task.Factory.StartNew
-                (
-                    () =>
-                    {
-                        this.chat.SendMessage(message);
-                    }
-                );
+                    (
+                        () => { chat.SendMessage(message); }
+                    );
 
-                this.ComposeOutgoingMessage(message);
+                ComposeOutgoingMessage(message);
             }
         }
 
         /// <summary>
-        /// Sends a chat state notification
+        ///   Sends a chat state notification
         /// </summary>
-        /// <param name="notificationType">Chat state notification type</param>
-        public void SendChatStateNotification(XmppChatStateNotification notificationType)
-        {
+        /// <param name = "notificationType">Chat state notification type</param>
+        public void SendChatStateNotification(XmppChatStateNotification notificationType) {
             Task.Factory.StartNew
-            (
-                () =>
-                {
-                    this.chat.SendChatStateNotification(notificationType);
-                }
-            );
+                (
+                    () => { chat.SendChatStateNotification(notificationType); }
+                );
         }
 
-        #endregion
-
-        #region · Command Actions ·
-
         /// <summary>
-        /// Closes the view
+        ///   Closes the view
         /// </summary>
-        /// <param name="obj"></param>
-        private void OnClose()
-        {
-            if (this.chat != null)
+        /// <param name = "obj"></param>
+        private void OnClose() {
+            if (chat != null)
             {
-                this.chat.Close();
-                ServiceFactory.Current.Resolve<IChatViewManager>().CloseChatView(this.chat.Contact.ContactId);
+                chat.Close();
+                ServiceFactory.Current.Resolve<IChatViewManager>().CloseChatView(chat.Contact.ContactId);
             }
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private void ShowMessages()
-        {
-            if (this.chat != null)
+        private void ShowMessages() {
+            if (chat != null)
             {
-                this.InvokeAsynchronously
-                (
-                    () =>
-                    {
-                        while (this.chat.PendingMessages.Count > 0)
-                        {
-                            XmppMessage currentMessage = this.chat.PendingMessages.Dequeue();
-
-                            if (!String.IsNullOrEmpty(currentMessage.Body))
+                InvokeAsynchronously
+                    (
+                        () =>
                             {
-                                this.ComposeIncomingMessage(currentMessage.Body);
-                            }
+                                while (chat.PendingMessages.Count > 0)
+                                {
+                                    XmppMessage currentMessage = chat.PendingMessages.Dequeue();
 
-                            this.ChatStateNotification = currentMessage.ChatStateNotification;
-                        }
+                                    if (!String.IsNullOrEmpty(currentMessage.Body))
+                                    {
+                                        ComposeIncomingMessage(currentMessage.Body);
+                                    }
+
+                                    ChatStateNotification = currentMessage.ChatStateNotification;
+                                }
 
 #warning TODO: Review this
-                        //if (!this.IsActive)
-                        //{
-                        //    this.HasUnreadMessages = true;
-                        //}
-                    }
-                );
+                                //if (!this.IsActive)
+                                //{
+                                //    this.HasUnreadMessages = true;
+                                //}
+                            }
+                    );
             }
         }
 
-        private void ComposeOutgoingMessage(string message)
-        {
-            Paragraph headerParagraph   = new Paragraph();
-            Paragraph messageParagraph  = new Paragraph();
+        private void ComposeOutgoingMessage(string message) {
+            var headerParagraph = new Paragraph();
+            var messageParagraph = new Paragraph();
 
             // Paragraph settings
-            headerParagraph.FontFamily  = new FontFamily("Segoe WP Light");
-            headerParagraph.FontSize    = 21.333;
-            headerParagraph.Foreground  = new SolidColorBrush(Color.FromArgb(255, 27, 161, 226));
+            headerParagraph.FontFamily = new FontFamily("Segoe WP Light");
+            headerParagraph.FontSize = 21.333;
+            headerParagraph.Foreground = new SolidColorBrush(Color.FromArgb(255, 27, 161, 226));
 
             headerParagraph.Inlines.Add(new Bold(new Run(DateTime.Now.ToShortTimeString())));
             headerParagraph.Inlines.Add(new Bold(new Run(" ")));
-            headerParagraph.Inlines.Add(new Bold(new Run(ServiceFactory.Current.Resolve<IConfigurationManager>().SelectedAccount.DisplayName)));
-            
+            headerParagraph.Inlines.Add(
+                new Bold(new Run(ServiceFactory.Current.Resolve<IConfigurationManager>().SelectedAccount.DisplayName)));
+
             messageParagraph.FontFamily = new FontFamily("Segoe WP");
-            messageParagraph.FontSize   = 14;
+            messageParagraph.FontSize = 14;
             messageParagraph.Inlines.Add(new Run(message));
 
-            this.conversation.Blocks.Add(headerParagraph);
-            this.conversation.Blocks.Add(messageParagraph);
+            conversation.Blocks.Add(headerParagraph);
+            conversation.Blocks.Add(messageParagraph);
 
             Action<Paragraph> x = r => r.BringIntoView();
-            this.Dispatcher.BeginInvoke(x, DispatcherPriority.SystemIdle, messageParagraph);
+            Dispatcher.BeginInvoke(x, DispatcherPriority.SystemIdle, messageParagraph);
 
-            this.NotifyPropertyChanged(() => Conversation);
+            NotifyPropertyChanged(() => Conversation);
         }
 
-        private void ComposeIncomingMessage(string message)
-        {
-            Paragraph headerParagraph   = new Paragraph();
-            Paragraph messageParagraph  = new Paragraph();
+        private void ComposeIncomingMessage(string message) {
+            var headerParagraph = new Paragraph();
+            var messageParagraph = new Paragraph();
 
             // Paragraph settings
-            headerParagraph.FontFamily  = new FontFamily("Segoe WP Light");
-            headerParagraph.FontSize    = 21.333;
-            headerParagraph.Foreground  = new SolidColorBrush(Color.FromArgb(255, 51, 153, 51));
+            headerParagraph.FontFamily = new FontFamily("Segoe WP Light");
+            headerParagraph.FontSize = 21.333;
+            headerParagraph.Foreground = new SolidColorBrush(Color.FromArgb(255, 51, 153, 51));
 
             headerParagraph.Inlines.Add(new Bold(new Run(DateTime.Now.ToShortTimeString())));
             headerParagraph.Inlines.Add(new Bold(new Run(" ")));
-            headerParagraph.Inlines.Add(new Bold(new Run(this.chat.Contact.DisplayName)));
-            
-            messageParagraph.FontFamily    = new FontFamily("Segoe WP");
-            messageParagraph.FontSize      = 14;
+            headerParagraph.Inlines.Add(new Bold(new Run(chat.Contact.DisplayName)));
+
+            messageParagraph.FontFamily = new FontFamily("Segoe WP");
+            messageParagraph.FontSize = 14;
             messageParagraph.Inlines.Add(new Run(message));
 
-            this.conversation.Blocks.Add(headerParagraph);
-            this.conversation.Blocks.Add(messageParagraph);
+            conversation.Blocks.Add(headerParagraph);
+            conversation.Blocks.Add(messageParagraph);
 
             Action<Paragraph> x = r => r.BringIntoView();
-            this.Dispatcher.BeginInvoke(x, DispatcherPriority.SystemIdle, messageParagraph);
+            Dispatcher.BeginInvoke(x, DispatcherPriority.SystemIdle, messageParagraph);
 
-            this.NotifyPropertyChanged(() => Conversation);
+            NotifyPropertyChanged(() => Conversation);
         }
 
-        #endregion
-
-        #region · Event Handlers ·
-
-        private void chat_ReceivedMessage(object sender, EventArgs e)
-        {
-            this.ShowMessages();
+        private void chat_ReceivedMessage(object sender, EventArgs e) {
+            ShowMessages();
         }
 
-        private void chat_ChatClosed(object sender, EventArgs e)
-        {
+        private void chat_ChatClosed(object sender, EventArgs e) {
             // Unbind event handlers
-            this.chat.ChatClosed        -= new EventHandler(chat_ChatClosed);
-            this.chat.ReceivedMessage   -= new EventHandler(chat_ReceivedMessage);
-            this.chat                   = null;
+            chat.ChatClosed -= chat_ChatClosed;
+            chat.ReceivedMessage -= chat_ReceivedMessage;
+            chat = null;
         }
-
-        #endregion
-    }
+        }
 }

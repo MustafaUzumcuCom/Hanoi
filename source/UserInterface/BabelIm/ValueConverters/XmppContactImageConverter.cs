@@ -28,23 +28,17 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace BabelIm.ValueConverters
-{
-    public class XmppContactImageConverter 
-        : IValueConverter
-    {
-        #region · IValueConverter Members ·
+namespace BabelIm.ValueConverters {
+    public class XmppContactImageConverter
+        : IValueConverter {
+        #region IValueConverter Members
 
         public object Convert(object value, Type targetType,
-            object parameter, System.Globalization.CultureInfo culture)
-        {
+                              object parameter, System.Globalization.CultureInfo culture) {
             BitmapFrame source = null;
 
             if (value != null)
@@ -55,7 +49,7 @@ namespace BabelIm.ValueConverters
                 }
                 else if (value is Stream)
                 {
-                    Stream stream = (Stream)value;
+                    var stream = (Stream) value;
                     stream.Seek(0, SeekOrigin.Begin);
                     source = BitmapFrame.Create(stream);
                 }
@@ -65,11 +59,10 @@ namespace BabelIm.ValueConverters
         }
 
         public object ConvertBack(object value, Type targetType,
-            object parameter, System.Globalization.CultureInfo culture)
-        {
+                                  object parameter, System.Globalization.CultureInfo culture) {
             throw new NotImplementedException();
         }
 
         #endregion
-    }
+        }
 }

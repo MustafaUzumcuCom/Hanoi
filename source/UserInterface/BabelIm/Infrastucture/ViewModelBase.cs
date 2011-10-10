@@ -22,29 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-using System;
-using System.Windows.Threading;
 using BabelIm.Net.Xmpp.InstantMessaging;
 
-namespace BabelIm.Infrastructure
-{
+namespace BabelIm.Infrastructure {
     /// <summary>
-    /// Provides a base class for Applications to inherit from. 
+    ///   Provides a base class for Applications to inherit from.
     /// </summary>
-    public abstract class ViewModelBase 
-        : ObservableObject
-    {
+    public abstract class ViewModelBase
+        : ObservableObject {
         #region · Constructors ·
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
-        /// </summary>
-        protected ViewModelBase()
-            : base()
-        {
-
-        }
-
         #endregion
-    }
+        }
 }

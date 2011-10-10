@@ -1,44 +1,18 @@
 ﻿using System.Windows.Input;
 using BabelIm.Configuration;
 
-namespace BabelIm.Contracts
-{
-    interface IConfigurationManager
-    {
-        #region · Properties ·
+namespace BabelIm.Contracts {
+    internal interface IConfigurationManager {
+        BabelImConfiguration Configuration { get; }
 
-        BabelImConfiguration Configuration
-        {
-            get;
-        }
+        ICommand OpenAccountPreferencesViewCommand { get; }
 
-        ICommand OpenAccountPreferencesViewCommand
-        {
-            get;
-        }
+        ICommand OpenPreferencesViewCommand { get; }
 
-        ICommand OpenPreferencesViewCommand
-        {
-            get;
-        }
+        ICommand OpenServerPreferencesViewCommand { get; }
 
-        ICommand OpenServerPreferencesViewCommand
-        {
-            get;
-        }
-
-        Account SelectedAccount
-        {
-            get;
-            set;
-        }
-
-        #endregion
-
-        #region · Constructors ·
+        Account SelectedAccount { get; set; }
 
         BabelImConfiguration GetConfiguration();
-
-        #endregion
     }
 }

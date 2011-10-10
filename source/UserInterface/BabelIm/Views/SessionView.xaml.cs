@@ -11,120 +11,88 @@ using BabelIm.Net.Xmpp.InstantMessaging;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using BabelIm.ViewModels;
 
-namespace BabelIm.Views
-{
+namespace BabelIm.Views {
     /// <summary>
-    /// Session view
+    ///   Session view
     /// </summary>
-    public partial class SessionView 
-        : UserControl
-    {
-        #region · Constructors ·
-
-        public SessionView()
-        {
+    public partial class SessionView
+        : UserControl {
+        public SessionView() {
             InitializeComponent();
 
-            this.DataContext = new SessionViewModel();
+            DataContext = new SessionViewModel();
 
             ServiceFactory.Current.Resolve<IXmppSession>()
                 .StateChanged
                 .Where(state => state == XmppSessionState.LoggingIn || state == XmppSessionState.LoggingOut)
-                .Subscribe(newState => this.OnSessionStateChanged(newState));
+                .Subscribe(newState => OnSessionStateChanged(newState));
         }
 
-        #endregion
-
-        #region · Private Methods ·
-
-        private void Subscribe()
-        {
-            ServiceFactory.Current.Resolve<IXmppSession>().Roster.ContactPresenceChanged += new EventHandler(OnContactPresenceChanged);
+        private void Subscribe() {
+            ServiceFactory.Current.Resolve<IXmppSession>().Roster.ContactPresenceChanged += OnContactPresenceChanged;
         }
 
-        private void Unsubscribe()
-        {
-            ServiceFactory.Current.Resolve<IXmppSession>().Roster.ContactPresenceChanged -= new EventHandler(OnContactPresenceChanged);
+        private void Unsubscribe() {
+            ServiceFactory.Current.Resolve<IXmppSession>().Roster.ContactPresenceChanged -= OnContactPresenceChanged;
         }
 
-        #endregion
-
-        #region · Message Handlers ·
-
-        private void OnSessionStateChanged(XmppSessionState newState)
-        {
+        private void OnSessionStateChanged(XmppSessionState newState) {
             if (newState == XmppSessionState.LoggingIn)
             {
-                this.Subscribe();
+                Subscribe();
             }
             else if (newState == XmppSessionState.LoggingOut)
             {
-                this.Unsubscribe();
+                Unsubscribe();
             }
         }
 
-        #endregion
+        private void ActiveChatsZone_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e) {
+            PivotControl.Width = e.NewSize.Width;
+            PivotControl.Height = e.NewSize.Height;
 
-        #region · Event Handlers ·
-
-        private void ActiveChatsZone_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
-        {
-            this.PivotControl.Width = e.NewSize.Width;
-            this.PivotControl.Height = e.NewSize.Height;
-
-            this.PivotControl.Invalidate();
+            PivotControl.Invalidate();
         }
 
-        private void OnContactPresenceChanged(object sender, EventArgs args)
-        {
-            this.Dispatcher.BeginInvoke
-            (
-                DispatcherPriority.ApplicationIdle,
-                new ThreadStart
+        private void OnContactPresenceChanged(object sender, EventArgs args) {
+            Dispatcher.BeginInvoke
                 (
-                    delegate
-                    {
-                        CollectionViewSource viewSource = this.Resources["ContactsViewSource"] as CollectionViewSource;
-                        viewSource.View.Refresh();
-                    }
-                )
-            );
-        }        
+                    DispatcherPriority.ApplicationIdle,
+                    new ThreadStart
+                        (
+                        delegate
+                            {
+                                var viewSource = Resources["ContactsViewSource"] as CollectionViewSource;
+                                viewSource.View.Refresh();
+                            }
+                        )
+                );
+        }
 
-        #endregion
-
-        #region · View Event Handlers ·
-
-        private void UserImage_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
+        private void UserImage_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
 #warning TODO: Move this to the ViewModel using commands
             // this.ViewModel.SelectAvatarImage();
         }
 
-        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
-        {
-            XmppContact contact = (XmppContact)e.Item;
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e) {
+            var contact = (XmppContact) e.Item;
 
             e.Accepted = (contact.Presence.PresenceStatus != XmppPresenceState.Offline);
         }
 
-        private void ListBoxItem_DoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (this.ContactsListBox.SelectedItem != null)
+        private void ListBoxItem_DoubleClick(object sender, MouseButtonEventArgs e) {
+            if (ContactsListBox.SelectedItem != null)
             {
-                XmppContact         contact     = (XmppContact)this.ContactsListBox.SelectedItem;
-                IChatViewManager    viewManager = ServiceFactory.Current.Resolve<IChatViewManager>();
+                var contact = (XmppContact) ContactsListBox.SelectedItem;
+                var viewManager = ServiceFactory.Current.Resolve<IChatViewManager>();
 
                 // Create the chatView
                 viewManager.OpenChatView(contact.ContactId);
             }
         }
 
-        #endregion
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            IXmppSession session = ServiceFactory.Current.Resolve<IXmppSession>();
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e) {
+            var session = ServiceFactory.Current.Resolve<IXmppSession>();
 
             if (session != null
                 && session.ServiceDiscovery.SupportsMultiuserChat)
@@ -134,9 +102,11 @@ namespace BabelIm.Views
                 if (service != null)
                 {
                     session.EnterChatRoom("babelimtest")
-                           .Invite(session.Roster.Where(c => c.ContactId.BareIdentifier.Equals("babelimtest@neko.im")).SingleOrDefault());
+                        .Invite(
+                            session.Roster.Where(c => c.ContactId.BareIdentifier.Equals("babelimtest@neko.im")).
+                                SingleOrDefault());
                 }
             }
         }
-    }
+        }
 }

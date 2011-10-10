@@ -27,51 +27,12 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.ComponentModel;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+namespace BabelIm.Common {
+    public class Emoticon {
+        public string Name { get; set; }
 
-namespace BabelIm.Common
-{
-    public class Emoticon
-    {
-        #region · Fields ·
+        public string Image { get; set; }
 
-        private string image;
-        private string name;
-        private string smiley;
-
-        #endregion
-
-        #region · Properties ·
-
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; }
-        }
-
-        public string Image
-        {
-            get { return this.image; }
-            set { this.image = value; }
-        }
-
-        public string Smiley
-        {
-            get { return this.smiley; }            
-            set { this.smiley = value; }
-        }
-
-        #endregion
-
-        #region · Constructors ·
-
-        public Emoticon()
-        {
-        }
-
-        #endregion
+        public string Smiley { get; set; }
     }
 }
