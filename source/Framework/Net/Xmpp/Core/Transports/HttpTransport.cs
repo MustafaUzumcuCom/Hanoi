@@ -9,7 +9,8 @@ using System.Text;
 using BabelIm.Net.Xmpp.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.Bosh;
 
-namespace BabelIm.Net.Xmpp.Core.Transports {
+namespace BabelIm.Net.Xmpp.Core.Transports
+{
     /// <summary>
     ///   XMPP over Bosh (HTTP) Transport implementation
     /// </summary>
@@ -17,8 +18,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
     ///   XEP-0124 - Bidirectional-streams Over Synchronous HTTP (BOSH) - http://xmpp.org/extensions/xep-0124.pdf
     ///   XEP-0206 - XMPP over BOSH - http://xmpp.org/extensions/xep-0206.pdf
     /// </remarks>
-    internal sealed class HttpTransport
-        : BaseTransport, ITransport {
+    internal sealed class HttpTransport : BaseTransport
+    {
         private const string ContentType = "text/xml; charset=utf-8";
         private const string BoshVersion = "1.10";
         private const string RouteFormat = "xmpp:{0}:9999";
@@ -29,14 +30,15 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
 
         #region ITransport Members
 
-        public override void Open(XmppConnectionString connectionString) {
+        public override void Open(XmppConnectionString connectionString)
+        {
             // Connection string
             ConnectionString = connectionString;
             UserId = ConnectionString.UserId;
 
             // Generate initial RID
             var rng = new RNGCryptoServiceProvider();
-            var bytes = new byte[32/8];
+            var bytes = new byte[32 / 8];
 
             rng.GetBytes(bytes);
 
@@ -48,7 +50,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
         }
 
-        public override void InitializeXmppStream() {
+        public override void InitializeXmppStream()
+        {
             var message = new HttpBindBody();
 
             message.Rid = (rid++).ToString();
@@ -57,12 +60,12 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
 
             if (streamResponse == null)
             {
-                message.Content = HttpTransport.ContentType;
+                message.Content = ContentType;
                 message.From = UserId.BareIdentifier;
                 message.Hold = 1;
                 message.HoldSpecified = true;
                 message.Route = String.Format(RouteFormat, ConnectionString.HostName);
-                message.Ver = HttpTransport.BoshVersion;
+                message.Ver = BoshVersion;
                 message.Wait = 60;
                 message.WaitSpecified = true;
                 message.Ack = "1";
@@ -73,7 +76,7 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
                 message.Restart = true;
             }
 
-            HttpBindBody response = SendSync(XmppSerializer.Serialize(message));
+            var response = SendSync(XmppSerializer.Serialize(message));
 
 #warning TODO: If no <stream:features/> element is included in the connection manager's session creation response, then the client SHOULD send empty request elements until it receives a response containing a <stream:features/> element.
 
@@ -96,12 +99,14 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param elementname = "message">The message to be sent</param>
-        public override void Send(object message) {
-            var body = new HttpBindBody();
-
-            body.Rid = (rid++).ToString();
-            body.Sid = streamResponse.Sid;
+        /// <param name="message">The message to be sent</param>
+        public override void Send(object message)
+        {
+            var body = new HttpBindBody
+                           {
+                               Rid = (rid++).ToString(), 
+                               Sid = streamResponse.Sid
+                           };
 
             body.Items.Add(message);
 
@@ -112,20 +117,23 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         ///   Sends an XMPP message string to the XMPP Server
         /// </summary>
         /// <param name = "value"></param>
-        public override void Send(string value) {
+        public override void Send(string value)
+        {
             Send(Encoding.UTF8.GetBytes(value));
         }
 
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public override void Send(byte[] buffer) {
-            HttpBindBody response = SendSync(buffer);
+        public override void Send(byte[] buffer)
+        {
+            var response = SendSync(buffer);
 
             ProcessResponse(response);
         }
 
-        public override void Close() {
+        public override void Close()
+        {
             base.Close();
 
             ServicePointManager.ServerCertificateValidationCallback -= ValidateRemoteCertificate;
@@ -140,7 +148,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
             object sender,
             X509Certificate certificate,
             X509Chain chain,
-            SslPolicyErrors policyErrors) {
+            SslPolicyErrors policyErrors)
+        {
             // allow any old dodgy certificate...
             return true;
         }
@@ -148,27 +157,29 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public HttpBindBody SendSync(byte[] buffer) {
+        public HttpBindBody SendSync(byte[] buffer)
+        {
             Debug.WriteLine(Encoding.UTF8.GetString(buffer));
 
             lock (SyncWrites)
             {
                 HttpWebRequest webRequest = CreateWebRequest();
 
-                using (System.IO.Stream stream = webRequest.GetRequestStream())
+                using (var stream = webRequest.GetRequestStream())
                 {
                     stream.Write(buffer, 0, buffer.Length);
 
-                    var webResponse = (HttpWebResponse) webRequest.GetResponse();
+                    var webResponse = (HttpWebResponse)webRequest.GetResponse();
 
                     if (webResponse.StatusCode == HttpStatusCode.OK)
                     {
-                        using (System.IO.Stream responseStream = webResponse.GetResponseStream())
+                        using (var responseStream = webResponse.GetResponseStream())
                         {
                             using (var responseReader = new StreamReader(responseStream, true))
                             {
-                                string response = responseReader.ReadToEnd();
+                                var response = responseReader.ReadToEnd();
 
+                                // TODO: necessary?
                                 Debug.WriteLine(response);
 
                                 return XmppSerializer.Deserialize("body", response) as HttpBindBody;
@@ -181,20 +192,22 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
             }
         }
 
-        private void ProcessResponse(HttpBindBody response) {
-            foreach (object item in response.Items)
+        private void ProcessResponse(HttpBindBody response)
+        {
+            foreach (var item in response.Items)
             {
                 OnMessageReceivedSubject.OnNext(item);
             }
         }
 
-        private HttpWebRequest CreateWebRequest() {
-            var webRequest = (HttpWebRequest) WebRequest.Create
+        private HttpWebRequest CreateWebRequest()
+        {
+            var webRequest = (HttpWebRequest)WebRequest.Create
                                                   (
                                                       String.Format("https://{0}/http-bind", ConnectionString.HostName)
                                                   );
 
-            webRequest.ContentType = HttpTransport.ContentType;
+            webRequest.ContentType = ContentType;
             webRequest.Method = "POST";
             webRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 
@@ -204,9 +217,11 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param elementname = "message">The message to be sent</param>
-        private void Send(HttpBindBody message) {
+        /// <param name="message">The message to be sent</param>
+        [Obsolete("R# tells me this is never used")]
+        private void Send(HttpBindBody message)
+        {
             Send(XmppSerializer.Serialize(message));
         }
-        }
+    }
 }

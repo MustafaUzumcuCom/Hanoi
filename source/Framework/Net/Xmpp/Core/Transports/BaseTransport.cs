@@ -6,96 +6,100 @@ using DnDns.Enums;
 using DnDns.Query;
 using DnDns.Records;
 
-namespace BabelIm.Net.Xmpp.Core.Transports {
+namespace BabelIm.Net.Xmpp.Core.Transports
+{
     /// <summary>
     ///   Base class for transport implementations
     /// </summary>
-    internal abstract class BaseTransport
-        : ITransport {
+    internal abstract class BaseTransport : ITransport
+    {
         private XmppConnectionString connectionString;
         private string hostName;
-        private bool isDisposed;
 
         private Subject<object> onMessageReceivedSubject = new Subject<object>();
         private Subject<string> onXmppStreamClosedSubject = new Subject<string>();
         private Subject<string> onXmppStreamInitializedSubject = new Subject<string>();
-        private object syncReads;
-        private object syncWrites;
         private XmppJid userId;
 
-        protected BaseTransport() {
-            this.syncReads = new object();
-            this.syncWrites = new object();
+        protected BaseTransport()
+        {
+            SyncReads = new object();
+            SyncWrites = new object();
         }
 
-        protected Subject<object> OnMessageReceivedSubject {
-            get { return this.onMessageReceivedSubject; }
+        protected Subject<object> OnMessageReceivedSubject
+        {
+            get { return onMessageReceivedSubject; }
         }
 
-        protected Subject<string> OnXmppStreamInitializedSubject {
-            get { return this.onXmppStreamInitializedSubject; }
+        protected Subject<string> OnXmppStreamInitializedSubject
+        {
+            get { return onXmppStreamInitializedSubject; }
         }
 
-        protected Subject<string> OnXmppStreamClosedSubject {
-            get { return this.onXmppStreamClosedSubject; }
+        protected Subject<string> OnXmppStreamClosedSubject
+        {
+            get { return onXmppStreamClosedSubject; }
         }
 
-        protected bool IsDisposed {
-            get { return this.isDisposed; }
+        protected bool IsDisposed { get; private set; }
+
+        protected XmppConnectionString ConnectionString
+        {
+            get { return connectionString; }
+            set { connectionString = value; }
         }
 
-        protected XmppConnectionString ConnectionString {
-            get { return this.connectionString; }
-            set { this.connectionString = value; }
+        protected XmppJid UserId
+        {
+            get { return userId; }
+            set { userId = value; }
         }
 
-        protected XmppJid UserId {
-            get { return this.userId; }
-            set { this.userId = value; }
-        }
+        protected object SyncReads { get; private set; }
 
-        protected object SyncReads {
-            get { return this.syncReads; }
-        }
-
-        protected object SyncWrites {
-            get { return this.syncWrites; }
-        }
+        protected object SyncWrites { get; private set; }
 
         #region ITransport Members
 
         /// <summary>
         ///   XMPP server Host name
         /// </summary>
-        public string HostName {
-            get {
-                if (!String.IsNullOrWhiteSpace(this.hostName))
+        public string HostName
+        {
+            get
+            {
+                if (!String.IsNullOrWhiteSpace(hostName))
                 {
-                    return this.hostName;
+                    return hostName;
                 }
 
-                return this.connectionString.HostName;
+                return connectionString.HostName;
             }
-            protected set { this.hostName = value; }
+            protected set { hostName = value; }
         }
 
-        public IObservable<object> OnMessageReceived {
-            get { return this.onMessageReceivedSubject.AsObservable(); }
+        public IObservable<object> OnMessageReceived
+        {
+            get { return onMessageReceivedSubject.AsObservable(); }
         }
 
-        public IObservable<string> OnXmppStreamInitialized {
-            get { return this.onXmppStreamInitializedSubject.AsObservable(); }
+        public IObservable<string> OnXmppStreamInitialized
+        {
+            get { return onXmppStreamInitializedSubject.AsObservable(); }
         }
 
-        public IObservable<string> OnXmppStreamClosed {
-            get { return this.onXmppStreamClosedSubject.AsObservable(); }
+        public IObservable<string> OnXmppStreamClosed
+        {
+            get { return onXmppStreamClosedSubject.AsObservable(); }
         }
 
         /// <summary>
         ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose() {
-            this.Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
 
             // This object will be cleaned up by the Dispose method.
             // Therefore, you should call GC.SupressFinalize to
@@ -115,14 +119,15 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
 
         public abstract void Send(byte[] message);
 
-        public virtual void Close() {
-            this.userId = null;
-            this.connectionString = null;
-            this.syncReads = null;
-            this.syncWrites = null;
-            this.onMessageReceivedSubject = null;
-            this.onXmppStreamInitializedSubject = null;
-            this.onXmppStreamClosedSubject = null;
+        public virtual void Close()
+        {
+            userId = null;
+            connectionString = null;
+            SyncReads = null;
+            SyncWrites = null;
+            onMessageReceivedSubject = null;
+            onXmppStreamInitializedSubject = null;
+            onXmppStreamClosedSubject = null;
         }
 
         #endregion
@@ -131,33 +136,35 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         ///   Releases unmanaged resources and performs other cleanup operations before the
         ///   <see cref = "T:BabelIm.Net.Xmpp.Core.XmppConnection" /> is reclaimed by garbage collection.
         /// </summary>
-        ~BaseTransport() {
+        ~BaseTransport()
+        {
             // Do not re-create Dispose clean-up code here.
             // Calling Dispose(false) is optimal in terms of
             // readability and maintainability.
-            this.Dispose(false);
+            Dispose(false);
         }
 
         /// <summary>
         ///   Disposes the specified disposing.
         /// </summary>
         /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
-        protected virtual void Dispose(bool disposing) {
-            if (!this.isDisposed)
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
             {
                 if (disposing)
                 {
-                    this.Close();
+                    Close();
                 }
 
-                this.userId = null;
-                this.connectionString = null;
-                this.syncReads = null;
-                this.syncWrites = null;
+                userId = null;
+                connectionString = null;
+                SyncReads = null;
+                SyncWrites = null;
 
-                this.onMessageReceivedSubject = null;
-                this.onXmppStreamInitializedSubject = null;
-                this.onXmppStreamClosedSubject = null;
+                onMessageReceivedSubject = null;
+                onXmppStreamInitializedSubject = null;
+                onXmppStreamClosedSubject = null;
 
                 // Call the appropriate methods to clean up 
                 // unmanaged resources here.
@@ -165,29 +172,30 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
                 // only the following code is executed.               
             }
 
-            this.isDisposed = true;
+            IsDisposed = true;
         }
 
-        protected void ResolveHostName() {
+        protected void ResolveHostName()
+        {
             try
             {
                 var request = new DnsQueryRequest();
-                DnsQueryResponse response = request.Resolve
+                var response = request.Resolve
                     (
-                        String.Format("{0}.{1}", XmppCodes.XmppSrvRecordPrefix, this.ConnectionString.HostName),
+                        String.Format("{0}.{1}", XmppCodes.XmppSrvRecordPrefix, ConnectionString.HostName),
                         NsType.SRV,
                         NsClass.INET,
                         ProtocolType.Tcp
                     );
 
-                foreach (SrvRecord record in response.Answers.OfType<SrvRecord>())
+                foreach (var record in response.Answers.OfType<SrvRecord>())
                 {
-                    this.HostName = record.HostName;
+                    HostName = record.HostName;
                 }
             }
-            catch
+            catch // TODO: logging of exceptions?
             {
             }
         }
-        }
+    }
 }

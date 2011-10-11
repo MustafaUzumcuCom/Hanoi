@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Net.Xmpp.Serializat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Net.Xmpp.InstantMessaging", "source\Framework\Net\Xmpp\InstantMessaging\BabelIm.Net.Xmpp.InstantMessaging.csproj", "{490DA560-229D-460A-B16F-A35CFECA9937}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E57FD011-81D5-44A8-B342-0E5DD233F624}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Net.Xmpp.Serialization.Tests", "source\Tests\BabelIm.Net.Xmpp.Serialization.Tests\BabelIm.Net.Xmpp.Serialization.Tests.csproj", "{54C7296D-2B7C-4983-A23F-1B755799FFB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,8 +45,19 @@ Global
 		{490DA560-229D-460A-B16F-A35CFECA9937}.Release|Any CPU.Build.0 = Release|Any CPU
 		{490DA560-229D-460A-B16F-A35CFECA9937}.Release|x64.ActiveCfg = Release|Any CPU
 		{490DA560-229D-460A-B16F-A35CFECA9937}.Release|x86.ActiveCfg = Release|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|x64.ActiveCfg = Release|Any CPU
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{54C7296D-2B7C-4983-A23F-1B755799FFB2} = {E57FD011-81D5-44A8-B342-0E5DD233F624}
 	EndGlobalSection
 EndGlobal

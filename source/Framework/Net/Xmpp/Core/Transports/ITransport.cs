@@ -1,11 +1,13 @@
 ﻿using System;
 
-namespace BabelIm.Net.Xmpp.Core.Transports {
+namespace BabelIm.Net.Xmpp.Core.Transports
+{
     /// <summary>
     ///   Interface for transport implementations
     /// </summary>
     internal interface ITransport
-        : IDisposable {
+        : IDisposable
+    {
         /// <summary>
         ///   XMPP server Host name
         /// </summary>
@@ -62,5 +64,5 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         ///   Closes the transport connection
         /// </summary>
         void Close();
-        }
+    }
 }

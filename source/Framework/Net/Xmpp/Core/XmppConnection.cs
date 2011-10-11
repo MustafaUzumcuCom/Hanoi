@@ -478,7 +478,7 @@ namespace BabelIm.Net.Xmpp.Core {
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param elementname = "message">The message to be sent</param>
+        /// <param name="message">The message to be sent</param>
         public void Send(object message) {
             transport.Send(message);
         }

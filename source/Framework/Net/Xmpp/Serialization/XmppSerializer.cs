@@ -35,11 +35,13 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization {
+namespace BabelIm.Net.Xmpp.Serialization
+{
     /// <summary>
     ///   Serializer class for XMPP stanzas
     /// </summary>
-    public sealed class XmppSerializer {
+    public sealed class XmppSerializer
+    {
         private static readonly string XmlSerializersResource = "BabelIm.Net.Xmpp.Serialization.Serializers.xml";
 
         private static readonly List<XmppSerializer> Serializers = new List<XmppSerializer>();
@@ -65,8 +67,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// <param name = "prefix">The prefix.</param>
         /// <param name = "defaultNamespace">The default namespace.</param>
         /// <param name = "serializerType">Type of the serializer.</param>
-        private XmppSerializer(string elementName, string schema, string prefix, string defaultNamespace,
-                               Type serializerType) {
+        private XmppSerializer(string elementName, string schema, string prefix, string defaultNamespace, Type serializerType)
+        {
             this.elementName = elementName;
             this.serializerType = serializerType;
             this.schema = schema;
@@ -89,7 +91,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         ///   Gets the name of the element.
         /// </summary>
         /// <value>The name of the element.</value>
-        public string ElementName {
+        public string ElementName
+        {
             get { return elementName; }
         }
 
@@ -97,7 +100,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         ///   Gets the schema.
         /// </summary>
         /// <value>The schema.</value>
-        public string Schema {
+        public string Schema
+        {
             get { return schema; }
         }
 
@@ -105,7 +109,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         ///   Gets the prefix.
         /// </summary>
         /// <value>The prefix.</value>
-        public string Prefix {
+        public string Prefix
+        {
             get { return prefix; }
         }
 
@@ -113,7 +118,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         ///   Gets the default namespace.
         /// </summary>
         /// <value>The default namespace.</value>
-        public string DefaultNamespace {
+        public string DefaultNamespace
+        {
             get { return defaultNamespace; }
         }
 
@@ -121,7 +127,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         ///   Gets the type of the serializer.
         /// </summary>
         /// <value>The type of the serializer.</value>
-        public Type SerializerType {
+        public Type SerializerType
+        {
             get { return serializerType; }
         }
 
@@ -130,7 +137,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// </summary>
         /// <param name = "value">The value.</param>
         /// <returns></returns>
-        public static byte[] Serialize(object value) {
+        public static byte[] Serialize(object value)
+        {
             Initialize();
 
             return GetSerializer(value.GetType()).SerializeObject(value);
@@ -142,7 +150,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// <param name = "value">The value.</param>
         /// <param name = "prefix">The prefix.</param>
         /// <returns></returns>
-        public static byte[] Serialize(object value, string prefix) {
+        public static byte[] Serialize(object value, string prefix)
+        {
             Initialize();
 
             return GetSerializer(value.GetType()).SerializeObject(value);
@@ -153,7 +162,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// </summary>
         /// <param name = "xml">The XML.</param>
         /// <returns></returns>
-        public static object Deserialize(string nodeName, string xml) {
+        public static object Deserialize(string nodeName, string xml)
+        {
             Initialize();
 
             XmppSerializer serializer = GetSerializer(nodeName);
@@ -169,14 +179,13 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// <summary>
         ///   Initializes this instance.
         /// </summary>
-        private static void Initialize() {
+        private static void Initialize()
+        {
             lock (SyncObject)
             {
                 if (!Initialized)
                 {
-                    using (
-                        Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(XmlSerializersResource)
-                        )
+                    using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(XmlSerializersResource))
                     {
                         using (var reader = new StreamReader(stream, System.Text.Encoding.UTF8))
                         {
@@ -210,7 +219,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// </summary>
         /// <param name = "elementName">Name of the element.</param>
         /// <returns></returns>
-        private static XmppSerializer GetSerializer(string elementName) {
+        private static XmppSerializer GetSerializer(string elementName)
+        {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Serializers Factory not initialized");
@@ -232,7 +242,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// </summary>
         /// <param name = "type">The type.</param>
         /// <returns></returns>
-        private static XmppSerializer GetSerializer(Type type) {
+        private static XmppSerializer GetSerializer(Type type)
+        {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Serializers Factory not initialized");
@@ -246,7 +257,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// </summary>
         /// <param name = "value">The value.</param>
         /// <returns></returns>
-        private byte[] SerializeObject(object value) {
+        private byte[] SerializeObject(object value)
+        {
             return SerializeObject(value, "");
         }
 
@@ -256,7 +268,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// <param name = "value">The value.</param>
         /// <param name = "prefix">The prefix.</param>
         /// <returns></returns>
-        private byte[] SerializeObject(object value, string prefix) {
+        private byte[] SerializeObject(object value, string prefix)
+        {
             byte[] result = null;
             MemoryStream ms = null;
             XmppTextWriter tw = null;
@@ -298,7 +311,8 @@ namespace BabelIm.Net.Xmpp.Serialization {
         /// </summary>
         /// <param name = "xml">The XML.</param>
         /// <returns></returns>
-        private object Deserialize(string xml) {
+        private object Deserialize(string xml)
+        {
             using (var reader = new XmlTextReader(xml, XmlNodeType.Element, context))
             {
                 return serializer.Deserialize(reader);
