@@ -12,12 +12,13 @@ using BabelIm.Net.Xmpp.Core.Sockets;
 using BabelIm.Net.Xmpp.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Core.Tls;
 
-namespace BabelIm.Net.Xmpp.Core.Transports {
+namespace BabelIm.Net.Xmpp.Core.Transports
+{
     /// <summary>
     ///   TCP/IP Transport implementation
     /// </summary>
-    internal sealed class TcpTransport
-        : BaseTransport, ISecureTransport {
+    internal sealed class TcpTransport : BaseTransport, ISecureTransport
+    {
         private const string StreamNamespace = "jabber:client";
         private const string StreamURI = "http://etherx.jabber.org/streams";
         private const string StreamVersion = "1.0";
@@ -28,18 +29,17 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         private const string EndStream = "</stream:stream>";
 
         private XmppMemoryStream inputBuffer;
-        private System.IO.Stream networkStream;
+        private Stream networkStream;
         private XmppStreamParser parser;
         private ProxySocket socket;
         private AutoResetEvent tlsProceedEvent;
-
-        #region ISecureTransport Members
 
         /// <summary>
         ///   Opens the connection
         /// </summary>
         /// <param name = "connectionString">The connection string used for authentication.</param>
-        public override void Open(XmppConnectionString connectionString) {
+        public override void Open(XmppConnectionString connectionString)
+        {
             // Connection string
             ConnectionString = connectionString;
             UserId = ConnectionString.UserId;
@@ -57,14 +57,18 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Closes the connection
         /// </summary>
-        public override void Close() {
+        public override void Close()
+        {
             if (!IsDisposed)
             {
                 try
                 {
                     Send(EndStream);
                 }
+                // TODO: empty try-catch bad, martial arts good
+// ReSharper disable EmptyGeneralCatchClause
                 catch
+// ReSharper restore EmptyGeneralCatchClause
                 {
                 }
                 finally
@@ -107,8 +111,9 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param elementname = "message">The message to be sent</param>
-        public override void Send(object message) {
+        /// <param name="message">The message to be sent</param>
+        public override void Send(object message)
+        {
             Send(XmppSerializer.Serialize(message));
         }
 
@@ -116,14 +121,16 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         ///   Sends an XMPP message string to the XMPP Server
         /// </summary>
         /// <param name = "value"></param>
-        public override void Send(string value) {
+        public override void Send(string value)
+        {
             Send(Encoding.UTF8.GetBytes(value));
         }
 
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public override void Send(byte[] buffer) {
+        public override void Send(byte[] buffer)
+        {
             lock (SyncWrites)
             {
                 Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
@@ -136,7 +143,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Initializes the XMPP stream.
         /// </summary>
-        public override void InitializeXmppStream() {
+        public override void InitializeXmppStream()
+        {
             // Serialization can't be used in this case
             string xml = String.Format
                 (
@@ -153,7 +161,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Opens a secure connection against the XMPP server using TLS
         /// </summary>
-        public void OpenSecureConnection() {
+        public void OpenSecureConnection()
+        {
             // Send Start TLS message
             var tlsMsg = new StartTls();
             Send(tlsMsg);
@@ -172,9 +181,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
             InitializeXmppStream();
         }
 
-        #endregion
-
-        private void OpenSecureStream() {
+        private void OpenSecureStream()
+        {
             if (networkStream != null)
             {
                 networkStream.Close();
@@ -190,7 +198,7 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
                 );
 
             // Perform SSL Authentication
-            ((SslStream) networkStream).AuthenticateAsClient
+            ((SslStream)networkStream).AuthenticateAsClient
                 (
                     ConnectionString.HostName,
                     null,
@@ -202,15 +210,18 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Opens the connection to the XMPP server.
         /// </summary>
-        private void Connect() {
+        private void Connect()
+        {
             try
             {
                 if (ConnectionString.ResolveHostName)
                 {
+                    // ReSharper disable RedundantBaseQualifier
                     base.ResolveHostName();
+                    // ReSharper restore RedundantBaseQualifier
                 }
 
-                IPAddress hostadd = Dns.GetHostEntry(HostName).AddressList[0];
+                var hostadd = Dns.GetHostEntry(HostName).AddressList[0];
                 var hostEndPoint = new IPEndPoint(hostadd, ConnectionString.PortNumber);
 
                 socket = new ProxySocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -263,7 +274,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// <summary>
         ///   Startds async readings on the socket connected to the server
         /// </summary>
-        private void BeginReceiveData() {
+        private void BeginReceiveData()
+        {
             var state = new StateObject(networkStream);
             AsyncCallback asyncCallback = ReceiveCallback;
 
@@ -280,7 +292,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         ///   Async read callback
         /// </summary>
         /// <param name = "ar"></param>
-        private void ReceiveCallback(IAsyncResult ar) {
+        private void ReceiveCallback(IAsyncResult ar)
+        {
             if (!ar.CompletedSynchronously)
             {
                 ProcessAsyncRead(ar);
@@ -291,11 +304,11 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         ///   Assync read processing.
         /// </summary>
         /// <param name = "ar"></param>
-        private void ProcessAsyncRead(IAsyncResult ar) {
+        private void ProcessAsyncRead(IAsyncResult ar)
+        {
             // Retrieve the state object and the client socket 
             // from the asynchronous state object.
-            var state = (StateObject) ar.AsyncState;
-            List<AutoResetEvent> resetEvents = null;
+            var state = (StateObject)ar.AsyncState;
 
             if (state.WorkStream != null && state.WorkStream.CanRead)
             {
@@ -315,11 +328,11 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
 
                     Monitor.Exit(SyncReads);
 
-                    resetEvents = ProcessPendingMessages();
+                    var resetEvents = ProcessPendingMessages();
 
                     if (resetEvents != null && resetEvents.Count > 0)
                     {
-                        foreach (AutoResetEvent resetEvent in resetEvents)
+                        foreach (var resetEvent in resetEvents)
                         {
                             resetEvent.Set();
                         }
@@ -336,7 +349,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         ///   Process all pending XMPP messages
         /// </summary>
         /// <returns></returns>
-        private List<AutoResetEvent> ProcessPendingMessages() {
+        private List<AutoResetEvent> ProcessPendingMessages()
+        {
             var resetEvents = new List<AutoResetEvent>();
 
             while (parser != null && !parser.EOF)
@@ -357,7 +371,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
         /// </summary>
         /// <param name = "node"></param>
         /// <returns></returns>
-        private AutoResetEvent ProcessXmppMessage(XmppStreamElement node) {
+        private AutoResetEvent ProcessXmppMessage(XmppStreamElement node)
+        {
             if (node != null)
             {
                 Debug.WriteLine(node.ToString());
@@ -372,7 +387,7 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
                 }
                 else
                 {
-                    object message = XmppSerializer.Deserialize(node.Name, node.ToString());
+                    var message = XmppSerializer.Deserialize(node.Name, node.ToString());
 
                     if (message != null)
                     {
@@ -380,10 +395,8 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
                         {
                             return tlsProceedEvent;
                         }
-                        else
-                        {
-                            OnMessageReceivedSubject.OnNext(message);
-                        }
+
+                        OnMessageReceivedSubject.OnNext(message);
                     }
                 }
             }
@@ -403,18 +416,20 @@ namespace BabelIm.Net.Xmpp.Core.Transports {
                                                  System.Security.Cryptography.X509Certificates.X509Certificate
                                                      certificate,
                                                  System.Security.Cryptography.X509Certificates.X509Chain chain,
-                                                 SslPolicyErrors sslPolicyErrors) {
-#warning Give the option to make this handled by the application using the library
+                                                 SslPolicyErrors sslPolicyErrors)
+        {
+            // TODO: Give the option to make this handled by the application using the library
             return true;
         }
 
         /// <summary>
         ///   Initializes the connection instance
         /// </summary>
-        private void Initialize() {
+        private void Initialize()
+        {
             inputBuffer = new XmppMemoryStream();
             parser = new XmppStreamParser(inputBuffer);
             tlsProceedEvent = new AutoResetEvent(false);
         }
-        }
+    }
 }
