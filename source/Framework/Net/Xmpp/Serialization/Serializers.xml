@@ -113,7 +113,7 @@
     </namespace>
   </serializer>
   <serializer group="IM" elementname="presence">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Presence.Presence, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence, BabelIm.Net.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -129,7 +129,7 @@
     </namespace>
   </serializer>
   <serializer group="IM" elementname="register">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.RegisterIQ, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register.RegisterIQ, BabelIm.Net.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
