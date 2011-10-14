@@ -27,35 +27,20 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#items")]
+    public enum ServiceActionType {
+        /// <remarks />
+        [XmlEnumAttribute("remove")] Remove,
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
-        }
-
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
-        }
-
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("update")] Update,
+    }
 }

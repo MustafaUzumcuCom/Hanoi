@@ -40,11 +40,11 @@ using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using Hanoi.Core;
 using Hanoi.Core.Authentication;
 using Hanoi.Serialization.Extensions.PubSub;
+using Hanoi.Serialization.Extensions.UserMood;
+using Hanoi.Serialization.Extensions.UserTune;
 using Hanoi.Serialization.Extensions.VCardTemp;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
-using Hanoi.Xmpp.Serialization.Extensions.UserMood;
-using Hanoi.Xmpp.Serialization.Extensions.UserTune;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

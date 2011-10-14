@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 - 2010, Carlos Guzmán Álvarez
+    Copyright (c) 2007-2010, Carlos Guzmán Álvarez
 
     All rights reserved.
 
@@ -27,35 +27,42 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.DataForms {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:x:data")]
+    public enum DataFormFieldType {
+        /// <remarks />
+        [XmlEnumAttribute("boolean")] Boolean,
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
-        }
+        /// <remarks />
+        [XmlEnumAttribute("fixed")] Fixed,
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("hidden")] Hidden,
 
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("jid-multi")] JidMulti,
 
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("jid-single")] JidSingle,
 
-        public string Nick {
-            get { return userItem.Nick; }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("list-multi")] ListMulti,
 
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("list-single")] ListSingle,
+
+        /// <remarks />
+        [XmlEnumAttribute("text-multi")] TextMulti,
+
+        /// <remarks />
+        [XmlEnumAttribute("text-private")] TextPrivate,
+
+        /// <remarks />
+        [XmlEnumAttribute("text-single")] TextSingle,
+    }
 }

@@ -34,8 +34,8 @@ using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using Hanoi.Core;
 using Hanoi.Core.Authentication;
+using Hanoi.Serialization.Extensions.UserMood;
 using Hanoi.Xmpp;
-using Hanoi.Xmpp.Serialization.Extensions.UserMood;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

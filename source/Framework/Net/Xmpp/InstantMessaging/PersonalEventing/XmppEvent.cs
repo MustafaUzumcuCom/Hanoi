@@ -28,8 +28,8 @@
 */
 
 using Hanoi.Serialization.Extensions.PubSub;
-using Hanoi.Xmpp.Serialization.Extensions.UserMood;
-using Hanoi.Xmpp.Serialization.Extensions.UserTune;
+using Hanoi.Serialization.Extensions.UserMood;
+using Hanoi.Serialization.Extensions.UserTune;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>

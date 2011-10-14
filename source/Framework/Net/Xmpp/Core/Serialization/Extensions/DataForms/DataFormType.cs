@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 - 2010, Carlos Guzmán Álvarez
+    Copyright (c) 2007-2010, Carlos Guzmán Álvarez
 
     All rights reserved.
 
@@ -27,35 +27,22 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.DataForms {
+    /// <remarks />
+    [XmlType(Namespace = "jabber:x:data")]
+    public enum DataFormType {
+        /// <remarks />
+        [XmlEnumAttribute("cancel")] Cancel,
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
-        }
+        /// <remarks />
+        [XmlEnumAttribute("form")] Form,
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("result")] Result,
 
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("submit")] Submit,
+    }
 }

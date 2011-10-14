@@ -28,7 +28,7 @@
 */
 
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization.Extensions.DataForms;
+using Hanoi.Serialization.Extensions.DataForms;
 
 namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />

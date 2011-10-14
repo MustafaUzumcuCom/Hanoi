@@ -27,35 +27,64 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#items")]
+    [XmlRootAttribute("item", Namespace = "http://jabber.org/protocol/disco#items", IsNullable = false)]
+    public class ServiceItem {
+        private ServiceActionType actionField;
+        private bool actionFieldSpecified;
+        private string jidField;
+        private string nameField;
+        private string nodeField;
+        private string valueField;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
+        /// <remarks />
+        [XmlAttributeAttribute("action")]
+        public ServiceActionType Action {
+            get { return actionField; }
+            set { actionField = value; }
         }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool actionSpecified {
+            get { return actionFieldSpecified; }
+            set { actionFieldSpecified = value; }
         }
 
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
+        /// <remarks />
+        [XmlAttributeAttribute("jid")]
+        public string Jid {
+            get { return jidField; }
+            set { jidField = value; }
         }
 
-        public string Identifier {
-            get { return userItem.Jid; }
+        /// <remarks />
+        [XmlAttributeAttribute("name")]
+        public string Name {
+            get { return nameField; }
+            set { nameField = value; }
         }
 
-        public string Nick {
-            get { return userItem.Nick; }
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node {
+            get { return nodeField; }
+            set { nodeField = value; }
         }
 
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
         }
-        }
+    }
 }

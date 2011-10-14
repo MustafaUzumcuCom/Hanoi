@@ -27,35 +27,41 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#info")]
+    [XmlRootAttribute("identity", Namespace = "http://jabber.org/protocol/disco#info", IsNullable = false)]
+    public class ServiceIdentity {
+        private string categoryField;
+        private string nameField;
+        private string typeField;
+        // private string valueField;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
+        /// <remarks />
+        [XmlAttributeAttribute("category")]
+        public string Category {
+            get { return categoryField; }
+            set { categoryField = value; }
         }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+        /// <remarks />
+        [XmlAttributeAttribute("name")]
+        public string Name {
+            get { return nameField; }
+            set { nameField = value; }
         }
 
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
+        /// <remarks />
+        [XmlAttributeAttribute("type")]
+        public string Type {
+            get { return typeField; }
+            set { typeField = value; }
         }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+    }
 }

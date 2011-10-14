@@ -31,8 +31,8 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using Hanoi.Serialization.Extensions.MultiUserChat;
 using Hanoi.Serialization.Extensions.PubSub;
-using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
 
 namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />

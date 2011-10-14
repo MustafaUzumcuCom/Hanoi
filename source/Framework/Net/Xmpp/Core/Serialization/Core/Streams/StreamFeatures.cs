@@ -34,8 +34,8 @@ using Hanoi.Serialization.Core.ResourceBinding;
 using Hanoi.Serialization.Core.Sasl;
 using Hanoi.Serialization.Core.Tls;
 using Hanoi.Serialization.Extensions.EntityCapabilities;
+using Hanoi.Serialization.Extensions.RosterVersioning;
 using Hanoi.Serialization.InstantMessaging.Register;
-using Hanoi.Xmpp.Serialization.Extensions.RosterVersioning;
 
 namespace Hanoi.Serialization.Core.Streams {
     /// <summary>

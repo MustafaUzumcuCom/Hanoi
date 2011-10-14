@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 - 2010, Carlos Guzmán Álvarez
+    Copyright (c) 2007-2010, Carlos Guzmán Álvarez
 
     All rights reserved.
 
@@ -27,35 +27,29 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.DataForms {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:x:data")]
+    [XmlRootAttribute("item", Namespace = "jabber:x:data", IsNullable = false)]
+    public class DataFormItem {
+        private List<DataFormField> fields;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
-        }
+        /// <remarks />
+        [XmlArrayItemAttribute("field")]
+        public List<DataFormField> Fields {
+            get {
+                if (fields == null)
+                {
+                    fields = new List<DataFormField>();
+                }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+                return fields;
+            }
         }
-
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+    }
 }

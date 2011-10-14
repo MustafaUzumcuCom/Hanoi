@@ -27,35 +27,56 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.UserTune {
+    /// <summary>
+    ///   XEP-0118: User Tune
+    /// </summary>
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/tune")]
+    [XmlRootAttribute("tune", Namespace = "http://jabber.org/protocol/tune", IsNullable = false)]
+    public class Tune {
+        private ushort lengthField;
+        private bool lengthFieldSpecified;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
+        /// <remarks />
+        [XmlElementAttribute("artist")]
+        public string Artist { get; set; }
+
+        /// <remarks />
+        [XmlElementAttribute("length", DataType = "unsignedShort")]
+        public ushort Length {
+            get { return lengthField; }
+            set {
+                lengthField = value;
+                lengthFieldSpecified = true;
+            }
         }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool LengthSpecified {
+            get { return lengthFieldSpecified; }
         }
 
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
+        /// <remarks />
+        [XmlElementAttribute("rating", DataType = "positiveInteger")]
+        public string Rating { get; set; }
 
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
+        /// <remarks />
+        [XmlElementAttribute("source")]
+        public string Source { get; set; }
 
-        public string Nick {
-            get { return userItem.Nick; }
-        }
+        /// <remarks />
+        [XmlElementAttribute("title")]
+        public string Title { get; set; }
 
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+        /// <remarks />
+        [XmlElementAttribute("track")]
+        public string Track { get; set; }
+
+        /// <remarks />
+        [XmlElementAttribute("uri", DataType = "anyURI")]
+        public string Uri { get; set; }
+    }
 }

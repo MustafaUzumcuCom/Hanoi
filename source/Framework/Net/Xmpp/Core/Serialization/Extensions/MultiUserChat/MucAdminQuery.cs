@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 - 2010, Carlos Guzmán Álvarez
+    Copyright (c) 2007-2010, Carlos Guzmán Álvarez
 
     All rights reserved.
 
@@ -27,35 +27,30 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.MultiUserChat {
+    /// <summary>
+    ///   XEP-0045: Multi-User Chat
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#admin")]
+    [XmlRootAttribute("query", Namespace = "http://jabber.org/protocol/muc#admin", IsNullable = false)]
+    public class MucAdminQuery {
+        private List<MucAdminItem> items;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
+        /// <remarks />
+        [XmlElementAttribute("item")]
+        public List<MucAdminItem> Items {
+            get {
+                if (items == null)
+                {
+                    items = new List<MucAdminItem>();
+                }
+                return items;
+            }
         }
-
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
-        }
-
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+    }
 }

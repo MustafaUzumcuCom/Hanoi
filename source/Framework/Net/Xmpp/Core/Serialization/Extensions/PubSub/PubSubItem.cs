@@ -28,8 +28,8 @@
 */
 
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization.Extensions.UserMood;
-using Hanoi.Xmpp.Serialization.Extensions.UserTune;
+using Hanoi.Serialization.Extensions.UserMood;
+using Hanoi.Serialization.Extensions.UserTune;
 
 namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />

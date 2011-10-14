@@ -27,35 +27,46 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Collections;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#info")]
+    [XmlRootAttribute("query", Namespace = "http://jabber.org/protocol/disco#info", IsNullable = false)]
+    public class ServiceQuery {
+        private ArrayList featuresField;
+        private ArrayList identitiesField;
+        private string node;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
+        public ServiceQuery() {
+            identitiesField = new ArrayList();
+            featuresField = new ArrayList();
         }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+        /// <remarks />
+        [XmlElementAttribute("identity", typeof (ServiceIdentity), Namespace = "http://jabber.org/protocol/disco#info")]
+        public ArrayList Identities {
+            get { return identitiesField; }
+            set { identitiesField = value; }
         }
 
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
+        /// <remarks />
+        [XmlElementAttribute("feature", typeof (ServiceFeature), Namespace = "http://jabber.org/protocol/disco#info")]
+        public ArrayList Features {
+            get { return featuresField; }
+            set { featuresField = value; }
         }
 
-        public string Identifier {
-            get { return userItem.Jid; }
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node {
+            get { return node; }
+            set { node = value; }
         }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+    }
 }

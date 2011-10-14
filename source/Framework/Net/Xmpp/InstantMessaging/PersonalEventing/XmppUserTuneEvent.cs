@@ -28,7 +28,7 @@
 */
 
 using System;
-using Hanoi.Xmpp.Serialization.Extensions.UserTune;
+using Hanoi.Serialization.Extensions.UserTune;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>

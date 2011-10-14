@@ -27,35 +27,37 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Collections;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.ServiceDiscovery {
+    /// <summary>
+    ///   XEP-0030: Service Discovery
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/disco#items")]
+    [XmlRootAttribute("query", Namespace = "http://jabber.org/protocol/disco#items", IsNullable = false)]
+    public class ServiceItemQuery {
+        private ArrayList itemsField;
+        private string nodeField;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
+        public ServiceItemQuery() {
+            itemsField = new ArrayList();
         }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+        /// <remarks />
+        [XmlElementAttribute("item", typeof (ServiceItem), Namespace = "http://jabber.org/protocol/disco#items")]
+        public ArrayList Items {
+            get { return itemsField; }
+            set { itemsField = value; }
         }
 
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node {
+            get { return nodeField; }
+            set { nodeField = value; }
         }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+    }
 }

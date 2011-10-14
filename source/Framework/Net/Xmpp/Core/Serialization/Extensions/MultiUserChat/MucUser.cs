@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 - 2010, Carlos Guzmán Álvarez
+    Copyright (c) 2007-2010, Carlos Guzmán Álvarez
 
     All rights reserved.
 
@@ -27,35 +27,36 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.MultiUserChat {
+    /// <summary>
+    ///   XEP-0045: Multi-User Chat
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "http://jabber.org/protocol/muc#user")]
+    [XmlRootAttribute("x", Namespace = "http://jabber.org/protocol/muc#user", IsNullable = false)]
+    public class MucUser {
+        private List<object> items;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
-        }
+        /// <remarks />
+        [XmlElementAttribute("password", typeof (string))]
+        [XmlElementAttribute("destroy", typeof (MucUserDestroy))]
+        [XmlElementAttribute("invite", typeof (MucUserInvite))]
+        [XmlElementAttribute("status", typeof (MucUserStatus))]
+        [XmlElementAttribute("decline", typeof (MucUserDecline))]
+        [XmlElementAttribute("item", typeof (MucUserItem))]
+        public List<object> Items {
+            get {
+                if (items == null)
+                {
+                    items = new List<object>();
+                }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+                return items;
+            }
         }
-
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+    }
 }

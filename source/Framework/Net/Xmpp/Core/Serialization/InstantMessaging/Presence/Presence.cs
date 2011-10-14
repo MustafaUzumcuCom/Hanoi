@@ -31,9 +31,9 @@ using System;
 using System.Collections;
 using System.Xml.Serialization;
 using Hanoi.Serialization.Extensions.EntityCapabilities;
+using Hanoi.Serialization.Extensions.MultiUserChat;
 using Hanoi.Serialization.Extensions.VCardAvatars;
 using Hanoi.Serialization.InstantMessaging.Client;
-using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
 
 namespace Hanoi.Serialization.InstantMessaging.Presence {
     /// <remarks />

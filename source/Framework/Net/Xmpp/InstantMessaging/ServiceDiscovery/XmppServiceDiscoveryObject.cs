@@ -32,9 +32,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Hanoi.Core;
+using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
-using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     public abstract class XmppServiceDiscoveryObject

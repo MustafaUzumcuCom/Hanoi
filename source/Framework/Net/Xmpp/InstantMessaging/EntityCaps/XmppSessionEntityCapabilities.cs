@@ -32,10 +32,10 @@ using System.Text;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using Hanoi.Core;
 using Hanoi.Serialization.Extensions.EntityCapabilities;
+using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
 using Hanoi.Xmpp;
-using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>

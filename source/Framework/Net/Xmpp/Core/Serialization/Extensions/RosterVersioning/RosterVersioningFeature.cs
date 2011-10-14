@@ -27,35 +27,35 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.MultiUserChat;
+using System;
+using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
-        private readonly MucUserItem userItem;
+namespace Hanoi.Serialization.Extensions.RosterVersioning {
+    /// <summary>
+    ///   XEP-0237: Roster Versioning
+    /// </summary>
+    [Serializable]
+    [XmlType(Namespace = "urn:xmpp:features:rosterver")]
+    [XmlRootAttribute("ver", Namespace = "urn:xmpp:features:rosterver")]
+    public class RosterVersioningFeature {
+        private ItemChoiceType itemElementNameField;
+        private Empty itemField;
 
-        internal XmppChatRoomUser(MucUserItem userItem) {
-            this.userItem = userItem;
+        /// <remarks />
+        [XmlElementAttribute("optional", typeof (Empty))]
+        [XmlElementAttribute("required", typeof (Empty))]
+        [XmlChoiceIdentifierAttribute("ItemElementName")]
+        public Empty Item {
+            get { return itemField; }
+            set { itemField = value; }
         }
 
-        public MucUserActor Actor {
-            get { return userItem.Actor; }
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public ItemChoiceType ItemElementName {
+            get { return itemElementNameField; }
+            set { itemElementNameField = value; }
         }
-
-        public MucUserItemAffiliation Affiliation {
-            get { return userItem.Affiliation; }
-        }
-
-        public string Identifier {
-            get { return userItem.Jid; }
-        }
-
-        public string Nick {
-            get { return userItem.Nick; }
-        }
-
-        public MucUserItemRole Role {
-            get { return userItem.Role; }
-        }
-        }
+    }
 }
