@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (c) 2007 - 2010, Carlos Guzmán Álvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm�n �lvarez
 
     All rights reserved.
 
@@ -27,19 +27,19 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.XmppPing {
+namespace Hanoi.Serialization.Extensions.VCardAvatars {
     /// <summary>
-    ///   XEP-0199: XMPP Ping
+    ///   XEP-0153: vCard-Based Avatars
     /// </summary>
-    [Serializable]
-    [XmlType(Namespace = "urn:xmpp:ping")]
-    [XmlRootAttribute("ping", Namespace = "urn:xmpp:ping", IsNullable = false)]
-    public class Ping {
-        #region · Constructors ·
+    [XmlType(Namespace = "vcard-temp")]
+    [XmlRootAttribute("PHOTO", Namespace = "vcard-temp", IsNullable = false)]
+    public class VCardPhoto {
+        [XmlElement("TYPE")]
+        public string Type { get; set; }
 
-        #endregion
+        [XmlElement("BINVAL", DataType = "base64Binary")]
+        public byte[] Photo { get; set; }
     }
 }

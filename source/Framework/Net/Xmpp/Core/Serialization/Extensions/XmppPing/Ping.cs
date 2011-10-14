@@ -29,42 +29,17 @@
 
 using System;
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization.Extensions.VCardAvatars;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.VCardTemp {
+namespace Hanoi.Serialization.Extensions.XmppPing {
     /// <summary>
-    ///   XEP-0054: vcard-temp
+    ///   XEP-0199: XMPP Ping
     /// </summary>
     [Serializable]
-    [XmlType(Namespace = "vcard-temp")]
-    [XmlRoot("x", Namespace = "vcard-temp", IsNullable = false)]
-    public class VCardData {
-        private string jabberId;
-        private string nickName;
-        private VCardPhoto photo;
+    [XmlType(Namespace = "urn:xmpp:ping")]
+    [XmlRootAttribute("ping", Namespace = "urn:xmpp:ping", IsNullable = false)]
+    public class Ping {
+        #region · Constructors ·
 
-        [XmlElement("NICKNAME")]
-        public string NickName {
-            get { return nickName; }
-            set { nickName = value; }
-        }
-
-        [XmlElement("JABBERID")]
-        public string JabberId {
-            get { return jabberId; }
-            set { jabberId = value; }
-        }
-
-        [XmlElement("PHOTO")]
-        public VCardPhoto Photo {
-            get {
-                if (photo == null)
-                {
-                    photo = new VCardPhoto();
-                }
-                return photo;
-            }
-            set { photo = value; }
-        }
+        #endregion
     }
 }

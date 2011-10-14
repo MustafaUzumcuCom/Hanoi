@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.VCardAvatars {
+namespace Hanoi.Serialization.Extensions.VCardAvatars {
     /// <summary>
     ///   XEP-0153: vCard-Based Avatars
     /// </summary>

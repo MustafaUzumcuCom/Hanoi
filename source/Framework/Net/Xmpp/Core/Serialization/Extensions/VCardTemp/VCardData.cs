@@ -27,19 +27,44 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System;
 using System.Xml.Serialization;
+using Hanoi.Serialization.Extensions.VCardAvatars;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.VCardAvatars {
+namespace Hanoi.Serialization.Extensions.VCardTemp {
     /// <summary>
-    ///   XEP-0153: vCard-Based Avatars
+    ///   XEP-0054: vcard-temp
     /// </summary>
+    [Serializable]
     [XmlType(Namespace = "vcard-temp")]
-    [XmlRootAttribute("PHOTO", Namespace = "vcard-temp", IsNullable = false)]
-    public class VCardPhoto {
-        [XmlElement("TYPE")]
-        public string Type { get; set; }
+    [XmlRoot("x", Namespace = "vcard-temp", IsNullable = false)]
+    public class VCardData {
+        private string jabberId;
+        private string nickName;
+        private VCardPhoto photo;
 
-        [XmlElement("BINVAL", DataType = "base64Binary")]
-        public byte[] Photo { get; set; }
+        [XmlElement("NICKNAME")]
+        public string NickName {
+            get { return nickName; }
+            set { nickName = value; }
+        }
+
+        [XmlElement("JABBERID")]
+        public string JabberId {
+            get { return jabberId; }
+            set { jabberId = value; }
+        }
+
+        [XmlElement("PHOTO")]
+        public VCardPhoto Photo {
+            get {
+                if (photo == null)
+                {
+                    photo = new VCardPhoto();
+                }
+                return photo;
+            }
+            set { photo = value; }
+        }
     }
 }
