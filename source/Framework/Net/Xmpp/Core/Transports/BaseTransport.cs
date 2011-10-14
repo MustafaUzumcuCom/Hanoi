@@ -6,13 +6,11 @@ using DnDns.Enums;
 using DnDns.Query;
 using DnDns.Records;
 
-namespace Hanoi.Xmpp.Transports
-{
+namespace Hanoi.Xmpp.Transports {
     /// <summary>
     ///   Base class for transport implementations
     /// </summary>
-    internal abstract class BaseTransport : ITransport
-    {
+    internal abstract class BaseTransport : ITransport {
         private XmppConnectionString connectionString;
         private string hostName;
 
@@ -21,37 +19,31 @@ namespace Hanoi.Xmpp.Transports
         private Subject<string> onXmppStreamInitializedSubject = new Subject<string>();
         private XmppJid userId;
 
-        protected BaseTransport()
-        {
+        protected BaseTransport() {
             SyncReads = new object();
             SyncWrites = new object();
         }
 
-        protected Subject<object> OnMessageReceivedSubject
-        {
+        protected Subject<object> OnMessageReceivedSubject {
             get { return onMessageReceivedSubject; }
         }
 
-        protected Subject<string> OnXmppStreamInitializedSubject
-        {
+        protected Subject<string> OnXmppStreamInitializedSubject {
             get { return onXmppStreamInitializedSubject; }
         }
 
-        protected Subject<string> OnXmppStreamClosedSubject
-        {
+        protected Subject<string> OnXmppStreamClosedSubject {
             get { return onXmppStreamClosedSubject; }
         }
 
         protected bool IsDisposed { get; private set; }
 
-        protected XmppConnectionString ConnectionString
-        {
+        protected XmppConnectionString ConnectionString {
             get { return connectionString; }
             set { connectionString = value; }
         }
 
-        protected XmppJid UserId
-        {
+        protected XmppJid UserId {
             get { return userId; }
             set { userId = value; }
         }
@@ -65,10 +57,8 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   XMPP server Host name
         /// </summary>
-        public string HostName
-        {
-            get
-            {
+        public string HostName {
+            get {
                 if (!String.IsNullOrWhiteSpace(hostName))
                 {
                     return hostName;
@@ -79,26 +69,22 @@ namespace Hanoi.Xmpp.Transports
             protected set { hostName = value; }
         }
 
-        public IObservable<object> OnMessageReceived
-        {
+        public IObservable<object> OnMessageReceived {
             get { return onMessageReceivedSubject.AsObservable(); }
         }
 
-        public IObservable<string> OnXmppStreamInitialized
-        {
+        public IObservable<string> OnXmppStreamInitialized {
             get { return onXmppStreamInitializedSubject.AsObservable(); }
         }
 
-        public IObservable<string> OnXmppStreamClosed
-        {
+        public IObservable<string> OnXmppStreamClosed {
             get { return onXmppStreamClosedSubject.AsObservable(); }
         }
 
         /// <summary>
         ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose()
-        {
+        public void Dispose() {
             Dispose(true);
 
             // This object will be cleaned up by the Dispose method.
@@ -119,8 +105,7 @@ namespace Hanoi.Xmpp.Transports
 
         public abstract void Send(byte[] message);
 
-        public virtual void Close()
-        {
+        public virtual void Close() {
             userId = null;
             connectionString = null;
             SyncReads = null;
@@ -136,8 +121,7 @@ namespace Hanoi.Xmpp.Transports
         ///   Releases unmanaged resources and performs other cleanup operations before the
         ///   <see cref = "T:Hanoi.Xmpp.XmppConnection" /> is reclaimed by garbage collection.
         /// </summary>
-        ~BaseTransport()
-        {
+        ~BaseTransport() {
             // Do not re-create Dispose clean-up code here.
             // Calling Dispose(false) is optimal in terms of
             // readability and maintainability.
@@ -148,8 +132,7 @@ namespace Hanoi.Xmpp.Transports
         ///   Disposes the specified disposing.
         /// </summary>
         /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
-        protected virtual void Dispose(bool disposing)
-        {
+        protected virtual void Dispose(bool disposing) {
             if (!IsDisposed)
             {
                 if (disposing)
@@ -175,8 +158,7 @@ namespace Hanoi.Xmpp.Transports
             IsDisposed = true;
         }
 
-        protected void ResolveHostName()
-        {
+        protected void ResolveHostName() {
             try
             {
                 var request = new DnsQueryRequest();

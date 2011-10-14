@@ -12,13 +12,11 @@ using BabelIm.Net.Xmpp.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Core.Tls;
 using Hanoi.Xmpp.Sockets;
 
-namespace Hanoi.Xmpp.Transports
-{
+namespace Hanoi.Xmpp.Transports {
     /// <summary>
     ///   TCP/IP Transport implementation
     /// </summary>
-    internal sealed class TcpTransport : BaseTransport, ISecureTransport
-    {
+    internal sealed class TcpTransport : BaseTransport, ISecureTransport {
         private const string StreamNamespace = "jabber:client";
         private const string StreamURI = "http://etherx.jabber.org/streams";
         private const string StreamVersion = "1.0";
@@ -34,12 +32,13 @@ namespace Hanoi.Xmpp.Transports
         private ProxySocket socket;
         private AutoResetEvent tlsProceedEvent;
 
+        #region ISecureTransport Members
+
         /// <summary>
         ///   Opens the connection
         /// </summary>
         /// <param name = "connectionString">The connection string used for authentication.</param>
-        public override void Open(XmppConnectionString connectionString)
-        {
+        public override void Open(XmppConnectionString connectionString) {
             // Connection string
             ConnectionString = connectionString;
             UserId = ConnectionString.UserId;
@@ -57,15 +56,14 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Closes the connection
         /// </summary>
-        public override void Close()
-        {
+        public override void Close() {
             if (!IsDisposed)
             {
                 try
                 {
                     Send(EndStream);
                 }
-                // TODO: empty try-catch bad, martial arts good
+                    // TODO: empty try-catch bad, martial arts good
 // ReSharper disable EmptyGeneralCatchClause
                 catch
 // ReSharper restore EmptyGeneralCatchClause
@@ -111,9 +109,8 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param name="message">The message to be sent</param>
-        public override void Send(object message)
-        {
+        /// <param name = "message">The message to be sent</param>
+        public override void Send(object message) {
             Send(XmppSerializer.Serialize(message));
         }
 
@@ -121,16 +118,14 @@ namespace Hanoi.Xmpp.Transports
         ///   Sends an XMPP message string to the XMPP Server
         /// </summary>
         /// <param name = "value"></param>
-        public override void Send(string value)
-        {
+        public override void Send(string value) {
             Send(Encoding.UTF8.GetBytes(value));
         }
 
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public override void Send(byte[] buffer)
-        {
+        public override void Send(byte[] buffer) {
             lock (SyncWrites)
             {
                 Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
@@ -143,8 +138,7 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Initializes the XMPP stream.
         /// </summary>
-        public override void InitializeXmppStream()
-        {
+        public override void InitializeXmppStream() {
             // Serialization can't be used in this case
             string xml = String.Format
                 (
@@ -161,8 +155,7 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Opens a secure connection against the XMPP server using TLS
         /// </summary>
-        public void OpenSecureConnection()
-        {
+        public void OpenSecureConnection() {
             // Send Start TLS message
             var tlsMsg = new StartTls();
             Send(tlsMsg);
@@ -181,8 +174,9 @@ namespace Hanoi.Xmpp.Transports
             InitializeXmppStream();
         }
 
-        private void OpenSecureStream()
-        {
+        #endregion
+
+        private void OpenSecureStream() {
             if (networkStream != null)
             {
                 networkStream.Close();
@@ -198,7 +192,7 @@ namespace Hanoi.Xmpp.Transports
                 );
 
             // Perform SSL Authentication
-            ((SslStream)networkStream).AuthenticateAsClient
+            ((SslStream) networkStream).AuthenticateAsClient
                 (
                     ConnectionString.HostName,
                     null,
@@ -210,8 +204,7 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Opens the connection to the XMPP server.
         /// </summary>
-        private void Connect()
-        {
+        private void Connect() {
             try
             {
                 if (ConnectionString.ResolveHostName)
@@ -274,8 +267,7 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Startds async readings on the socket connected to the server
         /// </summary>
-        private void BeginReceiveData()
-        {
+        private void BeginReceiveData() {
             var state = new StateObject(networkStream);
             AsyncCallback asyncCallback = ReceiveCallback;
 
@@ -292,8 +284,7 @@ namespace Hanoi.Xmpp.Transports
         ///   Async read callback
         /// </summary>
         /// <param name = "ar"></param>
-        private void ReceiveCallback(IAsyncResult ar)
-        {
+        private void ReceiveCallback(IAsyncResult ar) {
             if (!ar.CompletedSynchronously)
             {
                 ProcessAsyncRead(ar);
@@ -304,11 +295,10 @@ namespace Hanoi.Xmpp.Transports
         ///   Assync read processing.
         /// </summary>
         /// <param name = "ar"></param>
-        private void ProcessAsyncRead(IAsyncResult ar)
-        {
+        private void ProcessAsyncRead(IAsyncResult ar) {
             // Retrieve the state object and the client socket 
             // from the asynchronous state object.
-            var state = (StateObject)ar.AsyncState;
+            var state = (StateObject) ar.AsyncState;
 
             if (state.WorkStream != null && state.WorkStream.CanRead)
             {
@@ -349,8 +339,7 @@ namespace Hanoi.Xmpp.Transports
         ///   Process all pending XMPP messages
         /// </summary>
         /// <returns></returns>
-        private List<AutoResetEvent> ProcessPendingMessages()
-        {
+        private List<AutoResetEvent> ProcessPendingMessages() {
             var resetEvents = new List<AutoResetEvent>();
 
             while (parser != null && !parser.EOF)
@@ -371,8 +360,7 @@ namespace Hanoi.Xmpp.Transports
         /// </summary>
         /// <param name = "node"></param>
         /// <returns></returns>
-        private AutoResetEvent ProcessXmppMessage(XmppStreamElement node)
-        {
+        private AutoResetEvent ProcessXmppMessage(XmppStreamElement node) {
             if (node != null)
             {
                 Debug.WriteLine(node.ToString());
@@ -416,8 +404,7 @@ namespace Hanoi.Xmpp.Transports
                                                  System.Security.Cryptography.X509Certificates.X509Certificate
                                                      certificate,
                                                  System.Security.Cryptography.X509Certificates.X509Chain chain,
-                                                 SslPolicyErrors sslPolicyErrors)
-        {
+                                                 SslPolicyErrors sslPolicyErrors) {
             // TODO: Give the option to make this handled by the application using the library
             return true;
         }
@@ -425,8 +412,7 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Initializes the connection instance
         /// </summary>
-        private void Initialize()
-        {
+        private void Initialize() {
             inputBuffer = new XmppMemoryStream();
             parser = new XmppStreamParser(inputBuffer);
             tlsProceedEvent = new AutoResetEvent(false);

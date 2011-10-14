@@ -1,13 +1,11 @@
 ﻿using System;
 
-namespace Hanoi.Xmpp.Transports
-{
+namespace Hanoi.Xmpp.Transports {
     /// <summary>
     ///   Interface for transport implementations
     /// </summary>
     internal interface ITransport
-        : IDisposable
-    {
+        : IDisposable {
         /// <summary>
         ///   XMPP server Host name
         /// </summary>
@@ -64,5 +62,5 @@ namespace Hanoi.Xmpp.Transports
         ///   Closes the transport connection
         /// </summary>
         void Close();
-    }
+        }
 }

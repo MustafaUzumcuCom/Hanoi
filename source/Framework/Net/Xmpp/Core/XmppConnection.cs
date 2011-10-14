@@ -478,7 +478,7 @@ namespace Hanoi.Xmpp {
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param name="message">The message to be sent</param>
+        /// <param name = "message">The message to be sent</param>
         public void Send(object message) {
             transport.Send(message);
         }

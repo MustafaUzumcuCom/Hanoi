@@ -27,13 +27,11 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Hanoi.Xmpp.Transports
-{
+namespace Hanoi.Xmpp.Transports {
     /// <summary>
     ///   Interface for secure transport implementations
     /// </summary>
-    internal interface ISecureTransport : ITransport
-    {
+    internal interface ISecureTransport : ITransport {
         /// <summary>
         ///   Opens a secure transport connection
         /// </summary>

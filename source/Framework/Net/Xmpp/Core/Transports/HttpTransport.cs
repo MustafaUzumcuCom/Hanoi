@@ -9,8 +9,7 @@ using System.Text;
 using BabelIm.Net.Xmpp.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.Bosh;
 
-namespace Hanoi.Xmpp.Transports
-{
+namespace Hanoi.Xmpp.Transports {
     /// <summary>
     ///   XMPP over Bosh (HTTP) Transport implementation
     /// </summary>
@@ -18,8 +17,7 @@ namespace Hanoi.Xmpp.Transports
     ///   XEP-0124 - Bidirectional-streams Over Synchronous HTTP (BOSH) - http://xmpp.org/extensions/xep-0124.pdf
     ///   XEP-0206 - XMPP over BOSH - http://xmpp.org/extensions/xep-0206.pdf
     /// </remarks>
-    internal sealed class HttpTransport : BaseTransport
-    {
+    internal sealed class HttpTransport : BaseTransport {
         private const string ContentType = "text/xml; charset=utf-8";
         private const string BoshVersion = "1.10";
         private const string RouteFormat = "xmpp:{0}:9999";
@@ -28,17 +26,14 @@ namespace Hanoi.Xmpp.Transports
         private long rid;
         private HttpBindBody streamResponse;
 
-        #region ITransport Members
-
-        public override void Open(XmppConnectionString connectionString)
-        {
+        public override void Open(XmppConnectionString connectionString) {
             // Connection string
             ConnectionString = connectionString;
             UserId = ConnectionString.UserId;
 
             // Generate initial RID
             var rng = new RNGCryptoServiceProvider();
-            var bytes = new byte[32 / 8];
+            var bytes = new byte[32/8];
 
             rng.GetBytes(bytes);
 
@@ -50,8 +45,7 @@ namespace Hanoi.Xmpp.Transports
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
         }
 
-        public override void InitializeXmppStream()
-        {
+        public override void InitializeXmppStream() {
             var message = new HttpBindBody();
 
             message.Rid = (rid++).ToString();
@@ -99,12 +93,11 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param name="message">The message to be sent</param>
-        public override void Send(object message)
-        {
+        /// <param name = "message">The message to be sent</param>
+        public override void Send(object message) {
             var body = new HttpBindBody
                            {
-                               Rid = (rid++).ToString(), 
+                               Rid = (rid++).ToString(),
                                Sid = streamResponse.Sid
                            };
 
@@ -117,23 +110,20 @@ namespace Hanoi.Xmpp.Transports
         ///   Sends an XMPP message string to the XMPP Server
         /// </summary>
         /// <param name = "value"></param>
-        public override void Send(string value)
-        {
+        public override void Send(string value) {
             Send(Encoding.UTF8.GetBytes(value));
         }
 
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public override void Send(byte[] buffer)
-        {
+        public override void Send(byte[] buffer) {
             var response = SendSync(buffer);
 
             ProcessResponse(response);
         }
 
-        public override void Close()
-        {
+        public override void Close() {
             base.Close();
 
             ServicePointManager.ServerCertificateValidationCallback -= ValidateRemoteCertificate;
@@ -142,14 +132,11 @@ namespace Hanoi.Xmpp.Transports
             rid = 0;
         }
 
-        #endregion
-
         private static bool ValidateRemoteCertificate(
             object sender,
             X509Certificate certificate,
             X509Chain chain,
-            SslPolicyErrors policyErrors)
-        {
+            SslPolicyErrors policyErrors) {
             // allow any old dodgy certificate...
             return true;
         }
@@ -157,8 +144,7 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public HttpBindBody SendSync(byte[] buffer)
-        {
+        public HttpBindBody SendSync(byte[] buffer) {
             Debug.WriteLine(Encoding.UTF8.GetString(buffer));
 
             lock (SyncWrites)
@@ -169,7 +155,7 @@ namespace Hanoi.Xmpp.Transports
                 {
                     stream.Write(buffer, 0, buffer.Length);
 
-                    var webResponse = (HttpWebResponse)webRequest.GetResponse();
+                    var webResponse = (HttpWebResponse) webRequest.GetResponse();
 
                     if (webResponse.StatusCode == HttpStatusCode.OK)
                     {
@@ -192,17 +178,15 @@ namespace Hanoi.Xmpp.Transports
             }
         }
 
-        private void ProcessResponse(HttpBindBody response)
-        {
+        private void ProcessResponse(HttpBindBody response) {
             foreach (var item in response.Items)
             {
                 OnMessageReceivedSubject.OnNext(item);
             }
         }
 
-        private HttpWebRequest CreateWebRequest()
-        {
-            var webRequest = (HttpWebRequest)WebRequest.Create
+        private HttpWebRequest CreateWebRequest() {
+            var webRequest = (HttpWebRequest) WebRequest.Create
                                                   (
                                                       String.Format("https://{0}/http-bind", ConnectionString.HostName)
                                                   );
@@ -217,10 +201,9 @@ namespace Hanoi.Xmpp.Transports
         /// <summary>
         ///   Sends a new message.
         /// </summary>
-        /// <param name="message">The message to be sent</param>
+        /// <param name = "message">The message to be sent</param>
         [Obsolete("R# tells me this is never used")]
-        private void Send(HttpBindBody message)
-        {
+        private void Send(HttpBindBody message) {
             Send(XmppSerializer.Serialize(message));
         }
     }
