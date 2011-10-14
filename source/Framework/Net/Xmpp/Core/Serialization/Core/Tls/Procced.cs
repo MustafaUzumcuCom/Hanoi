@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -30,27 +30,13 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Stanzas {
+namespace Hanoi.Serialization.Core.Tls {
     [Serializable]
-    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas")]
-    [XmlRootAttribute("text", Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas", IsNullable = false)]
-    public class StanzaText {
-        private string langField;
-        private string valueField;
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-tls")]
+    [XmlRootAttribute("proceed", Namespace = "urn:ietf:params:xml:ns:xmpp-tls", IsNullable = false)]
+    public class Proceed {
+        #region ∑ Constructors ∑
 
-        /// <remarks />
-        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
-            Namespace = "http://www.w3.org/XML/1998/namespace")]
-        public string Lang {
-            get { return langField; }
-            set { langField = value; }
-        }
-
-        /// <remarks />
-        [XmlTextAttribute]
-        public string Value {
-            get { return valueField; }
-            set { valueField = value; }
-        }
+        #endregion
     }
 }

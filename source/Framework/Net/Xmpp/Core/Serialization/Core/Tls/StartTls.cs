@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Tls {
+namespace Hanoi.Serialization.Core.Tls {
     [Serializable]
     [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-tls")]
     [XmlRootAttribute("starttls", Namespace = "urn:ietf:params:xml:ns:xmpp-tls", IsNullable = false)]

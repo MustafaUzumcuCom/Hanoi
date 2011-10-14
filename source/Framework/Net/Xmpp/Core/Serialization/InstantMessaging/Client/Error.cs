@@ -29,7 +29,7 @@
 
 using System;
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization.Core.Stanzas;
+using Hanoi.Serialization.Core.Stanzas;
 
 namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />

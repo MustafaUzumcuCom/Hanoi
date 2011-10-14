@@ -32,7 +32,6 @@ using System.Collections;
 using System.Xml.Serialization;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
-using Hanoi.Xmpp.Serialization.Core.Streams;
 
 namespace Hanoi.Serialization.Core.Streams {
     /// <remarks />

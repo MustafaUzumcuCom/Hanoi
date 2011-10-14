@@ -10,8 +10,8 @@ using System.Text;
 using System.Threading;
 using Hanoi.Core.Sockets;
 using Hanoi.Serialization;
+using Hanoi.Serialization.Core.Tls;
 using Hanoi.Xmpp.Serialization;
-using Hanoi.Xmpp.Serialization.Core.Tls;
 
 namespace Hanoi.Core.Transports {
     /// <summary>

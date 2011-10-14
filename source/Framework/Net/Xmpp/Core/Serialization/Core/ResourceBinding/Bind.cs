@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -29,17 +29,21 @@
 
 using System;
 using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Streams {
+namespace Hanoi.Serialization.Core.ResourceBinding {
     /// <summary>
-    ///   http://xmpp.org/rfcs/rfc3921.html
+    ///   http://xmpp.org/rfcs/rfc3920.html
+    ///   http://xmpp.org/extensions/xep-0193.html
     /// </summary>
     [Serializable]
-    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-session")]
-    [XmlRootAttribute("session", Namespace = "urn:ietf:params:xml:ns:xmpp-session")]
-    public class Session {
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-bind")]
+    [XmlRootAttribute("bind", Namespace = "urn:ietf:params:xml:ns:xmpp-bind", IsNullable = false)]
+    public class Bind {
         private ItemChoiceType itemElementNameField;
         private Empty itemField;
+        private string jidField;
+        private string resourceField;
 
         /// <remarks />
         [XmlElementAttribute("optional", typeof (Empty))]
@@ -55,6 +59,20 @@ namespace Hanoi.Xmpp.Serialization.Core.Streams {
         public ItemChoiceType ItemElementName {
             get { return itemElementNameField; }
             set { itemElementNameField = value; }
+        }
+
+        /// <remarks />
+        [XmlElementAttribute("resource")]
+        public string Resource {
+            get { return resourceField; }
+            set { resourceField = value; }
+        }
+
+        /// <remarks />
+        [XmlElementAttribute("jid")]
+        public string Jid {
+            get { return jidField; }
+            set { jidField = value; }
         }
     }
 }

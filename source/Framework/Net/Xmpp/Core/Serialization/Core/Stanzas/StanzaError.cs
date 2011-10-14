@@ -30,13 +30,27 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Tls {
+namespace Hanoi.Serialization.Core.Stanzas {
     [Serializable]
-    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-tls")]
-    [XmlRootAttribute("proceed", Namespace = "urn:ietf:params:xml:ns:xmpp-tls", IsNullable = false)]
-    public class Proceed {
-        #region · Constructors ·
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas")]
+    [XmlRootAttribute("text", Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas", IsNullable = false)]
+    public class StanzaText {
+        private string langField;
+        private string valueField;
 
-        #endregion
+        /// <remarks />
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
+        }
+
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
     }
 }
