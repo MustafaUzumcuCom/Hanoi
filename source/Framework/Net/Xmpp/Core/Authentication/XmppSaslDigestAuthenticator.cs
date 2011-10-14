@@ -33,6 +33,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Hanoi.Authentication;
 using Hanoi.Xmpp.Serialization.Core.Sasl;
 
 namespace Hanoi.Xmpp.Authentication

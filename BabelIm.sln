@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E57FD011
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Net.Xmpp.Serialization.Tests", "source\Tests\BabelIm.Net.Xmpp.Serialization.Tests\BabelIm.Net.Xmpp.Serialization.Tests.csproj", "{54C7296D-2B7C-4983-A23F-1B755799FFB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Authentication", "source\Framework\Net\Xmpp\Authentication\Hanoi.Authentication\Hanoi.Authentication.csproj", "{C8C95556-23F0-4EDD-8648-9F711BCED2E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,14 @@ Global
 		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|x64.ActiveCfg = Release|Any CPU
 		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|x86.ActiveCfg = Release|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Release|x64.ActiveCfg = Release|Any CPU
+		{C8C95556-23F0-4EDD-8648-9F711BCED2E3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

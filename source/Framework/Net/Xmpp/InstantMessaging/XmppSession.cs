@@ -37,6 +37,7 @@ using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat;
 using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
+using Hanoi.Authentication;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Authentication;
 using Hanoi.Xmpp.Serialization.Extensions.PubSub;

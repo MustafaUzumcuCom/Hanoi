@@ -136,6 +136,10 @@
     <Compile Include="XmppSessionState.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Authentication\Hanoi.Authentication\Hanoi.Authentication.csproj">
+      <Project>{C8C95556-23F0-4EDD-8648-9F711BCED2E3}</Project>
+      <Name>Hanoi.Authentication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Hanoi.Xmpp.csproj">
       <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
       <Name>Hanoi.Xmpp</Name>

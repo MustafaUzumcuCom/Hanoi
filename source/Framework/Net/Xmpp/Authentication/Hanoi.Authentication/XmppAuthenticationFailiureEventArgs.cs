@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -29,28 +29,26 @@
 
 using System;
 
-namespace Hanoi.Xmpp.Authentication {
+namespace Hanoi.Authentication
+{
     /// <summary>
-    ///   EventArgs for the <see cref = "XmppConnection.AuthenticationFailiure" /> event.
+    ///   EventArgs for the <see cref = "Hanoi.Xmpp.XmppConnection.AuthenticationFailiure" /> event.
     /// </summary>
-    public sealed class XmppAuthenticationFailiureEventArgs
-        : EventArgs {
-        private readonly string message;
-
+    public sealed class XmppAuthenticationFailiureEventArgs : EventArgs
+    {
         /// <summary>
         ///   Initializes a new instance of the <see cref = "XmppAuthenticationFailiureEventArgs" /> class.
         /// </summary>
         /// <param name = "message">The authentication failiure message.</param>
-        internal XmppAuthenticationFailiureEventArgs(string message) {
-            this.message = message;
+        public XmppAuthenticationFailiureEventArgs(string message)
+        {
+            Message = message;
         }
 
         /// <summary>
         ///   Gets the authentication failiure message.
         /// </summary>
         /// <value>The message.</value>
-        public string Message {
-            get { return message; }
-        }
-        }
+        public string Message { get; private set; }
+    }
 }

@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using Hanoi.Authentication;
 
 namespace Hanoi.Xmpp.Authentication {
 
