@@ -34,10 +34,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Hanoi.Core;
+using Hanoi.Serialization.Extensions.SimpleCommunicationsBlocking;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Roster;
 using Hanoi.Xmpp;
-using Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
 using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
 

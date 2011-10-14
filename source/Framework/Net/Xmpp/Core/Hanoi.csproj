@@ -146,6 +146,11 @@
     <Compile Include="Serialization\Extensions\PubSub\PubSubSubscriptions.cs" />
     <Compile Include="Serialization\Extensions\PubSub\PubSubSubscriptionType.cs" />
     <Compile Include="Serialization\Extensions\PubSub\PubSubUnsubscribe.cs" />
+    <Compile Include="Serialization\Extensions\SimpleCommunicationsBlocking\Block.cs" />
+    <Compile Include="Serialization\Extensions\SimpleCommunicationsBlocking\BlockingErrors.cs" />
+    <Compile Include="Serialization\Extensions\SimpleCommunicationsBlocking\BlockItem.cs" />
+    <Compile Include="Serialization\Extensions\SimpleCommunicationsBlocking\BlockList.cs" />
+    <Compile Include="Serialization\Extensions\SimpleCommunicationsBlocking\UnBlock.cs" />
     <Compile Include="Serialization\Extensions\VCardAvatars\VCardAvatar.cs" />
     <Compile Include="Serialization\Extensions\VCardAvatars\VCardPhoto.cs" />
     <Compile Include="Serialization\Extensions\VCardTemp\VCardData.cs" />

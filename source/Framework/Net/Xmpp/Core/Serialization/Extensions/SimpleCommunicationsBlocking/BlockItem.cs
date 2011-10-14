@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -28,23 +28,23 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking {
+namespace Hanoi.Serialization.Extensions.SimpleCommunicationsBlocking {
     /// <summary>
     ///   XEP-0191: Simple Communications Blocking
     /// </summary>
     [Serializable]
     [XmlType(AnonymousType = true, Namespace = "urn:xmpp:blocking")]
-    [XmlRootAttribute("unblock", Namespace = "urn:xmpp:blocking", IsNullable = false)]
-    public sealed class UnBlock {
-        private List<BlockItem> itemsField;
+    [XmlRootAttribute("item", Namespace = "urn:xmpp:blocking", IsNullable = false)]
+    public sealed class BlockItem {
+        private string jidField;
 
-        [XmlElementAttribute("item", Type = typeof (BlockItem), Namespace = "urn:xmpp:blocking")]
-        public List<BlockItem> Items {
-            get { return itemsField; }
-            set { itemsField = value; }
+        /// <comentarios />
+        [XmlAttributeAttribute("jid")]
+        public string Jid {
+            get { return jidField; }
+            set { jidField = value; }
         }
     }
 }

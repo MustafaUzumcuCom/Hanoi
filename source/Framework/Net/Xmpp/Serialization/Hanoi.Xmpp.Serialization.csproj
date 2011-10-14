@@ -105,11 +105,6 @@
     <Compile Include="Extensions\MultiUserChat\MucUserStatus.cs" />
     <Compile Include="Extensions\MultiUserChat\MultiUserChat.cs" />
     <Compile Include="Extensions\RosterVersioning\RosterVersioningFeature.cs" />
-    <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockingErrors.cs" />
-    <Compile Include="Extensions\SimpleCommunicationsBlocking\Block.cs" />
-    <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockItem.cs" />
-    <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockList.cs" />
-    <Compile Include="Extensions\SimpleCommunicationsBlocking\UnBlock.cs" />
     <Compile Include="Extensions\UserMood\MoodType.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ActionType.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceFeature.cs" />
