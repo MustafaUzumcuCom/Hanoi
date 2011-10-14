@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp", "source\Framew
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp.Serialization", "source\Framework\Net\Xmpp\Serialization\Hanoi.Xmpp.Serialization.csproj", "{9E9572F4-1B90-456E-8EF0-D404D6FD3631}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Net.Xmpp.InstantMessaging", "source\Framework\Net\Xmpp\InstantMessaging\BabelIm.Net.Xmpp.InstantMessaging.csproj", "{490DA560-229D-460A-B16F-A35CFECA9937}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp.InstantMessaging", "source\Framework\Net\Xmpp\InstantMessaging\Hanoi.Xmpp.InstantMessaging.csproj", "{490DA560-229D-460A-B16F-A35CFECA9937}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E57FD011-81D5-44A8-B342-0E5DD233F624}"
 EndProject
