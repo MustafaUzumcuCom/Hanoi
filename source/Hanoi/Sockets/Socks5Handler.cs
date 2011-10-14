@@ -33,12 +33,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Hanoi.Core.Sockets {
+namespace Hanoi.Sockets {
     /// <summary>
     ///   Implements the SOCKS5 protocol.
     /// </summary>
-    internal sealed class Socks5Handler
-        : SocksHandler {
+    internal sealed class Socks5Handler : SocksHandler {
         /// <summary>
         ///   Holds the value of the Password property.
         /// </summary>
@@ -133,7 +132,7 @@ namespace Hanoi.Core.Sockets {
         /// <param name = "callback">The method to call when the negotiation is complete.</param>
         /// <param name = "proxyEndPoint">The IPEndPoint of the SOCKS proxy server.</param>
         /// <returns>An IAsyncProxyResult that references the asynchronous connection.</returns>
-        public override IAsyncProxyResult BeginNegotiate(string host, int port, HandShakeComplete callback,
+        public override IAsyncProxyResult BeginNegotiate(string host, int port, Action<Exception> callback,
                                                          IPEndPoint proxyEndPoint) {
             ProtocolComplete = callback;
             HandShake = GetHostPortBytes(host, port);
@@ -152,8 +151,7 @@ namespace Hanoi.Core.Sockets {
         /// <param name = "callback">The method to call when the negotiation is complete.</param>
         /// <param name = "proxyEndPoint">The IPEndPoint of the SOCKS proxy server.</param>
         /// <returns>An IAsyncProxyResult that references the asynchronous connection.</returns>
-        public override IAsyncProxyResult BeginNegotiate(IPEndPoint remoteEP, HandShakeComplete callback,
-                                                         IPEndPoint proxyEndPoint) {
+        public override IAsyncProxyResult BeginNegotiate(IPEndPoint remoteEP, Action<Exception> callback, IPEndPoint proxyEndPoint) {
             ProtocolComplete = callback;
             HandShake = GetEndPointBytes(remoteEP);
 

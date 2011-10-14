@@ -29,7 +29,7 @@
 
 using System;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   Internal constants
     /// </summary>

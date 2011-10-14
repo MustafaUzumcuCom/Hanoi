@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Hanoi.Core;
+using Hanoi;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 

@@ -29,7 +29,7 @@
 
 using System;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   Chat state notification types
     /// </summary>

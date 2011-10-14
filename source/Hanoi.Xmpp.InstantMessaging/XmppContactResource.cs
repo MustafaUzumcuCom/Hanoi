@@ -34,7 +34,7 @@ using System.IO;
 using System.Linq;
 using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using Hanoi.Core;
+using Hanoi;
 using Hanoi.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.Extensions.VCardAvatars;

@@ -233,7 +233,6 @@
     <Compile Include="Sockets\AuthMethod.cs" />
     <Compile Include="Sockets\AuthNone.cs" />
     <Compile Include="Sockets\AuthUserPass.cs" />
-    <Compile Include="Sockets\HandShakeComplete.cs" />
     <Compile Include="Sockets\IAsyncProxyResult.cs" />
     <Compile Include="Sockets\ProxyException.cs" />
     <Compile Include="Sockets\ProxySocket.cs" />

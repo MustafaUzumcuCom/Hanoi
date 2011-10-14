@@ -30,7 +30,7 @@
 using Hanoi.Serialization.Extensions.PubSub;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   Pub sub event message
     /// </summary>

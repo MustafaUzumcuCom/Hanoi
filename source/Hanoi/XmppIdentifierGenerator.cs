@@ -29,7 +29,7 @@
 
 using System;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   An ID generator for XMPP messages.
     /// </summary>

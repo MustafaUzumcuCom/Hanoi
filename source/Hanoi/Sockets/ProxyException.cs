@@ -30,7 +30,7 @@
 
 using System;
 
-namespace Hanoi.Core.Sockets {
+namespace Hanoi.Sockets {
     /// <summary>
     ///   The exception that is thrown when a proxy error occurs.
     /// </summary>

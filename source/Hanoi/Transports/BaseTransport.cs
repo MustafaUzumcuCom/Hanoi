@@ -6,7 +6,7 @@ using DnDns.Enums;
 using DnDns.Query;
 using DnDns.Records;
 
-namespace Hanoi.Core.Transports {
+namespace Hanoi.Transports {
     /// <summary>
     ///   Base class for transport implementations
     /// </summary>
@@ -119,7 +119,7 @@ namespace Hanoi.Core.Transports {
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:Hanoi.Core.XmppConnection" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.XmppConnection" /> is reclaimed by garbage collection.
         /// </summary>
         ~BaseTransport() {
             // Do not re-create Dispose clean-up code here.

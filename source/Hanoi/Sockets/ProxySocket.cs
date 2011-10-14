@@ -34,7 +34,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hanoi.Core.Sockets {
+namespace Hanoi.Sockets {
     /// <summary>
     ///   Implements a Socket class that can connect trough a SOCKS proxy server.
     /// </summary>
@@ -391,7 +391,7 @@ namespace Hanoi.Core.Sockets {
         /// <param name = "callback">The method to call when the hostname has been resolved.</param>
         /// <returns>An IAsyncResult instance that references the asynchronous request.</returns>
         /// <exception cref = "SocketException">There was an error while trying to resolve the host.</exception>
-        internal IAsyncProxyResult BeginDns(string host, HandShakeComplete callback) {
+        internal IAsyncProxyResult BeginDns(string host, Action<Exception> callback) {
             try
             {
                 Dns.BeginResolve(host, OnResolved, this);

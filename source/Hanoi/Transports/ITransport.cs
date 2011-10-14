@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hanoi.Core.Transports {
+namespace Hanoi.Transports {
     /// <summary>
     ///   Interface for transport implementations
     /// </summary>

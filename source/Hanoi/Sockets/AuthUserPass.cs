@@ -32,7 +32,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Hanoi.Core.Sockets {
+namespace Hanoi.Sockets {
     /// <summary>
     ///   This class implements the 'username/password authentication' scheme.
     /// </summary>
@@ -122,7 +122,7 @@ namespace Hanoi.Core.Sockets {
         ///   Starts the asynchronous authentication process.
         /// </summary>
         /// <param name = "callback">The method to call when the authentication is complete.</param>
-        public override void BeginAuthenticate(HandShakeComplete callback) {
+        public override void BeginAuthenticate(Action<Exception> callback) {
             CallBack = callback;
             Server.BeginSend(GetAuthenticationBytes(), 0, 3 + Username.Length + Password.Length, SocketFlags.None,
                              OnSent, Server);

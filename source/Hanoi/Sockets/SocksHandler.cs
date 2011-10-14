@@ -32,7 +32,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hanoi.Core.Sockets {
+namespace Hanoi.Sockets {
     /// <summary>
     ///   Implements a specific version of the SOCKS protocol. This is an abstract class; it must be inherited.
     /// </summary>
@@ -40,7 +40,8 @@ namespace Hanoi.Core.Sockets {
         /// <summary>
         ///   Holds the address of the method to call when the SOCKS protocol has been completed.
         /// </summary>
-        protected HandShakeComplete ProtocolComplete;
+        
+        protected Action<Exception> ProtocolComplete;
 
         /// <summary>
         ///   Holds the value of the Server property.
@@ -190,7 +191,7 @@ namespace Hanoi.Core.Sockets {
         /// <param name = "callback">The method to call when the connection has been established.</param>
         /// <param name = "proxyEndPoint">The IPEndPoint of the SOCKS proxy server.</param>
         /// <returns>An IAsyncProxyResult that references the asynchronous connection.</returns>
-        public abstract IAsyncProxyResult BeginNegotiate(IPEndPoint remoteEP, HandShakeComplete callback,
+        public abstract IAsyncProxyResult BeginNegotiate(IPEndPoint remoteEP, Action<Exception> callback,
                                                          IPEndPoint proxyEndPoint);
 
         /// <summary>
@@ -201,7 +202,7 @@ namespace Hanoi.Core.Sockets {
         /// <param name = "callback">The method to call when the connection has been established.</param>
         /// <param name = "proxyEndPoint">The IPEndPoint of the SOCKS proxy server.</param>
         /// <returns>An IAsyncProxyResult that references the asynchronous connection.</returns>
-        public abstract IAsyncProxyResult BeginNegotiate(string host, int port, HandShakeComplete callback,
+        public abstract IAsyncProxyResult BeginNegotiate(string host, int port, Action<Exception> callback,
                                                          IPEndPoint proxyEndPoint);
     }
 }

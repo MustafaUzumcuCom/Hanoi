@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Core;
+using Hanoi;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
 using ShowType = Hanoi.Serialization.InstantMessaging.Presence.ShowType;
 using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;

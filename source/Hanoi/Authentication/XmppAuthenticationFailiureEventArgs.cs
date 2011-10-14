@@ -29,7 +29,7 @@
 
 using System;
 
-namespace Hanoi.Core.Authentication
+namespace Hanoi.Authentication
 {
     /// <summary>
     ///   EventArgs for the <see cref = "Hanoi.Xmpp.XmppConnection.AuthenticationFailiure" /> event.

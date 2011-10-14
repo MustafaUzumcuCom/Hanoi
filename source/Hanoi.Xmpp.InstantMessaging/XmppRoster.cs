@@ -33,7 +33,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using Hanoi.Core;
+using Hanoi;
 using Hanoi.Serialization.Extensions.SimpleCommunicationsBlocking;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Roster;

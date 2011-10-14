@@ -31,7 +31,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   Hash extension methods
     /// </summary>

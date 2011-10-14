@@ -29,7 +29,7 @@
 
 using System.IO;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   Internal class used as State for socket reads
     /// </summary>

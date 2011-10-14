@@ -9,7 +9,7 @@ using System.Text;
 using Hanoi.Serialization;
 using Hanoi.Serialization.Extensions.Bosh;
 
-namespace Hanoi.Core.Transports {
+namespace Hanoi.Transports {
     /// <summary>
     ///   XMPP over Bosh (HTTP) Transport implementation
     /// </summary>

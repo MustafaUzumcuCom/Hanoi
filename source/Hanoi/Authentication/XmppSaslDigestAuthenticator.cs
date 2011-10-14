@@ -35,7 +35,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Hanoi.Serialization.Core.Sasl;
 
-namespace Hanoi.Core.Authentication
+namespace Hanoi.Authentication
 {
     /// <summary>
     ///   <see cref = "XmppAuthenticator" /> implementation for the SASL Digest Authentication mechanism.

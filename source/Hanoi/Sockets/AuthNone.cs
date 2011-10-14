@@ -28,9 +28,10 @@
   OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System;
 using System.Net.Sockets;
 
-namespace Hanoi.Core.Sockets {
+namespace Hanoi.Sockets {
     /// <summary>
     ///   This class implements the 'No Authentication' scheme.
     /// </summary>
@@ -58,7 +59,7 @@ namespace Hanoi.Core.Sockets {
         /// <remarks>
         ///   This method immediately calls the callback method.
         /// </remarks>
-        public override void BeginAuthenticate(HandShakeComplete callback) {
+        public override void BeginAuthenticate(Action<Exception> callback) {
             callback(null);
         }
         }

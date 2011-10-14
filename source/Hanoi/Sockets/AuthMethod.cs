@@ -32,7 +32,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hanoi.Core.Sockets {
+namespace Hanoi.Sockets {
     /// <summary>
     ///   Implements a SOCKS authentication scheme.
     /// </summary>
@@ -45,7 +45,7 @@ namespace Hanoi.Core.Sockets {
         /// <summary>
         ///   Holds the address of the method to call when the proxy has authenticated the client.
         /// </summary>
-        protected HandShakeComplete CallBack;
+        protected Action<Exception> CallBack;
 
         /// <summary>
         ///   Holds the value of the Server property.
@@ -105,6 +105,6 @@ namespace Hanoi.Core.Sockets {
         /// <exception cref = "ProtocolViolationException">The proxy server uses an invalid protocol.</exception>
         /// <exception cref = "SocketException">An operating system error occurs while accessing the Socket.</exception>
         /// <exception cref = "ObjectDisposedException">The Socket has been closed.</exception>
-        public abstract void BeginAuthenticate(HandShakeComplete callback);
+        public abstract void BeginAuthenticate(Action<Exception> callback);
     }
 }

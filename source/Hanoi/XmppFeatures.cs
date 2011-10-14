@@ -29,7 +29,7 @@
 
 using System;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   Speficies feature flags supported bythe XMPP server.
     /// </summary>

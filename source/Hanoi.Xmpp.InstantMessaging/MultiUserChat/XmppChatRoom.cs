@@ -32,7 +32,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using Hanoi.Core;
+using Hanoi;
 using Hanoi.Serialization.Extensions.MultiUserChat;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;

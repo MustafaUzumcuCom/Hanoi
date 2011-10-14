@@ -31,7 +31,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   A simple XMPP XML message parser
     /// </summary>

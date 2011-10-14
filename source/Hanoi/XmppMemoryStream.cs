@@ -30,7 +30,7 @@
 using System;
 using System.IO;
 
-namespace Hanoi.Core {
+namespace Hanoi {
     /// <summary>
     ///   A stream implementation used as input buffer for 
     ///   incoming data in the <see cref = "XmppConnection" /> class.
