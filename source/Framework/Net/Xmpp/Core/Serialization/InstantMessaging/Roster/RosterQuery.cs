@@ -30,27 +30,22 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Privacy {
+namespace Hanoi.Serialization.InstantMessaging.Roster {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:privacy")]
-    [XmlRootAttribute("default", Namespace = "jabber:iq:privacy", IsNullable = false)]
-    public class Default {
-        private string nameField;
-        private string valueField;
+    [XmlType(Namespace = "jabber:iq:roster")]
+    [XmlRootAttribute("query", Namespace = "jabber:iq:roster", IsNullable = false)]
+    public class RosterQuery {
+        private RosterItemCollection itemsField;
 
-        /// <remarks />
-        [XmlAttributeAttribute("name")]
-        public string Name {
-            get { return nameField; }
-            set { nameField = value; }
+        public RosterQuery() {
+            itemsField = new RosterItemCollection();
         }
 
         /// <remarks />
-        [XmlTextAttribute(DataType = "NMTOKEN")]
-        public string Value {
-            get { return valueField; }
-            set { valueField = value; }
+        [XmlElementAttribute("item")]
+        public RosterItemCollection Items {
+            get { return itemsField; }
         }
     }
 }

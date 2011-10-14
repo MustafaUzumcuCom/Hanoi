@@ -29,55 +29,51 @@
 
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
-using Hanoi.Xmpp.Serialization.Core.Streams;
+using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
 using Hanoi.Xmpp.Serialization.Extensions.PubSub;
-using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
-using Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
-using Hanoi.Xmpp.Serialization.Extensions.VCardTemp;
-using Hanoi.Xmpp.Serialization.Extensions.XmppPing;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Roster;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]
-    [XmlRoot("iq", Namespace = "jabber:client", IsNullable = false)]
-    public class IQ {
+    [XmlRootAttribute("message", Namespace = "jabber:client", IsNullable = false)]
+    public class Message {
         private Error errorField;
         private string fromField;
         private string idField;
-        private ArrayList items;
+        private ArrayList itemsField;
         private string langField;
         private string toField;
-        private IQType typeField;
+        private MessageType typeField;
 
-        public IQ() {
-            items = new ArrayList();
+        public Message() {
+            typeField = MessageType.Normal;
+            itemsField = new ArrayList();
         }
 
         /// <remarks />
-        [XmlElement("bind", Type = typeof (Bind), Namespace = "urn:ietf:params:xml:ns:xmpp-bind")]
-        [XmlElement("session", Type = typeof (Session), Namespace = "urn:ietf:params:xml:ns:xmpp-session")]
-        [XmlElement("ping", Type = typeof (Ping), Namespace = "urn:xmpp:ping")]
-        [XmlElement("query", Type = typeof (Browse), Namespace = "jabber:iq:browse")]
-        [XmlElement("query", Type = typeof (RegisterQuery), Namespace = "jabber:iq:register")]
-        [XmlElement("query", Type = typeof (RosterQuery), Namespace = "jabber:iq:roster")]
-        [XmlElement("pubsub", Type = typeof (PubSub), Namespace = "http://jabber.org/protocol/pubsub")]
-        [XmlElement("query", Type = typeof (ServiceQuery), Namespace = "http://jabber.org/protocol/disco#info")]
-        [XmlElement("query", Type = typeof (ServiceItemQuery), Namespace = "http://jabber.org/protocol/disco#items")]
-        [XmlElement("vCard", Type = typeof (VCardData), Namespace = "vcard-temp")]
-        [XmlElement("blocklist", Type = typeof (BlockList), Namespace = "urn:xmpp:blocking")]
-        [XmlElement("block", Type = typeof (Block), Namespace = "urn:xmpp:blocking")]
-        [XmlElement("unblock", Type = typeof (UnBlock), Namespace = "urn:xmpp:blocking")]
+        [XmlElementAttribute("subject", typeof (MessageSubject))]
+        [XmlElementAttribute("body", typeof (MessageBody))]
+        [XmlElementAttribute("thread", typeof (string), DataType = "NMTOKEN")]
+        [XmlElementAttribute("active", typeof (NotificationActive), Namespace = "http://jabber.org/protocol/chatstates")
+        ]
+        [XmlElementAttribute("composing", typeof (NotificationComposing),
+            Namespace = "http://jabber.org/protocol/chatstates")]
+        [XmlElementAttribute("gone", typeof (NotificationGone), Namespace = "http://jabber.org/protocol/chatstates")]
+        [XmlElementAttribute("inactive", typeof (NotificationInactive),
+            Namespace = "http://jabber.org/protocol/chatstates")]
+        [XmlElementAttribute("paused", typeof (NotificationPaused), Namespace = "http://jabber.org/protocol/chatstates")
+        ]
+        [XmlElementAttribute("event", typeof (PubSubEvent), Namespace = "http://jabber.org/protocol/pubsub#event")]
+        [XmlElementAttribute("x", Type = typeof (MucUser), Namespace = "http://jabber.org/protocol/muc#user")]
         public ArrayList Items {
-            get { return items; }
+            get { return itemsField; }
         }
 
         /// <remarks />
-        [XmlElementAttribute("error")]
+        [XmlElement("error")]
         public Error Error {
             get { return errorField; }
             set { errorField = value; }
@@ -106,7 +102,8 @@ namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
 
         /// <remarks />
         [XmlAttributeAttribute("type")]
-        public IQType Type {
+        [DefaultValue(MessageType.Normal)]
+        public MessageType Type {
             get { return typeField; }
             set { typeField = value; }
         }

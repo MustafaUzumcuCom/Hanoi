@@ -34,8 +34,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Hanoi.Core;
+using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>

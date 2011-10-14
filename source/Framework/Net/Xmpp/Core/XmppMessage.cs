@@ -28,7 +28,7 @@
 */
 
 using System;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Serialization.InstantMessaging.Client;
 
 namespace Hanoi.Core {
     /// <summary>

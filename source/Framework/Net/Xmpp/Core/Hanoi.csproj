@@ -109,10 +109,35 @@
     <Compile Include="Serialization\Extensions\Bosh\BodyCondition.cs" />
     <Compile Include="Serialization\Extensions\Bosh\BodyType.cs" />
     <Compile Include="Serialization\Extensions\Bosh\HttpBindBody.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\Browse.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\Error.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\ErrorType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\IQ.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\IQType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\Message.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\MessageBody.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\MessageSubject.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\MessageType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Client\NotificationType.cs" />
     <Compile Include="Serialization\InstantMessaging\Presence\Presence.cs" />
     <Compile Include="Serialization\InstantMessaging\Presence\PresenceType.cs" />
     <Compile Include="Serialization\InstantMessaging\Presence\ShowType.cs" />
     <Compile Include="Serialization\InstantMessaging\Presence\Status.cs" />
+    <Compile Include="Serialization\InstantMessaging\Privacy\Active.cs" />
+    <Compile Include="Serialization\InstantMessaging\Privacy\Default.cs" />
+    <Compile Include="Serialization\InstantMessaging\Privacy\PrivacyActionType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Privacy\PrivacyItem.cs" />
+    <Compile Include="Serialization\InstantMessaging\Privacy\PrivacyList.cs" />
+    <Compile Include="Serialization\InstantMessaging\Privacy\PrivacyQuery.cs" />
+    <Compile Include="Serialization\InstantMessaging\Privacy\PrivacyType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Register\Register.cs" />
+    <Compile Include="Serialization\InstantMessaging\Register\RegisterQuery.cs" />
+    <Compile Include="Serialization\InstantMessaging\Register\RegisterType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Roster\RosterAskType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Roster\RosterItem.cs" />
+    <Compile Include="Serialization\InstantMessaging\Roster\RosterItemCollection.cs" />
+    <Compile Include="Serialization\InstantMessaging\Roster\RosterQuery.cs" />
+    <Compile Include="Serialization\InstantMessaging\Roster\RosterSubscriptionType.cs" />
     <Compile Include="Serialization\XmppSerializer.cs" />
     <Compile Include="Serialization\XmppTextWriter.cs" />
     <Compile Include="Transports\BaseTransport.cs" />
@@ -186,7 +211,6 @@
   <ItemGroup>
     <Folder Include="Serialization\Core\ResourceBinding\" />
     <Folder Include="Serialization\Core\Stanzas\" />
-    <Folder Include="Serialization\InstantMessaging\Client\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

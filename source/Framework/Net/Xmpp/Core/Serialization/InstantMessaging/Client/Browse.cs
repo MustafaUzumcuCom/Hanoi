@@ -30,35 +30,14 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Privacy {
+namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:privacy")]
-    [XmlRootAttribute("query", Namespace = "jabber:iq:privacy", IsNullable = false)]
-    public class PrivacyQuery {
-        private Active activeField;
-        private Default defaultField;
-        private PrivacyList[] listField;
+    [XmlType(Namespace = "jabber:iq:browse")]
+    [XmlRootAttribute("query", Namespace = "jabber:iq:browse", IsNullable = false)]
+    public class Browse {
+        #region · Constructors ·
 
-        /// <remarks />
-        [XmlElement("active")]
-        public Active Active {
-            get { return activeField; }
-            set { activeField = value; }
-        }
-
-        /// <remarks />
-        [XmlElement("default")]
-        public Default Default {
-            get { return defaultField; }
-            set { defaultField = value; }
-        }
-
-        /// <remarks />
-        [XmlElementAttribute("list")]
-        public PrivacyList[] List {
-            get { return listField; }
-            set { listField = value; }
-        }
+        #endregion
     }
 }

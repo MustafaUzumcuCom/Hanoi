@@ -31,12 +31,12 @@ using System;
 using System.Collections;
 using System.Xml.Serialization;
 using Hanoi.Serialization.Core.Sasl;
+using Hanoi.Serialization.InstantMessaging.Register;
 using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
 using Hanoi.Xmpp.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.Core.Tls;
 using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Xmpp.Serialization.Extensions.RosterVersioning;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
 
 namespace Hanoi.Serialization.Core.Streams {
     /// <summary>

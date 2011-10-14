@@ -30,26 +30,24 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Privacy {
+namespace Hanoi.Serialization.InstantMessaging.Roster {
+    /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:privacy")]
-    [XmlRootAttribute("list", Namespace = "jabber:iq:privacy", IsNullable = false)]
-    public class PrivacyList {
-        private System.Collections.ArrayList itemField;
-        private string nameField;
+    [XmlType(Namespace = "jabber:iq:roster")]
+    public enum RosterSubscriptionType {
+        /// <remarks />
+        [XmlEnumAttribute("both")] Both,
 
         /// <remarks />
-        [XmlElementAttribute("item", Type = typeof (PrivacyItem))]
-        public System.Collections.ArrayList Items {
-            get { return itemField; }
-            set { itemField = value; }
-        }
+        [XmlEnumAttribute("from")] From,
 
         /// <remarks />
-        [XmlAttributeAttribute]
-        public string Name {
-            get { return nameField; }
-            set { nameField = value; }
-        }
+        [XmlEnumAttribute("none")] None,
+
+        /// <remarks />
+        [XmlEnumAttribute("remove")] Remove,
+
+        /// <remarks />
+        [XmlEnumAttribute("to")] To,
     }
 }

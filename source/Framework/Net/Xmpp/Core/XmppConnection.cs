@@ -35,16 +35,16 @@ using Hanoi.Core.Authentication;
 using Hanoi.Core.Transports;
 using Hanoi.Serialization.Core.Sasl;
 using Hanoi.Serialization.Core.Streams;
+using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
+using Hanoi.Serialization.InstantMessaging.Register;
+using Hanoi.Serialization.InstantMessaging.Roster;
 using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
 using Hanoi.Xmpp.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.Extensions.PubSub;
 using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Xmpp.Serialization.Extensions.VCardTemp;
 using Hanoi.Xmpp.Serialization.Extensions.XmppPing;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Roster;
 
 namespace Hanoi.Core {
     /// <summary>

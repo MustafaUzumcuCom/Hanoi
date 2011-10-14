@@ -30,28 +30,69 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Serialization.InstantMessaging.Register {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:client")]
-    [XmlRootAttribute("body", Namespace = "jabber:client", IsNullable = false)]
-    public class MessageBody {
-        private string langField;
-        private string valueField;
+    [XmlType(Namespace = "jabber:iq:register", IncludeInSchema = false)]
+    public enum RegisterType {
+        /// <remarks />
+        [XmlEnumAttribute("misc")] Misc,
 
         /// <remarks />
-        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
-            Namespace = "http://www.w3.org/XML/1998/namespace")]
-        public string Lang {
-            get { return langField; }
-            set { langField = value; }
-        }
+        [XmlEnumAttribute("username")] Username,
 
         /// <remarks />
-        [XmlTextAttribute]
-        public string Value {
-            get { return valueField; }
-            set { valueField = value; }
-        }
+        [XmlEnumAttribute("first")] First,
+
+        /// <remarks />
+        [XmlEnumAttribute("url")] Url,
+
+        /// <remarks />
+        [XmlEnumAttribute("remove")] Remove,
+
+        /// <remarks />
+        [XmlEnumAttribute("phone")] Phone,
+
+        /// <remarks />
+        [XmlEnumAttribute("name")] Name,
+
+        /// <remarks />
+        [XmlEnumAttribute("state")] State,
+
+        /// <remarks />
+        [XmlEnumAttribute("registered")] Registered,
+
+        /// <remarks />
+        [XmlEnumAttribute("date")] Date,
+
+        /// <remarks />
+        [XmlEnumAttribute("key")] Key,
+
+        /// <remarks />
+        [XmlEnumAttribute("city")] City,
+
+        /// <remarks />
+        [XmlEnumAttribute("instructions")] Instructions,
+
+        /// <remarks />
+        [XmlEnumAttribute("zip")] Zip,
+
+        /// <remarks />
+        [XmlEnumAttribute("nick")] Nick,
+
+        /// <remarks />
+        [XmlEnumAttribute("password")] Password,
+
+        /// <remarks />
+        [XmlEnumAttribute("email")] Email,
+
+        /// <remarks />
+        [XmlEnumAttribute("address")] Address,
+
+        /// <remarks />
+        [XmlEnumAttribute("text")] Text,
+
+        /// <remarks />
+        [XmlEnumAttribute("last")] Last
     }
 }

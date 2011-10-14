@@ -27,52 +27,27 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
-using System.Xml.Serialization;
+namespace Hanoi.Serialization.InstantMessaging.Roster {
+    public class RosterItemCollection : System.Collections.CollectionBase {
+        public RosterItem this[int index] {
+            get { return ((RosterItem) List[index]); }
+            set { List[index] = value; }
+        }
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
-    /// <remarks />
-    [Serializable]
-    [XmlType(Namespace = "http://jabber.org/protocol/chatstates")]
-    public class NotificationActive {
-        #region · Constructors ·
+        public int Add(RosterItem value) {
+            return (List.Add(value));
+        }
 
-        #endregion
-    }
+        public int IndexOf(RosterItem value) {
+            return (List.IndexOf(value));
+        }
 
-    /// <remarks />
-    [Serializable]
-    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
-    public class NotificationComposing {
-        #region · Constructors ·
+        public void Remove(RosterItem value) {
+            List.Remove(value);
+        }
 
-        #endregion
-    }
-
-    /// <remarks />
-    [Serializable]
-    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
-    public class NotificationGone {
-        #region · Constructors ·
-
-        #endregion
-    }
-
-    /// <remarks />
-    [Serializable]
-    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
-    public class NotificationInactive {
-        #region · Constructors ·
-
-        #endregion
-    }
-
-    /// <remarks />
-    [Serializable]
-    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
-    public class NotificationPaused {
-        #region · Constructors ·
-
-        #endregion
+        public bool Contains(RosterItem value) {
+            return (List.Contains(value));
+        }
     }
 }

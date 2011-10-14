@@ -29,8 +29,9 @@
 
 using System;
 using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Privacy {
+namespace Hanoi.Serialization.InstantMessaging.Privacy {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:iq:privacy")]

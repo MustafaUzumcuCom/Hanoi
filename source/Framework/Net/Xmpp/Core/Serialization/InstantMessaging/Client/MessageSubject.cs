@@ -30,24 +30,28 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Roster {
+namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:roster")]
-    public enum RosterSubscriptionType {
-        /// <remarks />
-        [XmlEnumAttribute("both")] Both,
+    [XmlType(Namespace = "jabber:client")]
+    [XmlRootAttribute("subject", Namespace = "jabber:client", IsNullable = false)]
+    public class MessageSubject {
+        private string langField;
+        private string valueField;
 
         /// <remarks />
-        [XmlEnumAttribute("from")] From,
+        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
+            Namespace = "http://www.w3.org/XML/1998/namespace")]
+        public string Lang {
+            get { return langField; }
+            set { langField = value; }
+        }
 
         /// <remarks />
-        [XmlEnumAttribute("none")] None,
-
-        /// <remarks />
-        [XmlEnumAttribute("remove")] Remove,
-
-        /// <remarks />
-        [XmlEnumAttribute("to")] To,
+        [XmlTextAttribute]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
+        }
     }
 }

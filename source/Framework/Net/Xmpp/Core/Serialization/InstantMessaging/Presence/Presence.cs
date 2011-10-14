@@ -30,10 +30,10 @@
 using System;
 using System.Collections;
 using System.Xml.Serialization;
+using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
 using Hanoi.Xmpp.Serialization.Extensions.VCardAvatars;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace Hanoi.Serialization.InstantMessaging.Presence {
     /// <remarks />

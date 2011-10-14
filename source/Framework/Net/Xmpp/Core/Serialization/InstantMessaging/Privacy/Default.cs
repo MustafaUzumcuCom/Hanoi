@@ -28,56 +28,16 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Roster {
+namespace Hanoi.Serialization.InstantMessaging.Privacy {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:roster")]
-    [XmlRootAttribute("item", Namespace = "jabber:iq:roster", IsNullable = false)]
-    public class RosterItem {
-        private RosterAskType askField;
-        private bool askFieldSpecified;
-        private List<String> groupsField;
-        private string jidField;
+    [XmlType(Namespace = "jabber:iq:privacy")]
+    [XmlRootAttribute("default", Namespace = "jabber:iq:privacy", IsNullable = false)]
+    public class Default {
         private string nameField;
-        private RosterSubscriptionType subscriptionField;
-        private bool subscriptionFieldSpecified;
-
-        public RosterItem() {
-            groupsField = new List<string>();
-        }
-
-        /// <remarks />
-        [XmlElementAttribute("group")]
-        public List<string> Groups {
-            get { return groupsField; }
-        }
-
-        /// <remarks />
-        [XmlAttributeAttribute("ask")]
-        public RosterAskType Ask {
-            get { return askField; }
-            set {
-                askField = value;
-                askFieldSpecified = true;
-            }
-        }
-
-        /// <remarks />
-        [XmlIgnoreAttribute]
-        public bool AskSpecified {
-            get { return askFieldSpecified; }
-            set { askFieldSpecified = value; }
-        }
-
-        /// <remarks />
-        [XmlAttributeAttribute("jid")]
-        public string Jid {
-            get { return jidField; }
-            set { jidField = value; }
-        }
+        private string valueField;
 
         /// <remarks />
         [XmlAttributeAttribute("name")]
@@ -87,20 +47,10 @@ namespace Hanoi.Xmpp.Serialization.InstantMessaging.Roster {
         }
 
         /// <remarks />
-        [XmlAttributeAttribute("subscription")]
-        public RosterSubscriptionType Subscription {
-            get { return subscriptionField; }
-            set {
-                SubscriptionSpecified = true;
-                subscriptionField = value;
-            }
-        }
-
-        /// <remarks />
-        [XmlIgnoreAttribute]
-        public bool SubscriptionSpecified {
-            get { return subscriptionFieldSpecified; }
-            set { subscriptionFieldSpecified = value; }
+        [XmlTextAttribute(DataType = "NMTOKEN")]
+        public string Value {
+            get { return valueField; }
+            set { valueField = value; }
         }
     }
 }

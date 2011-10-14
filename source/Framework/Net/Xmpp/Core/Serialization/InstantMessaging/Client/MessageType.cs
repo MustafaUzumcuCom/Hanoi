@@ -30,12 +30,24 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Roster {
+namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:roster")]
-    public enum RosterAskType {
+    [XmlType(Namespace = "jabber:client")]
+    public enum MessageType {
         /// <remarks />
-        [XmlEnumAttribute("subscribe")] Subscribe,
+        [XmlEnumAttribute("chat")] Chat,
+
+        /// <remarks />
+        [XmlEnumAttribute("error")] Error,
+
+        /// <remarks />
+        [XmlEnumAttribute("groupchat")] GroupChat,
+
+        /// <remarks />
+        [XmlEnumAttribute("headline")] Headline,
+
+        /// <remarks />
+        [XmlEnumAttribute("normal")] Normal,
     }
 }

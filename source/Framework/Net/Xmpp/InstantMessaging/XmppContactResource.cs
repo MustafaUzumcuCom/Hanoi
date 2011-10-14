@@ -35,12 +35,12 @@ using System.Linq;
 using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using Hanoi.Core;
+using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Xmpp.Serialization.Extensions.VCardAvatars;
 using Hanoi.Xmpp.Serialization.Extensions.VCardTemp;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
 using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
 

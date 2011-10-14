@@ -30,28 +30,15 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Serialization.InstantMessaging.Privacy {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:client")]
-    [XmlRootAttribute("subject", Namespace = "jabber:client", IsNullable = false)]
-    public class MessageSubject {
-        private string langField;
-        private string valueField;
+    [XmlType(Namespace = "jabber:iq:privacy")]
+    public enum PrivacyActionType {
+        /// <remarks />
+        [XmlEnumAttribute("allow")] Allow,
 
         /// <remarks />
-        [XmlAttributeAttribute("lang", Form = System.Xml.Schema.XmlSchemaForm.Qualified,
-            Namespace = "http://www.w3.org/XML/1998/namespace")]
-        public string Lang {
-            get { return langField; }
-            set { langField = value; }
-        }
-
-        /// <remarks />
-        [XmlTextAttribute]
-        public string Value {
-            get { return valueField; }
-            set { valueField = value; }
-        }
+        [XmlEnumAttribute("deny")] Deny,
     }
 }

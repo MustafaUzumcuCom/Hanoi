@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -30,11 +30,49 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Register {
+namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "http://jabber.org/features/iq-register")]
-    [XmlRootAttribute("register", Namespace = "http://jabber.org/features/iq-register", IsNullable = false)]
-    public class RegisterIQ {
+    [XmlType(Namespace = "http://jabber.org/protocol/chatstates")]
+    public class NotificationActive {
+        #region ∑ Constructors ∑
+
+        #endregion
+    }
+
+    /// <remarks />
+    [Serializable]
+    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
+    public class NotificationComposing {
+        #region ∑ Constructors ∑
+
+        #endregion
+    }
+
+    /// <remarks />
+    [Serializable]
+    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
+    public class NotificationGone {
+        #region ∑ Constructors ∑
+
+        #endregion
+    }
+
+    /// <remarks />
+    [Serializable]
+    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
+    public class NotificationInactive {
+        #region ∑ Constructors ∑
+
+        #endregion
+    }
+
+    /// <remarks />
+    [Serializable]
+    [XmlTypeAttribute(Namespace = "http://jabber.org/protocol/chatstates")]
+    public class NotificationPaused {
+        #region ∑ Constructors ∑
+
+        #endregion
     }
 }

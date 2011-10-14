@@ -30,14 +30,18 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Serialization.InstantMessaging.Privacy {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:browse")]
-    [XmlRootAttribute("query", Namespace = "jabber:iq:browse", IsNullable = false)]
-    public class Browse {
-        #region · Constructors ·
+    [XmlType(Namespace = "jabber:iq:privacy")]
+    public enum PrivacyType {
+        /// <remarks />
+        [XmlEnumAttribute("group")] Group,
 
-        #endregion
+        /// <remarks />
+        [XmlEnumAttribute("jid")] JID,
+
+        /// <remarks />
+        [XmlEnumAttribute("subscription")] Subscription,
     }
 }

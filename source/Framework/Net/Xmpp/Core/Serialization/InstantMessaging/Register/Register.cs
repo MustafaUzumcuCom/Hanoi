@@ -30,18 +30,11 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Privacy {
+namespace Hanoi.Serialization.InstantMessaging.Register {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:privacy")]
-    public enum PrivacyType {
-        /// <remarks />
-        [XmlEnumAttribute("group")] Group,
-
-        /// <remarks />
-        [XmlEnumAttribute("jid")] JID,
-
-        /// <remarks />
-        [XmlEnumAttribute("subscription")] Subscription,
+    [XmlType(Namespace = "http://jabber.org/features/iq-register")]
+    [XmlRootAttribute("register", Namespace = "http://jabber.org/features/iq-register", IsNullable = false)]
+    public class RegisterIQ {
     }
 }

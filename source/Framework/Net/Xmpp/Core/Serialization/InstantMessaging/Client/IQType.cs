@@ -27,27 +27,24 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Roster {
-    public class RosterItemCollection : System.Collections.CollectionBase {
-        public RosterItem this[int index] {
-            get { return ((RosterItem) List[index]); }
-            set { List[index] = value; }
-        }
+using System;
+using System.Xml.Serialization;
 
-        public int Add(RosterItem value) {
-            return (List.Add(value));
-        }
+namespace Hanoi.Serialization.InstantMessaging.Client {
+    /// <remarks />
+    [Serializable]
+    [XmlType(Namespace = "jabber:client")]
+    public enum IQType {
+        /// <remarks />
+        [XmlEnumAttribute("error")] Error,
 
-        public int IndexOf(RosterItem value) {
-            return (List.IndexOf(value));
-        }
+        /// <remarks />
+        [XmlEnumAttribute("get")] Get,
 
-        public void Remove(RosterItem value) {
-            List.Remove(value);
-        }
+        /// <remarks />
+        [XmlEnumAttribute("result")] Result,
 
-        public bool Contains(RosterItem value) {
-            return (List.Contains(value));
-        }
+        /// <remarks />
+        [XmlEnumAttribute("set")] Set,
     }
 }

@@ -28,9 +28,9 @@
 */
 
 using Hanoi.Core;
+using Hanoi.Serialization.InstantMessaging.Client;
+using Hanoi.Serialization.InstantMessaging.Register;
 using Hanoi.Xmpp;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>

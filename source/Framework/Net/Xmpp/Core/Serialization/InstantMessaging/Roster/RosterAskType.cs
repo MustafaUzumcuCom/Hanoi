@@ -30,15 +30,12 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Privacy {
+namespace Hanoi.Serialization.InstantMessaging.Roster {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:iq:privacy")]
-    public enum PrivacyActionType {
+    [XmlType(Namespace = "jabber:iq:roster")]
+    public enum RosterAskType {
         /// <remarks />
-        [XmlEnumAttribute("allow")] Allow,
-
-        /// <remarks />
-        [XmlEnumAttribute("deny")] Deny,
+        [XmlEnumAttribute("subscribe")] Subscribe,
     }
 }

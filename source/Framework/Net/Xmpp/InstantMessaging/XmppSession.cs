@@ -39,12 +39,12 @@ using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using Hanoi.Core;
 using Hanoi.Core.Authentication;
+using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Serialization.Extensions.PubSub;
 using Hanoi.Xmpp.Serialization.Extensions.UserMood;
 using Hanoi.Xmpp.Serialization.Extensions.UserTune;
 using Hanoi.Xmpp.Serialization.Extensions.VCardTemp;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

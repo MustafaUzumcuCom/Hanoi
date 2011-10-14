@@ -33,9 +33,9 @@ using System.Linq;
 using System.Threading;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using Hanoi.Core;
+using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
 using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
 

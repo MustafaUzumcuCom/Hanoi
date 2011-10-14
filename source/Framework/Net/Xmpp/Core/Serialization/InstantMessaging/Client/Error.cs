@@ -31,7 +31,7 @@ using System;
 using System.Xml.Serialization;
 using Hanoi.Xmpp.Serialization.Core.Stanzas;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]

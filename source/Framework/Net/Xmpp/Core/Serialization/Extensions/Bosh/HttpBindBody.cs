@@ -34,9 +34,9 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Hanoi.Serialization.Core.Sasl;
 using Hanoi.Serialization.Core.Streams;
+using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
 using Hanoi.Xmpp.Serialization.Core.Streams;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace Hanoi.Serialization.Extensions.Bosh {
     /// <summary>
