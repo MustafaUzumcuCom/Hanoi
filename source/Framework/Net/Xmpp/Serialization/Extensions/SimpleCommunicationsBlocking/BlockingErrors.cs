@@ -32,7 +32,7 @@
 // 
 
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking
+namespace Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking
 {
     /// <summary>
     /// </summary>

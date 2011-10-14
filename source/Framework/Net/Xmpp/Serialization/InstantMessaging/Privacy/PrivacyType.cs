@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Privacy {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Privacy {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:iq:privacy")]

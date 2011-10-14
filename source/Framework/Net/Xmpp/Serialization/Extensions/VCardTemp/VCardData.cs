@@ -29,9 +29,9 @@
 
 using System;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCardAvatars;
+using Hanoi.Xmpp.Serialization.Extensions.VCardAvatars;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp {
+namespace Hanoi.Xmpp.Serialization.Extensions.VCardTemp {
     /// <summary>
     ///   XEP-0054: vcard-temp
     /// </summary>

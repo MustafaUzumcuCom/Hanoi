@@ -33,12 +33,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
-using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
-using PresenceType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
+using Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Roster;
+using Presence = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Presence;
+using PresenceType = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

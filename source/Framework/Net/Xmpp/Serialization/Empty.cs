@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization {
+namespace Hanoi.Xmpp.Serialization {
     /// <remarks />
     [Serializable]
     public enum Empty {

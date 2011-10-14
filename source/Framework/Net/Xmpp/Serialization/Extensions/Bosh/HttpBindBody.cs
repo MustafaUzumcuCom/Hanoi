@@ -32,12 +32,12 @@ using System.Collections;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
-using BabelIm.Net.Xmpp.Serialization.Core.Streams;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
+using Hanoi.Xmpp.Serialization.Core.Sasl;
+using Hanoi.Xmpp.Serialization.Core.Streams;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Presence;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.Bosh {
+namespace Hanoi.Xmpp.Serialization.Extensions.Bosh {
     /// <summary>
     ///   XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH)
     ///   XEP-0206: XMPP Over BOSH

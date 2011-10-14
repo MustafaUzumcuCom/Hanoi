@@ -37,13 +37,13 @@ using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat;
 using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
-using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
-using BabelIm.Net.Xmpp.Serialization.Extensions.UserTune;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Authentication;
+using Hanoi.Xmpp.Serialization.Extensions.PubSub;
+using Hanoi.Xmpp.Serialization.Extensions.UserMood;
+using Hanoi.Xmpp.Serialization.Extensions.UserTune;
+using Hanoi.Xmpp.Serialization.Extensions.VCardTemp;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

@@ -31,7 +31,7 @@ using System;
 using System.Collections.Specialized;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
+namespace Hanoi.Xmpp.Serialization.Core.Sasl {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]

@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
+namespace Hanoi.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
     ///   XEP-0045: Multi-User Chat
     /// </summary>

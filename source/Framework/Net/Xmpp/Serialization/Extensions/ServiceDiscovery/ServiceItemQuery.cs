@@ -31,7 +31,7 @@ using System;
 using System.Collections;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery {
+namespace Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery {
     /// <summary>
     ///   XEP-0030: Service Discovery
     /// </summary>

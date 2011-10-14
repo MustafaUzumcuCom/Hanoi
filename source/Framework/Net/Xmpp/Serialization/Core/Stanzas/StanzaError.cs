@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Stanzas {
+namespace Hanoi.Xmpp.Serialization.Core.Stanzas {
     [Serializable]
     [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas")]
     [XmlRootAttribute("text", Namespace = "urn:ietf:params:xml:ns:xmpp-stanzas", IsNullable = false)]

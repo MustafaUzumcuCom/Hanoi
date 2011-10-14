@@ -30,7 +30,7 @@
 using System;
 using System.Text;
 using System.Threading;
-using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
+using Hanoi.Xmpp.Serialization.Core.Sasl;
 
 namespace Hanoi.Xmpp.Authentication {
     /// <summary>

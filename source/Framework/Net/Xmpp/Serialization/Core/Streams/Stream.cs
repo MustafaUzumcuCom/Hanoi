@@ -30,10 +30,10 @@
 using System;
 using System.Collections;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Presence;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
+namespace Hanoi.Xmpp.Serialization.Core.Streams {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "http://etherx.jabber.org/streams")]

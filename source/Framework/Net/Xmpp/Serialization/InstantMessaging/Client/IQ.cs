@@ -30,17 +30,17 @@
 using System;
 using System.Collections;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding;
-using BabelIm.Net.Xmpp.Serialization.Core.Streams;
-using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
-using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
-using BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
-using BabelIm.Net.Xmpp.Serialization.Extensions.XmppPing;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
+using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
+using Hanoi.Xmpp.Serialization.Core.Streams;
+using Hanoi.Xmpp.Serialization.Extensions.PubSub;
+using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
+using Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
+using Hanoi.Xmpp.Serialization.Extensions.VCardTemp;
+using Hanoi.Xmpp.Serialization.Extensions.XmppPing;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Roster;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]

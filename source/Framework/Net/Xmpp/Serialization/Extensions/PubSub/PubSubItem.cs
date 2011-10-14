@@ -28,10 +28,10 @@
 */
 
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
-using BabelIm.Net.Xmpp.Serialization.Extensions.UserTune;
+using Hanoi.Xmpp.Serialization.Extensions.UserMood;
+using Hanoi.Xmpp.Serialization.Extensions.UserTune;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("item", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]

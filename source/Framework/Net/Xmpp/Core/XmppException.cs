@@ -31,7 +31,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
-using BabelIm.Net.Xmpp.Serialization.Core.Streams;
+using Hanoi.Xmpp.Serialization.Core.Streams;
 
 namespace Hanoi.Xmpp {
     /// <summary>

@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Roster {
     public class RosterItemCollection : System.Collections.CollectionBase {
         public RosterItem this[int index] {
             get { return ((RosterItem) List[index]); }

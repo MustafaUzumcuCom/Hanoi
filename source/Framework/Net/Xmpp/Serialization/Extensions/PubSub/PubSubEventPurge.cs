@@ -29,7 +29,7 @@
 
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
     [XmlRootAttribute("purge", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]

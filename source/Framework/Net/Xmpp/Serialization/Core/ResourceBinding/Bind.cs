@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding {
+namespace Hanoi.Xmpp.Serialization.Core.ResourceBinding {
     /// <summary>
     ///   http://xmpp.org/rfcs/rfc3920.html
     ///   http://xmpp.org/extensions/xep-0193.html

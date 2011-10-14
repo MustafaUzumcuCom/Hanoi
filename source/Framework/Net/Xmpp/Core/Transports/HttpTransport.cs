@@ -6,8 +6,8 @@ using System.Net.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using BabelIm.Net.Xmpp.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Extensions.Bosh;
+using Hanoi.Xmpp.Serialization;
+using Hanoi.Xmpp.Serialization.Extensions.Bosh;
 
 namespace Hanoi.Xmpp.Transports {
     /// <summary>

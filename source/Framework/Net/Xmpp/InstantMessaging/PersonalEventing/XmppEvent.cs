@@ -27,9 +27,9 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
-using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
-using BabelIm.Net.Xmpp.Serialization.Extensions.UserTune;
+using Hanoi.Xmpp.Serialization.Extensions.PubSub;
+using Hanoi.Xmpp.Serialization.Extensions.UserMood;
+using Hanoi.Xmpp.Serialization.Extensions.UserTune;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>

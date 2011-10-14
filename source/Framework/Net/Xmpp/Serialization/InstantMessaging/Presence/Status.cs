@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Presence {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]

@@ -29,7 +29,7 @@
 
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.UserMood {
+namespace Hanoi.Xmpp.Serialization.Extensions.UserMood {
     /// <summary>
     ///   XEP-0107: User Mood
     /// </summary>

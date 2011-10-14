@@ -29,9 +29,9 @@
 
 using System;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Core.Stanzas;
+using Hanoi.Xmpp.Serialization.Core.Stanzas;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]

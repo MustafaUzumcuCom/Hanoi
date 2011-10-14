@@ -30,8 +30,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

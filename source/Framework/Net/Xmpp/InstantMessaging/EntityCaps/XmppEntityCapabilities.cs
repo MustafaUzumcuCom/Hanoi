@@ -29,7 +29,7 @@
 
 using System;
 using System.Linq;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>

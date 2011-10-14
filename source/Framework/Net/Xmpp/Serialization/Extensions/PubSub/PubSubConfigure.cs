@@ -28,9 +28,9 @@
 */
 
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Extensions.DataForms;
+using Hanoi.Xmpp.Serialization.Extensions.DataForms;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("configure", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]

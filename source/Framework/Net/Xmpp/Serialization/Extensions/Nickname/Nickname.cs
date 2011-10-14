@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.Nickname {
+namespace Hanoi.Xmpp.Serialization.Extensions.Nickname {
     /// <summary>
     ///   XEP-0172: User Nickname
     /// </summary>

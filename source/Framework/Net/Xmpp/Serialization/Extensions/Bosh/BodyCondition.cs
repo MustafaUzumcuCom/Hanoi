@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.Bosh {
+namespace Hanoi.Xmpp.Serialization.Extensions.Bosh {
     /// <summary>
     ///   XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH)
     ///   XEP-0206: XMPP Over BOSH

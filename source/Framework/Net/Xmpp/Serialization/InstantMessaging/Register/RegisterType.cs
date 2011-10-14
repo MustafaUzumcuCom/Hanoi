@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Register {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:iq:register", IncludeInSchema = false)]

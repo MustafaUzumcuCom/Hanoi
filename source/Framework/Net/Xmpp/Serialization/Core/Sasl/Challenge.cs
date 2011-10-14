@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Sasl {
+namespace Hanoi.Xmpp.Serialization.Core.Sasl {
     [Serializable]
     [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
     [XmlRootAttribute("challenge", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]

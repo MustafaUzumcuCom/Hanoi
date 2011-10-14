@@ -27,9 +27,9 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register;
 using Hanoi.Xmpp;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>

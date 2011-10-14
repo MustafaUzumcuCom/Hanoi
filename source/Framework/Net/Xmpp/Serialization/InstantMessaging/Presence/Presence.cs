@@ -30,12 +30,12 @@
 using System;
 using System.Collections;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities;
-using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCardAvatars;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;
+using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
+using Hanoi.Xmpp.Serialization.Extensions.VCardAvatars;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Presence {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]

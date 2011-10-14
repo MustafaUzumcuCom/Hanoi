@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities {
+namespace Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities {
     /// <summary>
     ///   XEP-0115: Entity Capabilities
     /// </summary>

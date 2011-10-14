@@ -29,7 +29,7 @@
 
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+namespace Hanoi.Xmpp.Serialization.Extensions.DataForms {
     /// <remarks />
     [XmlType(Namespace = "jabber:x:data")]
     public enum DataFormType {

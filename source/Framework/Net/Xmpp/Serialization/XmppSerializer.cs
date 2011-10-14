@@ -35,7 +35,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization
+namespace Hanoi.Xmpp.Serialization
 {
     /// <summary>
     ///   Serializer class for XMPP stanzas

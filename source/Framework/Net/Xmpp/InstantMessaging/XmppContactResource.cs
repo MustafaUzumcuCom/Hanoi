@@ -34,14 +34,14 @@ using System.IO;
 using System.Linq;
 using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities;
-using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCardAvatars;
-using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
-using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
-using PresenceType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
+using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;
+using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
+using Hanoi.Xmpp.Serialization.Extensions.VCardAvatars;
+using Hanoi.Xmpp.Serialization.Extensions.VCardTemp;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
+using Presence = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Presence;
+using PresenceType = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

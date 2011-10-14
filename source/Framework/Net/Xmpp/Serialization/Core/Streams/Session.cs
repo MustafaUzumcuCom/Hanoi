@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
+namespace Hanoi.Xmpp.Serialization.Core.Streams {
     /// <summary>
     ///   http://xmpp.org/rfcs/rfc3921.html
     /// </summary>

@@ -29,7 +29,7 @@
 
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.VCardAvatars {
+namespace Hanoi.Xmpp.Serialization.Extensions.VCardAvatars {
     /// <summary>
     ///   XEP-0153: vCard-Based Avatars
     /// </summary>

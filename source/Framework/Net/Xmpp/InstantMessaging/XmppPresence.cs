@@ -28,10 +28,10 @@
 */
 
 using Hanoi.Xmpp;
-using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
-using ShowType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.ShowType;
-using PresenceType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
-using Status = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Status;
+using Presence = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Presence;
+using ShowType = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.ShowType;
+using PresenceType = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
+using Status = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Status;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

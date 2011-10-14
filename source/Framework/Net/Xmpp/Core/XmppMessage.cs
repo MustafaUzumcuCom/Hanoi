@@ -28,7 +28,7 @@
 */
 
 using System;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace Hanoi.Xmpp {
     /// <summary>

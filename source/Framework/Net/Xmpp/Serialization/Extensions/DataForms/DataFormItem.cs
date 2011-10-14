@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.DataForms {
+namespace Hanoi.Xmpp.Serialization.Extensions.DataForms {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:x:data")]

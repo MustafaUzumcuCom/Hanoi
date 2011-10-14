@@ -31,7 +31,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace BabelIm.Net.Xmpp.Serialization {
+namespace Hanoi.Xmpp.Serialization {
     /// <summary>
     ///   Custom <see cref = "XmlTextWriter" /> implementation for writing XMPP stanzas
     /// </summary>

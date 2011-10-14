@@ -8,8 +8,8 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading;
-using BabelIm.Net.Xmpp.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Core.Tls;
+using Hanoi.Xmpp.Serialization;
+using Hanoi.Xmpp.Serialization.Core.Tls;
 using Hanoi.Xmpp.Sockets;
 
 namespace Hanoi.Xmpp.Transports {

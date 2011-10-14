@@ -31,10 +31,10 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat;
-using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
+using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
+using Hanoi.Xmpp.Serialization.Extensions.PubSub;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Client {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]

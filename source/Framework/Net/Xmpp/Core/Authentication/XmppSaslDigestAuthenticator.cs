@@ -33,7 +33,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
+using Hanoi.Xmpp.Serialization.Core.Sasl;
 
 namespace Hanoi.Xmpp.Authentication {
     /// <summary>

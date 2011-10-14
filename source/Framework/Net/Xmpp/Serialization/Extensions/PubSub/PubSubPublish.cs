@@ -30,7 +30,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
     [XmlRootAttribute("publish", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]

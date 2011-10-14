@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Core.Streams {
+namespace Hanoi.Xmpp.Serialization.Core.Streams {
     /// <remarks />
     [Serializable]
     [XmlType(TypeName = "error", Namespace = "http://etherx.jabber.org/streams")]

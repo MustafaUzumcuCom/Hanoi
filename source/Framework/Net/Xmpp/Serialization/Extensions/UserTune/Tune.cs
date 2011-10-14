@@ -29,7 +29,7 @@
 
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.UserTune {
+namespace Hanoi.Xmpp.Serialization.Extensions.UserTune {
     /// <summary>
     ///   XEP-0118: User Tune
     /// </summary>

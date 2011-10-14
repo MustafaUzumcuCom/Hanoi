@@ -32,11 +32,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
-using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
-using PresenceType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
+using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
+using Presence = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Presence;
+using PresenceType = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
     /// <summary>

@@ -31,9 +31,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
-using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp;
+using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
+using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>

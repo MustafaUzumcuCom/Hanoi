@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat;
+using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
     public sealed class XmppChatRoomUser

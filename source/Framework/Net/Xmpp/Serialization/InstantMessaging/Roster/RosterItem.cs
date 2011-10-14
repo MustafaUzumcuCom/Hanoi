@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster {
+namespace Hanoi.Xmpp.Serialization.InstantMessaging.Roster {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:iq:roster")]

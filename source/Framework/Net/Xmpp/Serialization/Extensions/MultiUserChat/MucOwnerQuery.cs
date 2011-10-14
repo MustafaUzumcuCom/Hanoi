@@ -29,9 +29,9 @@
 
 using System;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.Serialization.Extensions.DataForms;
+using Hanoi.Xmpp.Serialization.Extensions.DataForms;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.MultiUserChat {
+namespace Hanoi.Xmpp.Serialization.Extensions.MultiUserChat {
     /// <summary>
     ///   XEP-0045: Multi-User Chat
     /// </summary>

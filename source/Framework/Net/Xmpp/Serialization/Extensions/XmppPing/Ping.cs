@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.XmppPing {
+namespace Hanoi.Xmpp.Serialization.Extensions.XmppPing {
     /// <summary>
     ///   XEP-0199: XMPP Ping
     /// </summary>

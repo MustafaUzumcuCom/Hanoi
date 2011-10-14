@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking {
+namespace Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking {
     /// <summary>
     ///   XEP-0191: Simple Communications Blocking
     /// </summary>
