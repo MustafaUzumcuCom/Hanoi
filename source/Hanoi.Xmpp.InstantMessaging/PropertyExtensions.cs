@@ -39,7 +39,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
     ///   http://reyntjes.blogspot.com/2009/04/master-detail-viewmodel_24.html
     ///   http://blogs.ugidotnet.org/bmatte/archive/2008/11/28/pattern-model-view-viewmodel-inotifypropertychanged-static-reflection-e-extension-methods.aspx
     /// </remarks>
-    public static class PropertyExtensions {
+    internal static class PropertyExtensions {
         /// <summary>
         ///   Creates a <see cref = "PropertyChangedEventArgs" /> instance for a given property.
         /// </summary>

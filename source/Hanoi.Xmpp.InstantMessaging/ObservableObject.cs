@@ -32,23 +32,26 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Windows.Threading;
 
-namespace Hanoi.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging
+{
     /// <summary>
     ///   Base class for observable objects viewmodels
     /// </summary>
     [Obsolete]
-    public abstract class ObservableObject
-        : INotifyPropertyChanged {
+    internal abstract class ObservableObject : INotifyPropertyChanged 
+    {
         private readonly Dispatcher dispatcher;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "ObservableObject" /> class.
         /// </summary>
-        protected ObservableObject() {
+        protected ObservableObject() 
+        {
             dispatcher = Dispatcher.CurrentDispatcher;
         }
 
-        protected Dispatcher Dispatcher {
+        protected Dispatcher Dispatcher
+        {
             get { return dispatcher; }
         }
 
@@ -59,7 +62,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         #endregion
 
         public static PropertyChangedEventArgs CreateArgs<T>(
-            Expression<Func<T, object>> propertyExpression) {
+            Expression<Func<T, object>> propertyExpression)
+        {
             return new PropertyChangedEventArgs(propertyExpression.GetPropertyName());
         }
 
@@ -67,9 +71,9 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Executes the specified <see cref = "Action " /> at the <see cref = "DispatcherPriority.ApplicationIdle" /> priority 
         ///   on the thread on which the DispatcherObject is associated with.
         /// </summary>
-        /// <param name = "dispatcherObject">The dispatcher object.</param>
         /// <param name = "action">The action.</param>
-        protected void InvokeAsynchronously(Action action) {
+        protected void InvokeAsynchronously(Action action)
+        {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal, action);
         }
 
@@ -77,9 +81,9 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Executes the specified <see cref = "Action " /> at the <see cref = "DispatcherPriority.ApplicationIdle" /> priority 
         ///   on the thread on which the DispatcherObject is associated with.
         /// </summary>
-        /// <param name = "dispatcherObject">The dispatcher object.</param>
         /// <param name = "action">The action.</param>
-        protected void InvokeAsynchronouslyInBackground(Action action) {
+        protected void InvokeAsynchronouslyInBackground(Action action)
+        {
             Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
         }
 
@@ -87,9 +91,9 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Executes the specified <see cref = "Action " /> at the <see cref = "DispatcherPriority.ApplicationIdle" /> priority 
         ///   on the thread on which the DispatcherObject is associated with.
         /// </summary>
-        /// <param name = "dispatcherObject">The dispatcher object.</param>
         /// <param name = "action">The action.</param>
-        protected void Invoke(Action action) {
+        protected void Invoke(Action action)
+        {
             if (Dispatcher.CheckAccess())
             {
                 action.Invoke();
@@ -103,8 +107,9 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Notifies all properties changed.
         /// </summary>
-        protected void NotifyAllPropertiesChanged() {
-            NotifyPropertyChanged((string) null);
+        protected void NotifyAllPropertiesChanged()
+        {
+            NotifyPropertyChanged((string)null);
         }
 
         /// <summary>
@@ -112,7 +117,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// </summary>
         /// <typeparam name = "T"></typeparam>
         /// <param name = "property">The property.</param>
-        protected virtual void NotifyPropertyChanged<T>(Expression<Func<T>> property) {
+        protected virtual void NotifyPropertyChanged<T>(Expression<Func<T>> property)
+        {
             NotifyPropertyChanged(property.CreateChangeEventArgs());
         }
 
@@ -120,22 +126,21 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Notifies the property changed.
         /// </summary>
         /// <param name = "propertyName">Name of the property.</param>
-        protected virtual void NotifyPropertyChanged(string propertyName) {
+        protected virtual void NotifyPropertyChanged(string propertyName)
+        {
             NotifyPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
         ///   Notifies the property changed.
         /// </summary>
-        /// <param name = "propertyName">Name of the property.</param>
-        protected virtual void NotifyPropertyChanged(PropertyChangedEventArgs args) {
+        /// <param name="args">Property changed arguments</param>
+        protected virtual void NotifyPropertyChanged(PropertyChangedEventArgs args)
+        {
             if (PropertyChanged != null)
             {
-                InvokeAsynchronouslyInBackground
-                    (
-                        () => { PropertyChanged(this, args); }
-                    );
+                InvokeAsynchronouslyInBackground(() => PropertyChanged(this, args));
             }
         }
-        }
+    }
 }
