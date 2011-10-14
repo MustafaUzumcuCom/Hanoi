@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -27,50 +27,20 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
-    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("retract", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubRetract {
-        private List<PubSubItem> itemField;
-        private bool notifyField;
-        private bool notifyFieldSpecified;
-
-        public PubSubRetract() {
-            if ((itemField == null))
-            {
-                itemField = new List<PubSubItem>();
-            }
-        }
-
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+    [XmlRootAttribute("collection", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
+    public class PubSubEventCollection {
         /// <remarks />
-        [XmlElementAttribute("item")]
-        public List<PubSubItem> Item {
-            get { return itemField; }
-            set { itemField = value; }
-        }
+        [XmlElementAttribute("associate", typeof (PubSubEventAssociate))]
+        [XmlElementAttribute("disassociate", typeof (PubSubEventDisassociate))]
+        public object Item { get; set; }
 
         /// <remarks />
         [XmlAttributeAttribute("node")]
         public string Node { get; set; }
-
-        /// <remarks />
-        [XmlAttributeAttribute("notify")]
-        public bool Notify {
-            get { return notifyField; }
-            set {
-                notifyField = value;
-                notifyFieldSpecified = true;
-            }
-        }
-
-        /// <remarks />
-        [XmlIgnoreAttribute]
-        public bool NotifySpecified {
-            get { return notifyFieldSpecified; }
-        }
     }
 }

@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -27,19 +27,28 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
-    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#errors")]
-    [XmlRootAttribute("unsupported", Namespace = "http://jabber.org/protocol/pubsub#errors", IsNullable = false)]
-    public class PubSubErrorUnsupported {
-        /// <remarks />
-        [XmlAttributeAttribute("feature")]
-        public PubSubErrorUnsupportedFeatureType Feature { get; set; }
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+    [XmlRootAttribute("affiliations", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
+    public class PubSubAffiliations {
+        private List<PubSubAffiliation> affiliationField;
+
+        public PubSubAffiliations() {
+            if ((affiliationField == null))
+            {
+                affiliationField = new List<PubSubAffiliation>();
+            }
+        }
 
         /// <remarks />
-        [XmlTextAttribute]
-        public string Value { get; set; }
+        [XmlElementAttribute("affiliation")]
+        public List<PubSubAffiliation> Affiliation {
+            get { return affiliationField; }
+            set { affiliationField = value; }
+        }
     }
 }

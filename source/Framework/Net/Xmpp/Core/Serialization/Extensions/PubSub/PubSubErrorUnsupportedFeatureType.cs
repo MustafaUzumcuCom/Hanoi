@@ -29,7 +29,7 @@
 
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#errors")]
     public enum PubSubErrorUnsupportedFeatureType {

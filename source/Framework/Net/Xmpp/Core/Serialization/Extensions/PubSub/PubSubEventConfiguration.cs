@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -28,18 +28,31 @@
 */
 
 using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization.Extensions.DataForms;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
-    [XmlRootAttribute("retract", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventRetract {
-        /// <remarks />
-        [XmlAttributeAttribute("id")]
-        public string Id { get; set; }
+    [XmlRootAttribute("configuration", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
+    public class PubSubEventConfiguration {
+        private DataForm dataForm;
+
+        public PubSubEventConfiguration() {
+            if ((dataForm == null))
+            {
+                dataForm = new DataForm();
+            }
+        }
 
         /// <remarks />
-        [XmlTextAttribute]
-        public string Value { get; set; }
+        [XmlElementAttribute(Namespace = "jabber:x:data")]
+        public DataForm DataForm {
+            get { return dataForm; }
+            set { dataForm = value; }
+        }
+
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
+        public string Node { get; set; }
     }
 }

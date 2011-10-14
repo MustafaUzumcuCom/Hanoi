@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Xmpp.Serialization.Extensions.PubSub;
+using Hanoi.Serialization.Extensions.PubSub;
 using Hanoi.Xmpp.Serialization.Extensions.UserMood;
 using Hanoi.Xmpp.Serialization.Extensions.UserTune;
 

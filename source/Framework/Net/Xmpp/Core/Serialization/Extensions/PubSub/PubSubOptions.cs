@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -27,32 +27,27 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("subscriptions", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubSubscriptions {
-        private List<PubSubSubscription> subscriptionField;
-
-        public PubSubSubscriptions() {
-            if ((subscriptionField == null))
-            {
-                subscriptionField = new List<PubSubSubscription>();
-            }
-        }
+    [XmlRootAttribute("options", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
+    public class PubSubOptions {
+        /// <remarks />
+        [XmlAnyElementAttribute]
+        public System.Xml.XmlElement Any { get; set; }
 
         /// <remarks />
-        [XmlElementAttribute("subscription")]
-        public List<PubSubSubscription> Subscription {
-            get { return subscriptionField; }
-            set { subscriptionField = value; }
-        }
+        [XmlAttributeAttribute("jid")]
+        public string Jid { get; set; }
 
         /// <remarks />
         [XmlAttributeAttribute("node")]
-        public string Node { get; set; }
+        public string node { get; set; }
+
+        /// <remarks />
+        [XmlAttributeAttribute("subid")]
+        public string Subid { get; set; }
     }
 }

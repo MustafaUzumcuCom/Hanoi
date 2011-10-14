@@ -27,38 +27,22 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("pubsub", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSub {
-        private List<object> itemsField;
-
-        public PubSub() {
-            if ((itemsField == null))
-            {
-                itemsField = new List<object>();
-            }
-        }
+    public enum PubSubSubscriptionType {
+        /// <remarks />
+        [XmlEnumAttribute("none")] None,
 
         /// <remarks />
-        [XmlElementAttribute("affiliations", typeof (PubSubAffiliations))]
-        [XmlElementAttribute("configure", typeof (PubSubConfigure))]
-        [XmlElementAttribute("create", typeof (PubSubCreate))]
-        [XmlElementAttribute("items", typeof (PubSubItems))]
-        [XmlElementAttribute("options", typeof (PubSubOptions))]
-        [XmlElementAttribute("publish", typeof (PubSubPublish))]
-        [XmlElementAttribute("retract", typeof (PubSubRetract))]
-        [XmlElementAttribute("subscribe", typeof (PubSubSubscribe))]
-        [XmlElementAttribute("subscription", typeof (PubSubSubscription))]
-        [XmlElementAttribute("subscriptions", typeof (PubSubSubscriptions))]
-        [XmlElementAttribute("unsubscribe", typeof (PubSubUnsubscribe))]
-        public List<object> Items {
-            get { return itemsField; }
-            set { itemsField = value; }
-        }
+        [XmlEnumAttribute("pending")] Pending,
+
+        /// <remarks />
+        [XmlEnumAttribute("subscribed")] Subscribed,
+
+        /// <remarks />
+        [XmlEnumAttribute("unconfigured")] Unconfigured,
     }
 }

@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -28,31 +28,57 @@
 */
 
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization.Extensions.DataForms;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
-    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
-    [XmlRootAttribute("configuration", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventConfiguration {
-        private DataForm dataForm;
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
+    [XmlRootAttribute("subscription", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
+    public class PubSubSubscription {
+        private PubSubSubscribeOptions subscribeoptionsField;
+        private PubSubSubscriptionType subscriptionField;
+        private bool subscriptionFieldSpecified;
 
-        public PubSubEventConfiguration() {
-            if ((dataForm == null))
+        public PubSubSubscription() {
+            if ((subscribeoptionsField == null))
             {
-                dataForm = new DataForm();
+                subscribeoptionsField = new PubSubSubscribeOptions();
             }
         }
 
         /// <remarks />
-        [XmlElementAttribute(Namespace = "jabber:x:data")]
-        public DataForm DataForm {
-            get { return dataForm; }
-            set { dataForm = value; }
+        [XmlElementAttribute("subscribe-options")]
+        public PubSubSubscribeOptions SubscribeOptions {
+            get { return subscribeoptionsField; }
+            set { subscribeoptionsField = value; }
         }
+
+        /// <remarks />
+        [XmlAttributeAttribute("jid")]
+        public string Jid { get; set; }
 
         /// <remarks />
         [XmlAttributeAttribute("node")]
         public string Node { get; set; }
+
+        /// <remarks />
+        [XmlAttributeAttribute("subid")]
+        public string Subid { get; set; }
+
+        /// <remarks />
+        [XmlAttributeAttribute("subscription")]
+        public PubSubSubscriptionType Subscription {
+            get { return subscriptionField; }
+            set {
+                subscriptionField = value;
+                subscriptionFieldSpecified = true;
+            }
+        }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool SubscriptionSpecified {
+            get { return subscriptionFieldSpecified; }
+            set { subscriptionFieldSpecified = value; }
+        }
     }
 }

@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -29,13 +29,17 @@
 
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
-    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("subscribe-options", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubSubscribeOptions {
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+    [XmlRootAttribute("associate", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
+    public class PubSubEventAssociate {
         /// <remarks />
-        [XmlElement("required")]
-        public string Required { get; set; }
+        [XmlAttributeAttribute("node")]
+        public string Node { get; set; }
+
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value { get; set; }
     }
 }

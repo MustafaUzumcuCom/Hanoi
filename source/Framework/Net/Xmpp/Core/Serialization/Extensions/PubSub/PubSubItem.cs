@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -28,57 +28,21 @@
 */
 
 using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization.Extensions.UserMood;
+using Hanoi.Xmpp.Serialization.Extensions.UserTune;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("subscription", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubSubscription {
-        private PubSubSubscribeOptions subscribeoptionsField;
-        private PubSubSubscriptionType subscriptionField;
-        private bool subscriptionFieldSpecified;
-
-        public PubSubSubscription() {
-            if ((subscribeoptionsField == null))
-            {
-                subscribeoptionsField = new PubSubSubscribeOptions();
-            }
-        }
+    [XmlRootAttribute("item", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
+    public class PubSubItem {
+        /// <remarks />
+        [XmlElementAttribute("tune", typeof (Tune), Namespace = "http://jabber.org/protocol/tune")]
+        [XmlElementAttribute("mood", typeof (Mood), Namespace = "http://jabber.org/protocol/mood")]
+        public object Item { get; set; }
 
         /// <remarks />
-        [XmlElementAttribute("subscribe-options")]
-        public PubSubSubscribeOptions SubscribeOptions {
-            get { return subscribeoptionsField; }
-            set { subscribeoptionsField = value; }
-        }
-
-        /// <remarks />
-        [XmlAttributeAttribute("jid")]
-        public string Jid { get; set; }
-
-        /// <remarks />
-        [XmlAttributeAttribute("node")]
-        public string Node { get; set; }
-
-        /// <remarks />
-        [XmlAttributeAttribute("subid")]
-        public string Subid { get; set; }
-
-        /// <remarks />
-        [XmlAttributeAttribute("subscription")]
-        public PubSubSubscriptionType Subscription {
-            get { return subscriptionField; }
-            set {
-                subscriptionField = value;
-                subscriptionFieldSpecified = true;
-            }
-        }
-
-        /// <remarks />
-        [XmlIgnoreAttribute]
-        public bool SubscriptionSpecified {
-            get { return subscriptionFieldSpecified; }
-            set { subscriptionFieldSpecified = value; }
-        }
+        [XmlAttributeAttribute("id")]
+        public string Id { get; set; }
     }
 }

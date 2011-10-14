@@ -104,96 +104,6 @@
     <Compile Include="Extensions\MultiUserChat\MucUserItemRole.cs" />
     <Compile Include="Extensions\MultiUserChat\MucUserStatus.cs" />
     <Compile Include="Extensions\MultiUserChat\MultiUserChat.cs" />
-    <Compile Include="Extensions\PubSub\PubSub.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubAffiliation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubAffiliations.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubAffiliationType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubConfigure.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubCreate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubErrorUnsupported.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubErrorUnsupportedFeatureType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventAssociate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventConfiguration.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventDelete.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventDisassociate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventItems.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventPurge.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventRetract.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventSubscription.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubEventSubscriptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubItems.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubOptions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubPublish.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubRetract.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubSubscribe.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubSubscribeOptions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubSubscription.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubSubscriptions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubSubscriptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\PubSub\PubSubUnsubscribe.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Extensions\RosterVersioning\RosterVersioningFeature.cs" />
     <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockingErrors.cs" />
     <Compile Include="Extensions\SimpleCommunicationsBlocking\Block.cs" />
@@ -213,7 +123,6 @@
     <Compile Include="Extensions\UserMood\Mood.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Extensions\PubSub\PubSubOwner.cs" />
     <None Include="Schemas\Core\bind.xsd">
       <SubType>
       </SubType>

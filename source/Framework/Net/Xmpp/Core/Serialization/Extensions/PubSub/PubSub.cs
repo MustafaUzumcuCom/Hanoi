@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -27,28 +27,38 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System.Collections.Generic;
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization.Extensions.DataForms;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("configure", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubConfigure {
-        private DataForm itemField;
+    [XmlRootAttribute("pubsub", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
+    public class PubSub {
+        private List<object> itemsField;
 
-        public PubSubConfigure() {
-            if ((itemField == null))
+        public PubSub() {
+            if ((itemsField == null))
             {
-                itemField = new DataForm();
+                itemsField = new List<object>();
             }
         }
 
         /// <remarks />
-        [XmlElementAttribute("x", Namespace = "jabber:x:data")]
-        public DataForm Item {
-            get { return itemField; }
-            set { itemField = value; }
+        [XmlElementAttribute("affiliations", typeof (PubSubAffiliations))]
+        [XmlElementAttribute("configure", typeof (PubSubConfigure))]
+        [XmlElementAttribute("create", typeof (PubSubCreate))]
+        [XmlElementAttribute("items", typeof (PubSubItems))]
+        [XmlElementAttribute("options", typeof (PubSubOptions))]
+        [XmlElementAttribute("publish", typeof (PubSubPublish))]
+        [XmlElementAttribute("retract", typeof (PubSubRetract))]
+        [XmlElementAttribute("subscribe", typeof (PubSubSubscribe))]
+        [XmlElementAttribute("subscription", typeof (PubSubSubscription))]
+        [XmlElementAttribute("subscriptions", typeof (PubSubSubscriptions))]
+        [XmlElementAttribute("unsubscribe", typeof (PubSubUnsubscribe))]
+        public List<object> Items {
+            get { return itemsField; }
+            set { itemsField = value; }
         }
     }
 }

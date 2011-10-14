@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -29,21 +29,18 @@
 
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
-    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("subscribe", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubSubscribe {
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+    [XmlRootAttribute("event", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
+    public class PubSubEvent {
         /// <remarks />
-        [XmlAttributeAttribute("jid")]
-        public string Jid { get; set; }
-
-        /// <remarks />
-        [XmlAttributeAttribute("node")]
-        public string Node { get; set; }
-
-        /// <remarks />
-        [XmlTextAttribute]
-        public string Value { get; set; }
+        [XmlElementAttribute("collection", typeof (PubSubEventCollection))]
+        [XmlElementAttribute("configuration", typeof (PubSubEventConfiguration))]
+        [XmlElementAttribute("delete", typeof (PubSubEventDelete))]
+        [XmlElementAttribute("items", typeof (PubSubEventItems))]
+        [XmlElementAttribute("purge", typeof (PubSubEventPurge))]
+        [XmlElementAttribute("subscription", typeof (PubSubEventSubscription))]
+        public object Item { get; set; }
     }
 }

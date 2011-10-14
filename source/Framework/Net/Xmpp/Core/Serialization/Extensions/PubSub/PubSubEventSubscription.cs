@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -27,24 +27,62 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
-    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("unsubscribe", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubUnsubscribe {
+    [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
+    [XmlRootAttribute("subscription", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
+    public class PubSubEventSubscription {
+        private DateTime expiryField;
+        private bool expiryFieldSpecified;
+        private PubSubEventSubscriptionType subscriptionType;
+        private bool subscriptionTypeSpecified;
+
+        /// <remarks />
+        [XmlAttributeAttribute("expiry")]
+        public DateTime Expiry {
+            get { return expiryField; }
+            set {
+                expiryField = value;
+                expiryFieldSpecified = true;
+            }
+        }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool ExpirySpecified {
+            get { return expiryFieldSpecified; }
+        }
+
         /// <remarks />
         [XmlAttributeAttribute("jid")]
         public string Jid { get; set; }
 
         /// <remarks />
-        [XmlAttributeAttribute("node")]
-        public string Node { get; set; }
+        [XmlAttributeAttribute]
+        public string node { get; set; }
 
         /// <remarks />
         [XmlAttributeAttribute("subid")]
         public string Subid { get; set; }
+
+        /// <remarks />
+        [XmlAttributeAttribute("subscription")]
+        public PubSubEventSubscriptionType SubscriptionType {
+            get { return subscriptionType; }
+            set {
+                subscriptionType = value;
+                subscriptionTypeSpecified = true;
+            }
+        }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool SubscriptionTypeSpecified {
+            get { return subscriptionTypeSpecified; }
+        }
 
         /// <remarks />
         [XmlTextAttribute]

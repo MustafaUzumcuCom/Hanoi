@@ -29,18 +29,17 @@
 
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
-    [XmlRootAttribute("event", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEvent {
+    [XmlRootAttribute("disassociate", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
+    public class PubSubEventDisassociate {
         /// <remarks />
-        [XmlElementAttribute("collection", typeof (PubSubEventCollection))]
-        [XmlElementAttribute("configuration", typeof (PubSubEventConfiguration))]
-        [XmlElementAttribute("delete", typeof (PubSubEventDelete))]
-        [XmlElementAttribute("items", typeof (PubSubEventItems))]
-        [XmlElementAttribute("purge", typeof (PubSubEventPurge))]
-        [XmlElementAttribute("subscription", typeof (PubSubEventSubscription))]
-        public object Item { get; set; }
+        [XmlAttributeAttribute("node")]
+        public string Node { get; set; }
+
+        /// <remarks />
+        [XmlTextAttribute]
+        public string Value { get; set; }
     }
 }

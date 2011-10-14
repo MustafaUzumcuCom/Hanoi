@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -27,23 +27,50 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub")]
-    [XmlRootAttribute("affiliation", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
-    public class PubSubAffiliation {
-        /// <remarks />
-        [XmlAttributeAttribute("affiliation")]
-        public PubSubAffiliationType Affiliation { get; set; }
+    [XmlRootAttribute("retract", Namespace = "http://jabber.org/protocol/pubsub", IsNullable = false)]
+    public class PubSubRetract {
+        private List<PubSubItem> itemField;
+        private bool notifyField;
+        private bool notifyFieldSpecified;
+
+        public PubSubRetract() {
+            if ((itemField == null))
+            {
+                itemField = new List<PubSubItem>();
+            }
+        }
 
         /// <remarks />
-        [XmlAttributeAttribute]
+        [XmlElementAttribute("item")]
+        public List<PubSubItem> Item {
+            get { return itemField; }
+            set { itemField = value; }
+        }
+
+        /// <remarks />
+        [XmlAttributeAttribute("node")]
         public string Node { get; set; }
 
         /// <remarks />
-        [XmlTextAttribute]
-        public string Value { get; set; }
+        [XmlAttributeAttribute("notify")]
+        public bool Notify {
+            get { return notifyField; }
+            set {
+                notifyField = value;
+                notifyFieldSpecified = true;
+            }
+        }
+
+        /// <remarks />
+        [XmlIgnoreAttribute]
+        public bool NotifySpecified {
+            get { return notifyFieldSpecified; }
+        }
     }
 }

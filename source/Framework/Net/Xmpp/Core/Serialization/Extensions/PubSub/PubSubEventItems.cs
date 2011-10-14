@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -27,19 +27,33 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.PubSub {
+namespace Hanoi.Serialization.Extensions.PubSub {
     /// <remarks />
     [XmlType(AnonymousType = true, Namespace = "http://jabber.org/protocol/pubsub#event")]
-    [XmlRootAttribute("delete", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
-    public class PubSubEventDelete {
+    [XmlRootAttribute("items", Namespace = "http://jabber.org/protocol/pubsub#event", IsNullable = false)]
+    public class PubSubEventItems {
+        private List<object> itemsField;
+
+        public PubSubEventItems() {
+            if ((itemsField == null))
+            {
+                itemsField = new List<object>();
+            }
+        }
+
+        /// <remarks />
+        [XmlElementAttribute("item", typeof (PubSubItem))]
+        [XmlElementAttribute("retract", typeof (PubSubEventRetract))]
+        public List<object> Items {
+            get { return itemsField; }
+            set { itemsField = value; }
+        }
+
         /// <remarks />
         [XmlAttributeAttribute("node")]
         public string Node { get; set; }
-
-        /// <remarks />
-        [XmlTextAttribute]
-        public string Value { get; set; }
     }
 }
