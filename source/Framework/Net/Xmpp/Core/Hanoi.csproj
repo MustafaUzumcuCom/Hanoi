@@ -116,6 +116,10 @@
     <Compile Include="Serialization\Extensions\Bosh\HttpBindBody.cs" />
     <Compile Include="Serialization\Extensions\EntityCapabilities\EntityCapabilities.cs" />
     <Compile Include="Serialization\Extensions\Nickname\Nickname.cs" />
+    <Compile Include="Serialization\Extensions\VCardAvatars\VCardAvatar.cs" />
+    <Compile Include="Serialization\Extensions\VCardAvatars\VCardPhoto.cs" />
+    <Compile Include="Serialization\Extensions\VCardTemp\VCardData.cs" />
+    <Compile Include="Serialization\Extensions\XmppPing\Ping.cs" />
     <Compile Include="Serialization\InstantMessaging\Client\Browse.cs" />
     <Compile Include="Serialization\InstantMessaging\Client\Error.cs" />
     <Compile Include="Serialization\InstantMessaging\Client\ErrorType.cs" />

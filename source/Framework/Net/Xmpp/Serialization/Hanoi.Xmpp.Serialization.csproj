@@ -201,16 +201,12 @@
     <Compile Include="Extensions\SimpleCommunicationsBlocking\BlockList.cs" />
     <Compile Include="Extensions\SimpleCommunicationsBlocking\UnBlock.cs" />
     <Compile Include="Extensions\UserMood\MoodType.cs" />
-    <Compile Include="Extensions\VCardTemp\VCardData.cs" />
-    <Compile Include="Extensions\VCardAvatars\VCardPhoto.cs" />
-    <Compile Include="Extensions\XmppPing\Ping.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ActionType.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceFeature.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceIdentity.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceItem.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceItemQuery.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceQuery.cs" />
-    <Compile Include="Extensions\VCardAvatars\VCardAvatar.cs" />
     <Compile Include="ItemChoiceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\UserTune\Tune.cs" />
