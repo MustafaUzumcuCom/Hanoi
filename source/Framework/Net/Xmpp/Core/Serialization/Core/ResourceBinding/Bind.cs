@@ -29,7 +29,6 @@
 
 using System;
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization;
 
 namespace Hanoi.Serialization.Core.ResourceBinding {
     /// <summary>

@@ -40,7 +40,6 @@ using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.Extensions.VCardAvatars;
 using Hanoi.Serialization.Extensions.VCardTemp;
 using Hanoi.Serialization.InstantMessaging.Client;
-using Hanoi.Xmpp;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
 using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
 

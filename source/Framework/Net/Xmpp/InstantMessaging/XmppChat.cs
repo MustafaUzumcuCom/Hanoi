@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Hanoi.Core;
 using Hanoi.Serialization.InstantMessaging.Client;
-using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

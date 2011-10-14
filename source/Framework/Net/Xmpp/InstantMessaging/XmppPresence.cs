@@ -28,7 +28,6 @@
 */
 
 using Hanoi.Core;
-using Hanoi.Xmpp;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
 using ShowType = Hanoi.Serialization.InstantMessaging.Presence.ShowType;
 using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;

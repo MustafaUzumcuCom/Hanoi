@@ -140,10 +140,6 @@
       <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
       <Name>Hanoi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Serialization\Hanoi.Xmpp.Serialization.csproj">
-      <Project>{9E9572F4-1B90-456E-8EF0-D404D6FD3631}</Project>
-      <Name>Hanoi.Xmpp.Serialization</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

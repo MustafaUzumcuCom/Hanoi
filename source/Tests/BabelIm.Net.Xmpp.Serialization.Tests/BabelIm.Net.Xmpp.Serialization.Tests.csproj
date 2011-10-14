@@ -48,12 +48,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Framework\Net\Xmpp\Serialization\Hanoi.Xmpp.Serialization.csproj">
-      <Project>{9E9572F4-1B90-456E-8EF0-D404D6FD3631}</Project>
-      <Name>Hanoi.Xmpp.Serialization</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

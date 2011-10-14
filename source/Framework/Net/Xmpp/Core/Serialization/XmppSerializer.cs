@@ -34,7 +34,6 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization;
 
 namespace Hanoi.Serialization
 {

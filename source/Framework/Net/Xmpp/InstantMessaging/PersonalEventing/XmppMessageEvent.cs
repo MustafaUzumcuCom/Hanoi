@@ -28,7 +28,6 @@
 */
 
 using Hanoi.Core;
-using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>

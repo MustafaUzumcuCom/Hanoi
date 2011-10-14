@@ -34,7 +34,6 @@ using Hanoi.Core;
 using Hanoi.Serialization.Extensions.SimpleCommunicationsBlocking;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Roster;
-using Hanoi.Xmpp;
 using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
 using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
 

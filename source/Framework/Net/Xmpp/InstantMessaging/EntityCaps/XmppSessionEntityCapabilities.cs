@@ -35,7 +35,6 @@ using Hanoi.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
-using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>

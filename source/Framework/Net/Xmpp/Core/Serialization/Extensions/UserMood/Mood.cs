@@ -28,7 +28,6 @@
 */
 
 using System.Xml.Serialization;
-using Hanoi.Xmpp.Serialization;
 
 namespace Hanoi.Serialization.Extensions.UserMood {
     /// <summary>

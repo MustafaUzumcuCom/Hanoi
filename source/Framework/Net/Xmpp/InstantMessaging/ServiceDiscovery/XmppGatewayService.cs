@@ -30,7 +30,6 @@
 using Hanoi.Core;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Register;
-using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>

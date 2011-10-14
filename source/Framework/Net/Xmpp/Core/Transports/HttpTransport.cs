@@ -8,7 +8,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Hanoi.Serialization;
 using Hanoi.Serialization.Extensions.Bosh;
-using Hanoi.Xmpp.Serialization;
 
 namespace Hanoi.Core.Transports {
     /// <summary>

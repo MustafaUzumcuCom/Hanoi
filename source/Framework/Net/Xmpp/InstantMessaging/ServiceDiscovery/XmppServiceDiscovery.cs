@@ -34,7 +34,6 @@ using System.Linq;
 using Hanoi.Core;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
-using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>

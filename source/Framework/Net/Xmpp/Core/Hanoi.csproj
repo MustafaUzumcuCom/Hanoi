@@ -111,6 +111,7 @@
     <Compile Include="Serialization\Core\Streams\StreamFeatures.cs" />
     <Compile Include="Serialization\Core\Tls\Procced.cs" />
     <Compile Include="Serialization\Core\Tls\StartTls.cs" />
+    <Compile Include="Serialization\Empty.cs" />
     <Compile Include="Serialization\Extensions\Bosh\BodyCondition.cs" />
     <Compile Include="Serialization\Extensions\Bosh\BodyType.cs" />
     <Compile Include="Serialization\Extensions\Bosh\HttpBindBody.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Serialization\InstantMessaging\Roster\RosterItemCollection.cs" />
     <Compile Include="Serialization\InstantMessaging\Roster\RosterQuery.cs" />
     <Compile Include="Serialization\InstantMessaging\Roster\RosterSubscriptionType.cs" />
+    <Compile Include="Serialization\ItemChoiceType.cs" />
     <Compile Include="Serialization\XmppSerializer.cs" />
     <Compile Include="Serialization\XmppTextWriter.cs" />
     <Compile Include="Transports\BaseTransport.cs" />
@@ -262,12 +264,6 @@
     <Compile Include="XmppEventMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Serialization\Hanoi.Xmpp.Serialization.csproj">
-      <Project>{9E9572F4-1B90-456E-8EF0-D404D6FD3631}</Project>
-      <Name>Hanoi.Xmpp.Serialization</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
@@ -290,7 +286,146 @@
   <ItemGroup>
     <EmbeddedResource Include="Serialization\Serializers.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Serialization\Schemas\Core\bind.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Core\dialback.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Core\sasl.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Core\stanzaerror.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Core\streamerror.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Core\streams.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Core\tls.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\Bosh\httpbind.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\Bosh\XmppOverBosh.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\DataForms\x-data.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\EntityCapabilities\caps.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\FeatureNegotiation\feature-neg.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\FeatureNegotiation\feature-neg.xsx">
+      <DependentUpon>feature-neg.xsd</DependentUpon>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\FileTransfer\file-transfer.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\FileTransfer\file-transfer.xsx">
+      <DependentUpon>file-transfer.xsd</DependentUpon>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\InBandByteStreams\ibb.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\MultiUserChat\muc-admin.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\MultiUserChat\muc-owner.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\MultiUserChat\muc-unique.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\MultiUserChat\muc-user.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\MultiUserChat\muc.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\PubSub\pubsub-errors.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\PubSub\pubsub-event.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\PubSub\pubsub-owner.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\PubSub\pubsub.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\RosterVersioning\RosterVersioningFeature.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\ServiceDiscovery\disco-info.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\ServiceDiscovery\disco-items.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\SimpleCommunicationsBlocking\blocking-errors.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\SimpleCommunicationsBlocking\blocking.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\Socks5ByteStreams\bytestreams.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\StreamInitiation\si.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\UserMood\mood.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\UserTune\tune.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\vcard-avatars\vcard-avatar.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\vcard-temp\vcard-temp.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\Extensions\XmppPing\ping.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\authentication.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\client.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\iq-browse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\iq-register-failiure.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\iq-register.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\privacy.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\roster.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\server.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Serialization\Schemas\InstantMessaging\session.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
