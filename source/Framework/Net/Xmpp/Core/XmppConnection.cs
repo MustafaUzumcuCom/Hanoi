@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Hanoi.Authentication;
 using Hanoi.Core.Authentication;
 using Hanoi.Core.Transports;
 using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
