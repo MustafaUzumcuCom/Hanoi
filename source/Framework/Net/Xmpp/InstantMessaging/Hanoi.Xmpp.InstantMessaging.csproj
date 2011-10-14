@@ -8,8 +8,8 @@
     <ProjectGuid>{490DA560-229D-460A-B16F-A35CFECA9937}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BabelIm.Net.Xmpp.InstantMessaging</RootNamespace>
-    <AssemblyName>BabelIm.Net.Xmpp.InstantMessaging</AssemblyName>
+    <RootNamespace>Hanoi.Xmpp.InstantMessaging</RootNamespace>
+    <AssemblyName>Hanoi.Xmpp.InstantMessaging</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
