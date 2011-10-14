@@ -31,14 +31,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using Hanoi;
 using Hanoi.Serialization.Extensions.MultiUserChat;
 using Hanoi.Serialization.InstantMessaging.Client;
-using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
-using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
+using Hanoi.Serialization.InstantMessaging.Presence;
+using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
+namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
     /// <summary>
     ///   Represents a conversation in a conference room
     /// </summary>

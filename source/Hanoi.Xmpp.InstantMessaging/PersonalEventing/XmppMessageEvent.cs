@@ -27,9 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi;
-
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
     ///   Activity event for headline and normal messages
     /// </summary>

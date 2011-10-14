@@ -29,7 +29,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
+namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
     /// <summary>
     ///   Chat Room Supported Features
     /// </summary>

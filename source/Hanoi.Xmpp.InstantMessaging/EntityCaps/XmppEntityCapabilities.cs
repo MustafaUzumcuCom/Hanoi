@@ -31,7 +31,7 @@ using System;
 using System.Linq;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
+namespace Hanoi.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>
     ///   Client capabilities (XEP-0115)
     /// </summary>

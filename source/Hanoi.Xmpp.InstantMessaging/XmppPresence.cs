@@ -27,13 +27,9 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi;
-using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
-using ShowType = Hanoi.Serialization.InstantMessaging.Presence.ShowType;
-using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
-using Status = Hanoi.Serialization.InstantMessaging.Presence.Status;
+using Hanoi.Serialization.InstantMessaging.Presence;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Presence handling
     /// </summary>

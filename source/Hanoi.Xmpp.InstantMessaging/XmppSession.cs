@@ -33,19 +33,18 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
-using BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat;
-using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
-using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using Hanoi;
 using Hanoi.Authentication;
 using Hanoi.Serialization.Extensions.PubSub;
 using Hanoi.Serialization.Extensions.UserMood;
 using Hanoi.Serialization.Extensions.UserTune;
 using Hanoi.Serialization.Extensions.VCardTemp;
 using Hanoi.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp.InstantMessaging.EntityCaps;
+using Hanoi.Xmpp.InstantMessaging.MultiUserChat;
+using Hanoi.Xmpp.InstantMessaging.PersonalEventing;
+using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   XMPP Instant Messaging Session
     /// </summary>

@@ -29,7 +29,7 @@
 
 using Hanoi.Serialization.Extensions.MultiUserChat;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
+namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
     public sealed class XmppChatRoomUser
         : ObservableObject {
         private readonly MucUserItem userItem;

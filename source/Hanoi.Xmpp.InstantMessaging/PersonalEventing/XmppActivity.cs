@@ -33,10 +33,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using Hanoi;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
     ///   XMPP Activity
     /// </summary>

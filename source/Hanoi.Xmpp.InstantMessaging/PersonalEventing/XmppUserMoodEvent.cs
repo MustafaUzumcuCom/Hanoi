@@ -29,7 +29,7 @@
 
 using Hanoi.Serialization.Extensions.UserMood;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
     ///   Activity event for user mood
     /// </summary>

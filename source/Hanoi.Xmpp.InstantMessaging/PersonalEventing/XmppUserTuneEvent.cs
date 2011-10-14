@@ -30,7 +30,7 @@
 using System;
 using Hanoi.Serialization.Extensions.UserTune;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
     ///   Activity for the user tune event
     /// </summary>

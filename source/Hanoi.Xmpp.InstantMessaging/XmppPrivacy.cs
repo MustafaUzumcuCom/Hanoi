@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
 #warning TODO: Implement
 
     /// <summary>

@@ -27,11 +27,10 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Register;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
+namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>
     ///   XMPP Gateway service
     /// </summary>

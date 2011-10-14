@@ -28,15 +28,14 @@
 */
 
 using System;
-using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
-using BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat;
-using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
-using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using Hanoi;
 using Hanoi.Authentication;
 using Hanoi.Serialization.Extensions.UserMood;
+using Hanoi.Xmpp.InstantMessaging.EntityCaps;
+using Hanoi.Xmpp.InstantMessaging.MultiUserChat;
+using Hanoi.Xmpp.InstantMessaging.PersonalEventing;
+using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Interface for XMPP session implementations
     /// </summary>

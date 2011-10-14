@@ -31,11 +31,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Hanoi;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
+namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>
     ///   XMPP Service Discovery
     /// </summary>

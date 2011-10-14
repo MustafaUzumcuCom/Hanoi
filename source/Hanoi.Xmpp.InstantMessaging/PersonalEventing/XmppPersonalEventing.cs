@@ -30,11 +30,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hanoi;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
     ///   XMPP Personal Eventing
     /// </summary>

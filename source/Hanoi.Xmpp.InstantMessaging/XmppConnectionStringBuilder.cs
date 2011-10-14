@@ -31,9 +31,8 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Text;
-using Hanoi;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   XMPP Connection String Builder
     /// </summary>

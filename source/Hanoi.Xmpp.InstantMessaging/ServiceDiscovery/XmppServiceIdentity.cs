@@ -29,7 +29,7 @@
 
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
+namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>
     ///   XMPP Service Identity
     /// </summary>

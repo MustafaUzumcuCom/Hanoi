@@ -30,10 +30,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hanoi;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Represents a chat conversation with a contact.
     /// </summary>

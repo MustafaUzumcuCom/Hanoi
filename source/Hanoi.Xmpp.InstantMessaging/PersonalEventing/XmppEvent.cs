@@ -31,7 +31,7 @@ using Hanoi.Serialization.Extensions.PubSub;
 using Hanoi.Serialization.Extensions.UserMood;
 using Hanoi.Serialization.Extensions.UserTune;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>
     ///   Represents an XMPP event
     /// </summary>

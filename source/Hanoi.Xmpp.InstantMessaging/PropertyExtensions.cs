@@ -31,7 +31,7 @@ using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Property Extension Methods
     /// </summary>

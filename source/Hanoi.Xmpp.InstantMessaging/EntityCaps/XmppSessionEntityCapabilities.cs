@@ -29,14 +29,13 @@
 
 using System;
 using System.Text;
-using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using Hanoi;
 using Hanoi.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
+using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
+namespace Hanoi.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>
     ///   Client capabilities (XEP-0115)
     /// </summary>

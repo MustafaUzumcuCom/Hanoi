@@ -30,9 +30,9 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
+using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
+namespace Hanoi.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>
     ///   Client capabilities (XEP-0115)
     /// </summary>

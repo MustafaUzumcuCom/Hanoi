@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     [Serializable]
     [XmlType(Namespace = "")]
     [XmlRootAttribute("avatar", Namespace = "", IsNullable = false)]

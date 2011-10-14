@@ -29,7 +29,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery {
+namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     /// <summary>
     ///   Service Categories enumeration
     /// </summary>

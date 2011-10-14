@@ -1,4 +1,4 @@
-﻿namespace BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat {
+﻿namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
     /// <summary>
     ///   XMPP multi user chat status codes
     /// </summary>

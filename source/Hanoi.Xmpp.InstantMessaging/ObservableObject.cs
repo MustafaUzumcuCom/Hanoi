@@ -32,7 +32,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Windows.Threading;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Base class for observable objects viewmodels
     /// </summary>

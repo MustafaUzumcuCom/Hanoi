@@ -32,18 +32,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
-using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
-using Hanoi;
 using Hanoi.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.Extensions.VCardAvatars;
 using Hanoi.Serialization.Extensions.VCardTemp;
 using Hanoi.Serialization.InstantMessaging.Client;
-using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
-using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
+using Hanoi.Serialization.InstantMessaging.Presence;
+using Hanoi.Xmpp.InstantMessaging.EntityCaps;
+using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Represents a contact resource
     /// </summary>

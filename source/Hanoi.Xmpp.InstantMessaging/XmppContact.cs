@@ -30,14 +30,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hanoi;
 using Hanoi.Serialization.Extensions.SimpleCommunicationsBlocking;
 using Hanoi.Serialization.InstantMessaging.Client;
+using Hanoi.Serialization.InstantMessaging.Presence;
 using Hanoi.Serialization.InstantMessaging.Roster;
-using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
-using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
 
-namespace BabelIm.Net.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Represents a <see cref = "XmppRoster" /> contact.
     /// </summary>
