@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows.Threading;
 using Hanoi.Serialization.Extensions.SimpleCommunicationsBlocking;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
@@ -42,8 +43,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Contact's Roster
     /// </summary>
-    public sealed class XmppRoster
-        : ObservableObject, IEnumerable<XmppContact>, INotifyCollectionChanged {
+    public sealed class XmppRoster : IEnumerable<XmppContact>, INotifyCollectionChanged {
         private readonly XmppConnection connection;
         private readonly ObservableCollection<XmppContact> contacts;
         private readonly List<string> pendingMessages;
@@ -270,15 +270,11 @@ namespace Hanoi.Xmpp.InstantMessaging {
 
                                 if (CollectionChanged != null)
                                 {
-                                    InvokeAsynchronouslyInBackground
-                                        (
-                                            () =>
-                                                {
-                                                    CollectionChanged(this,
-                                                                      new NotifyCollectionChangedEventArgs(
-                                                                          NotifyCollectionChangedAction.Reset));
-                                                }
-                                        );
+                                    Dispatcher.CurrentDispatcher.BeginInvoke(
+                                        DispatcherPriority.Background,
+                                        new Action(() => CollectionChanged(this,
+                                                                           new NotifyCollectionChangedEventArgs(
+                                                                               NotifyCollectionChangedAction.Reset))));
                                 }
                             }
                         }
@@ -442,16 +438,20 @@ namespace Hanoi.Xmpp.InstantMessaging {
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            InvokeAsynchronouslyInBackground
-                (
-                    () =>
-                        {
-                            if (CollectionChanged != null)
-                            {
-                                CollectionChanged(this, e);
-                            }
-                        }
-                );
+
+            Dispatcher.CurrentDispatcher.BeginInvoke(
+                DispatcherPriority.Background, 
+                new Action(() =>
+                                {
+                                    if (
+                                        CollectionChanged !=
+                                        null)
+                                    {
+                                        CollectionChanged
+                                            (this, e);
+                                    }
+                                }
+                        ));
         }
-        }
+    }
 }

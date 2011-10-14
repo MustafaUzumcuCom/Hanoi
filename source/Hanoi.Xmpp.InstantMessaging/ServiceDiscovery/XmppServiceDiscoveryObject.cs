@@ -36,7 +36,7 @@ using Hanoi.Serialization.InstantMessaging.Client;
 
 namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     public abstract class XmppServiceDiscoveryObject
-        : ObservableObject {
+         {
         private readonly XmppJid identifier;
         private readonly XmppSession session;
         private readonly AutoResetEvent waitEvent;
@@ -269,7 +269,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
                 Unsubscribe();
             }
 
-            NotifyAllPropertiesChanged();
+            //NotifyAllPropertiesChanged();
         }
 
         private void OnServiceDiscoveryMessage(IQ message) {
@@ -286,7 +286,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
                             items.Add(new XmppServiceItem(session, serviceItem.Jid));
                         }
 
-                        NotifyPropertyChanged(() => Items);
+                        //NotifyPropertyChanged(() => Items);
                     }
                     else if (item is ServiceQuery)
                     {
@@ -310,8 +310,8 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
                             features.Add(new XmppServiceFeature(feature.Name));
                         }
 
-                        NotifyPropertyChanged(() => Identities);
-                        NotifyPropertyChanged(() => Features);
+                        //NotifyPropertyChanged(() => Identities);
+                        //NotifyPropertyChanged(() => Features);
                     }
                 }
 

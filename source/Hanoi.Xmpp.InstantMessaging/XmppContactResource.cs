@@ -45,8 +45,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Represents a contact resource
     /// </summary>
-    public sealed class XmppContactResource
-        : ObservableObject {
+    public sealed class XmppContactResource {
         internal static int DefaultPresencePriorityValue = -200;
 
         private readonly XmppContact contact;
@@ -110,7 +109,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 if (capabilities != value)
                 {
                     capabilities = value;
-                    NotifyPropertyChanged(() => Capabilities);
+                    // NotifyPropertyChanged(() => Capabilities);
                 }
             }
         }
@@ -124,7 +123,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 if (avatar != value)
                 {
                     avatar = value;
-                    NotifyPropertyChanged(() => Avatar);
+                    // NotifyPropertyChanged(() => Avatar);
                 }
             }
         }
@@ -216,7 +215,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                             DiscoverCapabilities();
                         }
 
-                        NotifyPropertyChanged(() => Capabilities);
+                        // NotifyPropertyChanged(() => Capabilities);
                     }
                 }
             }
@@ -357,7 +356,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 session.ClientCapabilitiesStorage.Save();
             }
 
-            NotifyPropertyChanged(() => Capabilities);
+            // NotifyPropertyChanged(() => Capabilities);
         }
 
         private void OnQueryErrorMessage(IQ message) {

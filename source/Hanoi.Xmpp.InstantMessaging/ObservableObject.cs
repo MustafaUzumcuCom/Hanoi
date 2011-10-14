@@ -36,6 +36,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Base class for observable objects viewmodels
     /// </summary>
+    [Obsolete]
     public abstract class ObservableObject
         : INotifyPropertyChanged {
         private readonly Dispatcher dispatcher;

@@ -35,12 +35,13 @@ using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
 using Hanoi.Serialization.InstantMessaging.Roster;
 
-namespace Hanoi.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging
+{
     /// <summary>
     ///   Represents a <see cref = "XmppRoster" /> contact.
     /// </summary>
     public sealed class XmppContact
-        : ObservableObject {
+    {
         private readonly XmppJid contactId;
         private readonly XmppSession session;
         private readonly object syncObject;
@@ -59,7 +60,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <param name = "subscription">The subscription.</param>
         /// <param name = "groups">The groups.</param>
         internal XmppContact(XmppSession session, string contactId, string name,
-                             XmppContactSubscriptionType subscription, IList<string> groups) {
+                             XmppContactSubscriptionType subscription, IList<string> groups)
+        {
             this.session = session;
             syncObject = new object();
             this.contactId = contactId;
@@ -73,7 +75,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets the contact id.
         /// </summary>
         /// <value>The contact id.</value>
-        public XmppJid ContactId {
+        public XmppJid ContactId
+        {
             get { return contactId; }
         }
 
@@ -81,14 +84,16 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name {
+        public string Name
+        {
             get { return name; }
-            private set {
+            private set
+            {
                 if (name != value)
                 {
                     name = value;
 
-                    NotifyPropertyChanged(() => Name);
+                    // NotifyPropertyChanged(() => Name);
                 }
             }
         }
@@ -97,8 +102,10 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets the contact groups.
         /// </summary>
         /// <value>The groups.</value>
-        public List<string> Groups {
-            get {
+        public List<string> Groups
+        {
+            get
+            {
                 if (groups == null)
                 {
                     groups = new List<string>();
@@ -111,9 +118,11 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Gets the contact Display Name
         /// </summary>
-        public string DisplayName {
+        public string DisplayName
+        {
             get { return displayName; }
-            set {
+            set
+            {
                 if (displayName != value)
                 {
                     if (!String.IsNullOrEmpty(value))
@@ -127,7 +136,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
 
                     Update();
 
-                    NotifyPropertyChanged(() => DisplayName);
+                    //NotifyPropertyChanged(() => DisplayName);
                 }
             }
         }
@@ -136,8 +145,10 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets the list available resources.
         /// </summary>
         /// <value>The resources.</value>
-        public IEnumerable<XmppContactResource> Resources {
-            get {
+        public IEnumerable<XmppContactResource> Resources
+        {
+            get
+            {
                 if (resources == null)
                 {
                     resources = new List<XmppContactResource>();
@@ -154,14 +165,16 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets or sets the subscription.
         /// </summary>
         /// <value>The subscription.</value>
-        public XmppContactSubscriptionType Subscription {
+        public XmppContactSubscriptionType Subscription
+        {
             get { return subscription; }
-            set {
+            set
+            {
                 if (subscription != value)
                 {
                     subscription = value;
 
-                    NotifyPropertyChanged(() => Subscription);
+                    //NotifyPropertyChanged(() => Subscription);
                 }
             }
         }
@@ -170,7 +183,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets the presence.
         /// </summary>
         /// <value>The presence.</value>
-        public XmppContactResource Resource {
+        public XmppContactResource Resource
+        {
             get { return GetResource(); }
         }
 
@@ -178,29 +192,34 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets the presence.
         /// </summary>
         /// <value>The presence.</value>
-        public XmppContactPresence Presence {
+        public XmppContactPresence Presence
+        {
             get { return GetResource().Presence; }
         }
 
         /// <summary>
         ///   Gets a value that indicates if the contact supports File Transfer
         /// </summary>
-        public bool SupportsFileTransfer {
+        public bool SupportsFileTransfer
+        {
             get { throw new NotImplementedException(); }
         }
 
         /// <summary>
         ///   Gets a value that indicates if the contact supports MUC
         /// </summary>
-        public bool SupportsConference {
+        public bool SupportsConference
+        {
             get { return (Resource.Capabilities.Features.Where(f => f.Name == XmppFeatures.MultiUserChat).Count() > 0); }
         }
 
         /// <summary>
         ///   Gets a value that indicates if the contact supports chat state notifications
         /// </summary>
-        public bool SupportsChatStateNotifications {
-            get {
+        public bool SupportsChatStateNotifications
+        {
+            get
+            {
                 return
                     (Resource.Capabilities.Features.Where(f => f.Name == XmppFeatures.ChatStateNotifications).Count() >
                      0);
@@ -211,7 +230,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Adds to group.
         /// </summary>
         /// <param name = "groupName">Name of the group.</param>
-        public void AddToGroup(string groupName) {
+        public void AddToGroup(string groupName)
+        {
             var iq = new IQ();
             var query = new RosterQuery();
             var item = new RosterItem();
@@ -225,7 +245,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
 
             item.Jid = ContactId.BareIdentifier;
             item.Name = Name;
-            item.Subscription = (RosterSubscriptionType) Subscription;
+            item.Subscription = (RosterSubscriptionType)Subscription;
 
             item.Groups.Add(groupName);
 
@@ -238,7 +258,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Updates the contact data.
         /// </summary>
-        public void Update() {
+        public void Update()
+        {
             var iq = new IQ();
             var query = new RosterQuery();
             var item = new RosterItem();
@@ -247,7 +268,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
 
             item.Jid = ContactId.BareIdentifier;
             item.Name = DisplayName;
-            item.Subscription = (RosterSubscriptionType) Subscription;
+            item.Subscription = (RosterSubscriptionType)Subscription;
 
             item.Groups.AddRange(Groups);
 
@@ -260,14 +281,16 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Request subscription to he presence of the contanct
         /// </summary>
-        public void RequestSubscription() {
+        public void RequestSubscription()
+        {
             session.Presence.RequestSubscription(ContactId);
         }
 
         /// <summary>
         ///   Block contact
         /// </summary>
-        public void Block() {
+        public void Block()
+        {
             if (session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ
@@ -296,7 +319,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Unblock contact.
         /// </summary>
-        public void UnBlock() {
+        public void UnBlock()
+        {
             if (session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ
@@ -328,11 +352,13 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <returns>
         ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return ContactId.ToString();
         }
 
-        internal void AddDefaultResource() {
+        internal void AddDefaultResource()
+        {
             var defaultPresence = new Presence();
             var contactResource = new XmppContactResource(session, this, ContactId);
             var resourceJid = new XmppJid(contactId.UserName, ContactId.DomainName, Guid.NewGuid().ToString());
@@ -349,7 +375,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
             resources.Add(contactResource);
         }
 
-        internal void RefreshData(string name, XmppContactSubscriptionType subscription, IList<string> groups) {
+        internal void RefreshData(string name, XmppContactSubscriptionType subscription, IList<string> groups)
+        {
             Name = ((name == null) ? String.Empty : name);
 
             if (!String.IsNullOrEmpty(Name))
@@ -372,11 +399,12 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 Groups.Add("Contacts");
             }
 
-            NotifyPropertyChanged(() => DisplayName);
-            NotifyPropertyChanged(() => Groups);
+            //NotifyPropertyChanged(() => DisplayName);
+            //NotifyPropertyChanged(() => Groups);
         }
 
-        internal void UpdatePresence(XmppJid jid, Presence presence) {
+        internal void UpdatePresence(XmppJid jid, Presence presence)
+        {
             lock (syncObject)
             {
                 XmppContactResource resource = resources
@@ -398,17 +426,18 @@ namespace Hanoi.Xmpp.InstantMessaging {
                     resources.Remove(resource);
                 }
 
-                NotifyPropertyChanged(() => Presence);
-                NotifyPropertyChanged(() => Resource);
+                //NotifyPropertyChanged(() => Presence);
+                //NotifyPropertyChanged(() => Resource);
             }
         }
 
-        private XmppContactResource GetResource() {
+        private XmppContactResource GetResource()
+        {
             var q = from resource in resources
                     orderby resource.Presence.Priority descending
                     select resource;
 
             return q.FirstOrDefault();
         }
-        }
+    }
 }

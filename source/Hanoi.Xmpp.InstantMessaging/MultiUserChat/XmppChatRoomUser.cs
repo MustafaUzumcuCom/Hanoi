@@ -29,33 +29,38 @@
 
 using Hanoi.Serialization.Extensions.MultiUserChat;
 
-namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
-    public sealed class XmppChatRoomUser
-        : ObservableObject {
+namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
+{
+    public sealed class XmppChatRoomUser {
         private readonly MucUserItem userItem;
 
         internal XmppChatRoomUser(MucUserItem userItem) {
             this.userItem = userItem;
         }
 
-        public MucUserActor Actor {
+        public MucUserActor Actor
+        {
             get { return userItem.Actor; }
         }
 
-        public MucUserItemAffiliation Affiliation {
+        public MucUserItemAffiliation Affiliation
+        {
             get { return userItem.Affiliation; }
         }
 
-        public string Identifier {
+        public string Identifier
+        {
             get { return userItem.Jid; }
         }
 
-        public string Nick {
+        public string Nick
+        {
             get { return userItem.Nick; }
         }
 
-        public MucUserItemRole Role {
+        public MucUserItemRole Role
+        {
             get { return userItem.Role; }
         }
-        }
+    }
 }

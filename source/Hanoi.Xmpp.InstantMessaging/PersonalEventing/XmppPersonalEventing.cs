@@ -33,12 +33,13 @@ using System.Linq;
 using Hanoi.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
+{
     /// <summary>
     ///   XMPP Personal Eventing
     /// </summary>
     public sealed class XmppPersonalEventing
-        : ObservableObject {
+    {
         private readonly List<string> features;
         private readonly List<string> pendingMessages;
         private readonly XmppSession session;
@@ -51,7 +52,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
         ///   Initializes a new instance of the <see cref = "T:XmppServiceDiscovery" /> class.
         /// </summary>
         /// <param name = "session">The session.</param>
-        internal XmppPersonalEventing(XmppSession session) {
+        internal XmppPersonalEventing(XmppSession session)
+        {
             this.session = session;
             pendingMessages = new List<string>();
             features = new List<string>();
@@ -62,8 +64,10 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
         /// <summary>
         ///   Gets the collection of features ( if personal eventing is supported )
         /// </summary>
-        public IEnumerable<string> Features {
-            get {
+        public IEnumerable<string> Features
+        {
+            get
+            {
                 foreach (string feature in features)
                 {
                     yield return feature;
@@ -74,27 +78,30 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
         /// <summary>
         ///   Gets a value that indicates if it supports user tunes
         /// </summary>
-        public bool SupportsUserTune {
+        public bool SupportsUserTune
+        {
             get { return SupportsFeature(XmppFeatures.UserTune); }
         }
 
         /// <summary>
         ///   Gets a value that indicates if it supports user moods
         /// </summary>
-        public bool SupportsUserMood {
+        public bool SupportsUserMood
+        {
             get { return SupportsFeature(XmppFeatures.UserMood); }
         }
 
         /// <summary>
         ///   Gets or sets a value that indicates if user tune is enabled
         /// </summary>
-        public bool IsUserTuneEnabled {
+        public bool IsUserTuneEnabled
+        {
             get { return isUserTuneEnabled; }
-            set {
+            set
+            {
                 if (isUserTuneEnabled != value)
                 {
                     isUserTuneEnabled = value;
-                    NotifyPropertyChanged(() => IsUserTuneEnabled);
                 }
             }
         }
@@ -103,7 +110,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
         ///   Discover if we have personal eventing support enabled
         /// </summary>
         /// <returns></returns>
-        internal void DiscoverSupport() {
+        internal void DiscoverSupport()
+        {
             var query = new ServiceItemQuery();
             var iq = new IQ();
 
@@ -120,7 +128,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
             session.Send(iq);
         }
 
-        private bool SupportsFeature(string featureName) {
+        private bool SupportsFeature(string featureName)
+        {
             var q = from feature in features
                     where feature == featureName
                     select feature;
@@ -128,29 +137,31 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
             return (q.Count() > 0);
         }
 
-        private void SubscribeToSessionState() {
+        private void SubscribeToSessionState()
+        {
             sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>
+                    {
+                        if (newState == XmppSessionState.LoggingOut)
                         {
-                            if (newState == XmppSessionState.LoggingOut)
-                            {
-                                Subscribe();
-                            }
-                            else if (newState == XmppSessionState.LoggingOut)
-                            {
-                                features.Clear();
-                                pendingMessages.Clear();
-                                Unsubscribe();
-                            }
+                            Subscribe();
                         }
+                        else if (newState == XmppSessionState.LoggingOut)
+                        {
+                            features.Clear();
+                            pendingMessages.Clear();
+                            Unsubscribe();
+                        }
+                    }
                 );
         }
 
-        private void Subscribe() {
+        private void Subscribe()
+        {
             infoQueryErrorSubscription = session.Connection
                 .OnInfoQueryMessage
                 .Where(iq => iq.Type == IQType.Error)
@@ -162,7 +173,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
                 .Subscribe(message => OnServiceDiscoveryMessage(message));
         }
 
-        private void Unsubscribe() {
+        private void Unsubscribe()
+        {
             if (infoQueryErrorSubscription != null)
             {
                 infoQueryErrorSubscription.Dispose();
@@ -176,7 +188,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
             }
         }
 
-        private void OnServiceDiscoveryMessage(IQ message) {
+        private void OnServiceDiscoveryMessage(IQ message)
+        {
             pendingMessages.Remove(message.ID);
 
             foreach (ServiceItemQuery item in message.Items)
@@ -186,21 +199,19 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
                     features.Add(sitem.Node);
                 }
 
-                NotifyPropertyChanged(() => SupportsUserTune);
-                NotifyPropertyChanged(() => SupportsUserMood);
+                //if (SupportsUserTune)
+                //{
 
-                if (SupportsUserTune)
-                {
-
-                }
+                //}
             }
         }
 
-        private void OnQueryErrorMessage(IQ message) {
+        private void OnQueryErrorMessage(IQ message)
+        {
             if (pendingMessages.Contains(message.ID))
             {
                 pendingMessages.Remove(message.ID);
             }
         }
-        }
+    }
 }

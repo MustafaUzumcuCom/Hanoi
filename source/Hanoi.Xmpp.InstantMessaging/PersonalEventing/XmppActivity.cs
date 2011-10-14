@@ -33,14 +33,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows.Threading;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
+namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
+{
     /// <summary>
     ///   XMPP Activity
     /// </summary>
-    public sealed class XmppActivity
-        : ObservableObject, IEnumerable<XmppEvent>, INotifyCollectionChanged {
+    public sealed class XmppActivity : IEnumerable<XmppEvent>, INotifyCollectionChanged
+    {
         private readonly ObservableCollection<XmppEvent> activities;
         private readonly XmppSession session;
 
@@ -51,7 +53,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
         /// <summary>
         ///   Initializes a new instance of the <see cref = "XmppSession" /> class
         /// </summary>
-        internal XmppActivity(XmppSession session) {
+        internal XmppActivity(XmppSession session)
+        {
             this.session = session;
             activities = new ObservableCollection<XmppEvent>();
 
@@ -60,11 +63,13 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
 
         #region IEnumerable<XmppEvent> Members
 
-        IEnumerator<XmppEvent> IEnumerable<XmppEvent>.GetEnumerator() {
+        IEnumerator<XmppEvent> IEnumerable<XmppEvent>.GetEnumerator()
+        {
             return activities.GetEnumerator();
         }
 
-        public IEnumerator GetEnumerator() {
+        public IEnumerator GetEnumerator()
+        {
             return activities.GetEnumerator();
         }
 
@@ -79,45 +84,47 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
         /// <summary>
         ///   Clears the activity list
         /// </summary>
-        public void Clear() {
+        public void Clear()
+        {
             activities.Clear();
 
-            InvokeAsynchronously
-                (
-                    () =>
-                        {
-                            if (CollectionChanged != null)
-                            {
-                                CollectionChanged(this,
-                                                  new NotifyCollectionChangedEventArgs(
-                                                      NotifyCollectionChangedAction.Reset));
-                            }
-                        }
-                );
+            // TODO: necessary?
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+                                                                  {
+                                                                      if (CollectionChanged != null)
+                                                                      {
+                                                                          CollectionChanged(this,
+                                                                                            new NotifyCollectionChangedEventArgs
+                                                                                                (NotifyCollectionChangedAction.Reset));
+                                                                      }
+                                                                  }));
+
         }
 
-        private void SubscribeToSessionState() {
+        private void SubscribeToSessionState()
+        {
             sessionStateSubscription = session
                 .StateChanged
                 .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>
+                    {
+                        if (newState == XmppSessionState.LoggingOut)
                         {
-                            if (newState == XmppSessionState.LoggingOut)
-                            {
-                                Subscribe();
-                            }
-                            else if (newState == XmppSessionState.LoggingOut)
-                            {
-                                Clear();
-                                Unsubscribe();
-                            }
+                            Subscribe();
                         }
+                        else if (newState == XmppSessionState.LoggingOut)
+                        {
+                            Clear();
+                            Unsubscribe();
+                        }
+                    }
                 );
         }
 
-        private void Subscribe() {
+        private void Subscribe()
+        {
             messageSubscription = session
                 .MessageReceived
                 .Where(m => m.Type == MessageType.Headline || m.Type == MessageType.Normal)
@@ -133,7 +140,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
             activities.CollectionChanged += OnCollectionChanged;
         }
 
-        private void Unsubscribe() {
+        private void Unsubscribe()
+        {
             if (messageSubscription != null)
             {
                 messageSubscription.Dispose();
@@ -149,7 +157,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
             activities.CollectionChanged -= OnCollectionChanged;
         }
 
-        private void OnActivityMessage(XmppMessage message) {
+        private void OnActivityMessage(XmppMessage message)
+        {
             switch (message.Type)
             {
                 case MessageType.Normal:
@@ -162,7 +171,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
             }
         }
 
-        private void OnEventMessage(XmppEventMessage message) {
+        private void OnEventMessage(XmppEventMessage message)
+        {
             // Add the activity based on the source event
             if (XmppEvent.IsActivityEvent(message.Event))
             {
@@ -172,7 +182,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
                 if (xmppevent != null)
                 {
 #warning TODO: This needs to be changed
-                    if (xmppevent is XmppUserTuneEvent && ((XmppUserTuneEvent) xmppevent).IsEmpty)
+                    if (xmppevent is XmppUserTuneEvent && ((XmppUserTuneEvent)xmppevent).IsEmpty)
                     {
                         // And empty tune means no info available or that the user
                         // cancelled the tune notifications ??
@@ -185,17 +195,19 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing {
             }
         }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            InvokeAsynchronouslyInBackground
-                (
-                    () =>
+        // TODO: necessary?
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Dispatcher.CurrentDispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                new Action(() =>
                         {
                             if (CollectionChanged != null)
                             {
                                 CollectionChanged(this, e);
                             }
                         }
-                );
+                ));
         }
-        }
+    }
 }

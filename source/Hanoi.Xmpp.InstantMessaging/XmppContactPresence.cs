@@ -33,8 +33,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   XMPP Contact presence information
     /// </summary>
-    public sealed class XmppContactPresence
-        : ObservableObject {
+    public sealed class XmppContactPresence {
         private readonly XmppSession session;
         private XmppPresenceState presenceStatus;
         private int priority;
@@ -59,7 +58,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 if (priority != value)
                 {
                     priority = value;
-                    NotifyPropertyChanged(() => Priority);
+                    // NotifyPropertyChanged(() => Priority);
                 }
             }
         }
@@ -74,7 +73,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 if (presenceStatus != value)
                 {
                     presenceStatus = value;
-                    NotifyPropertyChanged(() => PresenceStatus);
+                    //NotifyPropertyChanged(() => PresenceStatus);
                     session.Roster.OnContactPresenceChanged();
                 }
             }
@@ -90,7 +89,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 if (statusMessage != value)
                 {
                     statusMessage = value;
-                    NotifyPropertyChanged(() => StatusMessage);
+                    //NotifyPropertyChanged(() => StatusMessage);
                 }
             }
         }

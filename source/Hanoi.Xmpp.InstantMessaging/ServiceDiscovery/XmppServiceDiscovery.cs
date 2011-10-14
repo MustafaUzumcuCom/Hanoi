@@ -39,7 +39,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     ///   XMPP Service Discovery
     /// </summary>
     public sealed class XmppServiceDiscovery
-        : ObservableObject {
+         {
         private readonly string domainName;
         private readonly List<string> pendingMessages;
         private readonly XmppSession session;
@@ -100,7 +100,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
                 if (supportsServiceDiscovery != value)
                 {
                     supportsServiceDiscovery = value;
-                    NotifyPropertyChanged(() => SupportsServiceDiscovery);
+                    //NotifyPropertyChanged(() => SupportsServiceDiscovery);
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
             pendingMessages.Clear();
             Services.Clear();
 
-            NotifyAllPropertiesChanged();
+            //NotifyAllPropertiesChanged();
         }
 
         public XmppService GetService(XmppServiceCategory category) {
@@ -237,7 +237,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
                 }
             }
 
-            NotifyPropertyChanged(() => Services);
+            //NotifyPropertyChanged(() => Services);
         }
 
         private void OnQueryErrorReceived(IQ message) {
