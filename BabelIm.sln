@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp", "source\Framework\Net\Xmpp\Core\Hanoi.Xmpp.csproj", "{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Core", "source\Framework\Net\Xmpp\Core\Hanoi.Core.csproj", "{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp.Serialization", "source\Framework\Net\Xmpp\Serialization\Hanoi.Xmpp.Serialization.csproj", "{9E9572F4-1B90-456E-8EF0-D404D6FD3631}"
 EndProject

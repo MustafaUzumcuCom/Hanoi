@@ -140,9 +140,9 @@
       <Project>{C8C95556-23F0-4EDD-8648-9F711BCED2E3}</Project>
       <Name>Hanoi.Authentication</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core\Hanoi.Xmpp.csproj">
+    <ProjectReference Include="..\Core\Hanoi.Core.csproj">
       <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
-      <Name>Hanoi.Xmpp</Name>
+      <Name>Hanoi.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Serialization\Hanoi.Xmpp.Serialization.csproj">
       <Project>{9E9572F4-1B90-456E-8EF0-D404D6FD3631}</Project>

@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using Hanoi.Authentication;
 
-namespace Hanoi.Xmpp.Authentication {
+namespace Hanoi.Core.Authentication {
 
     // TODO: introduce IAuthenticator interface
 
@@ -95,7 +95,7 @@ namespace Hanoi.Xmpp.Authentication {
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:Hanoi.Xmpp.Authentication.XmppAuthenticator" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.Core.Authentication.XmppAuthenticator" /> is reclaimed by garbage collection.
         /// </summary>
         ~XmppAuthenticator() {
             Dispose(false);
@@ -139,7 +139,7 @@ namespace Hanoi.Xmpp.Authentication {
         ///   Called when an unhandled message is received
         /// </summary>
         /// <param name = "sender">The sender.</param>
-        /// <param name = "e">The <see cref = "T:Hanoi.Xmpp.XmppUnhandledMessageEventArgs" /> instance containing the event data.</param>
+        /// <param name = "e">The <see cref = "T:Hanoi.Core.XmppUnhandledMessageEventArgs" /> instance containing the event data.</param>
         protected abstract void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e);
 
         /// <summary>

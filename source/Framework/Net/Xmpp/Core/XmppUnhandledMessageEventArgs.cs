@@ -29,7 +29,7 @@
 
 using System;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Event args for the <see cref = "XmppConnection.UnhandledMessage" /> event.
     /// </summary>

@@ -32,7 +32,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Hanoi.Authentication;
-using Hanoi.Xmpp.Authentication;
+using Hanoi.Core.Authentication;
+using Hanoi.Core.Transports;
 using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
 using Hanoi.Xmpp.Serialization.Core.Sasl;
 using Hanoi.Xmpp.Serialization.Core.Streams;
@@ -44,9 +45,8 @@ using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Presence;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Roster;
-using Hanoi.Xmpp.Transports;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Represents a connection to a XMPP server
     /// </summary>
@@ -253,7 +253,7 @@ namespace Hanoi.Xmpp {
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:Hanoi.Xmpp.XmppConnection" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.Core.XmppConnection" /> is reclaimed by garbage collection.
         /// </summary>
         ~XmppConnection() {
             // Do not re-create Dispose clean-up code here.

@@ -30,7 +30,7 @@
 
 using System.Net.Sockets;
 
-namespace Hanoi.Xmpp.Sockets {
+namespace Hanoi.Core.Sockets {
     /// <summary>
     ///   This class implements the 'No Authentication' scheme.
     /// </summary>
