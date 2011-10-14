@@ -29,7 +29,6 @@
 
 using System;
 using System.Collections.Generic;
-using Hanoi.Authentication;
 
 namespace Hanoi.Core.Authentication {
 
