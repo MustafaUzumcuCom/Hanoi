@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi", "source\Framework\Net\Xmpp\Core\Hanoi.csproj", "{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp.InstantMessaging", "source\Framework\Net\Xmpp\InstantMessaging\Hanoi.Xmpp.InstantMessaging.csproj", "{490DA560-229D-460A-B16F-A35CFECA9937}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E57FD011-81D5-44A8-B342-0E5DD233F624}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Net.Xmpp.Serialization.Tests", "source\Tests\BabelIm.Net.Xmpp.Serialization.Tests\BabelIm.Net.Xmpp.Serialization.Tests.csproj", "{54C7296D-2B7C-4983-A23F-1B755799FFB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi", "source\Hanoi\Hanoi.csproj", "{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|x64.ActiveCfg = Release|Any CPU
-		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|x86.ActiveCfg = Release|Any CPU
 		{490DA560-229D-460A-B16F-A35CFECA9937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{490DA560-229D-460A-B16F-A35CFECA9937}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{490DA560-229D-460A-B16F-A35CFECA9937}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -43,6 +35,14 @@ Global
 		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|x64.ActiveCfg = Release|Any CPU
 		{54C7296D-2B7C-4983-A23F-1B755799FFB2}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|x64.ActiveCfg = Release|Any CPU
+		{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

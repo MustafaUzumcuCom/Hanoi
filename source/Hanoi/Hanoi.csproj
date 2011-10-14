@@ -71,11 +71,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnDns, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\lib\DnDns\DnDns.dll</HintPath>
+      <HintPath>..\..\lib\DnDns\DnDns.dll</HintPath>
     </Reference>
     <Reference Include="libidn, Version=1.0.3903.37340, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\libidn\libidn.dll</HintPath>
+      <HintPath>..\..\lib\libidn\libidn.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -83,11 +83,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.CoreEx">
-      <HintPath>..\..\..\..\..\lib\Rx Framework\System.CoreEx.dll</HintPath>
+      <HintPath>..\..\lib\Rx Framework\System.CoreEx.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\..\..\..\lib\Rx Framework\System.Reactive.dll</HintPath>
+      <HintPath>..\..\lib\Rx Framework\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Xml" />

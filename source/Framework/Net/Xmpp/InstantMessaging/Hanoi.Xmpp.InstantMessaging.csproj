@@ -136,12 +136,6 @@
     <Compile Include="XmppSessionState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Hanoi.csproj">
-      <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
-      <Name>Hanoi</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +163,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MultiUserChat\MucStatusCodes.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Hanoi\Hanoi.csproj">
+      <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
+      <Name>Hanoi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
