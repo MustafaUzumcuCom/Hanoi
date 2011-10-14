@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -31,7 +31,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace Hanoi.Xmpp.Serialization {
+namespace Hanoi.Serialization {
     /// <summary>
     ///   Custom <see cref = "XmlTextWriter" /> implementation for writing XMPP stanzas
     /// </summary>

@@ -9,6 +9,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using Hanoi.Core.Sockets;
+using Hanoi.Serialization;
 using Hanoi.Xmpp.Serialization;
 using Hanoi.Xmpp.Serialization.Core.Tls;
 

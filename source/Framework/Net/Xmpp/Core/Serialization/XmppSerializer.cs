@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -34,15 +34,16 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization;
 
-namespace Hanoi.Xmpp.Serialization
+namespace Hanoi.Serialization
 {
     /// <summary>
     ///   Serializer class for XMPP stanzas
     /// </summary>
     public sealed class XmppSerializer
     {
-        private static readonly string XmlSerializersResource = "BabelIm.Net.Xmpp.Serialization.Serializers.xml";
+        private static readonly string XmlSerializersResource = "Hanoi.Serialization.Serializers.xml";
 
         private static readonly List<XmppSerializer> Serializers = new List<XmppSerializer>();
         private static bool Initialized;

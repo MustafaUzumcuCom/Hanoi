@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007-2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007-2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -37,7 +37,7 @@ using Hanoi.Xmpp.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Presence;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.Bosh {
+namespace Hanoi.Serialization.Extensions.Bosh {
     /// <summary>
     ///   XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH)
     ///   XEP-0206: XMPP Over BOSH

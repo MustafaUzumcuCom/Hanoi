@@ -95,9 +95,6 @@
     <Compile Include="Core\Tls\Procced.cs" />
     <Compile Include="Core\Tls\StartTls.cs" />
     <Compile Include="Empty.cs" />
-    <Compile Include="Extensions\Bosh\BodyCondition.cs" />
-    <Compile Include="Extensions\Bosh\BodyType.cs" />
-    <Compile Include="Extensions\Bosh\HttpBindBody.cs" />
     <Compile Include="Extensions\DataForms\DataForm.cs" />
     <Compile Include="Extensions\DataForms\DataFormField.cs" />
     <Compile Include="Extensions\DataForms\DataFormFieldType.cs" />
@@ -266,8 +263,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\UserTune\Tune.cs" />
     <Compile Include="Extensions\UserMood\Mood.cs" />
-    <Compile Include="XmppSerializer.cs" />
-    <Compile Include="XmppTextWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Extensions\PubSub\PubSubOwner.cs" />
@@ -405,9 +400,6 @@
       </SubType>
     </None>
     <None Include="Schemas\Extensions\StreamInitiation\si.xsd" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Serializers.xml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
