@@ -30,7 +30,7 @@
 using BabelIm.Net.Xmpp.Serialization.Extensions.PubSub;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Pub sub event message
     /// </summary>

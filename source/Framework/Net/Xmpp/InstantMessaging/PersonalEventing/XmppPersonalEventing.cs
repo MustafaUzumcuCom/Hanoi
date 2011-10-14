@@ -30,9 +30,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing {
     /// <summary>

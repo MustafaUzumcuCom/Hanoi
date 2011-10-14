@@ -30,7 +30,7 @@
 using System;
 using System.IO;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   A stream implementation used as input buffer for 
     ///   incoming data in the <see cref = "XmppConnection" /> class.

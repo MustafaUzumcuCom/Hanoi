@@ -30,7 +30,7 @@
 
 using System.Net.Sockets;
 
-namespace BabelIm.Net.Xmpp.Core.Sockets {
+namespace Hanoi.Xmpp.Sockets {
     /// <summary>
     ///   This class implements the 'No Authentication' scheme.
     /// </summary>

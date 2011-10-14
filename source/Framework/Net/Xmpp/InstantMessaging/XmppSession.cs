@@ -33,8 +33,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using BabelIm.Net.Xmpp.Core;
-using BabelIm.Net.Xmpp.Core.Authentication;
 using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.MultiUserChat;
 using BabelIm.Net.Xmpp.InstantMessaging.PersonalEventing;
@@ -44,6 +42,8 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.UserMood;
 using BabelIm.Net.Xmpp.Serialization.Extensions.UserTune;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp;
+using Hanoi.Xmpp.Authentication;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

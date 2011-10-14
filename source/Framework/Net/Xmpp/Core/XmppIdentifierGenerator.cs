@@ -29,7 +29,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   An ID generator for XMPP messages.
     /// </summary>

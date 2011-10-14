@@ -31,8 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using BabelIm.Net.Xmpp.Core.Authentication;
-using BabelIm.Net.Xmpp.Core.Transports;
 using BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 using BabelIm.Net.Xmpp.Serialization.Core.Streams;
@@ -41,11 +39,13 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.Extensions.XmppPing;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
-using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
+using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster;
+using Hanoi.Xmpp.Authentication;
+using Hanoi.Xmpp.Transports;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Represents a connection to a XMPP server
     /// </summary>
@@ -217,7 +217,7 @@ namespace BabelIm.Net.Xmpp.Core {
             {
                 isError = true;
             }
-            else if (message is Xmpp.Serialization.Core.Sasl.Failure)
+            else if (message is Failure)
             {
                 isError = true;
             }
@@ -252,7 +252,7 @@ namespace BabelIm.Net.Xmpp.Core {
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:BabelIm.Net.Xmpp.Core.XmppConnection" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.Xmpp.XmppConnection" /> is reclaimed by garbage collection.
         /// </summary>
         ~XmppConnection() {
             // Do not re-create Dispose clean-up code here.

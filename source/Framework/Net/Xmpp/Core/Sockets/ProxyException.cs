@@ -30,7 +30,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core.Sockets {
+namespace Hanoi.Xmpp.Sockets {
     /// <summary>
     ///   The exception that is thrown when a proxy error occurs.
     /// </summary>

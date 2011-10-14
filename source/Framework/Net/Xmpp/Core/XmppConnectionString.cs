@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Represents a Connection String
     /// </summary>

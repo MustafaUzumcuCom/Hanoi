@@ -32,7 +32,7 @@ using System.Text;
 using System.Threading;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 
-namespace BabelIm.Net.Xmpp.Core.Authentication {
+namespace Hanoi.Xmpp.Authentication {
     /// <summary>
     ///   <see cref = "XmppAuthenticator" /> implementation for the SASL Plain Authentication mechanism.
     /// </summary>

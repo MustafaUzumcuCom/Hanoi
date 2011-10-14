@@ -29,7 +29,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Event args for the <see cref = "XmppConnection.UnhandledMessage" /> event.
     /// </summary>

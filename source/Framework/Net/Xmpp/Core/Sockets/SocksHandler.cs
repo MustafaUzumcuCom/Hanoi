@@ -32,7 +32,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace BabelIm.Net.Xmpp.Core.Sockets {
+namespace Hanoi.Xmpp.Sockets {
     /// <summary>
     ///   Implements a specific version of the SOCKS protocol. This is an abstract class; it must be inherited.
     /// </summary>

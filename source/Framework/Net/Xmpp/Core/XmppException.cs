@@ -33,7 +33,7 @@ using System.Security.Permissions;
 using System.Text;
 using BabelIm.Net.Xmpp.Serialization.Core.Streams;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Exception for XMPP related errors.
     /// </summary>

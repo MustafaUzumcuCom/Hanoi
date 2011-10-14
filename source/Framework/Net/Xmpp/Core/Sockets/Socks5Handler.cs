@@ -33,7 +33,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace BabelIm.Net.Xmpp.Core.Sockets {
+namespace Hanoi.Xmpp.Sockets {
     /// <summary>
     ///   Implements the SOCKS5 protocol.
     /// </summary>

@@ -9,7 +9,7 @@ using System.Text;
 using BabelIm.Net.Xmpp.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Extensions.Bosh;
 
-namespace BabelIm.Net.Xmpp.Core.Transports
+namespace Hanoi.Xmpp.Transports
 {
     /// <summary>
     ///   XMPP over Bosh (HTTP) Transport implementation

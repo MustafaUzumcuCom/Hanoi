@@ -31,7 +31,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Hash extension methods
     /// </summary>

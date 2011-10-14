@@ -32,7 +32,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 
-namespace BabelIm.Net.Xmpp.Core.Sockets {
+namespace Hanoi.Xmpp.Sockets {
     /// <summary>
     ///   This class implements the 'username/password authentication' scheme.
     /// </summary>

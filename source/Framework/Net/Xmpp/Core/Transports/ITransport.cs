@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BabelIm.Net.Xmpp.Core.Transports
+namespace Hanoi.Xmpp.Transports
 {
     /// <summary>
     ///   Interface for transport implementations

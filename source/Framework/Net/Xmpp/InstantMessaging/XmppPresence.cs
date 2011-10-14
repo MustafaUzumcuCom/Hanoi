@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using BabelIm.Net.Xmpp.Core;
+using Hanoi.Xmpp;
 using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
 using ShowType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.ShowType;
 using PresenceType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;

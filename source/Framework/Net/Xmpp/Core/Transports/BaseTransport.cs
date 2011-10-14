@@ -6,7 +6,7 @@ using DnDns.Enums;
 using DnDns.Query;
 using DnDns.Records;
 
-namespace BabelIm.Net.Xmpp.Core.Transports
+namespace Hanoi.Xmpp.Transports
 {
     /// <summary>
     ///   Base class for transport implementations
@@ -134,7 +134,7 @@ namespace BabelIm.Net.Xmpp.Core.Transports
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:BabelIm.Net.Xmpp.Core.XmppConnection" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.Xmpp.XmppConnection" /> is reclaimed by garbage collection.
         /// </summary>
         ~BaseTransport()
         {

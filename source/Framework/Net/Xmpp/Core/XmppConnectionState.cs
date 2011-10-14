@@ -29,7 +29,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Describes the current state of the connection to a XMPP Server.
     /// </summary>

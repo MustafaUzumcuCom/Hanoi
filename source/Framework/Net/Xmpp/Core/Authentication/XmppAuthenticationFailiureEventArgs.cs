@@ -29,7 +29,7 @@
 
 using System;
 
-namespace BabelIm.Net.Xmpp.Core.Authentication {
+namespace Hanoi.Xmpp.Authentication {
     /// <summary>
     ///   EventArgs for the <see cref = "XmppConnection.AuthenticationFailiure" /> event.
     /// </summary>

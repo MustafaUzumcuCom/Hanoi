@@ -31,7 +31,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   A simple XMPP XML message parser
     /// </summary>

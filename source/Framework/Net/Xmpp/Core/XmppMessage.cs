@@ -30,7 +30,7 @@
 using System;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Represents an XMPP message stanza
     /// </summary>

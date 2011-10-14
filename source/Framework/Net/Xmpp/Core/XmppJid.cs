@@ -32,7 +32,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Gnu.Inet.Encoding;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Represents a XMPP JID
     /// </summary>

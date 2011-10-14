@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using BabelIm.Net.Xmpp.Serialization.Core.Sasl;
 
-namespace BabelIm.Net.Xmpp.Core.Authentication {
+namespace Hanoi.Xmpp.Authentication {
     /// <summary>
     ///   http://209.85.129.132/search?q=cache:AhT1kmNCYw4J:dystopics.dump.be/%3Fp%3D54+IssueAuthToken&cd=2&hl=es&ct=clnk&gl=es&client=firefox-a
     ///   </remarks>

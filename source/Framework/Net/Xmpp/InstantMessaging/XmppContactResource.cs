@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.InstantMessaging.EntityCaps;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities;
@@ -40,6 +39,7 @@ using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCardAvatars;
 using BabelIm.Net.Xmpp.Serialization.Extensions.VCardTemp;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
+using Hanoi.Xmpp;
 using Presence = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence;
 using PresenceType = BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
 

@@ -30,7 +30,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BabelIm.Net.Xmpp.Core.Authentication {
+namespace Hanoi.Xmpp.Authentication {
     /// <summary>
     ///   Base class for authentication mechanims implementations.
     /// </summary>
@@ -103,7 +103,7 @@ namespace BabelIm.Net.Xmpp.Core.Authentication {
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:BabelIm.Net.Xmpp.Core.Authentication.XmppAuthenticator" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.Xmpp.Authentication.XmppAuthenticator" /> is reclaimed by garbage collection.
         /// </summary>
         ~XmppAuthenticator() {
             Dispose(false);
@@ -149,7 +149,7 @@ namespace BabelIm.Net.Xmpp.Core.Authentication {
         ///   Called when an unhandled message is received
         /// </summary>
         /// <param name = "sender">The sender.</param>
-        /// <param name = "e">The <see cref = "T:BabelIm.Net.Xmpp.Core.XmppUnhandledMessageEventArgs" /> instance containing the event data.</param>
+        /// <param name = "e">The <see cref = "T:Hanoi.Xmpp.XmppUnhandledMessageEventArgs" /> instance containing the event data.</param>
         protected abstract void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e);
 
         /// <summary>

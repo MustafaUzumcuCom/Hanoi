@@ -29,12 +29,12 @@
 
 using System;
 using System.Text;
-using BabelIm.Net.Xmpp.Core;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.Extensions.EntityCapabilities;
 using BabelIm.Net.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client;
 using BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence;
+using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>

@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace BabelIm.Net.Xmpp.Core.Transports
+namespace Hanoi.Xmpp.Transports
 {
     /// <summary>
     ///   Interface for secure transport implementations

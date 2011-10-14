@@ -8,11 +8,11 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading;
-using BabelIm.Net.Xmpp.Core.Sockets;
 using BabelIm.Net.Xmpp.Serialization;
 using BabelIm.Net.Xmpp.Serialization.Core.Tls;
+using Hanoi.Xmpp.Sockets;
 
-namespace BabelIm.Net.Xmpp.Core.Transports
+namespace Hanoi.Xmpp.Transports
 {
     /// <summary>
     ///   TCP/IP Transport implementation

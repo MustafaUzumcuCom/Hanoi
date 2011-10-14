@@ -34,7 +34,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace BabelIm.Net.Xmpp.Core.Sockets {
+namespace Hanoi.Xmpp.Sockets {
     /// <summary>
     ///   Implements a Socket class that can connect trough a SOCKS proxy server.
     /// </summary>

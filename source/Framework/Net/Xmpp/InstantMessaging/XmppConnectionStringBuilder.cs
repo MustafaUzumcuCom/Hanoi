@@ -31,7 +31,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Text;
-using BabelIm.Net.Xmpp.Core;
+using Hanoi.Xmpp;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

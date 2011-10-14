@@ -29,7 +29,7 @@
 
 using System.IO;
 
-namespace BabelIm.Net.Xmpp.Core {
+namespace Hanoi.Xmpp {
     /// <summary>
     ///   Internal class used as State for socket reads
     /// </summary>
