@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   An element of an XMPP XML message
     /// </summary>

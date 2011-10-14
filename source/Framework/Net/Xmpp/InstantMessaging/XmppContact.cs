@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hanoi.Core;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;

@@ -6,7 +6,7 @@ using System.Threading;
 using Hanoi.Authentication;
 using Hanoi.Xmpp.Serialization.Core.Sasl;
 
-namespace Hanoi.Xmpp.Authentication {
+namespace Hanoi.Core.Authentication {
     /// <summary>
     ///   http://209.85.129.132/search?q=cache:AhT1kmNCYw4J:dystopics.dump.be/%3Fp%3D54+IssueAuthToken&cd=2&hl=es&ct=clnk&gl=es&client=firefox-a
     ///   </remarks>

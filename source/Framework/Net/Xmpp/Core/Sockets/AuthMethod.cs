@@ -32,7 +32,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hanoi.Xmpp.Sockets {
+namespace Hanoi.Core.Sockets {
     /// <summary>
     ///   Implements a SOCKS authentication scheme.
     /// </summary>

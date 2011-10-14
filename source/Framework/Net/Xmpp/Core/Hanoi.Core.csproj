@@ -8,8 +8,8 @@
     <ProjectGuid>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hanoi.Xmpp</RootNamespace>
-    <AssemblyName>Hanoi.Xmpp</AssemblyName>
+    <RootNamespace>Hanoi.Core</RootNamespace>
+    <AssemblyName>Hanoi.Core</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>

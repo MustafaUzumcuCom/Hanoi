@@ -27,7 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Hanoi.Xmpp.Transports {
+namespace Hanoi.Core.Transports {
     /// <summary>
     ///   Interface for secure transport implementations
     /// </summary>

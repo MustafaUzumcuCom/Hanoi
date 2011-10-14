@@ -30,7 +30,7 @@
 using System;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Represents an XMPP message stanza
     /// </summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hanoi.Xmpp.Transports {
+namespace Hanoi.Core.Transports {
     /// <summary>
     ///   Interface for transport implementations
     /// </summary>

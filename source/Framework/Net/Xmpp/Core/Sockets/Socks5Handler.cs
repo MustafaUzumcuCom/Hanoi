@@ -33,7 +33,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Hanoi.Xmpp.Sockets {
+namespace Hanoi.Core.Sockets {
     /// <summary>
     ///   Implements the SOCKS5 protocol.
     /// </summary>

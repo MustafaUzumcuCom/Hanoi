@@ -31,7 +31,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Hash extension methods
     /// </summary>

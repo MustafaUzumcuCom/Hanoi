@@ -27,6 +27,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using Hanoi.Core;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Register;

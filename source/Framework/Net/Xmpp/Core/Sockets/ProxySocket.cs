@@ -34,7 +34,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Hanoi.Xmpp.Sockets {
+namespace Hanoi.Core.Sockets {
     /// <summary>
     ///   Implements a Socket class that can connect trough a SOCKS proxy server.
     /// </summary>

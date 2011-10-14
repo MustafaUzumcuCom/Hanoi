@@ -8,11 +8,11 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading;
+using Hanoi.Core.Sockets;
 using Hanoi.Xmpp.Serialization;
 using Hanoi.Xmpp.Serialization.Core.Tls;
-using Hanoi.Xmpp.Sockets;
 
-namespace Hanoi.Xmpp.Transports {
+namespace Hanoi.Core.Transports {
     /// <summary>
     ///   TCP/IP Transport implementation
     /// </summary>

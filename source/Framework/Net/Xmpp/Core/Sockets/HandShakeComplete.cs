@@ -30,7 +30,7 @@
 
 using System;
 
-namespace Hanoi.Xmpp.Sockets {
+namespace Hanoi.Core.Sockets {
     /// <summary>
     ///   References the callback method to be called when the protocol negotiation is completed.
     /// </summary>

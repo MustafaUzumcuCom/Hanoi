@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Represents a Connection String
     /// </summary>

@@ -33,7 +33,7 @@ using System.Security.Permissions;
 using System.Text;
 using Hanoi.Xmpp.Serialization.Core.Streams;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Exception for XMPP related errors.
     /// </summary>

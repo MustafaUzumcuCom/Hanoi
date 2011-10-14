@@ -29,7 +29,7 @@
 
 using System;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Describes the current state of the connection to a XMPP Server.
     /// </summary>

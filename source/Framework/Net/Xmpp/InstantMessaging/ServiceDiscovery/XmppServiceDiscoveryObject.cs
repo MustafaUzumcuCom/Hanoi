@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Hanoi.Core;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;

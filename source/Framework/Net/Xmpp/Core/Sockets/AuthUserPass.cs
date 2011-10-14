@@ -32,7 +32,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Hanoi.Xmpp.Sockets {
+namespace Hanoi.Core.Sockets {
     /// <summary>
     ///   This class implements the 'username/password authentication' scheme.
     /// </summary>

@@ -29,7 +29,7 @@
 
 using System.IO;
 
-namespace Hanoi.Xmpp {
+namespace Hanoi.Core {
     /// <summary>
     ///   Internal class used as State for socket reads
     /// </summary>
