@@ -1,4 +1,4 @@
-babelim - An implementation of the XMPP protocol written in C# and a WPF client.
+Hanoi, a fork of babelim - An implementation of the XMPP protocol written in C#
 =================================================================================================
 
 Support for:
