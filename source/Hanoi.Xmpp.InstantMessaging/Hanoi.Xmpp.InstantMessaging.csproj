@@ -78,12 +78,12 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.CoreEx">
-      <HintPath>..\..\..\..\..\lib\Rx Framework\System.CoreEx.dll</HintPath>
+      <HintPath>..\..\lib\Rx Framework\System.CoreEx.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\..\..\..\lib\Rx Framework\System.Reactive.dll</HintPath>
+      <HintPath>..\..\lib\Rx Framework\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase">
@@ -165,7 +165,7 @@
     <Content Include="MultiUserChat\MucStatusCodes.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Hanoi\Hanoi.csproj">
+    <ProjectReference Include="..\Hanoi\Hanoi.csproj">
       <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
       <Name>Hanoi</Name>
     </ProjectReference>

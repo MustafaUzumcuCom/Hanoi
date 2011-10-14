@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp.InstantMessaging", "source\Framework\Net\Xmpp\InstantMessaging\Hanoi.Xmpp.InstantMessaging.csproj", "{490DA560-229D-460A-B16F-A35CFECA9937}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Xmpp.InstantMessaging", "source\Hanoi.Xmpp.InstantMessaging\Hanoi.Xmpp.InstantMessaging.csproj", "{490DA560-229D-460A-B16F-A35CFECA9937}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E57FD011-81D5-44A8-B342-0E5DD233F624}"
 EndProject
