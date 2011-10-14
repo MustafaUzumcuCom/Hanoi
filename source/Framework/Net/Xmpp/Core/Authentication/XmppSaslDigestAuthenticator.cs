@@ -35,7 +35,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Hanoi.Xmpp.Serialization.Core.Sasl;
 
-namespace Hanoi.Xmpp.Authentication {
+namespace Hanoi.Xmpp.Authentication
+{
     /// <summary>
     ///   <see cref = "XmppAuthenticator" /> implementation for the SASL Digest Authentication mechanism.
     /// </summary>
@@ -44,25 +45,27 @@ namespace Hanoi.Xmpp.Authentication {
     ///   http://www.ietf.org/html.charters/sasl-charter.html
     ///   http://www.ietf.org/internet-drafts/draft-ietf-sasl-rfc2831bis-09.txt
     /// </remarks>
-    internal sealed class XmppSaslDigestAuthenticator
-        : XmppAuthenticator {
+    internal sealed class XmppSaslDigestAuthenticator : XmppAuthenticator
+    {
         private readonly string cnonce;
         private readonly AutoResetEvent successEvent;
-        private Dictionary<string, string> digestChallenge;
+        private IDictionary<string, string> digestChallenge;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppSaslDigestAuthenticator" /> class.
+        ///   Initializes a new instance of the <see cref="XmppSaslDigestAuthenticator" /> class.
         /// </summary>
         public XmppSaslDigestAuthenticator(XmppConnection connection)
-            : base(connection) {
+            : base(connection)
+        {
             cnonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(XmppIdentifierGenerator.Generate()));
             successEvent = new AutoResetEvent(false);
         }
 
-        private static Dictionary<string, string> DecodeDigestChallenge(Challenge challenge) {
+        private static IDictionary<string, string> DecodeDigestChallenge(Challenge challenge)
+        {
             var table = new Dictionary<string, string>();
-            string decoded = Encoding.UTF8.GetString(Convert.FromBase64String(challenge.Value));
-            MatchCollection keyPairs = Regex.Matches(decoded, @"([\w\s\d]*)\s*=\s*([^,]*)");
+            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(challenge.Value));
+            var keyPairs = Regex.Matches(decoded, @"([\w\s\d]*)\s*=\s*([^,]*)");
 
             foreach (Match match in keyPairs)
             {
@@ -98,10 +101,10 @@ namespace Hanoi.Xmpp.Authentication {
         /// <summary>
         ///   Performs the authentication using the SASL digest authentication mechanism.
         /// </summary>
-        public override void Authenticate() {
+        public override void Authenticate()
+        {
             // Send authentication mechanism
-            var auth = new Auth();
-            auth.Mechanism = XmppCodes.SaslDigestMD5Mechanism;
+            var auth = new Auth { Mechanism = XmppCodes.SaslDigestMD5Mechanism };
 
             Connection.Send(auth);
 
@@ -156,11 +159,12 @@ namespace Hanoi.Xmpp.Authentication {
             }
         }
 
-        protected override void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e) {
+        protected override void OnUnhandledMessage(object sender, XmppUnhandledMessageEventArgs e)
+        {
             if (e.StanzaInstance is Challenge)
             {
                 // Response to teh Authentication Information Request
-                digestChallenge = DecodeDigestChallenge((Challenge) e.StanzaInstance);
+                digestChallenge = DecodeDigestChallenge((Challenge)e.StanzaInstance);
                 successEvent.Set();
             }
             else if (e.StanzaInstance is Success)
@@ -169,15 +173,17 @@ namespace Hanoi.Xmpp.Authentication {
             }
         }
 
-        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
+        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e)
+        {
             base.OnAuthenticationError(sender, e);
 
             successEvent.Set();
         }
 
-        private string BuildDigestRespose() {
+        private string BuildDigestRespose()
+        {
             var response = new StringBuilder();
-            string digestUri = String.Empty;
+            string digestUri;
 
             response.AppendFormat("username=\"{0}\",", Connection.UserId.UserName);
 
@@ -203,14 +209,16 @@ namespace Hanoi.Xmpp.Authentication {
             return Encoding.UTF8.GetBytes(response.ToString()).ToBase64String();
         }
 
-        private string GenerateResponseValue() {
-            string realm = ((digestChallenge.ContainsKey("realm")) ? digestChallenge["realm"] : Connection.HostName);
-            string nonce = digestChallenge["nonce"];
-            string userId = Connection.UserId.UserName;
-            string password = Connection.UserPassword;
-            string digestURI = String.Format("xmpp/{0}", realm);
-            string quop = SelectProtectionQuality();
+        private string GenerateResponseValue()
+        {
+            var realm = ((digestChallenge.ContainsKey("realm")) ? digestChallenge["realm"] : Connection.HostName);
+            var nonce = digestChallenge["nonce"];
+            var userId = Connection.UserId.UserName;
+            var password = Connection.UserPassword;
+            var digestURI = String.Format("xmpp/{0}", realm);
+            var quop = SelectProtectionQuality();
 
+            // TODO: is this necessary?
             /*
             If authzid is specified, then A1 is
                 A1 = { H( { username-value, ":", realm-value, ":", passwd } ),
@@ -220,10 +228,11 @@ namespace Hanoi.Xmpp.Authentication {
                 A1 = { H( { username-value, ":", realm-value, ":", passwd } ),
                     ":", nonce-value, ":", cnonce-value }
             */
+
             var a1 = new MemoryStream();
 
-            byte[] a1hash = (new[] {userId, ":", realm, ":", password}).ComputeMD5Hash();
-            byte[] temp = Encoding.UTF8.GetBytes(String.Format(":{0}:{1}", nonce, cnonce));
+            var a1hash = (new[] { userId, ":", realm, ":", password }).ComputeMD5Hash();
+            var temp = Encoding.UTF8.GetBytes(String.Format(":{0}:{1}", nonce, cnonce));
 
             // There are no authzid-value
             a1.Write(a1hash, 0, a1hash.Length);
@@ -259,20 +268,21 @@ namespace Hanoi.Xmpp.Authentication {
                         );
              */
 
-            string hexA1 = a1.ToArray().ComputeMD5Hash().ToHexString();
-            string hexA2 = (new[] {a2}).ComputeMD5Hash().ToHexString();
+            var hexA1 = a1.ToArray().ComputeMD5Hash().ToHexString();
+            var hexA2 = (new[] { a2 }).ComputeMD5Hash().ToHexString();
 
             return
-                (new[] {hexA1, ":", nonce, ":", "00000001", ":", cnonce, ":", quop, ":", hexA2}).ComputeMD5Hash().
+                (new[] { hexA1, ":", nonce, ":", "00000001", ":", cnonce, ":", quop, ":", hexA2 }).ComputeMD5Hash().
                     ToHexString();
         }
 
-        private string SelectProtectionQuality() {
+        private string SelectProtectionQuality() 
+        {
             if (digestChallenge.ContainsKey("qop-options"))
             {
-                string[] quopOptions = digestChallenge["qop-options"].Split(',');
+                var quopOptions = digestChallenge["qop-options"].Split(',');
 
-                foreach (string quo in quopOptions)
+                foreach (var quo in quopOptions)
                 {
                     switch (quo)
                     {
@@ -289,5 +299,5 @@ namespace Hanoi.Xmpp.Authentication {
 
             return "auth";
         }
-        }
+    }
 }

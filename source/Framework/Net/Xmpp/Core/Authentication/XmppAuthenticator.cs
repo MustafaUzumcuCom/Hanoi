@@ -31,22 +31,21 @@ using System;
 using System.Collections.Generic;
 
 namespace Hanoi.Xmpp.Authentication {
+
+    // TODO: introduce IAuthenticator interface
+
     /// <summary>
     ///   Base class for authentication mechanims implementations.
     /// </summary>
-    internal abstract class XmppAuthenticator
-        : IDisposable {
-        private string authenticationError;
-        private bool authenticationFailed;
-        private XmppConnection connection;
+    internal abstract class XmppAuthenticator : IDisposable {
         private List<string> pendingMessages;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppAuthenticator" /> class.
+        ///   Initializes a new instance of the <see cref="XmppAuthenticator" /> class.
         /// </summary>
-        /// <param name = "connection">A <see cref = "XmppConnection" /> instance</param>
+        /// <param name = "connection">A <see cref="XmppConnection" /> instance</param>
         protected XmppAuthenticator(XmppConnection connection) {
-            this.connection = connection;
+            Connection = connection;
 
             Subscribe();
         }
@@ -55,33 +54,25 @@ namespace Hanoi.Xmpp.Authentication {
         ///   Gets the authentication error.
         /// </summary>
         /// <value>The authentication error.</value>
-        public string AuthenticationError {
-            get { return authenticationError; }
-        }
+        public string AuthenticationError { get; private set; }
 
         /// <summary>
         ///   Gets a value indicating whether the authentication has failed.
         /// </summary>
         /// <value><c>true</c> if authentication failed; otherwise, <c>false</c>.</value>
-        public bool AuthenticationFailed {
-            get { return authenticationFailed; }
-            protected set { authenticationFailed = value; }
-        }
+        public bool AuthenticationFailed { get; protected set; }
 
         /// <summary>
         ///   Gets the connection associated with the authenticator class.
         /// </summary>
-        public XmppConnection Connection {
-            get { return connection; }
-        }
+        public XmppConnection Connection { get; private set; }
 
         /// <summary>
         ///   Gets the list of message ID's pending of response
         /// </summary>
         public List<string> PendingMessages {
             get {
-                if (pendingMessages == null)
-                {
+                if (pendingMessages == null) {
                     pendingMessages = new List<string>();
                 }
 
@@ -114,19 +105,17 @@ namespace Hanoi.Xmpp.Authentication {
         /// </summary>
         /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
         protected virtual void Dispose(bool disposing) {
-            if (disposing)
-            {
+            if (disposing) {
                 Unsubscribe();
 
-                if (pendingMessages != null)
-                {
+                if (pendingMessages != null){
                     pendingMessages.Clear();
                 }
 
                 pendingMessages = null;
-                connection = null;
-                authenticationError = null;
-                authenticationFailed = false;
+                Connection = null;
+                AuthenticationError = null;
+                AuthenticationFailed = false;
             }
         }
 
@@ -136,13 +125,13 @@ namespace Hanoi.Xmpp.Authentication {
         public abstract void Authenticate();
 
         protected void Subscribe() {
-            connection.UnhandledMessage += OnUnhandledMessage;
-            connection.AuthenticationError += OnAuthenticationError;
+            Connection.UnhandledMessage += OnUnhandledMessage;
+            Connection.AuthenticationError += OnAuthenticationError;
         }
 
         protected void Unsubscribe() {
-            connection.UnhandledMessage -= OnUnhandledMessage;
-            connection.AuthenticationError -= OnAuthenticationError;
+            Connection.UnhandledMessage -= OnUnhandledMessage;
+            Connection.AuthenticationError -= OnAuthenticationError;
         }
 
         /// <summary>
@@ -158,13 +147,12 @@ namespace Hanoi.Xmpp.Authentication {
         /// <param name = "sender">The sender.</param>
         /// <param name = "e">The <see cref = "XmppAuthenticationFailiureEventArgs" /> instance containing the event data.</param>
         protected virtual void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
-            if (pendingMessages != null)
-            {
+            if (pendingMessages != null) {
                 pendingMessages.Clear();
             }
 
-            authenticationError = e.Message;
-            authenticationFailed = true;
+            AuthenticationError = e.Message;
+            AuthenticationFailed = true;
         }
-        }
+    }
 }
