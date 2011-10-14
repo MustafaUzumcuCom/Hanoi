@@ -30,10 +30,10 @@
 using System;
 using System.Collections;
 using System.Xml.Serialization;
+using Hanoi.Serialization.Core.ResourceBinding;
+using Hanoi.Serialization.Core.Streams;
 using Hanoi.Serialization.InstantMessaging.Register;
 using Hanoi.Serialization.InstantMessaging.Roster;
-using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
-using Hanoi.Xmpp.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.Extensions.PubSub;
 using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Xmpp.Serialization.Extensions.SimpleCommunicationsBlocking;

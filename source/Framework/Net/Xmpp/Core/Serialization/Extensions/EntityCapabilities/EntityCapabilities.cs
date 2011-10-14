@@ -29,8 +29,9 @@
 
 using System;
 using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities {
+namespace Hanoi.Serialization.Extensions.EntityCapabilities {
     /// <summary>
     ///   XEP-0115: Entity Capabilities
     /// </summary>

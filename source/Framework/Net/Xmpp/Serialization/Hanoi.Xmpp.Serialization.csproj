@@ -77,11 +77,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\ResourceBinding\Bind.cs" />
-    <Compile Include="Core\Stanzas\StanzaError.cs" />
-    <Compile Include="Core\Streams\Session.cs" />
-    <Compile Include="Core\Tls\Procced.cs" />
-    <Compile Include="Core\Tls\StartTls.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="Extensions\DataForms\DataForm.cs" />
     <Compile Include="Extensions\DataForms\DataFormField.cs" />
@@ -109,7 +104,6 @@
     <Compile Include="Extensions\MultiUserChat\MucUserItemRole.cs" />
     <Compile Include="Extensions\MultiUserChat\MucUserStatus.cs" />
     <Compile Include="Extensions\MultiUserChat\MultiUserChat.cs" />
-    <Compile Include="Extensions\Nickname\Nickname.cs" />
     <Compile Include="Extensions\PubSub\PubSub.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -210,7 +204,6 @@
     <Compile Include="Extensions\VCardTemp\VCardData.cs" />
     <Compile Include="Extensions\VCardAvatars\VCardPhoto.cs" />
     <Compile Include="Extensions\XmppPing\Ping.cs" />
-    <Compile Include="Extensions\EntityCapabilities\EntityCapabilities.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ActionType.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceFeature.cs" />
     <Compile Include="Extensions\ServiceDiscovery\ServiceIdentity.cs" />

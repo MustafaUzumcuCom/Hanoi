@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\XmppAuthenticationFailiureEventArgs.cs" />
+    <Compile Include="Serialization\Core\ResourceBinding\Bind.cs" />
     <Compile Include="Serialization\Core\Sasl\Abort.cs" />
     <Compile Include="Serialization\Core\Sasl\Auth.cs" />
     <Compile Include="Serialization\Core\Sasl\Challenge.cs" />
@@ -102,13 +103,19 @@
     <Compile Include="Serialization\Core\Sasl\Mechanims.cs" />
     <Compile Include="Serialization\Core\Sasl\Response.cs" />
     <Compile Include="Serialization\Core\Sasl\Success.cs" />
+    <Compile Include="Serialization\Core\Stanzas\StanzaError.cs" />
+    <Compile Include="Serialization\Core\Streams\Session.cs" />
     <Compile Include="Serialization\Core\Streams\Stream.cs" />
     <Compile Include="Serialization\Core\Streams\StreamError.cs" />
     <Compile Include="Serialization\Core\Streams\StreamErrorText.cs" />
     <Compile Include="Serialization\Core\Streams\StreamFeatures.cs" />
+    <Compile Include="Serialization\Core\Tls\Procced.cs" />
+    <Compile Include="Serialization\Core\Tls\StartTls.cs" />
     <Compile Include="Serialization\Extensions\Bosh\BodyCondition.cs" />
     <Compile Include="Serialization\Extensions\Bosh\BodyType.cs" />
     <Compile Include="Serialization\Extensions\Bosh\HttpBindBody.cs" />
+    <Compile Include="Serialization\Extensions\EntityCapabilities\EntityCapabilities.cs" />
+    <Compile Include="Serialization\Extensions\Nickname\Nickname.cs" />
     <Compile Include="Serialization\InstantMessaging\Client\Browse.cs" />
     <Compile Include="Serialization\InstantMessaging\Client\Error.cs" />
     <Compile Include="Serialization\InstantMessaging\Client\ErrorType.cs" />
@@ -208,10 +215,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Serialization\Serializers.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Serialization\Core\ResourceBinding\" />
-    <Folder Include="Serialization\Core\Stanzas\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
