@@ -39,7 +39,6 @@ using Hanoi.Serialization.Extensions.UserMood;
 using Hanoi.Serialization.Extensions.UserTune;
 using Hanoi.Serialization.Extensions.VCardTemp;
 using Hanoi.Serialization.InstantMessaging.Client;
-using Hanoi.Serialization.InstantMessaging.Presence;
 using Hanoi.Serialization.InstantMessaging.Roster;
 using Hanoi.Xmpp.InstantMessaging.EntityCaps;
 using Hanoi.Xmpp.InstantMessaging.MultiUserChat;
@@ -54,17 +53,17 @@ namespace Hanoi.Xmpp.InstantMessaging
     public sealed class Session : ISession
     {
         private readonly AvatarStorage avatarStorage;
-        private readonly Dictionary<string, XmppChat> chats;
-        private readonly XmppClientCapabilitiesStorage clientCapabilitiesStorage;
+        private readonly Dictionary<string, Chat> chats;
+        private readonly ClientCapabilitiesStorage clientCapabilitiesStorage;
         private readonly Connection connection;
 
         private readonly Subject<Message> messageReceivedSubject = new Subject<Message>();
         private readonly PersonalEventing.PersonalEventing personalEventing;
-        private readonly XmppServiceDiscovery serviceDiscovery;
+        private readonly ServiceDiscovery.ServiceDiscovery serviceDiscovery;
         private readonly Subject<SessionState> stateChangedSubject = new Subject<SessionState>();
         private readonly object syncObject;
-        private XmppActivity activity;
-        private XmppSessionEntityCapabilities capabilities;
+        private Activity activity;
+        private SessionEntityCapabilities capabilities;
 
         private IDisposable chatMessageSubscription;
         private IDisposable errorMessageSubscription;
@@ -79,13 +78,13 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             State = SessionState.LoggedOut;
             avatarStorage = new AvatarStorage();
-            chats = new Dictionary<string, XmppChat>();
+            chats = new Dictionary<string, Chat>();
             syncObject = new object();
             connection = new Connection();
-            serviceDiscovery = new XmppServiceDiscovery(this);
+            serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
             personalEventing = new PersonalEventing.PersonalEventing(this);
-            activity = new XmppActivity(this);
-            clientCapabilitiesStorage = new XmppClientCapabilitiesStorage();
+            activity = new Activity(this);
+            clientCapabilitiesStorage = new ClientCapabilitiesStorage();
             roster = new Roster(this);
 
             avatarStorage.Load();
@@ -103,7 +102,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Gets the client capabilities storage
         /// </summary>
-        internal XmppClientCapabilitiesStorage ClientCapabilitiesStorage
+        internal ClientCapabilitiesStorage ClientCapabilitiesStorage
         {
             get { return clientCapabilitiesStorage; }
         }
@@ -172,15 +171,15 @@ namespace Hanoi.Xmpp.InstantMessaging
         }
 
         /// <summary>
-        ///   Gets the list of <see cref = "XmppActivity">activities</see>
+        ///   Gets the list of <see cref = "InstantMessaging.PersonalEventing.Activity">activities</see>
         /// </summary>
-        public XmppActivity Activity
+        public Activity Activity
         {
             get
             {
                 if (activity == null)
                 {
-                    activity = new XmppActivity(this);
+                    activity = new Activity(this);
                 }
 
                 return activity;
@@ -190,13 +189,13 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Gets the client session supported features
         /// </summary>
-        public XmppSessionEntityCapabilities Capabilities
+        public SessionEntityCapabilities Capabilities
         {
             get
             {
                 if (capabilities == null)
                 {
-                    capabilities = new XmppSessionEntityCapabilities(this);
+                    capabilities = new SessionEntityCapabilities(this);
                 }
 
                 return capabilities;
@@ -238,7 +237,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Gets the <see cref = "Session">service discovery </see> instance associated to the session
         /// </summary>
-        public XmppServiceDiscovery ServiceDiscovery
+        public ServiceDiscovery.ServiceDiscovery ServiceDiscovery
         {
             get { return serviceDiscovery; }
         }
@@ -374,7 +373,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         /// <param name = "contactId">The contact id.</param>
         /// <returns></returns>
-        public XmppChat CreateChat(string contactId)
+        public Chat CreateChat(string contactId)
         {
             return CreateChat(new Jid(contactId));
         }
@@ -384,17 +383,17 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         /// <param name = "contactId">The contact id.</param>
         /// <returns></returns>
-        public XmppChat CreateChat(Jid contactId)
+        public Chat CreateChat(Jid contactId)
         {
             CheckSessionState();
 
-            XmppChat chat = null;
+            Chat chat = null;
 
             lock (syncObject)
             {
                 if (!chats.ContainsKey(contactId.BareIdentifier))
                 {
-                    chat = new XmppChat(this, Roster[contactId.BareIdentifier]);
+                    chat = new Chat(this, Roster[contactId.BareIdentifier]);
                     chats.Add(contactId.BareIdentifier, chat);
 
                     chat.ChatClosed += OnChatClosed;
@@ -413,9 +412,9 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         /// <param name = "chatRoomName">Name of the chat room.</param>
         /// <returns></returns>
-        public XmppChatRoom EnterChatRoom()
+        public ChatRoom EnterChatRoom()
         {
-            return EnterChatRoom(XmppIdentifierGenerator.Generate());
+            return EnterChatRoom(IdentifierGenerator.Generate());
         }
 
         /// <summary>
@@ -423,12 +422,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         /// <param name = "chatRoomName">Name of the chat room.</param>
         /// <returns></returns>
-        public XmppChatRoom EnterChatRoom(string chatRoomName)
+        public ChatRoom EnterChatRoom(string chatRoomName)
         {
             CheckSessionState();
 
-            XmppService service = ServiceDiscovery.GetService(XmppServiceCategory.Conference);
-            XmppChatRoom chatRoom = null;
+            Service service = ServiceDiscovery.GetService(ServiceCategory.Conference);
+            ChatRoom chatRoom = null;
             var chatRoomId = new Jid
                 (
                 chatRoomName,
@@ -438,7 +437,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             if (service != null)
             {
-                chatRoom = new XmppChatRoom(this, service, chatRoomId);
+                chatRoom = new ChatRoom(this, service, chatRoomId);
                 chatRoom.Enter();
             }
 
@@ -448,7 +447,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Publishes user tune information
         /// </summary>
-        public ISession PublishTune(XmppUserTuneEvent tuneEvent)
+        public ISession PublishTune(UserTuneEvent tuneEvent)
         {
             var iq = new IQ();
             var pubsub = new PubSub();
@@ -461,9 +460,9 @@ namespace Hanoi.Xmpp.InstantMessaging
             publish.Items.Add(item);
 
             iq.From = UserId.ToString();
-            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.ID = IdentifierGenerator.Generate();
             iq.Type = IQType.Set;
-            publish.Node = XmppFeatures.UserMood;
+            publish.Node = Features.UserMood;
             item.Item = tune;
             tune.Artist = tuneEvent.Artist;
             tune.Length = tuneEvent.Length;
@@ -494,9 +493,9 @@ namespace Hanoi.Xmpp.InstantMessaging
             publish.Items.Add(item);
 
             iq.From = UserId.ToString();
-            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.ID = IdentifierGenerator.Generate();
             iq.Type = IQType.Set;
-            publish.Node = XmppFeatures.UserMood;
+            publish.Node = Features.UserMood;
             item.Item = tune;
 
             Send(iq);
@@ -514,7 +513,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             instance.MoodType = mood;
             instance.Text = description;
 
-            PublishMood(new XmppUserMoodEvent(null, instance));
+            PublishMood(new UserMoodEvent(null, instance));
 
             return this;
         }
@@ -522,7 +521,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Publishes user mood information
         /// </summary>
-        public ISession PublishMood(XmppUserMoodEvent moodEvent)
+        public ISession PublishMood(UserMoodEvent moodEvent)
         {
             var iq = new IQ();
             var pubsub = new PubSub();
@@ -535,9 +534,9 @@ namespace Hanoi.Xmpp.InstantMessaging
             publish.Items.Add(item);
 
             iq.From = UserId.ToString();
-            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.ID = IdentifierGenerator.Generate();
             iq.Type = IQType.Set;
-            publish.Node = XmppFeatures.UserMood;
+            publish.Node = Features.UserMood;
             item.Item = mood;
             mood.MoodType = (MoodType)Enum.Parse(typeof(MoodType), moodEvent.Mood);
             mood.Text = moodEvent.Text;
@@ -557,7 +556,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             var iq = new IQ();
             var vcard = new VCardData();
 
-            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.ID = IdentifierGenerator.Generate();
             iq.Type = IQType.Set;
             iq.From = UserId.ToString();
 
@@ -588,7 +587,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                 var iq = new IQ();
                 var vcard = new VCardData();
 
-                iq.ID = XmppIdentifierGenerator.Generate();
+                iq.ID = IdentifierGenerator.Generate();
                 iq.Type = IQType.Set;
                 iq.From = UserId.ToString();
 
@@ -638,7 +637,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         ///   Sets the presence.
         /// </summary>
         /// <param name = "showAs">The show as.</param>
-        public ISession SetPresence(XmppPresenceState newPresence)
+        public ISession SetPresence(PresenceState newPresence)
         {
             SetPresence(newPresence, null);
 
@@ -650,14 +649,14 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         /// <param name = "newPresence">The new presence state.</param>
         /// <param name = "status">The status.</param>
-        public ISession SetPresence(XmppPresenceState newPresence, string status)
+        public ISession SetPresence(PresenceState newPresence, string status)
         {
             switch (newPresence)
             {
-                case XmppPresenceState.Invisible:
+                case PresenceState.Invisible:
                     throw new NotImplementedException();
 
-                case XmppPresenceState.Offline:
+                case PresenceState.Offline:
                     Close();
                     break;
 
@@ -675,7 +674,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <param name = "newPresence">The new presence state.</param>
         /// <param name = "status">The status.</param>
         /// <param name = "priority">The priority.</param>
-        public ISession SetPresence(XmppPresenceState newPresence, string status, int priority)
+        public ISession SetPresence(PresenceState newPresence, string status, int priority)
         {
             CheckSessionState();
 
@@ -704,7 +703,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         private void Subscribe()
         {
             chatMessageSubscription = connection.OnMessageReceived
-                .Where(m => m.Type == MessageType.Chat && m.ChatStateNotification != XmppChatStateNotification.None)
+                .Where(m => m.Type == MessageType.Chat && m.ChatStateNotification != ChatStateNotification.None)
                 .Subscribe(OnChatMessageReceived);
 
             errorMessageSubscription = connection.OnMessageReceived
@@ -744,7 +743,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void OnChatMessageReceived(Message message)
         {
-            XmppChat chat = null;
+            Chat chat = null;
 
             if (String.IsNullOrEmpty(message.Body) &&
                 !chats.ContainsKey(message.From.BareIdentifier))
@@ -772,7 +771,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void OnChatClosed(object sender, EventArgs e)
         {
-            var chat = (XmppChat)sender;
+            var chat = (Chat)sender;
 
             if (chat != null)
             {

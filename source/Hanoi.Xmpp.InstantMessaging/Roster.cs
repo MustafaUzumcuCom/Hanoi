@@ -44,10 +44,10 @@ namespace Hanoi.Xmpp.InstantMessaging
     /// <summary>
     ///   Contact's Roster
     /// </summary>
-    public sealed class Roster : IEnumerable<XmppContact>, INotifyCollectionChanged
+    public sealed class Roster : IEnumerable<Contact>, INotifyCollectionChanged
     {
         private readonly Connection connection;
-        private readonly ObservableCollection<XmppContact> contacts;
+        private readonly ObservableCollection<Contact> contacts;
         private readonly List<string> pendingMessages;
         private readonly Session session;
 
@@ -63,7 +63,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             this.session = session;
             connection = session.Connection;
-            contacts = new ObservableCollection<XmppContact>();
+            contacts = new ObservableCollection<Contact>();
             pendingMessages = new List<string>();
 
             SubscribeToSessionState();
@@ -74,14 +74,14 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         /// <param name = "jid">The bare JID</param>
         /// <returns></returns>
-        public XmppContact this[string jid]
+        public Contact this[string jid]
         {
             get { return contacts.Where(contact => contact.ContactId.BareIdentifier == jid).SingleOrDefault(); }
         }
 
-        #region IEnumerable<XmppContact> Members
+        #region IEnumerable<Contact> Members
 
-        IEnumerator<XmppContact> IEnumerable<XmppContact>.GetEnumerator()
+        IEnumerator<Contact> IEnumerable<Contact>.GetEnumerator()
         {
             return contacts.GetEnumerator();
         }
@@ -122,7 +122,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             var query = new RosterQuery();
             var iq = new IQ
                          {
-                             ID = XmppIdentifierGenerator.Generate(),
+                             ID = IdentifierGenerator.Generate(),
                              Type = IQType.Set,
                              From = connection.UserId
                          };
@@ -153,7 +153,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             var query = new RosterQuery();
             var iq = new IQ
                          {
-                             ID = XmppIdentifierGenerator.Generate(), 
+                             ID = IdentifierGenerator.Generate(), 
                              Type = IQType.Set, 
                              From = connection.UserId,
                          };
@@ -183,7 +183,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             var query = new RosterQuery();
             var iq = new IQ
                          {
-                             ID = XmppIdentifierGenerator.Generate(), 
+                             ID = IdentifierGenerator.Generate(), 
                              Type = IQType.Get, 
                              From = connection.UserId
                          };
@@ -201,12 +201,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <returns></returns>
         public Roster RefreshBlockedContacts()
         {
-#warning TODO: Check if contact list should be stored in a separated collection or the information should be injected into XmppContact class
+#warning TODO: Check if contact list should be stored in a separated collection or the information should be injected into Contact class
             if (session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ
                              {
-                                 ID = XmppIdentifierGenerator.Generate(),
+                                 ID = IdentifierGenerator.Generate(),
                                  Type = IQType.Get
                              };
 
@@ -227,7 +227,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             {
                 var iq = new IQ
                              {
-                                 ID = XmppIdentifierGenerator.Generate(),
+                                 ID = IdentifierGenerator.Generate(),
                                  From = session.UserId,
                                  Type = IQType.Set
                              };
@@ -255,12 +255,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             contacts.Add
                 (
-                    new XmppContact
+                    new Contact
                         (
                         session,
                         session.UserId.BareIdentifier,
                         "",
-                        XmppContactSubscriptionType.Both,
+                        ContactSubscriptionType.Both,
                         new List<string>(new[] { "Buddies" })
                         )
                 );
@@ -346,17 +346,17 @@ namespace Hanoi.Xmpp.InstantMessaging
             // It's a roster management related message
             foreach (RosterItem item in message.Items)
             {
-                XmppContact contact = this.Where(c => c.ContactId.BareIdentifier == item.Jid).FirstOrDefault();
+                Contact contact = this.Where(c => c.ContactId.BareIdentifier == item.Jid).FirstOrDefault();
 
                 if (contact == null)
                 {
                     // Create the new contact
-                    var newContact = new XmppContact
+                    var newContact = new Contact
                         (
                         session,
                         item.Jid,
                         item.Name,
-                        (XmppContactSubscriptionType)item.Subscription,
+                        (ContactSubscriptionType)item.Subscription,
                         item.Groups
                         );
 
@@ -376,7 +376,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                             contact.RefreshData
                                 (
                                     item.Name,
-                                    (XmppContactSubscriptionType)item.Subscription,
+                                    (ContactSubscriptionType)item.Subscription,
                                     item.Groups
                                 );
                             break;
@@ -400,7 +400,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
             else
             {
-                XmppContact contact = this[jid.BareIdentifier];
+                Contact contact = this[jid.BareIdentifier];
 
                 if (contact != null)
                 {

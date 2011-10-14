@@ -30,13 +30,15 @@
 using System;
 using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   Represents an XMPP message stanza
     /// </summary>
-    public sealed class Message {
+    public sealed class Message
+    {
         private string body;
-        private XmppChatStateNotification chatStateNotification;
+        private ChatStateNotification chatStateNotification;
         private Jid from;
         private string identifier;
         private string language;
@@ -49,14 +51,16 @@ namespace Hanoi {
         ///   Initializes a new instance of the <see cref = "T:Message" /> class.
         /// </summary>
         /// <param name = "message">The message.</param>
-        internal Message(Serialization.InstantMessaging.Client.Message message) {
+        internal Message(Serialization.InstantMessaging.Client.Message message)
+        {
             Initialize(message);
         }
 
         /// <summary>
         ///   Gets the message identifier
         /// </summary>
-        public string Identifier {
+        public string Identifier
+        {
             get { return identifier; }
         }
 
@@ -64,7 +68,8 @@ namespace Hanoi {
         ///   Gets the message source JID .
         /// </summary>
         /// <value>From.</value>
-        public Jid From {
+        public Jid From
+        {
             get { return @from; }
         }
 
@@ -72,14 +77,16 @@ namespace Hanoi {
         ///   Gets the message target JID .
         /// </summary>
         /// <value>From.</value>
-        public Jid To {
+        public Jid To
+        {
             get { return to; }
         }
 
         /// <summary>
         ///   Gets the message type
         /// </summary>
-        public MessageType Type {
+        public MessageType Type
+        {
             get { return type; }
         }
 
@@ -87,7 +94,8 @@ namespace Hanoi {
         ///   Gets the message subject.
         /// </summary>
         /// <value>The subject.</value>
-        public string Subject {
+        public string Subject
+        {
             get { return subject; }
         }
 
@@ -95,7 +103,8 @@ namespace Hanoi {
         ///   Gets the message body.
         /// </summary>
         /// <value>The body.</value>
-        public string Body {
+        public string Body
+        {
             get { return body; }
         }
 
@@ -103,7 +112,8 @@ namespace Hanoi {
         ///   Gets the message thread.
         /// </summary>
         /// <value>The thread.</value>
-        public string Thread {
+        public string Thread
+        {
             get { return thread; }
         }
 
@@ -111,55 +121,58 @@ namespace Hanoi {
         ///   Gets the message language.
         /// </summary>
         /// <value>The language.</value>
-        public string Language {
+        public string Language
+        {
             get { return language; }
         }
 
         /// <summary>
         ///   Gests the chat state notification type
         /// </summary>
-        public XmppChatStateNotification ChatStateNotification {
+        public ChatStateNotification ChatStateNotification
+        {
             get { return chatStateNotification; }
         }
 
-        private void Initialize(Serialization.InstantMessaging.Client.Message message) {
+        private void Initialize(Serialization.InstantMessaging.Client.Message message)
+        {
             identifier = message.ID;
             @from = message.From;
             to = message.To;
             language = message.Lang;
             type = message.Type;
             thread = String.Empty;
-            chatStateNotification = XmppChatStateNotification.None;
+            chatStateNotification = ChatStateNotification.None;
 
             foreach (object item in message.Items)
             {
                 if (item is MessageBody)
                 {
-                    body = ((MessageBody) item).Value;
+                    body = ((MessageBody)item).Value;
                 }
                 else if (item is MessageSubject)
                 {
-                    subject = ((MessageSubject) item).Value;
+                    subject = ((MessageSubject)item).Value;
                 }
                 else if (item is NotificationActive)
                 {
-                    chatStateNotification = XmppChatStateNotification.Active;
+                    chatStateNotification = ChatStateNotification.Active;
                 }
                 else if (item is NotificationComposing)
                 {
-                    chatStateNotification = XmppChatStateNotification.Composing;
+                    chatStateNotification = ChatStateNotification.Composing;
                 }
                 else if (item is NotificationGone)
                 {
-                    chatStateNotification = XmppChatStateNotification.Gone;
+                    chatStateNotification = ChatStateNotification.Gone;
                 }
                 else if (item is NotificationInactive)
                 {
-                    chatStateNotification = XmppChatStateNotification.Inactive;
+                    chatStateNotification = ChatStateNotification.Inactive;
                 }
                 else if (item is NotificationPaused)
                 {
-                    chatStateNotification = XmppChatStateNotification.Paused;
+                    chatStateNotification = ChatStateNotification.Paused;
                 }
             }
         }

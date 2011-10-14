@@ -242,24 +242,24 @@
     <Compile Include="Sockets\SocksHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateObject.cs" />
-    <Compile Include="Authentication\XmppAuthenticator.cs" />
-    <Compile Include="XmppChatStateNotification.cs" />
+    <Compile Include="Authentication\Authenticator.cs" />
+    <Compile Include="ChatStateNotification.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="XmppCodes.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionState.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="XmppException.cs" />
-    <Compile Include="XmppFeatures.cs" />
-    <Compile Include="XmppIdentifierGenerator.cs" />
+    <Compile Include="StreamFeatures.cs" />
+    <Compile Include="IdentifierGenerator.cs" />
     <Compile Include="Jid.cs" />
     <Compile Include="XmppMemoryStream.cs" />
-    <Compile Include="Authentication\XmppSaslDigestAuthenticator.cs" />
-    <Compile Include="Authentication\XmppSaslPlainAuthenticator.cs" />
-    <Compile Include="Authentication\XmppSaslXGoogleTokenAuthenticator.cs" />
+    <Compile Include="Authentication\SaslDigestAuthenticator.cs" />
+    <Compile Include="Authentication\SaslPlainAuthenticator.cs" />
+    <Compile Include="Authentication\SaslXGoogleTokenAuthenticator.cs" />
     <Compile Include="XmppStreamElement.cs" />
     <Compile Include="XmppStreamParser.cs" />
-    <Compile Include="XmppUnhandledMessageEventArgs.cs" />
+    <Compile Include="UnhandledMessageEventArgs.cs" />
     <Compile Include="EventMessage.cs" />
   </ItemGroup>
   <ItemGroup>

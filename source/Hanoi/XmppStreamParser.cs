@@ -31,12 +31,13 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   A simple XMPP XML message parser
     /// </summary>
-    internal sealed class XmppStreamParser
-        : IDisposable {
+    internal sealed class XmppStreamParser : IDisposable
+    {
         private StringBuilder currentTag;
         private long depth;
         private bool isDisposed;
@@ -50,7 +51,8 @@ namespace Hanoi {
         ///   Initializes a new instance of the <see cref = "T:XmppStreamParser" /> class.
         /// </summary>
         /// <param name = "stream">The stream.</param>
-        public XmppStreamParser(XmppMemoryStream stream) {
+        public XmppStreamParser(XmppMemoryStream stream)
+        {
             this.stream = stream;
             reader = new BinaryReader(this.stream, Encoding.UTF8);
             node = new StringBuilder();
@@ -61,7 +63,8 @@ namespace Hanoi {
         ///   Gets a value indicating whether this <see cref = "T:XmppStreamParser" /> is EOF.
         /// </summary>
         /// <value><c>true</c> if EOF; otherwise, <c>false</c>.</value>
-        public bool EOF {
+        public bool EOF
+        {
             get { return stream.EOF; }
         }
 
@@ -70,7 +73,8 @@ namespace Hanoi {
         /// <summary>
         ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
 
             // This object will be cleaned up by the Dispose method.
@@ -83,11 +87,13 @@ namespace Hanoi {
 
         #endregion
 
-        private static string GetXmlNamespace(string tag) {
+        private static string GetXmlNamespace(string tag)
+        {
             return null;
         }
 
-        private static string GetTagName(string tag) {
+        private static string GetTagName(string tag)
+        {
             var tagName = new StringBuilder();
             int index = 1;
 
@@ -108,29 +114,35 @@ namespace Hanoi {
             return tagName.ToString();
         }
 
-        private static bool IsStartTag(string tag) {
+        private static bool IsStartTag(string tag)
+        {
             return (tag.StartsWith("<", StringComparison.OrdinalIgnoreCase) &&
                     !tag.StartsWith("</", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static bool IsEndStreamTag(string tag) {
+        private static bool IsEndStreamTag(string tag)
+        {
             return (tag.Equals(XmppCodes.XmppStreamClose));
         }
 
-        private static bool IsEndTag(string tag) {
+        private static bool IsEndTag(string tag)
+        {
             return (tag.StartsWith("</", StringComparison.OrdinalIgnoreCase) ||
                     tag.EndsWith("/>", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static bool IsProcessingInstruction(string tag) {
+        private static bool IsProcessingInstruction(string tag)
+        {
             return (tag.StartsWith("<?", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static bool IsCharacterDataAndMarkup(string tag) {
+        private static bool IsCharacterDataAndMarkup(string tag)
+        {
             return (tag.StartsWith("<![", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static bool IsXmppStreamOpen(string tag) {
+        private static bool IsXmppStreamOpen(string tag)
+        {
             return tag.StartsWith(XmppCodes.XmppStreamOpen, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -138,7 +150,8 @@ namespace Hanoi {
         ///   Disposes the specified disposing.
         /// </summary>
         /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
-        private void Dispose(bool disposing) {
+        private void Dispose(bool disposing)
+        {
             if (!isDisposed)
             {
                 if (disposing)
@@ -173,7 +186,8 @@ namespace Hanoi {
         ///   Reads the next node.
         /// </summary>
         /// <returns></returns>
-        public XmppStreamElement ReadNextNode() {
+        public XmppStreamElement ReadNextNode()
+        {
             if (node.Length == 0)
             {
                 depth = -1;
@@ -260,7 +274,8 @@ namespace Hanoi {
             return result;
         }
 
-        private bool ReadTag() {
+        private bool ReadTag()
+        {
             SkipWhiteSpace();
 
             int next = Peek();
@@ -288,7 +303,8 @@ namespace Hanoi {
             }
         }
 
-        private void SkipWhiteSpace() {
+        private void SkipWhiteSpace()
+        {
             while (true)
             {
                 int next = Peek();
@@ -296,7 +312,7 @@ namespace Hanoi {
                 {
                     break;
                 }
-                else if (Char.IsWhiteSpace((char) next))
+                else if (Char.IsWhiteSpace((char)next))
                 {
                     Read();
                 }
@@ -307,7 +323,8 @@ namespace Hanoi {
             }
         }
 
-        private bool ReadText() {
+        private bool ReadText()
+        {
             while (true)
             {
                 if (Peek() == -1)
@@ -328,12 +345,14 @@ namespace Hanoi {
             return true;
         }
 
-        private int Peek() {
+        private int Peek()
+        {
             return reader.PeekChar();
         }
 
-        private char Read() {
+        private char Read()
+        {
             return reader.ReadChar();
         }
-        }
+    }
 }

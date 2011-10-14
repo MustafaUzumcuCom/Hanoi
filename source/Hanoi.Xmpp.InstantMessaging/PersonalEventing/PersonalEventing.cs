@@ -49,7 +49,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         private IDisposable sessionStateSubscription;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppServiceDiscovery" /> class.
+        ///   Initializes a new instance of the <see cref = "T:ServiceDiscovery" /> class.
         /// </summary>
         /// <param name = "session">The session.</param>
         internal PersonalEventing(Session session)
@@ -80,7 +80,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         /// </summary>
         public bool SupportsUserTune
         {
-            get { return SupportsFeature(XmppFeatures.UserTune); }
+            get { return SupportsFeature(InstantMessaging.Features.UserTune); }
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         /// </summary>
         public bool SupportsUserMood
         {
-            get { return SupportsFeature(XmppFeatures.UserMood); }
+            get { return SupportsFeature(InstantMessaging.Features.UserMood); }
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             var query = new ServiceItemQuery();
             var iq = new IQ();
 
-            iq.ID = XmppIdentifierGenerator.Generate();
+            iq.ID = IdentifierGenerator.Generate();
             iq.Type = IQType.Get;
             iq.From = session.UserId;
             iq.To = session.UserId.BareIdentifier;

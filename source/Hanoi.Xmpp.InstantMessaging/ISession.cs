@@ -33,7 +33,6 @@ using Hanoi.Serialization.Extensions.UserMood;
 using Hanoi.Xmpp.InstantMessaging.EntityCaps;
 using Hanoi.Xmpp.InstantMessaging.MultiUserChat;
 using Hanoi.Xmpp.InstantMessaging.PersonalEventing;
-using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
@@ -52,17 +51,17 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         Roster Roster { get; }
 
-        XmppServiceDiscovery ServiceDiscovery { get; }
+        ServiceDiscovery.ServiceDiscovery ServiceDiscovery { get; }
 
         SessionState State { get; }
 
         Jid UserId { get; }
 
-        XmppActivity Activity { get; }
+        Activity Activity { get; }
 
         AvatarStorage AvatarStorage { get; }
 
-        XmppSessionEntityCapabilities Capabilities { get; }
+        SessionEntityCapabilities Capabilities { get; }
         event EventHandler<AuthenticationFailiureEventArgs> AuthenticationFailed;
 
         ISession Open(string connectionString);
@@ -71,17 +70,17 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         ISession PublishDisplayName(string displayName);
 
-        ISession PublishMood(XmppUserMoodEvent moodEvent);
+        ISession PublishMood(UserMoodEvent moodEvent);
 
         ISession PublishMood(MoodType mood, string description);
 
-        ISession PublishTune(XmppUserTuneEvent tuneEvent);
+        ISession PublishTune(UserTuneEvent tuneEvent);
 
-        ISession SetPresence(XmppPresenceState newPresence);
+        ISession SetPresence(PresenceState newPresence);
 
-        ISession SetPresence(XmppPresenceState newPresence, string status);
+        ISession SetPresence(PresenceState newPresence, string status);
 
-        ISession SetPresence(XmppPresenceState newPresence, string status, int priority);
+        ISession SetPresence(PresenceState newPresence, string status, int priority);
 
         ISession SetUnavailable();
 
@@ -89,13 +88,13 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         ISession Close();
 
-        XmppChat CreateChat(Jid contactId);
+        Chat CreateChat(Jid contactId);
 
-        XmppChat CreateChat(string contactId);
+        Chat CreateChat(string contactId);
 
-        XmppChatRoom EnterChatRoom();
+        ChatRoom EnterChatRoom();
 
-        XmppChatRoom EnterChatRoom(string chatRoomName);
+        ChatRoom EnterChatRoom(string chatRoomName);
 
         bool HasOpenChat(Jid contactId);
 

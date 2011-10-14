@@ -184,7 +184,7 @@ namespace Hanoi
         ///   Gets the password specified in the Connection string.
         /// </summary>
         /// <remarks>
-        ///   Needed for <see cref = "XmppAuthenticator" /> implementations.
+        ///   Needed for <see cref = "Authenticator" /> implementations.
         /// </remarks>
         internal string UserPassword
         {
@@ -261,7 +261,7 @@ namespace Hanoi
         /// <summary>
         ///   Occurs when a new message received from the XMPP server has no handler.
         /// </summary>
-        internal event EventHandler<XmppUnhandledMessageEventArgs> UnhandledMessage;
+        internal event EventHandler<UnhandledMessageEventArgs> UnhandledMessage;
 
         /// <summary>
         ///   Occurs when a sasl failiure occurs.
@@ -572,7 +572,7 @@ namespace Hanoi
                 }
                 else if (UnhandledMessage != null)
                 {
-                    UnhandledMessage(this, new XmppUnhandledMessageEventArgs(message));
+                    UnhandledMessage(this, new UnhandledMessageEventArgs(message));
                 }
             }
 
@@ -746,7 +746,7 @@ namespace Hanoi
 
         private bool Authenticate()
         {
-            XmppAuthenticator authenticator = null;
+            Authenticator authenticator = null;
             bool result = false;
 
             try
@@ -808,7 +808,7 @@ namespace Hanoi
                 var iq = new IQ
                 {
                     Type = IQType.Set,
-                    ID = XmppIdentifierGenerator.Generate()
+                    ID = IdentifierGenerator.Generate()
                 };
 
                 iq.Items.Add(bind);
@@ -827,7 +827,7 @@ namespace Hanoi
                              {
                                  Type = IQType.Set,
                                  To = _connectionString.HostName,
-                                 ID = XmppIdentifierGenerator.Generate()
+                                 ID = IdentifierGenerator.Generate()
                              };
 
 
@@ -873,24 +873,24 @@ namespace Hanoi
         }
 
         /// <summary>
-        ///   Creates an instance of the <see cref = "XmppAuthenticator" /> used by the connection.
+        ///   Creates an instance of the <see cref = "Authenticator" /> used by the connection.
         /// </summary>
         /// <returns></returns>
-        private XmppAuthenticator CreateAuthenticator()
+        private Authenticator CreateAuthenticator()
         {
-            XmppAuthenticator authenticator = null;
+            Authenticator authenticator = null;
 
             if (SupportsFeature(StreamFeatures.SaslDigestMD5))
             {
-                authenticator = new XmppSaslDigestAuthenticator(this);
+                authenticator = new SaslDigestAuthenticator(this);
             }
             else if (SupportsFeature(StreamFeatures.XGoogleToken))
             {
-                authenticator = new XmppSaslXGoogleTokenAuthenticator(this);
+                authenticator = new SaslXGoogleTokenAuthenticator(this);
             }
             else if (SupportsFeature(StreamFeatures.SaslPlain))
             {
-                authenticator = new XmppSaslPlainAuthenticator(this);
+                authenticator = new SaslPlainAuthenticator(this);
             }
 
             return authenticator;
