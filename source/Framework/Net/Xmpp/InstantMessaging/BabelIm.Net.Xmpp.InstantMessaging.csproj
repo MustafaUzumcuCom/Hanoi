@@ -136,13 +136,13 @@
     <Compile Include="XmppSessionState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\BabelIm.Net.Xmpp.Core.csproj">
+    <ProjectReference Include="..\Core\Hanoi.Xmpp.csproj">
       <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
-      <Name>BabelIm.Net.Xmpp.Core</Name>
+      <Name>Hanoi.Xmpp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Serialization\BabelIm.Net.Xmpp.Serialization.csproj">
+    <ProjectReference Include="..\Serialization\Hanoi.Xmpp.Serialization.csproj">
       <Project>{9E9572F4-1B90-456E-8EF0-D404D6FD3631}</Project>
-      <Name>BabelIm.Net.Xmpp.Serialization</Name>
+      <Name>Hanoi.Xmpp.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

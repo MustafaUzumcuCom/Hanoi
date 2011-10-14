@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <serializers>
   <serializer group="Core" elementname="stream:stream">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Streams.Stream, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Streams.Stream, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix>stream</prefix>
@@ -9,7 +9,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="stream:features">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Streams.StreamFeatures, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Streams.StreamFeatures, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix>stream</prefix>
@@ -17,7 +17,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="stream:error">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Streams.StreamError, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Streams.StreamError, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix>stream</prefix>
@@ -25,7 +25,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="starttls">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Tls.StartTls, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Tls.StartTls, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -33,7 +33,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="proceed">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Tls.Proceed, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Tls.Proceed, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -41,7 +41,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="bind">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.ResourceBinding.Bind, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.ResourceBinding.Bind, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -49,7 +49,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="abort">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Abort, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Sasl.Abort, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -57,7 +57,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="auth">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Auth, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Sasl.Auth, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -65,7 +65,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="challenge">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Challenge, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Sasl.Challenge, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -73,7 +73,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="response">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Response, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Sasl.Response, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -81,7 +81,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="success">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Success, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Sasl.Success, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -89,7 +89,7 @@
     </namespace>
   </serializer>
   <serializer group="Core" elementname="failure">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Core.Sasl.Failure, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Core.Sasl.Failure, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -97,7 +97,7 @@
     </namespace>
   </serializer>
   <serializer group="IM" elementname="iq">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.IQ, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.InstantMessaging.Client.IQ, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -105,7 +105,7 @@
     </namespace>
   </serializer>
   <serializer group="IM" elementname="message">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Client.Message, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.InstantMessaging.Client.Message, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -113,7 +113,7 @@
     </namespace>
   </serializer>
   <serializer group="IM" elementname="presence">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Presence.Presence, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Presence, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -122,14 +122,14 @@
   </serializer>
   <serializer group="IM" elementname="query">
     <schema></schema>
-    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Roster.RosterQuery, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.InstantMessaging.Roster.RosterQuery, Hanoi.Xmpp.Serialization</serializertype>
     <namespace>
       <prefix></prefix>
       <namespace>jabber:iq:roster</namespace>
     </namespace>
   </serializer>
   <serializer group="IM" elementname="register">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.InstantMessaging.Register.RegisterIQ, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.InstantMessaging.Register.RegisterIQ, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>
@@ -137,7 +137,7 @@
     </namespace>
   </serializer>
   <serializer group="Bosh" elementname="body">
-    <serializertype>BabelIm.Net.Xmpp.Serialization.Extensions.Bosh.HttpBindBody, BabelIm.Net.Xmpp.Serialization</serializertype>
+    <serializertype>Hanoi.Xmpp.Serialization.Extensions.Bosh.HttpBindBody, Hanoi.Xmpp.Serialization</serializertype>
     <schema></schema>
     <namespace>
       <prefix></prefix>

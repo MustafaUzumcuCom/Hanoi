@@ -134,9 +134,9 @@
     <Compile Include="XmppEventMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Serialization\BabelIm.Net.Xmpp.Serialization.csproj">
+    <ProjectReference Include="..\Serialization\Hanoi.Xmpp.Serialization.csproj">
       <Project>{9E9572F4-1B90-456E-8EF0-D404D6FD3631}</Project>
-      <Name>BabelIm.Net.Xmpp.Serialization</Name>
+      <Name>Hanoi.Xmpp.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
