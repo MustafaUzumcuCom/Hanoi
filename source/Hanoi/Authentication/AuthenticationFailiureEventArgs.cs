@@ -27,56 +27,28 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using Hanoi.Serialization.Extensions.PubSub;
-using Hanoi.Serialization.InstantMessaging.Client;
+using System;
 
-namespace Hanoi {
+namespace Hanoi.Authentication
+{
     /// <summary>
-    ///   Pub sub event message
+    ///   EventArgs for the <see cref = "Hanoi.Xmpp.XmppConnection.AuthenticationFailiure" /> event.
     /// </summary>
-    public sealed class XmppEventMessage {
-        private readonly PubSubEvent eventMessage;
-        private readonly XmppJid from;
-        private readonly string identifier;
-        private readonly XmppJid to;
-
+    public sealed class AuthenticationFailiureEventArgs : EventArgs
+    {
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppEventMessage" /> class.
+        ///   Initializes a new instance of the <see cref = "AuthenticationFailiureEventArgs" /> class.
         /// </summary>
-        /// <param name = "message">The event.</param>
-        internal XmppEventMessage(Message message) {
-            identifier = message.ID;
-            @from = message.From;
-            to = message.To;
-            eventMessage = (PubSubEvent) message.Items[0];
+        /// <param name = "message">The authentication failiure message.</param>
+        public AuthenticationFailiureEventArgs(string message)
+        {
+            Message = message;
         }
 
         /// <summary>
-        ///   Gets the XMPP Event Message ID
+        ///   Gets the authentication failiure message.
         /// </summary>
-        public string Identifier {
-            get { return identifier; }
-        }
-
-        /// <summary>
-        ///   Gets the Event Message source JID
-        /// </summary>
-        public XmppJid From {
-            get { return @from; }
-        }
-
-        /// <summary>
-        ///   Gets the Event Message target JID
-        /// </summary>
-        public XmppJid To {
-            get { return to; }
-        }
-
-        /// <summary>
-        ///   Gets the XMPP Event Message data
-        /// </summary>
-        public PubSubEvent Event {
-            get { return eventMessage; }
-        }
+        /// <value>The message.</value>
+        public string Message { get; private set; }
     }
 }

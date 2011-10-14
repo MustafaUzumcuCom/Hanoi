@@ -51,8 +51,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         private readonly XmppContact contact;
         private readonly List<string> pendingMessages;
         private readonly XmppContactPresence presence;
-        private readonly XmppJid resourceId;
-        private readonly XmppSession session;
+        private readonly Jid resourceId;
+        private readonly Session session;
         private Stream avatar;
         private string avatarHash;
         private XmppClientCapabilities capabilities;
@@ -64,7 +64,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Initializes a new instance of the <see cref = "XmppContactResource" /> class.
         /// </summary>
-        internal XmppContactResource(XmppSession session, XmppContact contact, XmppJid resourceId) {
+        internal XmppContactResource(Session session, XmppContact contact, Jid resourceId) {
             this.session = session;
             this.contact = contact;
             this.resourceId = resourceId;
@@ -87,7 +87,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets or sets the resource id.
         /// </summary>
         /// <value>The resource id.</value>
-        public XmppJid ResourceId {
+        public Jid ResourceId {
             get { return resourceId; }
         }
 
@@ -132,7 +132,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
             return resourceId.ToString();
         }
 
-        internal void Update(Presence presence) {
+        internal void Update(Serialization.InstantMessaging.Presence.Presence presence) {
             Presence.Update(presence);
 
             if (IsDefaultResource && Presence.PresenceStatus == XmppPresenceState.Offline)
@@ -266,7 +266,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         private void SubscribeToSessionState() {
             sessionStateSubscription = session
                 .StateChanged
-                .Where(s => s == XmppSessionState.LoggingOut)
+                .Where(s => s == SessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>

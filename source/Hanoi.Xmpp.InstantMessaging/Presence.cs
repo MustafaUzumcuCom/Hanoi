@@ -33,15 +33,15 @@ namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
     ///   Presence handling
     /// </summary>
-    public sealed class XmppPresence {
-        private readonly XmppSession session;
+    public sealed class Presence {
+        private readonly Session session;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "XmppPresence" /> class using
+        ///   Initializes a new instance of the <see cref = "Presence" /> class using
         ///   the given session.
         /// </summary>
         /// <param name = "session"></param>
-        internal XmppPresence(XmppSession session) {
+        internal Presence(Session session) {
             this.session = session;
         }
 
@@ -49,8 +49,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Gets the presence of the given user.
         /// </summary>
         /// <param name = "targetJid">User JID</param>
-        public void GetPresence(XmppJid targetJid) {
-            var presence = new Presence
+        public void GetPresence(Jid targetJid) {
+            var presence = new Serialization.InstantMessaging.Presence.Presence
                                {
                                    Id = XmppIdentifierGenerator.Generate(),
                                    Type = PresenceType.Probe,
@@ -72,8 +72,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Sets the initial presence against the given user.
         /// </summary>
         /// <param name = "target">JID of the target user.</param>
-        public void SetInitialPresence(XmppJid target) {
-            var presence = new Presence();
+        public void SetInitialPresence(Jid target) {
+            var presence = new Serialization.InstantMessaging.Presence.Presence();
 
             if (target != null && target.ToString().Length > 0)
             {
@@ -114,7 +114,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <param name = "statusMessage"></param>
         /// <param name = "priority"></param>
         public void SetPresence(XmppPresenceState showAs, string statusMessage, int priority) {
-            var presence = new Presence();
+            var presence = new Serialization.InstantMessaging.Presence.Presence();
             var status = new Status();
 
             status.Value = statusMessage;
@@ -130,7 +130,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Sets the presence as Unavailable
         /// </summary>
         public void SetUnavailable() {
-            var presence = new Presence
+            var presence = new Serialization.InstantMessaging.Presence.Presence
                                {
                                    Type = PresenceType.Unavailable
                                };
@@ -142,8 +142,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Request subscription to the given user
         /// </summary>
         /// <param name = "contactId"></param>
-        public void RequestSubscription(XmppJid jid) {
-            var presence = new Presence
+        public void RequestSubscription(Jid jid) {
+            var presence = new Serialization.InstantMessaging.Presence.Presence
                                {
                                    Type = PresenceType.Subscribe,
                                    To = jid
@@ -156,8 +156,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Subscribes to presence updates of the current user
         /// </summary>
         /// <param name = "jid"></param>
-        public void Subscribed(XmppJid jid) {
-            var presence = new Presence
+        public void Subscribed(Jid jid) {
+            var presence = new Serialization.InstantMessaging.Presence.Presence
                                {
                                    Type = PresenceType.Subscribed,
                                    To = jid
@@ -170,8 +170,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Subscribes to presence updates of the current user
         /// </summary>
         /// <param name = "jid"></param>
-        public void Unsuscribed(XmppJid jid) {
-            var presence = new Presence
+        public void Unsuscribed(Jid jid) {
+            var presence = new Serialization.InstantMessaging.Presence.Presence
                                {
                                    Type = PresenceType.Unsubscribed,
                                    To = jid

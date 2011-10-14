@@ -36,7 +36,7 @@ namespace Hanoi {
     /// <summary>
     ///   Represents a Connection String
     /// </summary>
-    public sealed class XmppConnectionString {
+    public sealed class ConnectionString {
         /// <summary>
         ///   Synonyms list
         /// </summary>
@@ -45,10 +45,10 @@ namespace Hanoi {
         private readonly Dictionary<string, object> options;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppConnectionString" /> class.
+        ///   Initializes a new instance of the <see cref = "T:ConnectionString" /> class.
         /// </summary>
         /// <param name = "connectionString">The connection string.</param>
-        public XmppConnectionString(string connectionString) {
+        public ConnectionString(string connectionString) {
             options = new Dictionary<string, object>();
             Load(connectionString);
         }

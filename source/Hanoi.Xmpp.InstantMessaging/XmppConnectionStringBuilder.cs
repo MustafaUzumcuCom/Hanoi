@@ -227,9 +227,9 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 {
                     values[0] = values[0].ToLower(CultureInfo.CurrentUICulture);
 
-                    if (XmppConnectionString.IsSynonym(values[0]))
+                    if (Hanoi.ConnectionString.IsSynonym(values[0]))
                     {
-                        options[XmppConnectionString.GetSynonym(values[0])] = values[1].Trim();
+                        options[Hanoi.ConnectionString.GetSynonym(values[0])] = values[1].Trim();
                     }
                 }
             }

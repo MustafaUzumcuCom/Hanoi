@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (c) 2008 - 2010, Carlos Guzmán Álvarez
+    Copyright (c) 2007 - 2010, Carlos Guzmán Álvarez
 
     All rights reserved.
 
@@ -29,35 +29,32 @@
 
 using System;
 
-namespace Hanoi.Xmpp.InstantMessaging {
+namespace Hanoi
+{
     /// <summary>
-    ///   Session states
+    ///   Describes the current state of the connection to a XMPP Server.
     /// </summary>
     [Serializable]
-    public enum XmppSessionState {
+    public enum ConnectionState
+    {
         /// <summary>
-        ///   Loggin out
+        ///   The connection is being closed.
         /// </summary>
-        LoggingOut,
+        Closing,
 
         /// <summary>
-        ///   Logged out
+        ///   The connection is closed.
         /// </summary>
-        LoggedOut,
+        Closed,
 
         /// <summary>
-        ///   Logging in
+        ///   The connection is being opened
         /// </summary>
-        LoggingIn,
+        Opening,
 
         /// <summary>
-        ///   Logged in
+        ///   The connection is open and the authentication has been done correctly.
         /// </summary>
-        LoggedIn,
-
-        /// <summary>
-        ///   Error
-        /// </summary>
-        Error,
+        Open,
     }
 }

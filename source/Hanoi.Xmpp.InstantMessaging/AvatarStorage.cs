@@ -38,7 +38,7 @@ using System.Xml.Serialization;
 
 namespace Hanoi.Xmpp.InstantMessaging {
     /// <summary>
-    ///   <see cref = "XmppSession" /> configuration
+    ///   <see cref = "Session" /> configuration
     /// </summary>
     [Serializable]
     [XmlTypeAttribute(Namespace = "")]

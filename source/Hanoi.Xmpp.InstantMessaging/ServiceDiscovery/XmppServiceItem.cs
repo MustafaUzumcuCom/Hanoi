@@ -33,7 +33,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     /// </summary>
     public sealed class XmppServiceItem
         : XmppServiceDiscoveryObject {
-        internal XmppServiceItem(XmppSession session, string identifier)
+        internal XmppServiceItem(Session session, string identifier)
             : base(session, identifier) {
         }
         }

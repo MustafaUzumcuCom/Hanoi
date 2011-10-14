@@ -44,16 +44,16 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
     public sealed class XmppActivity : IEnumerable<XmppEvent>, INotifyCollectionChanged
     {
         private readonly ObservableCollection<XmppEvent> activities;
-        private readonly XmppSession session;
+        private readonly Session session;
 
         private IDisposable eventMessageSubscription;
         private IDisposable messageSubscription;
         private IDisposable sessionStateSubscription;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "XmppSession" /> class
+        ///   Initializes a new instance of the <see cref = "Session" /> class
         /// </summary>
-        internal XmppActivity(XmppSession session)
+        internal XmppActivity(Session session)
         {
             this.session = session;
             activities = new ObservableCollection<XmppEvent>();
@@ -105,16 +105,16 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         {
             sessionStateSubscription = session
                 .StateChanged
-                .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
+                .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>
                     {
-                        if (newState == XmppSessionState.LoggingOut)
+                        if (newState == SessionState.LoggingOut)
                         {
                             Subscribe();
                         }
-                        else if (newState == XmppSessionState.LoggingOut)
+                        else if (newState == SessionState.LoggingOut)
                         {
                             Clear();
                             Unsubscribe();
@@ -157,7 +157,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             activities.CollectionChanged -= OnCollectionChanged;
         }
 
-        private void OnActivityMessage(XmppMessage message)
+        private void OnActivityMessage(Message message)
         {
             switch (message.Type)
             {
@@ -171,7 +171,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             }
         }
 
-        private void OnEventMessage(XmppEventMessage message)
+        private void OnEventMessage(EventMessage message)
         {
             // Add the activity based on the source event
             if (XmppEvent.IsActivityEvent(message.Event))

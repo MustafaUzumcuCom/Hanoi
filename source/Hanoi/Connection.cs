@@ -45,93 +45,103 @@ using Hanoi.Serialization.InstantMessaging.Register;
 using Hanoi.Serialization.InstantMessaging.Roster;
 using Hanoi.Transports;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   Represents a connection to a XMPP server
     /// </summary>
-    public sealed class XmppConnection
-        : IDisposable {
-        private readonly Subject<XmppEventMessage> onEventMessage = new Subject<XmppEventMessage>();
-        private readonly Subject<IQ> onServiceDiscoveryMessage = new Subject<IQ>();
-        private AutoResetEvent bindResourceEvent;
-        private XmppConnectionString connectionString;
-        private AutoResetEvent initializedStreamEvent;
-        private bool isDisposed;
-        private Subject<IQ> onInfoQueryMessage = new Subject<IQ>();
-        private Subject<XmppMessage> onMessageReceived = new Subject<XmppMessage>();
-        private Subject<Presence> onPresenceMessage = new Subject<Presence>();
-        private Subject<RosterQuery> onRosterMessage = new Subject<RosterQuery>();
-        private Subject<IQ> onVCardMessage = new Subject<IQ>();
-        private XmppConnectionState state;
-        private XmppStreamFeatures streamFeatures;
-        private AutoResetEvent streamFeaturesEvent;
-        private ITransport transport;
+    public sealed class Connection : IDisposable
+    {
+        private readonly Subject<EventMessage> _onEventMessage = new Subject<EventMessage>();
+        private readonly Subject<IQ> _onServiceDiscoveryMessage = new Subject<IQ>();
+        private ConnectionString _connectionString;
+        private AutoResetEvent _bindResourceEvent;
+        private AutoResetEvent _initializedStreamEvent;
+        private bool _isDisposed;
+        private Subject<IQ> _onInfoQueryMessage = new Subject<IQ>();
+        private Subject<Message> _onMessageReceived = new Subject<Message>();
+        private Subject<Presence> _onPresenceMessage = new Subject<Presence>();
+        private Subject<RosterQuery> _onRosterMessage = new Subject<RosterQuery>();
+        private Subject<IQ> _onVCardMessage = new Subject<IQ>();
+        private ConnectionState _state;
+        private StreamFeatures _streamFeatures;
+        private AutoResetEvent _streamFeaturesEvent;
+        private ITransport _transport;
 
-        private IDisposable transportMessageSubscription;
-        private IDisposable transportStreamClosedSubscription;
-        private IDisposable transportStreamInitializedSubscription;
-        private XmppJid userId;
+        private IDisposable _transportMessageSubscription;
+        private IDisposable _transportStreamClosedSubscription;
+        private IDisposable _transportStreamInitializedSubscription;
+        private Jid _userId;
 
         /// <summary>
         ///   Occurs when a new message is received.
         /// </summary>
-        public IObservable<XmppMessage> OnMessageReceived {
-            get { return onMessageReceived.AsObservable(); }
+        public IObservable<Message> OnMessageReceived
+        {
+            get { return _onMessageReceived.AsObservable(); }
         }
 
         /// <summary>
         ///   Occurs when an info/query message is recevied
         /// </summary>
-        public IObservable<IQ> OnInfoQueryMessage {
-            get { return onInfoQueryMessage.AsObservable(); }
+        public IObservable<IQ> OnInfoQueryMessage
+        {
+            get { return _onInfoQueryMessage.AsObservable(); }
         }
 
         /// <summary>
         ///   Occurs when a Service Discovery message is received from XMPP Server
         /// </summary>
-        public IObservable<IQ> OnServiceDiscoveryMessage {
-            get { return onServiceDiscoveryMessage.AsObservable(); }
+        public IObservable<IQ> OnServiceDiscoveryMessage
+        {
+            get { return _onServiceDiscoveryMessage.AsObservable(); }
         }
 
         /// <summary>
         ///   Occurs when an vCard message is received from the XMPP Server
         /// </summary>
-        public IObservable<IQ> OnVCardMessage {
-            get { return onVCardMessage.AsObservable(); }
+        public IObservable<IQ> OnVCardMessage
+        {
+            get { return _onVCardMessage.AsObservable(); }
         }
 
         /// <summary>
         ///   Occurs when a roster notification message is recevied
         /// </summary>
-        public IObservable<RosterQuery> OnRosterMessage {
-            get { return onRosterMessage.AsObservable(); }
+        public IObservable<RosterQuery> OnRosterMessage
+        {
+            get { return _onRosterMessage.AsObservable(); }
         }
 
         /// <summary>
         ///   Occurs when a presence message is received
         /// </summary>
-        public IObservable<Presence> OnPresenceMessage {
-            get { return onPresenceMessage.AsObservable(); }
+        public IObservable<Presence> OnPresenceMessage
+        {
+            get { return _onPresenceMessage.AsObservable(); }
         }
 
         /// <summary>
         ///   Occurs when a event message ( pub-sub event ) is received
         /// </summary>
-        public IObservable<XmppEventMessage> OnEventMessage {
-            get { return onEventMessage.AsObservable(); }
+        public IObservable<EventMessage> OnEventMessage
+        {
+            get { return _onEventMessage.AsObservable(); }
         }
 
         /// <summary>
         ///   Gets the connection string used on authentication.
         /// </summary>
-        public string ConnectionString {
-            get {
-                if (connectionString == null)
+        public string ConnectionString
+        {
+            get
+            {
+                if (_connectionString == null)
                 {
                     return null;
                 }
 
-                return connectionString.ToString();
+                return _connectionString.ToString();
             }
         }
 
@@ -141,29 +151,33 @@ namespace Hanoi {
         /// <exception cref = "InvalidOperationException">
         ///   The connection is not open.
         /// </exception>
-        public XmppConnectionState State {
-            get { return state; }
+        public ConnectionState State
+        {
+            get { return _state; }
         }
 
         /// <summary>
         ///   Gets the connection Host name
         /// </summary>
-        public string HostName {
-            get {
-                if (transport == null)
+        public string HostName
+        {
+            get
+            {
+                if (_transport == null)
                 {
                     return String.Empty;
                 }
 
-                return transport.HostName;
+                return _transport.HostName;
             }
         }
 
         /// <summary>
         ///   Gets the User ID specified in the Connection String.
         /// </summary>
-        public XmppJid UserId {
-            get { return userId; }
+        public Jid UserId
+        {
+            get { return _userId; }
         }
 
         /// <summary>
@@ -172,14 +186,16 @@ namespace Hanoi {
         /// <remarks>
         ///   Needed for <see cref = "XmppAuthenticator" /> implementations.
         /// </remarks>
-        internal string UserPassword {
-            get {
-                if (connectionString == null)
+        internal string UserPassword
+        {
+            get
+            {
+                if (_connectionString == null)
                 {
                     return String.Empty;
                 }
 
-                return connectionString.UserPassword;
+                return _connectionString.UserPassword;
             }
         }
 
@@ -188,7 +204,8 @@ namespace Hanoi {
         /// <summary>
         ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
 
             // This object will be cleaned up by the Dispose method.
@@ -206,12 +223,13 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "message">The XMPP Message instance</param>
         /// <returns><b>true</b> if it's an error message; otherwise <b>false</b></returns>
-        private static bool IsErrorMessage(object message) {
+        private static bool IsErrorMessage(object message)
+        {
             bool isError = false;
 
             if (message is IQ)
             {
-                isError = (((IQ) message).Type == IQType.Error);
+                isError = (((IQ)message).Type == IQType.Error);
             }
             else if (message is StreamError)
             {
@@ -228,7 +246,7 @@ namespace Hanoi {
         /// <summary>
         ///   Occurs when the authentication fails
         /// </summary>
-        public event EventHandler<XmppAuthenticationFailiureEventArgs> AuthenticationFailiure;
+        public event EventHandler<AuthenticationFailiureEventArgs> AuthenticationFailiure;
 
         /// <summary>
         ///   Occurs before the connection to the XMPP Server is closed.
@@ -248,13 +266,14 @@ namespace Hanoi {
         /// <summary>
         ///   Occurs when a sasl failiure occurs.
         /// </summary>
-        internal event EventHandler<XmppAuthenticationFailiureEventArgs> AuthenticationError;
+        internal event EventHandler<AuthenticationFailiureEventArgs> AuthenticationError;
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:Hanoi.XmppConnection" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.Connection" /> is reclaimed by garbage collection.
         /// </summary>
-        ~XmppConnection() {
+        ~Connection()
+        {
             // Do not re-create Dispose clean-up code here.
             // Calling Dispose(false) is optimal in terms of
             // readability and maintainability.
@@ -265,8 +284,9 @@ namespace Hanoi {
         ///   Disposes the specified disposing.
         /// </summary>
         /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
-        private void Dispose(bool disposing) {
-            if (!isDisposed)
+        private void Dispose(bool disposing)
+        {
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -278,22 +298,23 @@ namespace Hanoi {
                 // unmanaged resources here.
                 // If disposing is false, 
                 // only the following code is executed.
-                onMessageReceived = null;
-                onInfoQueryMessage = null;
-                onRosterMessage = null;
-                onPresenceMessage = null;
-                onVCardMessage = null;
+                _onMessageReceived = null;
+                _onInfoQueryMessage = null;
+                _onRosterMessage = null;
+                _onPresenceMessage = null;
+                _onVCardMessage = null;
             }
 
-            isDisposed = true;
+            _isDisposed = true;
         }
 
         /// <summary>
         ///   Opens the connection
         /// </summary>
         /// <param name = "connectionString">The connection string used for authentication.</param>
-        public void Open(string connectionString) {
-            if (state == XmppConnectionState.Open)
+        public void Open(string connectionString)
+        {
+            if (_state == ConnectionState.Open)
             {
                 throw new XmppException("Connection must be closed first.");
             }
@@ -304,32 +325,32 @@ namespace Hanoi {
                 Initialize();
 
                 // Build the connection string
-                this.connectionString = new XmppConnectionString(connectionString);
-                userId = this.connectionString.UserId;
+                _connectionString = new ConnectionString(connectionString);
+                _userId = _connectionString.UserId;
 
                 // Connect to the server
-                if (this.connectionString.UseHttpBinding)
+                if (_connectionString.UseHttpBinding)
                 {
-                    transport = new HttpTransport();
+                    _transport = new HttpTransport();
                 }
                 else
                 {
-                    transport = new TcpTransport();
+                    _transport = new TcpTransport();
                 }
 
-                transportMessageSubscription = transport
+                _transportMessageSubscription = _transport
                     .OnMessageReceived
-                    .Subscribe(message => OnTransportMessageReceived(message));
+                    .Subscribe(OnTransportMessageReceived);
 
-                transportStreamInitializedSubscription = transport
+                _transportStreamInitializedSubscription = _transport
                     .OnXmppStreamInitialized
-                    .Subscribe(message => OnTransportXmppStreamInitialized(message));
+                    .Subscribe(message => OnTransportXmppStreamInitialized());
 
-                transportStreamClosedSubscription = transport
+                _transportStreamClosedSubscription = _transport
                     .OnXmppStreamClosed
-                    .Subscribe(message => OnTransportXmppStreamClosed(message));
+                    .Subscribe(OnTransportXmppStreamClosed);
 
-                transport.Open(this.connectionString);
+                _transport.Open(_connectionString);
 
                 // Initialize XMPP Stream
                 InitializeXmppStream();
@@ -337,14 +358,14 @@ namespace Hanoi {
                 // Wait until we receive the Stream features
                 WaitForStreamFeatures();
 
-                if (transport is ISecureTransport)
+                if (_transport is ISecureTransport)
                 {
-                    if (this.connectionString.PortNumber != 443 &&
-                        this.connectionString.PortNumber != 5223)
+                    if (_connectionString.PortNumber != 443 &&
+                        _connectionString.PortNumber != 5223)
                     {
-                        if (SupportsFeature(XmppStreamFeatures.SecureConnection))
+                        if (SupportsFeature(StreamFeatures.SecureConnection))
                         {
-                            ((ISecureTransport) transport).OpenSecureConnection();
+                            ((ISecureTransport)_transport).OpenSecureConnection();
 
                             // Wait until we receive the Stream features
                             WaitForStreamFeatures();
@@ -364,14 +385,14 @@ namespace Hanoi {
                     OpenSession();
 
                     // Update state
-                    state = XmppConnectionState.Open;
+                    _state = ConnectionState.Open;
                 }
             }
             catch (Exception ex)
             {
                 if (AuthenticationFailiure != null)
                 {
-                    AuthenticationFailiure(this, new XmppAuthenticationFailiureEventArgs(ex.ToString()));
+                    AuthenticationFailiure(this, new AuthenticationFailiureEventArgs(ex.ToString()));
                 }
 
                 Close();
@@ -381,97 +402,98 @@ namespace Hanoi {
         /// <summary>
         ///   Closes the connection
         /// </summary>
-        public void Close() {
-            if (state != XmppConnectionState.Closed)
+        public void Close()
+        {
+            if (_state == ConnectionState.Closed)
+                return;
+
+            if (ConnectionClosing != null)
             {
-                if (ConnectionClosing != null)
+                ConnectionClosing(this, new EventArgs());
+            }
+
+            try
+            {
+                _state = ConnectionState.Closing;
+
+                if (_transport != null)
                 {
-                    ConnectionClosing(this, new EventArgs());
+                    _transport.Close();
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (_initializedStreamEvent != null)
+                {
+                    _initializedStreamEvent.Set();
+                    _initializedStreamEvent = null;
                 }
 
-                try
+                if (_streamFeaturesEvent != null)
                 {
-                    state = XmppConnectionState.Closing;
-
-                    if (transport != null)
-                    {
-                        transport.Close();
-                    }
-                }
-                catch
-                {
-                }
-                finally
-                {
-                    if (initializedStreamEvent != null)
-                    {
-                        initializedStreamEvent.Set();
-                        initializedStreamEvent = null;
-                    }
-
-                    if (streamFeaturesEvent != null)
-                    {
-                        streamFeaturesEvent.Set();
-                        streamFeaturesEvent = null;
-                    }
-
-                    if (bindResourceEvent != null)
-                    {
-                        bindResourceEvent.Set();
-                        bindResourceEvent = null;
-                    }
-
-                    if (initializedStreamEvent != null)
-                    {
-                        initializedStreamEvent.Close();
-                        initializedStreamEvent = null;
-                    }
-
-                    if (streamFeaturesEvent != null)
-                    {
-                        streamFeaturesEvent.Close();
-                        streamFeaturesEvent = null;
-                    }
-
-                    if (bindResourceEvent != null)
-                    {
-                        bindResourceEvent.Close();
-                        bindResourceEvent = null;
-                    }
-
-                    if (transportMessageSubscription != null)
-                    {
-                        transportMessageSubscription.Dispose();
-                        transportMessageSubscription = null;
-                    }
-
-                    if (transportStreamInitializedSubscription != null)
-                    {
-                        transportStreamInitializedSubscription.Dispose();
-                        transportStreamInitializedSubscription = null;
-                    }
-
-                    if (transportStreamClosedSubscription != null)
-                    {
-                        transportStreamClosedSubscription.Dispose();
-                        transportStreamClosedSubscription = null;
-                    }
-
-                    if (transport != null)
-                    {
-                        transport = null;
-                    }
-
-                    streamFeatures = streamFeatures & (~streamFeatures);
-                    state = XmppConnectionState.Closed;
-                    connectionString = null;
-                    userId = null;
+                    _streamFeaturesEvent.Set();
+                    _streamFeaturesEvent = null;
                 }
 
-                if (ConnectionClosed != null)
+                if (_bindResourceEvent != null)
                 {
-                    ConnectionClosed(this, new EventArgs());
+                    _bindResourceEvent.Set();
+                    _bindResourceEvent = null;
                 }
+
+                if (_initializedStreamEvent != null)
+                {
+                    _initializedStreamEvent.Close();
+                    _initializedStreamEvent = null;
+                }
+
+                if (_streamFeaturesEvent != null)
+                {
+                    _streamFeaturesEvent.Close();
+                    _streamFeaturesEvent = null;
+                }
+
+                if (_bindResourceEvent != null)
+                {
+                    _bindResourceEvent.Close();
+                    _bindResourceEvent = null;
+                }
+
+                if (_transportMessageSubscription != null)
+                {
+                    _transportMessageSubscription.Dispose();
+                    _transportMessageSubscription = null;
+                }
+
+                if (_transportStreamInitializedSubscription != null)
+                {
+                    _transportStreamInitializedSubscription.Dispose();
+                    _transportStreamInitializedSubscription = null;
+                }
+
+                if (_transportStreamClosedSubscription != null)
+                {
+                    _transportStreamClosedSubscription.Dispose();
+                    _transportStreamClosedSubscription = null;
+                }
+
+                if (_transport != null)
+                {
+                    _transport = null;
+                }
+
+                _streamFeatures = _streamFeatures & (~_streamFeatures);
+                _state = ConnectionState.Closed;
+                _connectionString = null;
+                _userId = null;
+            }
+
+            if (ConnectionClosed != null)
+            {
+                ConnectionClosed(this, new EventArgs());
             }
         }
 
@@ -479,39 +501,44 @@ namespace Hanoi {
         ///   Sends a new message.
         /// </summary>
         /// <param name = "message">The message to be sent</param>
-        public void Send(object message) {
-            transport.Send(message);
+        public void Send(object message)
+        {
+            _transport.Send(message);
         }
 
         /// <summary>
         ///   Sends an XMPP message string to the XMPP Server
         /// </summary>
         /// <param name = "value"></param>
-        public void Send(string value) {
-            transport.Send(value);
+        public void Send(string value)
+        {
+            _transport.Send(value);
         }
 
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public void Send(byte[] buffer) {
-            transport.Send(buffer);
+        public void Send(byte[] buffer)
+        {
+            _transport.Send(buffer);
         }
 
         /// <summary>
         ///   Initializes the XMPP stream.
         /// </summary>
-        internal void InitializeXmppStream() {
-            transport.InitializeXmppStream();
+        internal void InitializeXmppStream()
+        {
+            _transport.InitializeXmppStream();
 
-            initializedStreamEvent.WaitOne();
+            _initializedStreamEvent.WaitOne();
         }
 
         /// <summary>
         ///   Waits until the stream:features message is received
         /// </summary>
-        internal void WaitForStreamFeatures() {
-            streamFeaturesEvent.WaitOne();
+        internal void WaitForStreamFeatures()
+        {
+            _streamFeaturesEvent.WaitOne();
         }
 
         /// <summary>
@@ -519,14 +546,15 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "message"></param>
         /// <returns></returns>
-        private AutoResetEvent ProcessMessageInstance(object message) {
+        private AutoResetEvent ProcessMessageInstance(object message)
+        {
             if (message != null)
             {
-                if (XmppConnection.IsErrorMessage(message))
+                if (IsErrorMessage(message))
                 {
                     return ProcessErrorMessage(message);
                 }
-                else if (message is IQ)
+                if (message is IQ)
                 {
                     ProcessQueryMessage(message as IQ);
                 }
@@ -534,13 +562,13 @@ namespace Hanoi {
                 {
                     ProcessPresenceMessage(message as Presence);
                 }
-                else if (message is Message)
+                else if (message is Serialization.InstantMessaging.Client.Message)
                 {
-                    ProcessMessage(message as Message);
+                    ProcessMessage(message as Serialization.InstantMessaging.Client.Message);
                 }
-                else if (message is StreamFeatures)
+                else if (message is Serialization.Core.Streams.StreamFeatures)
                 {
-                    ProcessStreamFeatures(message as StreamFeatures);
+                    ProcessStreamFeatures(message as Serialization.Core.Streams.StreamFeatures);
                 }
                 else if (UnhandledMessage != null)
                 {
@@ -555,23 +583,24 @@ namespace Hanoi {
         ///   Process an XMPP Error message
         /// </summary>
         /// <param name = "message"></param>
-        private AutoResetEvent ProcessErrorMessage(object message) {
+        private AutoResetEvent ProcessErrorMessage(object message)
+        {
             if (message is IQ)
             {
-                onInfoQueryMessage.OnNext(message as IQ);
+                _onInfoQueryMessage.OnNext(message as IQ);
             }
             else if (message is StreamError)
             {
-                throw new XmppException((StreamError) message);
+                throw new XmppException((StreamError)message);
             }
             else if (message is Failure)
             {
                 if (AuthenticationError != null)
                 {
                     string errorMessage = String.Format("SASL Authentication Failed ({0})",
-                                                        ((Failure) message).FailiureType);
+                                                        ((Failure)message).FailiureType);
 
-                    AuthenticationError(this, new XmppAuthenticationFailiureEventArgs(errorMessage));
+                    AuthenticationError(this, new AuthenticationFailiureEventArgs(errorMessage));
                 }
             }
             else if (message is PubSubErrorUnsupported)
@@ -586,7 +615,8 @@ namespace Hanoi {
         ///   Process an Stream Features XMPP message
         /// </summary>
         /// <param name = "features"></param>
-        private void ProcessStreamFeatures(StreamFeatures features) {
+        private void ProcessStreamFeatures(Serialization.Core.Streams.StreamFeatures features)
+        {
             if (features.Mechanisms != null && features.Mechanisms.SaslMechanisms.Count > 0)
             {
                 foreach (string mechanism in features.Mechanisms.SaslMechanisms)
@@ -594,15 +624,15 @@ namespace Hanoi {
                     switch (mechanism)
                     {
                         case XmppCodes.SaslDigestMD5Mechanism:
-                            streamFeatures |= XmppStreamFeatures.SaslDigestMD5;
+                            _streamFeatures |= StreamFeatures.SaslDigestMD5;
                             break;
 
                         case XmppCodes.SaslPlainMechanism:
-                            streamFeatures |= XmppStreamFeatures.SaslPlain;
+                            _streamFeatures |= StreamFeatures.SaslPlain;
                             break;
 
                         case XmppCodes.SaslXGoogleTokenMechanism:
-                            streamFeatures |= XmppStreamFeatures.XGoogleToken;
+                            _streamFeatures |= StreamFeatures.XGoogleToken;
                             break;
                     }
                 }
@@ -610,12 +640,12 @@ namespace Hanoi {
 
             if (features.Bind != null)
             {
-                streamFeatures |= XmppStreamFeatures.ResourceBinding;
+                _streamFeatures |= StreamFeatures.ResourceBinding;
             }
 
             if (features.SessionSpecified)
             {
-                streamFeatures |= XmppStreamFeatures.Sessions;
+                _streamFeatures |= StreamFeatures.Sessions;
             }
 
             if (features.Items.Count > 0)
@@ -624,27 +654,28 @@ namespace Hanoi {
                 {
                     if (item is RegisterIQ)
                     {
-                        streamFeatures |= XmppStreamFeatures.InBandRegistration;
+                        _streamFeatures |= StreamFeatures.InBandRegistration;
                     }
                 }
             }
 
-            streamFeaturesEvent.Set();
+            _streamFeaturesEvent.Set();
         }
 
         /// <summary>
         ///   Process an XMPP Message
         /// </summary>
         /// <param name = "message"></param>
-        private void ProcessMessage(Message message) {
+        private void ProcessMessage(Serialization.InstantMessaging.Client.Message message)
+        {
             if (message.Items.Count > 0 &&
                 message.Items[0] is PubSubEvent)
             {
-                onEventMessage.OnNext(new XmppEventMessage(message));
+                _onEventMessage.OnNext(new EventMessage(message));
             }
             else
             {
-                onMessageReceived.OnNext(new XmppMessage(message));
+                _onMessageReceived.OnNext(new Message(message));
             }
         }
 
@@ -652,7 +683,8 @@ namespace Hanoi {
         ///   Process an XMPP IQ message
         /// </summary>
         /// <param name = "iq"></param>
-        private void ProcessQueryMessage(IQ iq) {
+        private void ProcessQueryMessage(IQ iq)
+        {
             if (iq.Items != null && iq.Items.Count > 0)
             {
                 foreach (object item in iq.Items)
@@ -661,17 +693,17 @@ namespace Hanoi {
                     {
                         if (item is Bind)
                         {
-                            userId = ((Bind) item).Jid;
+                            _userId = ((Bind)item).Jid;
 
-                            bindResourceEvent.Set();
+                            _bindResourceEvent.Set();
                         }
                         else if (item is RosterQuery)
                         {
-                            onRosterMessage.OnNext(item as RosterQuery);
+                            _onRosterMessage.OnNext(item as RosterQuery);
                         }
                         else if (item is VCardData)
                         {
-                            onVCardMessage.OnNext(iq);
+                            _onVCardMessage.OnNext(iq);
                         }
                         else if (item is Ping)
                         {
@@ -694,7 +726,7 @@ namespace Hanoi {
 
                     if (item is ServiceQuery || item is ServiceItemQuery)
                     {
-                        onServiceDiscoveryMessage.OnNext(iq);
+                        _onServiceDiscoveryMessage.OnNext(iq);
                     }
                 }
             }
@@ -705,13 +737,15 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "presence">The presence.</param>
         /// <returns></returns>
-        private bool ProcessPresenceMessage(Presence presence) {
-            onPresenceMessage.OnNext(presence);
+        private bool ProcessPresenceMessage(Presence presence)
+        {
+            _onPresenceMessage.OnNext(presence);
 
             return true;
         }
 
-        private bool Authenticate() {
+        private bool Authenticate()
+        {
             XmppAuthenticator authenticator = null;
             bool result = false;
 
@@ -728,7 +762,7 @@ namespace Hanoi {
                         if (AuthenticationFailiure != null)
                         {
                             AuthenticationFailiure(this,
-                                                   new XmppAuthenticationFailiureEventArgs(
+                                                   new AuthenticationFailiureEventArgs(
                                                        authenticator.AuthenticationError));
                         }
                     }
@@ -740,7 +774,7 @@ namespace Hanoi {
                     if (AuthenticationFailiure != null)
                     {
                         AuthenticationFailiure(this,
-                                               new XmppAuthenticationFailiureEventArgs(
+                                               new AuthenticationFailiureEventArgs(
                                                    "No valid authentication mechanism found."));
                     }
                     else
@@ -765,32 +799,37 @@ namespace Hanoi {
             return result;
         }
 
-        private void BindResource() {
-            if (SupportsFeature(XmppStreamFeatures.ResourceBinding))
+        private void BindResource()
+        {
+            if (SupportsFeature(StreamFeatures.ResourceBinding))
             {
-                var bind = new Bind();
-                bind.Resource = UserId.ResourceName;
+                var bind = new Bind { Resource = UserId.ResourceName };
 
-                var iq = new IQ();
-                iq.Type = IQType.Set;
-                iq.ID = XmppIdentifierGenerator.Generate();
+                var iq = new IQ
+                {
+                    Type = IQType.Set,
+                    ID = XmppIdentifierGenerator.Generate()
+                };
 
                 iq.Items.Add(bind);
 
                 Send(iq);
 
-                bindResourceEvent.WaitOne();
+                _bindResourceEvent.WaitOne();
             }
         }
 
-        private void OpenSession() {
-            if (SupportsFeature(XmppStreamFeatures.Sessions))
+        private void OpenSession()
+        {
+            if (SupportsFeature(StreamFeatures.Sessions))
             {
-                var iq = new IQ();
+                var iq = new IQ
+                             {
+                                 Type = IQType.Set,
+                                 To = _connectionString.HostName,
+                                 ID = XmppIdentifierGenerator.Generate()
+                             };
 
-                iq.Type = IQType.Set;
-                iq.To = connectionString.HostName;
-                iq.ID = XmppIdentifierGenerator.Generate();
 
                 iq.Items.Add(new Session());
 
@@ -798,19 +837,22 @@ namespace Hanoi {
             }
         }
 
-        private void OnTransportXmppStreamInitialized(string stanza) {
+        private void OnTransportXmppStreamInitialized()
+        {
             // Wait until we have the stream:stream element readed
-            initializedStreamEvent.Set();
+            _initializedStreamEvent.Set();
         }
 
-        private void OnTransportXmppStreamClosed(string stanza) {
+        private void OnTransportXmppStreamClosed(string stanza)
+        {
             if (ConnectionClosed != null)
             {
                 ConnectionClosed(this, EventArgs.Empty);
             }
         }
 
-        private void OnTransportMessageReceived(object message) {
+        private void OnTransportMessageReceived(object message)
+        {
             AutoResetEvent resetEvent = ProcessMessageInstance(message);
 
             if (resetEvent != null)
@@ -822,29 +864,31 @@ namespace Hanoi {
         /// <summary>
         ///   Initializes the connection instance
         /// </summary>
-        private void Initialize() {
-            state = XmppConnectionState.Opening;
-            initializedStreamEvent = new AutoResetEvent(false);
-            streamFeaturesEvent = new AutoResetEvent(false);
-            bindResourceEvent = new AutoResetEvent(false);
+        private void Initialize()
+        {
+            _state = ConnectionState.Opening;
+            _initializedStreamEvent = new AutoResetEvent(false);
+            _streamFeaturesEvent = new AutoResetEvent(false);
+            _bindResourceEvent = new AutoResetEvent(false);
         }
 
         /// <summary>
         ///   Creates an instance of the <see cref = "XmppAuthenticator" /> used by the connection.
         /// </summary>
         /// <returns></returns>
-        private XmppAuthenticator CreateAuthenticator() {
+        private XmppAuthenticator CreateAuthenticator()
+        {
             XmppAuthenticator authenticator = null;
 
-            if (SupportsFeature(XmppStreamFeatures.SaslDigestMD5))
+            if (SupportsFeature(StreamFeatures.SaslDigestMD5))
             {
                 authenticator = new XmppSaslDigestAuthenticator(this);
             }
-            else if (SupportsFeature(XmppStreamFeatures.XGoogleToken))
+            else if (SupportsFeature(StreamFeatures.XGoogleToken))
             {
                 authenticator = new XmppSaslXGoogleTokenAuthenticator(this);
             }
-            else if (SupportsFeature(XmppStreamFeatures.SaslPlain))
+            else if (SupportsFeature(StreamFeatures.SaslPlain))
             {
                 authenticator = new XmppSaslPlainAuthenticator(this);
             }
@@ -856,9 +900,11 @@ namespace Hanoi {
         ///   Checks if a speficic stream feature is supported by the XMPP server.
         /// </summary>
         /// <param elementname = "feature">Feature to check.</param>
+        /// <param name="feature"></param>
         /// <returns><b>true</b> if the feature is supported by the server; or <b>false</b> if not</returns>
-        private bool SupportsFeature(XmppStreamFeatures feature) {
-            return ((streamFeatures & feature) == feature);
+        private bool SupportsFeature(StreamFeatures feature)
+        {
+            return ((_streamFeatures & feature) == feature);
         }
-        }
+    }
 }

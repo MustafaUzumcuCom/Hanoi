@@ -26,7 +26,7 @@ namespace Hanoi.Transports {
         private long rid;
         private HttpBindBody streamResponse;
 
-        public override void Open(XmppConnectionString connectionString) {
+        public override void Open(ConnectionString connectionString) {
             // Connection string
             ConnectionString = connectionString;
             UserId = ConnectionString.UserId;

@@ -34,7 +34,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
     ///   XMPP Contact presence information
     /// </summary>
     public sealed class XmppContactPresence {
-        private readonly XmppSession session;
+        private readonly Session session;
         private XmppPresenceState presenceStatus;
         private int priority;
         private string statusMessage;
@@ -43,7 +43,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Initializes a new instance of the <see cref = "">XmppContactPresence</see>
         /// </summary>
         /// <param name = "session"></param>
-        internal XmppContactPresence(XmppSession session) {
+        internal XmppContactPresence(Session session) {
             this.session = session;
             presenceStatus = XmppPresenceState.Offline;
         }
@@ -94,7 +94,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
             }
         }
 
-        internal void Update(Presence presence) {
+        internal void Update(Serialization.InstantMessaging.Presence.Presence presence) {
             if (presence.TypeSpecified &&
                 presence.Type == PresenceType.Unavailable)
             {

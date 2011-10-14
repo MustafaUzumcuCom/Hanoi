@@ -62,7 +62,7 @@ namespace Hanoi.Serialization.Core.Streams {
         /// <remarks />
         [XmlElementAttribute("presence", typeof (Presence), Namespace = "jabber:client")]
         [XmlElementAttribute("iq", typeof (IQ), Namespace = "jabber:client")]
-        [XmlElementAttribute("message", typeof (Message), Namespace = "jabber:client")]
+        [XmlElementAttribute("message", typeof (InstantMessaging.Client.Message), Namespace = "jabber:client")]
         public ArrayList Items {
             get { return itemsField; }
         }

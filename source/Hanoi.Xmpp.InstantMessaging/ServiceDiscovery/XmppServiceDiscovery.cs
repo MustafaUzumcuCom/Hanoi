@@ -42,7 +42,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
          {
         private readonly string domainName;
         private readonly List<string> pendingMessages;
-        private readonly XmppSession session;
+        private readonly Session session;
         private IDisposable infoQuerySubscription;
         private IDisposable serviceDiscoverySubscription;
         private ObservableCollection<XmppService> services;
@@ -54,7 +54,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         ///   Initializes a new instance of the <see cref = "T:XmppServiceDiscovery" /> class.
         /// </summary>
         /// <param name = "session">The session.</param>
-        public XmppServiceDiscovery(XmppSession session) {
+        public XmppServiceDiscovery(Session session) {
             this.session = session;
             pendingMessages = new List<string>();
 
@@ -65,7 +65,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         ///   Initializes a new instance of the <see cref = "T:XmppServiceDiscovery" /> class.
         /// </summary>
         /// <param name = "session">The session.</param>
-        public XmppServiceDiscovery(XmppSession session, string domainName)
+        public XmppServiceDiscovery(Session session, string domainName)
             : this(session) {
             this.domainName = domainName;
         }
@@ -177,16 +177,16 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         private void SubscribeToSessionState() {
             sessionStateSubscription = session
                 .StateChanged
-                .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
+                .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>
                         {
-                            if (newState == XmppSessionState.LoggingIn)
+                            if (newState == SessionState.LoggingIn)
                             {
                                 Subscribe();
                             }
-                            else if (newState == XmppSessionState.LoggingOut)
+                            else if (newState == SessionState.LoggingOut)
                             {
                                 Unsubscribe();
                                 Clear();

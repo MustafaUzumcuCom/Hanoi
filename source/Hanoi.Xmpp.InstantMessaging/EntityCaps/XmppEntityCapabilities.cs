@@ -47,39 +47,39 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps {
 
         private IDisposable infoQueryErrorSubscription;
         private IDisposable serviceDiscoverySubscription;
-        private XmppSession session;
+        private Session session;
 
         private IDisposable sessionStateSubscription;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "XmppEntityCapabilities" /> class.
         /// </summary>
-        protected XmppEntityCapabilities(XmppSession session) {
+        protected XmppEntityCapabilities(Session session) {
             this.session = session;
 
             SubscribeToSessionState();
         }
 
         /// <summary>
-        ///   Gets the <see cref = "XmppSession">Session</see>
+        ///   Gets the <see cref = "InstantMessaging.Session">Session</see>
         /// </summary>
-        protected XmppSession Session {
+        protected Session Session {
             get { return session; }
         }
 
         private void SubscribeToSessionState() {
             sessionStateSubscription = session
                 .StateChanged
-                .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
+                .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>
                         {
-                            if (newState == XmppSessionState.LoggingOut)
+                            if (newState == SessionState.LoggingOut)
                             {
                                 Subscribe();
                             }
-                            else if (newState == XmppSessionState.LoggingOut)
+                            else if (newState == SessionState.LoggingOut)
                             {
                                 Unsubscribe();
                             }

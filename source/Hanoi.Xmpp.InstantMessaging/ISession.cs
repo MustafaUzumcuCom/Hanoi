@@ -35,59 +35,61 @@ using Hanoi.Xmpp.InstantMessaging.MultiUserChat;
 using Hanoi.Xmpp.InstantMessaging.PersonalEventing;
 using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
-namespace Hanoi.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging
+{
     /// <summary>
     ///   Interface for XMPP session implementations
     /// </summary>
-    public interface IXmppSession {
-        IObservable<XmppMessage> MessageReceived { get; }
+    public interface ISession
+    {
+        IObservable<Message> MessageReceived { get; }
 
-        IObservable<XmppSessionState> StateChanged { get; }
+        IObservable<SessionState> StateChanged { get; }
 
-        XmppPersonalEventing PersonalEventing { get; }
+        PersonalEventing.PersonalEventing PersonalEventing { get; }
 
-        XmppPresence Presence { get; }
+        Presence Presence { get; }
 
-        XmppRoster Roster { get; }
+        Roster Roster { get; }
 
         XmppServiceDiscovery ServiceDiscovery { get; }
 
-        XmppSessionState State { get; }
+        SessionState State { get; }
 
-        XmppJid UserId { get; }
+        Jid UserId { get; }
 
         XmppActivity Activity { get; }
 
         AvatarStorage AvatarStorage { get; }
 
         XmppSessionEntityCapabilities Capabilities { get; }
-        event EventHandler<XmppAuthenticationFailiureEventArgs> AuthenticationFailed;
+        event EventHandler<AuthenticationFailiureEventArgs> AuthenticationFailed;
 
-        IXmppSession Open(string connectionString);
+        ISession Open(string connectionString);
 
-        IXmppSession PublishAvatar(string mimetype, string hash, System.Drawing.Image avatarImage);
+        ISession PublishAvatar(string mimetype, string hash, System.Drawing.Image avatarImage);
 
-        IXmppSession PublishDisplayName(string displayName);
+        ISession PublishDisplayName(string displayName);
 
-        IXmppSession PublishMood(XmppUserMoodEvent moodEvent);
+        ISession PublishMood(XmppUserMoodEvent moodEvent);
 
-        IXmppSession PublishMood(MoodType mood, string description);
+        ISession PublishMood(MoodType mood, string description);
 
-        IXmppSession PublishTune(XmppUserTuneEvent tuneEvent);
+        ISession PublishTune(XmppUserTuneEvent tuneEvent);
 
-        IXmppSession SetPresence(XmppPresenceState newPresence);
+        ISession SetPresence(XmppPresenceState newPresence);
 
-        IXmppSession SetPresence(XmppPresenceState newPresence, string status);
+        ISession SetPresence(XmppPresenceState newPresence, string status);
 
-        IXmppSession SetPresence(XmppPresenceState newPresence, string status, int priority);
+        ISession SetPresence(XmppPresenceState newPresence, string status, int priority);
 
-        IXmppSession SetUnavailable();
+        ISession SetUnavailable();
 
-        IXmppSession StopTunePublication();
+        ISession StopTunePublication();
 
-        IXmppSession Close();
+        ISession Close();
 
-        XmppChat CreateChat(XmppJid contactId);
+        XmppChat CreateChat(Jid contactId);
 
         XmppChat CreateChat(string contactId);
 
@@ -95,7 +97,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
 
         XmppChatRoom EnterChatRoom(string chatRoomName);
 
-        bool HasOpenChat(XmppJid contactId);
+        bool HasOpenChat(Jid contactId);
 
         bool HasOpenChat(string contactId);
     }

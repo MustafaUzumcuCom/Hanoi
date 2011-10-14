@@ -43,7 +43,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         /// </summary>
         /// <param name = "session"></param>
         /// <param name = "serviceId"></param>
-        public XmppGatewayService(XmppSession session, string serviceId)
+        public XmppGatewayService(Session session, string serviceId)
             : base(session, serviceId) {
             InferGatewayType();
         }

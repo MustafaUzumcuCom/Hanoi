@@ -39,15 +39,17 @@ using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
 using Hanoi.Serialization.InstantMessaging.Roster;
 
-namespace Hanoi.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging
+{
     /// <summary>
     ///   Contact's Roster
     /// </summary>
-    public sealed class XmppRoster : IEnumerable<XmppContact>, INotifyCollectionChanged {
-        private readonly XmppConnection connection;
+    public sealed class Roster : IEnumerable<XmppContact>, INotifyCollectionChanged
+    {
+        private readonly Connection connection;
         private readonly ObservableCollection<XmppContact> contacts;
         private readonly List<string> pendingMessages;
-        private readonly XmppSession session;
+        private readonly Session session;
 
         private IDisposable infoQueryErrorSubscription;
         private IDisposable presenceSubscription;
@@ -55,9 +57,10 @@ namespace Hanoi.Xmpp.InstantMessaging {
         private IDisposable sessionStateSubscription;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "XmppRoster" /> class
+        ///   Initializes a new instance of the <see cref = "Roster" /> class
         /// </summary>
-        internal XmppRoster(XmppSession session) {
+        internal Roster(Session session)
+        {
             this.session = session;
             connection = session.Connection;
             contacts = new ObservableCollection<XmppContact>();
@@ -71,17 +74,20 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// </summary>
         /// <param name = "jid">The bare JID</param>
         /// <returns></returns>
-        public XmppContact this[string jid] {
+        public XmppContact this[string jid]
+        {
             get { return contacts.Where(contact => contact.ContactId.BareIdentifier == jid).SingleOrDefault(); }
         }
 
         #region IEnumerable<XmppContact> Members
 
-        IEnumerator<XmppContact> IEnumerable<XmppContact>.GetEnumerator() {
+        IEnumerator<XmppContact> IEnumerable<XmppContact>.GetEnumerator()
+        {
             return contacts.GetEnumerator();
         }
 
-        public IEnumerator GetEnumerator() {
+        public IEnumerator GetEnumerator()
+        {
             return contacts.GetEnumerator();
         }
 
@@ -111,19 +117,22 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// </summary>
         /// <param name = "jid">Contact JID</param>
         /// <param name = "name">Contact name</param>
-        public XmppRoster AddContact(string jid, string name) {
+        public Roster AddContact(string jid, string name)
+        {
             var query = new RosterQuery();
-            var iq = new IQ();
+            var iq = new IQ
+                         {
+                             ID = XmppIdentifierGenerator.Generate(),
+                             Type = IQType.Set,
+                             From = connection.UserId
+                         };
 
-            iq.ID = XmppIdentifierGenerator.Generate();
-            iq.Type = IQType.Set;
-            iq.From = connection.UserId;
-
-            var item = new RosterItem();
-
-            item.Subscription = RosterSubscriptionType.None;
-            item.Jid = jid;
-            item.Name = name;
+            var item = new RosterItem
+                           {
+                               Subscription = RosterSubscriptionType.None,
+                               Jid = jid,
+                               Name = name
+                           };
 
             query.Items.Add(item);
 
@@ -139,18 +148,21 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Deletes a user from the roster list
         /// </summary>
-        public XmppRoster RemoveContact(XmppJid jid) {
+        public Roster RemoveContact(Jid jid)
+        {
             var query = new RosterQuery();
-            var iq = new IQ();
+            var iq = new IQ
+                         {
+                             ID = XmppIdentifierGenerator.Generate(), 
+                             Type = IQType.Set, 
+                             From = connection.UserId,
+                         };
 
-            iq.ID = XmppIdentifierGenerator.Generate();
-            iq.Type = IQType.Set;
-            iq.From = connection.UserId;
-
-            var item = new RosterItem();
-
-            item.Jid = jid.BareIdentifier;
-            item.Subscription = RosterSubscriptionType.Remove;
+            var item = new RosterItem
+                           {
+                               Jid = jid.BareIdentifier,
+                               Subscription = RosterSubscriptionType.Remove,
+                           };
 
             query.Items.Add(item);
 
@@ -166,13 +178,15 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Request Roster list to the XMPP Server
         /// </summary>
-        public XmppRoster RequestRosterList() {
+        public Roster RequestRosterList()
+        {
             var query = new RosterQuery();
-            var iq = new IQ();
-
-            iq.ID = XmppIdentifierGenerator.Generate();
-            iq.Type = IQType.Get;
-            iq.From = connection.UserId;
+            var iq = new IQ
+                         {
+                             ID = XmppIdentifierGenerator.Generate(), 
+                             Type = IQType.Get, 
+                             From = connection.UserId
+                         };
 
             iq.Items.Add(query);
 
@@ -185,7 +199,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Refreshes the blocked contacts list
         /// </summary>
         /// <returns></returns>
-        public XmppRoster RefreshBlockedContacts() {
+        public Roster RefreshBlockedContacts()
+        {
 #warning TODO: Check if contact list should be stored in a separated collection or the information should be injected into XmppContact class
             if (session.ServiceDiscovery.SupportsBlocking)
             {
@@ -206,7 +221,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Unblocks all blocked contacts
         /// </summary>
-        public XmppRoster UnBlockAll() {
+        public Roster UnBlockAll()
+        {
             if (session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ
@@ -227,14 +243,16 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Called when the presence of a contact is changed
         /// </summary>
-        internal void OnContactPresenceChanged() {
+        internal void OnContactPresenceChanged()
+        {
             if (ContactPresenceChanged != null)
             {
                 ContactPresenceChanged(this, EventArgs.Empty);
             }
         }
 
-        private void AddUserContact() {
+        private void AddUserContact()
+        {
             contacts.Add
                 (
                     new XmppContact
@@ -243,62 +261,65 @@ namespace Hanoi.Xmpp.InstantMessaging {
                         session.UserId.BareIdentifier,
                         "",
                         XmppContactSubscriptionType.Both,
-                        new List<string>(new[] {"Buddies"})
+                        new List<string>(new[] { "Buddies" })
                         )
                 );
         }
 
-        private void SubscribeToSessionState() {
+        private void SubscribeToSessionState()
+        {
             sessionStateSubscription = session
                 .StateChanged
                 .Subscribe
                 (
                     newState =>
+                    {
+                        if (newState == SessionState.LoggingIn)
                         {
-                            if (newState == XmppSessionState.LoggingIn)
-                            {
-                                Subscribe();
-                            }
-                            else if (newState == XmppSessionState.LoggedIn)
-                            {
-                                AddUserContact();
-                            }
-                            else if (newState == XmppSessionState.LoggingOut)
-                            {
-                                Unsubscribe();
-                                contacts.Clear();
+                            Subscribe();
+                        }
+                        else if (newState == SessionState.LoggedIn)
+                        {
+                            AddUserContact();
+                        }
+                        else if (newState == SessionState.LoggingOut)
+                        {
+                            Unsubscribe();
+                            contacts.Clear();
 
-                                if (CollectionChanged != null)
-                                {
-                                    Dispatcher.CurrentDispatcher.BeginInvoke(
-                                        DispatcherPriority.Background,
-                                        new Action(() => CollectionChanged(this,
-                                                                           new NotifyCollectionChangedEventArgs(
-                                                                               NotifyCollectionChangedAction.Reset))));
-                                }
+                            if (CollectionChanged != null)
+                            {
+                                Dispatcher.CurrentDispatcher.BeginInvoke(
+                                    DispatcherPriority.Background,
+                                    new Action(() => CollectionChanged(this,
+                                                                       new NotifyCollectionChangedEventArgs(
+                                                                           NotifyCollectionChangedAction.Reset))));
                             }
                         }
+                    }
                 );
         }
 
-        private void Subscribe() {
+        private void Subscribe()
+        {
             rosterNotificationSubscription = connection
                 .OnRosterMessage
-                .Subscribe(mesasge => OnRosterNotification(mesasge));
+                .Subscribe(OnRosterNotification);
 
             infoQueryErrorSubscription = connection
                 .OnInfoQueryMessage
                 .Where(iq => iq.Type == IQType.Error)
-                .Subscribe(message => OnQueryErrorReceived(message));
+                .Subscribe(OnQueryErrorReceived);
 
             presenceSubscription = connection
                 .OnPresenceMessage
-                .Subscribe(message => OnPresenceMessageReceived(message));
+                .Subscribe(OnPresenceMessageReceived);
 
             contacts.CollectionChanged += OnCollectionChanged;
         }
 
-        private void Unsubscribe() {
+        private void Unsubscribe()
+        {
             if (rosterNotificationSubscription != null)
             {
                 rosterNotificationSubscription.Dispose();
@@ -320,7 +341,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
             contacts.CollectionChanged -= OnCollectionChanged;
         }
 
-        private void OnRosterNotification(RosterQuery message) {
+        private void OnRosterNotification(RosterQuery message)
+        {
             // It's a roster management related message
             foreach (RosterItem item in message.Items)
             {
@@ -334,7 +356,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                         session,
                         item.Jid,
                         item.Name,
-                        (XmppContactSubscriptionType) item.Subscription,
+                        (XmppContactSubscriptionType)item.Subscription,
                         item.Groups
                         );
 
@@ -354,7 +376,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                             contact.RefreshData
                                 (
                                     item.Name,
-                                    (XmppContactSubscriptionType) item.Subscription,
+                                    (XmppContactSubscriptionType)item.Subscription,
                                     item.Groups
                                 );
                             break;
@@ -368,8 +390,9 @@ namespace Hanoi.Xmpp.InstantMessaging {
             }
         }
 
-        private void OnPresenceMessageReceived(Presence message) {
-            XmppJid jid = message.From;
+        private void OnPresenceMessageReceived(Serialization.InstantMessaging.Presence.Presence message)
+        {
+            Jid jid = message.From;
 
             if (jid.BareIdentifier == session.UserId.BareIdentifier)
             {
@@ -430,17 +453,19 @@ namespace Hanoi.Xmpp.InstantMessaging {
             }
         }
 
-        private void OnQueryErrorReceived(IQ message) {
+        private void OnQueryErrorReceived(IQ message)
+        {
             if (pendingMessages.Contains(message.ID))
             {
                 pendingMessages.Remove(message.ID);
             }
         }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
 
             Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.Background, 
+                DispatcherPriority.Background,
                 new Action(() =>
                                 {
                                     if (

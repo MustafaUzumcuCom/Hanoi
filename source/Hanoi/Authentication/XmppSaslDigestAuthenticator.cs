@@ -54,7 +54,7 @@ namespace Hanoi.Authentication
         /// <summary>
         ///   Initializes a new instance of the <see cref="XmppSaslDigestAuthenticator" /> class.
         /// </summary>
-        public XmppSaslDigestAuthenticator(XmppConnection connection)
+        public XmppSaslDigestAuthenticator(Connection connection)
             : base(connection)
         {
             cnonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(XmppIdentifierGenerator.Generate()));
@@ -173,7 +173,7 @@ namespace Hanoi.Authentication
             }
         }
 
-        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e)
+        protected override void OnAuthenticationError(object sender, AuthenticationFailiureEventArgs e)
         {
             base.OnAuthenticationError(sender, e);
 

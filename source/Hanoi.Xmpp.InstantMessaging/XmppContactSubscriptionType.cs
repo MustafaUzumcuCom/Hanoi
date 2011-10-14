@@ -53,7 +53,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         None,
 
         /// <summary>
-        ///   Used to remove a <see cref = "XmppContact" /> from the <see cref = "XmppRoster" />.
+        ///   Used to remove a <see cref = "XmppContact" /> from the <see cref = "Roster" />.
         /// </summary>
         Remove,
 

@@ -38,12 +38,12 @@ using Hanoi.Serialization.InstantMessaging.Roster;
 namespace Hanoi.Xmpp.InstantMessaging
 {
     /// <summary>
-    ///   Represents a <see cref = "XmppRoster" /> contact.
+    ///   Represents a <see cref = "Roster" /> contact.
     /// </summary>
     public sealed class XmppContact
     {
-        private readonly XmppJid contactId;
-        private readonly XmppSession session;
+        private readonly Jid contactId;
+        private readonly Session session;
         private readonly object syncObject;
         private string displayName;
         private List<string> groups;
@@ -59,7 +59,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <param name = "name">The name.</param>
         /// <param name = "subscription">The subscription.</param>
         /// <param name = "groups">The groups.</param>
-        internal XmppContact(XmppSession session, string contactId, string name,
+        internal XmppContact(Session session, string contactId, string name,
                              XmppContactSubscriptionType subscription, IList<string> groups)
         {
             this.session = session;
@@ -75,7 +75,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         ///   Gets the contact id.
         /// </summary>
         /// <value>The contact id.</value>
-        public XmppJid ContactId
+        public Jid ContactId
         {
             get { return contactId; }
         }
@@ -359,9 +359,9 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         internal void AddDefaultResource()
         {
-            var defaultPresence = new Presence();
+            var defaultPresence = new Serialization.InstantMessaging.Presence.Presence();
             var contactResource = new XmppContactResource(session, this, ContactId);
-            var resourceJid = new XmppJid(contactId.UserName, ContactId.DomainName, Guid.NewGuid().ToString());
+            var resourceJid = new Jid(contactId.UserName, ContactId.DomainName, Guid.NewGuid().ToString());
 
             // Add a default resource
             defaultPresence.TypeSpecified = true;
@@ -403,7 +403,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             //NotifyPropertyChanged(() => Groups);
         }
 
-        internal void UpdatePresence(XmppJid jid, Presence presence)
+        internal void UpdatePresence(Jid jid, Serialization.InstantMessaging.Presence.Presence presence)
         {
             lock (syncObject)
             {

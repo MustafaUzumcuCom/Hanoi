@@ -94,7 +94,7 @@
     <Compile Include="Avatar.cs" />
     <Compile Include="AvatarStorage.cs" />
     <Compile Include="MultiUserChat\XmppChatRoomStatusCode.cs" />
-    <Compile Include="IXmppSession.cs" />
+    <Compile Include="ISession.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="PropertyExtensions.cs" />
     <Compile Include="ServiceDiscovery\XmppServiceDiscoveryObject.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="ServiceDiscovery\XmppGatewayService.cs" />
     <Compile Include="ServiceDiscovery\XmppGatewayType.cs" />
     <Compile Include="PersonalEventing\XmppMessageEvent.cs" />
-    <Compile Include="PersonalEventing\XmppPersonalEventing.cs" />
+    <Compile Include="PersonalEventing\PersonalEventing.cs" />
     <Compile Include="PersonalEventing\XmppUserMoodEvent.cs" />
     <Compile Include="PersonalEventing\XmppUserTuneEvent.cs" />
     <Compile Include="PersonalEventing\XmppUserEvent.cs" />
@@ -124,16 +124,16 @@
     <Compile Include="MultiUserChat\XmppChatRoomUser.cs" />
     <Compile Include="XmppContact.cs" />
     <Compile Include="XmppContactSubscriptionType.cs" />
-    <Compile Include="XmppPresence.cs" />
+    <Compile Include="Presence.cs" />
     <Compile Include="XmppPresenceState.cs" />
     <Compile Include="XmppPrivacy.cs" />
-    <Compile Include="XmppRoster.cs" />
+    <Compile Include="Roster.cs" />
     <Compile Include="ServiceDiscovery\XmppService.cs" />
     <Compile Include="ServiceDiscovery\XmppServiceCategory.cs" />
     <Compile Include="ServiceDiscovery\XmppServiceDiscovery.cs" />
     <Compile Include="ServiceDiscovery\XmppServiceItem.cs" />
-    <Compile Include="XmppSession.cs" />
-    <Compile Include="XmppSessionState.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="SessionState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

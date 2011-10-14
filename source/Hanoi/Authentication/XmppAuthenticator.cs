@@ -43,8 +43,8 @@ namespace Hanoi.Authentication {
         /// <summary>
         ///   Initializes a new instance of the <see cref="XmppAuthenticator" /> class.
         /// </summary>
-        /// <param name = "connection">A <see cref="XmppConnection" /> instance</param>
-        protected XmppAuthenticator(XmppConnection connection) {
+        /// <param name = "connection">A <see cref="Hanoi.Connection" /> instance</param>
+        protected XmppAuthenticator(Connection connection) {
             Connection = connection;
 
             Subscribe();
@@ -65,7 +65,7 @@ namespace Hanoi.Authentication {
         /// <summary>
         ///   Gets the connection associated with the authenticator class.
         /// </summary>
-        public XmppConnection Connection { get; private set; }
+        public Connection Connection { get; private set; }
 
         /// <summary>
         ///   Gets the list of message ID's pending of response
@@ -145,8 +145,8 @@ namespace Hanoi.Authentication {
         ///   Called when an authentication failiure occurs.
         /// </summary>
         /// <param name = "sender">The sender.</param>
-        /// <param name = "e">The <see cref = "XmppAuthenticationFailiureEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
+        /// <param name = "e">The <see cref = "AuthenticationFailiureEventArgs" /> instance containing the event data.</param>
+        protected virtual void OnAuthenticationError(object sender, AuthenticationFailiureEventArgs e) {
             if (pendingMessages != null) {
                 pendingMessages.Clear();
             }

@@ -27,28 +27,56 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using System;
+using Hanoi.Serialization.Extensions.PubSub;
+using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace Hanoi.Authentication
-{
+namespace Hanoi {
     /// <summary>
-    ///   EventArgs for the <see cref = "Hanoi.Xmpp.XmppConnection.AuthenticationFailiure" /> event.
+    ///   Pub sub event message
     /// </summary>
-    public sealed class XmppAuthenticationFailiureEventArgs : EventArgs
-    {
+    public sealed class EventMessage {
+        private readonly PubSubEvent eventMessage;
+        private readonly Jid from;
+        private readonly string identifier;
+        private readonly Jid to;
+
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "XmppAuthenticationFailiureEventArgs" /> class.
+        ///   Initializes a new instance of the <see cref = "T:EventMessage" /> class.
         /// </summary>
-        /// <param name = "message">The authentication failiure message.</param>
-        public XmppAuthenticationFailiureEventArgs(string message)
-        {
-            Message = message;
+        /// <param name = "message">The event.</param>
+        internal EventMessage(Serialization.InstantMessaging.Client.Message message) {
+            identifier = message.ID;
+            @from = message.From;
+            to = message.To;
+            eventMessage = (PubSubEvent) message.Items[0];
         }
 
         /// <summary>
-        ///   Gets the authentication failiure message.
+        ///   Gets the XMPP Event Message ID
         /// </summary>
-        /// <value>The message.</value>
-        public string Message { get; private set; }
+        public string Identifier {
+            get { return identifier; }
+        }
+
+        /// <summary>
+        ///   Gets the Event Message source JID
+        /// </summary>
+        public Jid From {
+            get { return @from; }
+        }
+
+        /// <summary>
+        ///   Gets the Event Message target JID
+        /// </summary>
+        public Jid To {
+            get { return to; }
+        }
+
+        /// <summary>
+        ///   Gets the XMPP Event Message data
+        /// </summary>
+        public PubSubEvent Event {
+            get { return eventMessage; }
+        }
     }
 }

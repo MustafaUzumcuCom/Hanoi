@@ -100,11 +100,11 @@ namespace Hanoi.Serialization.Extensions.Bosh {
         [XmlElementAttribute("challenge", Type = typeof (Challenge), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
         [XmlElementAttribute("response", Type = typeof (Response), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
         [XmlElementAttribute("success", Type = typeof (Success), Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-        [XmlElementAttribute("features", Type = typeof (StreamFeatures), Namespace = "http://etherx.jabber.org/streams",
+        [XmlElementAttribute("features", Type = typeof (Core.Streams.StreamFeatures), Namespace = "http://etherx.jabber.org/streams",
             Form = XmlSchemaForm.Qualified)]
         [XmlElementAttribute("iq", Type = typeof (IQ), Namespace = "jabber:client")]
         [XmlElementAttribute("presence", Type = typeof (Presence), Namespace = "jabber:client")]
-        [XmlElementAttribute("message", Type = typeof (Message), Namespace = "jabber:client")]
+        [XmlElementAttribute("message", Type = typeof (InstantMessaging.Client.Message), Namespace = "jabber:client")]
         [XmlElementAttribute("uri", typeof (string))]
         public ArrayList Items {
             get { return itemsField; }

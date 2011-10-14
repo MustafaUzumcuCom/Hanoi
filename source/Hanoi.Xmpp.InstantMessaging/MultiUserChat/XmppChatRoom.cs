@@ -56,7 +56,7 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
         /// <param name = "session">The session.</param>
         /// <param name = "conferenceService">The conference service.</param>
         /// <param name = "chatRoomId">The chat room id.</param>
-        internal XmppChatRoom(XmppSession session, XmppService conferenceService, XmppJid chatRoomId)
+        internal XmppChatRoom(Session session, XmppService conferenceService, Jid chatRoomId)
             : base(session, chatRoomId) {
             this.conferenceService = conferenceService;
             seekEnterChatRoomEvent = new AutoResetEvent(false);
@@ -83,7 +83,7 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
         /// </summary>
         /// <returns></returns>
         public XmppChatRoom Enter() {
-            var presence = new Presence
+            var presence = new Serialization.InstantMessaging.Presence.Presence
                                {
                                    From = Session.UserId,
                                    To = Identifier
@@ -103,7 +103,7 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
         /// </summary>
         /// <param name = "message">The message.</param>
         public XmppChatRoom SendMessage(string message) {
-            var chatMessage = new Message
+            var chatMessage = new Serialization.InstantMessaging.Client.Message
                                   {
                                       ID = XmppIdentifierGenerator.Generate(),
                                       Type = MessageType.GroupChat,
@@ -130,7 +130,7 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
         /// <param name = "contact"></param>
         public XmppChatRoom Invite(XmppContact contact) {
             var user = new MucUser();
-            var message = new Message
+            var message = new Serialization.InstantMessaging.Client.Message
                               {
                                   From = Session.UserId,
                                   To = Identifier.BareIdentifier,
@@ -153,7 +153,7 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
         ///   Closes the chatroom
         /// </summary>
         public void Close() {
-            var presence = new Presence
+            var presence = new Serialization.InstantMessaging.Presence.Presence
                                {
                                    Id = XmppIdentifierGenerator.Generate(),
                                    To = Identifier,
@@ -195,12 +195,12 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat {
             }
         }
 
-        private void OnMultiUserChatMessageReceived(XmppMessage message) {
+        private void OnMultiUserChatMessageReceived(Message message) {
             createChatRoomEvent.Set();
             seekEnterChatRoomEvent.Set();
         }
 
-        private void OnPresenceMessageReceived(Presence message) {
+        private void OnPresenceMessageReceived(Serialization.InstantMessaging.Presence.Presence message) {
             //<presence to='carlosga@neko.im/Home' from='babelimtest@conference.neko.im/carlosga'>
             //    <x xmlns='http://jabber.org/protocol/muc#user'>
             //        <item jid='carlosga@neko.im/Home' affiliation='owner' role='moderator'/>

@@ -32,11 +32,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Gnu.Inet.Encoding;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   Represents a XMPP JID
     /// </summary>
-    public sealed class XmppJid {
+    public sealed class Jid
+    {
         /// <summary>
         ///   Regex used to parse jid strings
         /// </summary>
@@ -55,22 +57,24 @@ namespace Hanoi {
         private string userName;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "XmppJid" /> class with
+        ///   Initializes a new instance of the <see cref = "Jid" /> class with
         ///   the given JID
         /// </summary>
         /// <param name = "jid">The XMPP jid</param>
-        public XmppJid(string jid) {
+        public Jid(string jid)
+        {
             Parse(jid);
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "XmppJid" /> class with
+        ///   Initializes a new instance of the <see cref = "Jid" /> class with
         ///   the given user name, domain name and resource name.
         /// </summary>
         /// <param name = "userName">The user name</param>
         /// <param name = "domainName">The domain name</param>
         /// <param name = "resourceName">The resource name</param>
-        public XmppJid(string userName, string domainName, string resourceName) {
+        public Jid(string userName, string domainName, string resourceName)
+        {
             this.userName = Stringprep.NamePrep(userName);
             this.domainName = Stringprep.NodePrep(domainName);
             this.resourceName = Stringprep.ResourcePrep(resourceName);
@@ -81,38 +85,44 @@ namespace Hanoi {
         /// <summary>
         ///   Gets the Bare JID
         /// </summary>
-        public string BareIdentifier {
+        public string BareIdentifier
+        {
             get { return bareJid; }
         }
 
         /// <summary>
         ///   Gets the User Name
         /// </summary>
-        public string UserName {
+        public string UserName
+        {
             get { return userName; }
         }
 
         /// <summary>
         ///   Gets the Domain Name
         /// </summary>
-        public string DomainName {
+        public string DomainName
+        {
             get { return domainName; }
         }
 
         /// <summary>
         ///   Gets the Resource Name
         /// </summary>
-        public string ResourceName {
+        public string ResourceName
+        {
             get { return resourceName; }
         }
 
-        // Implicit conversion from string to XmppJid. 
-        public static implicit operator XmppJid(string x) {
-            return new XmppJid(x);
+        // Implicit conversion from string to Jid. 
+        public static implicit operator Jid(string x)
+        {
+            return new Jid(x);
         }
 
-        // Explicit conversion from XmppJid to string. 
-        public static implicit operator string(XmppJid x) {
+        // Explicit conversion from Jid to string. 
+        public static implicit operator string(Jid x)
+        {
             if (x == null)
             {
                 throw new InvalidOperationException();
@@ -122,22 +132,24 @@ namespace Hanoi {
         }
 
         // Override the Object.Equals(object o) method:
-        public override bool Equals(object o) {
+        public override bool Equals(object o)
+        {
             // If parameter is null return false.
             if (o == null)
             {
                 return false;
             }
-            if (!(o is XmppJid))
+            if (!(o is Jid))
             {
                 return false;
             }
 
-            return (fullJid == ((XmppJid) o).fullJid);
+            return (fullJid == ((Jid)o).fullJid);
         }
 
         // Override the Object.GetHashCode() method:
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return fullJid.GetHashCode();
         }
 
@@ -147,11 +159,13 @@ namespace Hanoi {
         /// <returns>
         ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return fullJid;
         }
 
-        private void Parse(string jid) {
+        private void Parse(string jid)
+        {
             Match match = JidRegex.Match(jid);
 
             if (match != null)
@@ -173,7 +187,8 @@ namespace Hanoi {
             BuildBareAndFullJid();
         }
 
-        private void BuildBareAndFullJid() {
+        private void BuildBareAndFullJid()
+        {
             var jidBuffer = new StringBuilder();
 
             if (UserName != null && userName.Length > 0)

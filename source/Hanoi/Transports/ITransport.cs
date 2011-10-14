@@ -33,7 +33,7 @@ namespace Hanoi.Transports {
         ///   Opens the transport connection
         /// </summary>
         /// <param name = "connectionString"></param>
-        void Open(XmppConnectionString connectionString);
+        void Open(ConnectionString connectionString);
 
         /// <summary>
         ///   Initializes the XMPP stream

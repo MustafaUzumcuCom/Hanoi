@@ -19,7 +19,7 @@ namespace Hanoi.Authentication {
         /// <summary>
         ///   Initializes a new instance of the <see cref = "T:XmppSaslPlainAuthenticator" /> class.
         /// </summary>
-        public XmppSaslXGoogleTokenAuthenticator(XmppConnection connection)
+        public XmppSaslXGoogleTokenAuthenticator(Connection connection)
             : base(connection) {
             waitEvent = new AutoResetEvent(false);
         }
@@ -62,7 +62,7 @@ namespace Hanoi.Authentication {
             }
         }
 
-        protected override void OnAuthenticationError(object sender, XmppAuthenticationFailiureEventArgs e) {
+        protected override void OnAuthenticationError(object sender, AuthenticationFailiureEventArgs e) {
             base.OnAuthenticationError(sender, e);
 
             waitEvent.Set();

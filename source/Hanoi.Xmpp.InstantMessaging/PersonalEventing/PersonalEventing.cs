@@ -38,11 +38,11 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
     /// <summary>
     ///   XMPP Personal Eventing
     /// </summary>
-    public sealed class XmppPersonalEventing
+    public sealed class PersonalEventing
     {
         private readonly List<string> features;
         private readonly List<string> pendingMessages;
-        private readonly XmppSession session;
+        private readonly Session session;
         private IDisposable infoQueryErrorSubscription;
         private bool isUserTuneEnabled;
         private IDisposable serviceDiscoverySubscription;
@@ -52,7 +52,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         ///   Initializes a new instance of the <see cref = "T:XmppServiceDiscovery" /> class.
         /// </summary>
         /// <param name = "session">The session.</param>
-        internal XmppPersonalEventing(XmppSession session)
+        internal PersonalEventing(Session session)
         {
             this.session = session;
             pendingMessages = new List<string>();
@@ -141,16 +141,16 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         {
             sessionStateSubscription = session
                 .StateChanged
-                .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
+                .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>
                     {
-                        if (newState == XmppSessionState.LoggingOut)
+                        if (newState == SessionState.LoggingOut)
                         {
                             Subscribe();
                         }
-                        else if (newState == XmppSessionState.LoggingOut)
+                        else if (newState == SessionState.LoggingOut)
                         {
                             features.Clear();
                             pendingMessages.Clear();

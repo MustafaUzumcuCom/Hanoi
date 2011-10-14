@@ -39,8 +39,8 @@ namespace Hanoi.Xmpp.InstantMessaging {
     public sealed class XmppChat {
         private IDisposable chatMessageSubscription;
         private XmppContact contact;
-        private Queue<XmppMessage> pendingMessages;
-        private XmppSession session;
+        private Queue<Message> pendingMessages;
+        private Session session;
 
         private IDisposable sessionStateSubscription;
 
@@ -49,10 +49,10 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// </summary>
         /// <param name = "session">The session.</param>
         /// <param name = "contact">The contact.</param>
-        internal XmppChat(XmppSession session, XmppContact contact) {
+        internal XmppChat(Session session, XmppContact contact) {
             this.session = session;
             this.contact = contact;
-            pendingMessages = new Queue<XmppMessage>();
+            pendingMessages = new Queue<Message>();
 
             Subscribe();
         }
@@ -68,7 +68,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Gets the pending messages
         /// </summary>
-        public Queue<XmppMessage> PendingMessages {
+        public Queue<Message> PendingMessages {
             get { return pendingMessages; }
         }
 
@@ -124,7 +124,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                                Value = message
                            };
 
-            var chatMessage = new Message
+            var chatMessage = new Serialization.InstantMessaging.Client.Message
                                   {
                                       ID = XmppIdentifierGenerator.Generate(),
                                       Type = MessageType.Chat,
@@ -152,7 +152,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
             // Generate the notification only if the target entity supports it
             if (Contact.SupportsChatStateNotifications)
             {
-                var message = new Message
+                var message = new Serialization.InstantMessaging.Client.Message
                                   {
                                       ID = XmppIdentifierGenerator.Generate(),
                                       Type = MessageType.Chat,
@@ -192,7 +192,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
         private void SubscribeToSessionState() {
             sessionStateSubscription = session
                 .StateChanged
-                .Where(s => s == XmppSessionState.LoggingOut)
+                .Where(s => s == SessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>

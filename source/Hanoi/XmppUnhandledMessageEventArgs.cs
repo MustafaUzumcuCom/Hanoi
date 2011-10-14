@@ -31,7 +31,7 @@ using System;
 
 namespace Hanoi {
     /// <summary>
-    ///   Event args for the <see cref = "XmppConnection.UnhandledMessage" /> event.
+    ///   Event args for the <see cref = "Connection.UnhandledMessage" /> event.
     /// </summary>
     public sealed class XmppUnhandledMessageEventArgs
         : EventArgs {

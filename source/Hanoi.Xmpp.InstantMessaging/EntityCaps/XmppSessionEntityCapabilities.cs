@@ -41,12 +41,12 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps {
     /// </summary>
     public sealed class XmppSessionEntityCapabilities
         : XmppEntityCapabilities {
-        private XmppSession session;
+        private Session session;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "XmppEntityCapabilities" /> class.
         /// </summary>
-        internal XmppSessionEntityCapabilities(XmppSession session)
+        internal XmppSessionEntityCapabilities(Session session)
             : base(session) {
             this.session = session;
 
@@ -88,7 +88,7 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps {
                 !String.IsNullOrEmpty(Node) &&
                 Identities.Count > 0)
             {
-                var presence = new Presence
+                var presence = new Serialization.InstantMessaging.Presence.Presence
                                    {
                                        Id = XmppIdentifierGenerator.Generate()
                                    };

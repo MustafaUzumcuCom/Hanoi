@@ -38,7 +38,7 @@ namespace Hanoi.Transports {
         ///   Opens the connection
         /// </summary>
         /// <param name = "connectionString">The connection string used for authentication.</param>
-        public override void Open(XmppConnectionString connectionString) {
+        public override void Open(ConnectionString connectionString) {
             // Connection string
             ConnectionString = connectionString;
             UserId = ConnectionString.UserId;

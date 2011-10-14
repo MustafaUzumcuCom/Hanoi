@@ -37,8 +37,8 @@ using Hanoi.Serialization.InstantMessaging.Client;
 namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
     public abstract class XmppServiceDiscoveryObject
          {
-        private readonly XmppJid identifier;
-        private readonly XmppSession session;
+        private readonly Jid identifier;
+        private readonly Session session;
         private readonly AutoResetEvent waitEvent;
         private List<XmppServiceFeature> features;
         private bool featuresRequested;
@@ -53,7 +53,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         /// <summary>
         ///   Initializes a new instance of the <see cref = "XmppServiceDiscoveryObject" /> class.
         /// </summary>
-        protected XmppServiceDiscoveryObject(XmppSession session, string identifier) {
+        protected XmppServiceDiscoveryObject(Session session, string identifier) {
             this.session = session;
             this.identifier = identifier;
             waitEvent = new AutoResetEvent(false);
@@ -64,7 +64,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         /// <summary>
         ///   Gets the XMPP Identifier (JID)
         /// </summary>
-        public XmppJid Identifier {
+        public Jid Identifier {
             get { return identifier; }
         }
 
@@ -113,7 +113,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         /// <summary>
         ///   Gets the Xmpp Session
         /// </summary>
-        protected XmppSession Session {
+        protected Session Session {
             get { return session; }
         }
 
@@ -221,7 +221,7 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
         private void SubscribeToSessionState() {
             sessionStateSubscription = session
                 .StateChanged
-                .Where(s => s == XmppSessionState.LoggingIn || s == XmppSessionState.LoggingOut)
+                .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe(newState => OnSessionStateChanged(newState));
         }
 
@@ -257,14 +257,14 @@ namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery {
             }
         }
 
-        protected virtual void OnSessionStateChanged(XmppSessionState newState) {
+        protected virtual void OnSessionStateChanged(SessionState newState) {
             SubscribeToSessionState();
 
-            if (newState == XmppSessionState.LoggingIn)
+            if (newState == SessionState.LoggingIn)
             {
                 Subscribe();
             }
-            else if (newState == XmppSessionState.LoggingOut)
+            else if (newState == SessionState.LoggingOut)
             {
                 Unsubscribe();
             }

@@ -34,7 +34,7 @@ namespace Hanoi {
     ///   Speficies feature flags supported bythe XMPP server.
     /// </summary>
     [Flags]
-    internal enum XmppStreamFeatures {
+    internal enum StreamFeatures {
         /// <summary>
         ///   TLS Connections.
         /// </summary>

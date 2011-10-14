@@ -11,13 +11,13 @@ namespace Hanoi.Transports {
     ///   Base class for transport implementations
     /// </summary>
     internal abstract class BaseTransport : ITransport {
-        private XmppConnectionString connectionString;
+        private ConnectionString connectionString;
         private string hostName;
 
         private Subject<object> onMessageReceivedSubject = new Subject<object>();
         private Subject<string> onXmppStreamClosedSubject = new Subject<string>();
         private Subject<string> onXmppStreamInitializedSubject = new Subject<string>();
-        private XmppJid userId;
+        private Jid userId;
 
         protected BaseTransport() {
             SyncReads = new object();
@@ -38,12 +38,12 @@ namespace Hanoi.Transports {
 
         protected bool IsDisposed { get; private set; }
 
-        protected XmppConnectionString ConnectionString {
+        protected ConnectionString ConnectionString {
             get { return connectionString; }
             set { connectionString = value; }
         }
 
-        protected XmppJid UserId {
+        protected Jid UserId {
             get { return userId; }
             set { userId = value; }
         }
@@ -95,7 +95,7 @@ namespace Hanoi.Transports {
             GC.SuppressFinalize(this);
         }
 
-        public abstract void Open(XmppConnectionString connectionString);
+        public abstract void Open(ConnectionString connectionString);
 
         public abstract void InitializeXmppStream();
 
@@ -119,7 +119,7 @@ namespace Hanoi.Transports {
 
         /// <summary>
         ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:Hanoi.XmppConnection" /> is reclaimed by garbage collection.
+        ///   <see cref = "T:Hanoi.Connection" /> is reclaimed by garbage collection.
         /// </summary>
         ~BaseTransport() {
             // Do not re-create Dispose clean-up code here.

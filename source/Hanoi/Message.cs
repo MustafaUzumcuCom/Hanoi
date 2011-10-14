@@ -34,22 +34,22 @@ namespace Hanoi {
     /// <summary>
     ///   Represents an XMPP message stanza
     /// </summary>
-    public sealed class XmppMessage {
+    public sealed class Message {
         private string body;
         private XmppChatStateNotification chatStateNotification;
-        private XmppJid from;
+        private Jid from;
         private string identifier;
         private string language;
         private string subject;
         private string thread;
-        private XmppJid to;
+        private Jid to;
         private MessageType type;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppMessage" /> class.
+        ///   Initializes a new instance of the <see cref = "T:Message" /> class.
         /// </summary>
         /// <param name = "message">The message.</param>
-        internal XmppMessage(Message message) {
+        internal Message(Serialization.InstantMessaging.Client.Message message) {
             Initialize(message);
         }
 
@@ -64,7 +64,7 @@ namespace Hanoi {
         ///   Gets the message source JID .
         /// </summary>
         /// <value>From.</value>
-        public XmppJid From {
+        public Jid From {
             get { return @from; }
         }
 
@@ -72,7 +72,7 @@ namespace Hanoi {
         ///   Gets the message target JID .
         /// </summary>
         /// <value>From.</value>
-        public XmppJid To {
+        public Jid To {
             get { return to; }
         }
 
@@ -122,7 +122,7 @@ namespace Hanoi {
             get { return chatStateNotification; }
         }
 
-        private void Initialize(Message message) {
+        private void Initialize(Serialization.InstantMessaging.Client.Message message) {
             identifier = message.ID;
             @from = message.From;
             to = message.To;
