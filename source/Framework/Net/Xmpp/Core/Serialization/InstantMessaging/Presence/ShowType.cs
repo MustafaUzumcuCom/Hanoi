@@ -30,11 +30,22 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Sasl {
+namespace Hanoi.Serialization.InstantMessaging.Presence {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-    [XmlRootAttribute("abort", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-    public class Abort {
+    [XmlType(Namespace = "jabber:client")]
+    [XmlRoot("show", Namespace = "jabber:client", IsNullable = false)]
+    public enum ShowType {
+        /// <remarks />
+        [XmlEnumAttribute("away")] Away = 0,
+
+        /// <remarks />
+        [XmlEnumAttribute("chat")] Online = 1,
+
+        /// <remarks />
+        [XmlEnumAttribute("dnd")] Busy = 2,
+
+        /// <remarks />
+        [XmlEnumAttribute("xa")] ExtendedAway = 4
     }
 }

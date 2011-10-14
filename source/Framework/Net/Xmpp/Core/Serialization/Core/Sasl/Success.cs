@@ -28,28 +28,13 @@
 */
 
 using System;
-using System.Collections.Specialized;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Sasl {
+namespace Hanoi.Serialization.Core.Sasl {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-    [XmlRootAttribute("mechanisms", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-    public class Mechanisms {
-        private StringCollection saslMechanisms;
-
-        /// <remarks />
-        [XmlElementAttribute("mechanism")]
-        public StringCollection SaslMechanisms {
-            get {
-                if (saslMechanisms == null)
-                {
-                    saslMechanisms = new StringCollection();
-                }
-
-                return saslMechanisms;
-            }
-        }
+    [XmlRootAttribute("success", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
+    public class Success {
     }
 }

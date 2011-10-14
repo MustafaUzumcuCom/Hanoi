@@ -30,8 +30,8 @@
 using System;
 using System.Collections;
 using System.Xml.Serialization;
+using Hanoi.Serialization.Core.Sasl;
 using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
-using Hanoi.Xmpp.Serialization.Core.Sasl;
 using Hanoi.Xmpp.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.Core.Tls;
 using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;

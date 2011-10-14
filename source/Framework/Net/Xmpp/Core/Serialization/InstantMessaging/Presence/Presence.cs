@@ -35,7 +35,7 @@ using Hanoi.Xmpp.Serialization.Extensions.MultiUserChat;
 using Hanoi.Xmpp.Serialization.Extensions.VCardAvatars;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Presence {
+namespace Hanoi.Serialization.InstantMessaging.Presence {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "jabber:client")]

@@ -29,8 +29,9 @@
 
 using System;
 using System.Xml.Serialization;
+using Hanoi.Xmpp.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Sasl {
+namespace Hanoi.Serialization.Core.Sasl {
     /// <remarks />
     [Serializable]
     [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]

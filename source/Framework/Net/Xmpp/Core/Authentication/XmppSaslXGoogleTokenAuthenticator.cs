@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-using Hanoi.Xmpp.Serialization.Core.Sasl;
+using Hanoi.Serialization.Core.Sasl;
 
 namespace Hanoi.Core.Authentication {
     /// <summary>

@@ -30,30 +30,30 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.InstantMessaging.Presence {
+namespace Hanoi.Serialization.Core.Sasl {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "jabber:client")]
-    public enum PresenceType {
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IncludeInSchema = false)]
+    public enum FailiureType {
         /// <remarks />
-        [XmlEnumAttribute("error")] Error,
+        [XmlEnumAttribute("not-authorized")] NotAuthorized,
 
         /// <remarks />
-        [XmlEnumAttribute("probe")] Probe,
+        [XmlEnumAttribute("mechanism-too-weak")] MechanismTooWeak,
 
         /// <remarks />
-        [XmlEnumAttribute("subscribe")] Subscribe,
+        [XmlEnumAttribute("temporary-auth-failure")] TemporaryAuthFailure,
 
         /// <remarks />
-        [XmlEnumAttribute("subscribed")] Subscribed,
+        [XmlEnumAttribute("invalid-authzid")] InvalidAuthzid,
 
         /// <remarks />
-        [XmlEnumAttribute("unavailable")] Unavailable,
+        [XmlEnumAttribute("aborted")] Aborted,
 
         /// <remarks />
-        [XmlEnumAttribute("unsubscribe")] Unsubscribe,
+        [XmlEnumAttribute("incorrect-encoding")] IncorrectEncoding,
 
         /// <remarks />
-        [XmlEnumAttribute("unsubscribed")] Unsubscribed,
+        [XmlEnumAttribute("invalid-mechanism")] InvalidMechanism,
     }
 }

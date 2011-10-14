@@ -31,11 +31,11 @@ using System;
 using System.Text;
 using BabelIm.Net.Xmpp.InstantMessaging.ServiceDiscovery;
 using Hanoi.Core;
+using Hanoi.Serialization.InstantMessaging.Presence;
 using Hanoi.Xmpp;
 using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Xmpp.Serialization.Extensions.ServiceDiscovery;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
-using Hanoi.Xmpp.Serialization.InstantMessaging.Presence;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging.EntityCaps {
     /// <summary>

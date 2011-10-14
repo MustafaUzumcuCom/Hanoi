@@ -30,30 +30,26 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Sasl {
+namespace Hanoi.Serialization.Core.Sasl {
     /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IncludeInSchema = false)]
-    public enum FailiureType {
-        /// <remarks />
-        [XmlEnumAttribute("not-authorized")] NotAuthorized,
+    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+    [XmlRootAttribute("auth", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
+    public class Auth {
+        private string mechanismField;
+        private string value;
 
         /// <remarks />
-        [XmlEnumAttribute("mechanism-too-weak")] MechanismTooWeak,
+        [XmlAttributeAttribute("mechanism")]
+        public string Mechanism {
+            get { return mechanismField; }
+            set { mechanismField = value; }
+        }
 
-        /// <remarks />
-        [XmlEnumAttribute("temporary-auth-failure")] TemporaryAuthFailure,
-
-        /// <remarks />
-        [XmlEnumAttribute("invalid-authzid")] InvalidAuthzid,
-
-        /// <remarks />
-        [XmlEnumAttribute("aborted")] Aborted,
-
-        /// <remarks />
-        [XmlEnumAttribute("incorrect-encoding")] IncorrectEncoding,
-
-        /// <remarks />
-        [XmlEnumAttribute("invalid-mechanism")] InvalidMechanism,
+        [XmlText]
+        public string Value {
+            get { return value; }
+            set { this.value = value; }
+        }
     }
 }

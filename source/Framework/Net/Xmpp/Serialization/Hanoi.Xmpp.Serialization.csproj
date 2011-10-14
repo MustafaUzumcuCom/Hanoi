@@ -78,20 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ResourceBinding\Bind.cs" />
-    <Compile Include="Core\Sasl\Abort.cs" />
-    <Compile Include="Core\Sasl\Auth.cs" />
-    <Compile Include="Core\Sasl\Challenge.cs" />
-    <Compile Include="Core\Sasl\Failiure.cs" />
-    <Compile Include="Core\Sasl\FailiureType.cs" />
-    <Compile Include="Core\Sasl\Mechanims.cs" />
-    <Compile Include="Core\Sasl\Response.cs" />
-    <Compile Include="Core\Sasl\Success.cs" />
     <Compile Include="Core\Stanzas\StanzaError.cs" />
     <Compile Include="Core\Streams\Session.cs" />
-    <Compile Include="Core\Streams\Stream.cs" />
-    <Compile Include="Core\Streams\StreamError.cs" />
-    <Compile Include="Core\Streams\StreamErrorText.cs" />
-    <Compile Include="Core\Streams\StreamFeatures.cs" />
     <Compile Include="Core\Tls\Procced.cs" />
     <Compile Include="Core\Tls\StartTls.cs" />
     <Compile Include="Empty.cs" />
@@ -232,10 +220,6 @@
     <Compile Include="InstantMessaging\Client\MessageSubject.cs" />
     <Compile Include="InstantMessaging\Client\MessageType.cs" />
     <Compile Include="InstantMessaging\Client\NotificationType.cs" />
-    <Compile Include="InstantMessaging\Presence\Presence.cs" />
-    <Compile Include="InstantMessaging\Presence\ShowType.cs" />
-    <Compile Include="InstantMessaging\Presence\Status.cs" />
-    <Compile Include="InstantMessaging\Presence\PresenceType.cs" />
     <Compile Include="Extensions\EntityCapabilities\EntityCapabilities.cs" />
     <Compile Include="InstantMessaging\Privacy\PrivacyActionType.cs" />
     <Compile Include="InstantMessaging\Privacy\Active.cs" />

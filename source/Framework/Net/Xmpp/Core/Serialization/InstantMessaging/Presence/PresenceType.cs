@@ -30,17 +30,30 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Sasl {
+namespace Hanoi.Serialization.InstantMessaging.Presence {
+    /// <remarks />
     [Serializable]
-    [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-    [XmlRootAttribute("challenge", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-    public class Challenge {
-        private string value;
+    [XmlType(Namespace = "jabber:client")]
+    public enum PresenceType {
+        /// <remarks />
+        [XmlEnumAttribute("error")] Error,
 
-        [XmlTextAttribute]
-        public string Value {
-            get { return value; }
-            set { this.value = value; }
-        }
+        /// <remarks />
+        [XmlEnumAttribute("probe")] Probe,
+
+        /// <remarks />
+        [XmlEnumAttribute("subscribe")] Subscribe,
+
+        /// <remarks />
+        [XmlEnumAttribute("subscribed")] Subscribed,
+
+        /// <remarks />
+        [XmlEnumAttribute("unavailable")] Unavailable,
+
+        /// <remarks />
+        [XmlEnumAttribute("unsubscribe")] Unsubscribe,
+
+        /// <remarks />
+        [XmlEnumAttribute("unsubscribed")] Unsubscribed,
     }
 }

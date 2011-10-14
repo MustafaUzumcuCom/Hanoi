@@ -27,10 +27,10 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-using ShowType = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.ShowType;
-using PresenceType = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.PresenceType;
-using Presence = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Presence;
-using Status = Hanoi.Xmpp.Serialization.InstantMessaging.Presence.Status;
+using ShowType = Hanoi.Serialization.InstantMessaging.Presence.ShowType;
+using PresenceType = Hanoi.Serialization.InstantMessaging.Presence.PresenceType;
+using Presence = Hanoi.Serialization.InstantMessaging.Presence.Presence;
+using Status = Hanoi.Serialization.InstantMessaging.Presence.Status;
 
 namespace BabelIm.Net.Xmpp.InstantMessaging {
     /// <summary>

@@ -30,23 +30,14 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Sasl {
-    /// <remarks />
+namespace Hanoi.Serialization.Core.Sasl {
     [Serializable]
     [XmlType(Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
-    [XmlRootAttribute("auth", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
-    public class Auth {
-        private string mechanismField;
+    [XmlRootAttribute("challenge", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl", IsNullable = false)]
+    public class Challenge {
         private string value;
 
-        /// <remarks />
-        [XmlAttributeAttribute("mechanism")]
-        public string Mechanism {
-            get { return mechanismField; }
-            set { mechanismField = value; }
-        }
-
-        [XmlText]
+        [XmlTextAttribute]
         public string Value {
             get { return value; }
             set { this.value = value; }

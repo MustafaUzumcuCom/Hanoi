@@ -94,9 +94,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\XmppAuthenticationFailiureEventArgs.cs" />
+    <Compile Include="Serialization\Core\Sasl\Abort.cs" />
+    <Compile Include="Serialization\Core\Sasl\Auth.cs" />
+    <Compile Include="Serialization\Core\Sasl\Challenge.cs" />
+    <Compile Include="Serialization\Core\Sasl\Failiure.cs" />
+    <Compile Include="Serialization\Core\Sasl\FailiureType.cs" />
+    <Compile Include="Serialization\Core\Sasl\Mechanims.cs" />
+    <Compile Include="Serialization\Core\Sasl\Response.cs" />
+    <Compile Include="Serialization\Core\Sasl\Success.cs" />
+    <Compile Include="Serialization\Core\Streams\Stream.cs" />
+    <Compile Include="Serialization\Core\Streams\StreamError.cs" />
+    <Compile Include="Serialization\Core\Streams\StreamErrorText.cs" />
+    <Compile Include="Serialization\Core\Streams\StreamFeatures.cs" />
     <Compile Include="Serialization\Extensions\Bosh\BodyCondition.cs" />
     <Compile Include="Serialization\Extensions\Bosh\BodyType.cs" />
     <Compile Include="Serialization\Extensions\Bosh\HttpBindBody.cs" />
+    <Compile Include="Serialization\InstantMessaging\Presence\Presence.cs" />
+    <Compile Include="Serialization\InstantMessaging\Presence\PresenceType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Presence\ShowType.cs" />
+    <Compile Include="Serialization\InstantMessaging\Presence\Status.cs" />
     <Compile Include="Serialization\XmppSerializer.cs" />
     <Compile Include="Serialization\XmppTextWriter.cs" />
     <Compile Include="Transports\BaseTransport.cs" />
@@ -169,7 +185,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Serialization\Core\ResourceBinding\" />
-    <Folder Include="Serialization\Streams\" />
+    <Folder Include="Serialization\Core\Stanzas\" />
+    <Folder Include="Serialization\InstantMessaging\Client\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
