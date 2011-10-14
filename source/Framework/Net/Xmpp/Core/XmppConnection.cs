@@ -33,6 +33,7 @@ using System.Linq;
 using System.Threading;
 using Hanoi.Core.Authentication;
 using Hanoi.Core.Transports;
+using Hanoi.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
 using Hanoi.Xmpp.Serialization.Core.Sasl;
 using Hanoi.Xmpp.Serialization.Core.Streams;

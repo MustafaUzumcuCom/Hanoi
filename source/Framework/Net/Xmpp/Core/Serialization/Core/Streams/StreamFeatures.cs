@@ -32,12 +32,13 @@ using System.Collections;
 using System.Xml.Serialization;
 using Hanoi.Xmpp.Serialization.Core.ResourceBinding;
 using Hanoi.Xmpp.Serialization.Core.Sasl;
+using Hanoi.Xmpp.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.Core.Tls;
 using Hanoi.Xmpp.Serialization.Extensions.EntityCapabilities;
 using Hanoi.Xmpp.Serialization.Extensions.RosterVersioning;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Register;
 
-namespace Hanoi.Xmpp.Serialization.Core.Streams {
+namespace Hanoi.Serialization.Core.Streams {
     /// <summary>
     ///   http://xmpp.org/rfcs/rfc3920.html
     /// </summary>

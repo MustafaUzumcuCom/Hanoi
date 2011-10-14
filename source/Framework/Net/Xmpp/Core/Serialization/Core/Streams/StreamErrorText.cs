@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Streams {
+namespace Hanoi.Serialization.Core.Streams {
     /// <remarks />
     [Serializable]
     [XmlType(TypeName = "text", Namespace = "urn:ietf:params:xml:ns:xmpp-streams")]

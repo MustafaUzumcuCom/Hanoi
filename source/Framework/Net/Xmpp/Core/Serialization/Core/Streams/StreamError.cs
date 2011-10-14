@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2007 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2007 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -30,7 +30,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.Serialization.Core.Streams {
+namespace Hanoi.Serialization.Core.Streams {
     /// <remarks />
     [Serializable]
     [XmlType(TypeName = "error", Namespace = "http://etherx.jabber.org/streams")]

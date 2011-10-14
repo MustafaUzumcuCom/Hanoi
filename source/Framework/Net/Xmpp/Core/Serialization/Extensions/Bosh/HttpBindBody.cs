@@ -32,6 +32,7 @@ using System.Collections;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Hanoi.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.Core.Sasl;
 using Hanoi.Xmpp.Serialization.Core.Streams;
 using Hanoi.Xmpp.Serialization.InstantMessaging.Client;
