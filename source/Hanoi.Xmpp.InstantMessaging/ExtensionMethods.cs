@@ -1,5 +1,5 @@
-Ôªø/*
-    Copyright (c) 2008 - 2010, Carlos Guzm√°n √Ålvarez
+/*
+    Copyright (c) 2008 - 2010, Carlos Guzm·n ¡lvarez
 
     All rights reserved.
 
@@ -31,17 +31,20 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Hanoi {
+namespace Hanoi.Xmpp.InstantMessaging
+{
     /// <summary>
     ///   Hash extension methods
     /// </summary>
-    public static class HashExtensionMethods {
+    internal static class HashExtensionMethods
+    {
         /// <summary>
         ///   Converts a given byte array to a base-64 string
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        public static string ToBase64String(this byte[] buffer) {
+        public static string ToBase64String(this byte[] buffer)
+        {
             return Convert.ToBase64String(buffer);
         }
 
@@ -50,7 +53,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        public static byte[] ComputeSHA1Hash(this string value) {
+        public static byte[] ComputeSHA1Hash(this string value)
+        {
             using (SHA1 hashAlgorithm = SHA1.Create())
             {
                 return hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(value));
@@ -62,7 +66,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        public static byte[] ComputeSHA1Hash(this StringBuilder value) {
+        public static byte[] ComputeSHA1Hash(this StringBuilder value)
+        {
             return value.ToString().ComputeSHA1Hash();
         }
 
@@ -71,7 +76,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        public static byte[] ComputeMD5Hash(this byte[] buffer) {
+        public static byte[] ComputeMD5Hash(this byte[] buffer)
+        {
             using (MD5 md5 = MD5.Create())
             {
                 md5.TransformFinalBlock(buffer, 0, buffer.Length);
@@ -85,7 +91,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        public static byte[] ComputeSHA1Hash(this byte[] buffer) {
+        public static byte[] ComputeSHA1Hash(this byte[] buffer)
+        {
             using (SHA1 hashAlgorithm = SHA1.Create())
             {
                 hashAlgorithm.TransformFinalBlock(buffer, 0, buffer.Length);
@@ -99,7 +106,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        public static byte[] ComputeMD5Hash(this string[] values) {
+        public static byte[] ComputeMD5Hash(this string[] values)
+        {
             using (MD5 hashAlgorithm = MD5.Create())
             {
                 foreach (string value in values)
@@ -123,7 +131,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        private static byte[] ComputeSHA1Hash(this string[] values) {
+        private static byte[] ComputeSHA1Hash(this string[] values)
+        {
             using (SHA1 hashAlgorithm = SHA1.Create())
             {
                 foreach (string value in values)
@@ -147,7 +156,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "buffer"></param>
         /// <returns></returns>
-        public static string ToHexString(this byte[] buffer) {
+        public static string ToHexString(this byte[] buffer)
+        {
             var hex = new StringBuilder();
 
             for (int i = 0; i < buffer.Length; i++)
