@@ -52,24 +52,24 @@ namespace Hanoi.Xmpp.InstantMessaging
     /// </summary>
     public sealed class Session : ISession
     {
-        private readonly AvatarStorage avatarStorage;
-        private readonly Dictionary<string, Chat> chats;
-        private readonly ClientCapabilitiesStorage clientCapabilitiesStorage;
-        private readonly Connection connection;
+        private readonly AvatarStorage _avatarStorage;
+        private readonly Dictionary<string, Chat> _chats;
+        private readonly ClientCapabilitiesStorage _clientCapabilitiesStorage;
+        private readonly Connection _connection;
 
-        private readonly Subject<Message> messageReceivedSubject = new Subject<Message>();
-        private readonly PersonalEventing.PersonalEventing personalEventing;
-        private readonly ServiceDiscovery.ServiceDiscovery serviceDiscovery;
-        private readonly Subject<SessionState> stateChangedSubject = new Subject<SessionState>();
-        private readonly object syncObject;
-        private Activity activity;
-        private SessionEntityCapabilities capabilities;
+        private readonly Subject<Message> _messageReceivedSubject = new Subject<Message>();
+        private readonly PersonalEventing.PersonalEventing _personalEventing;
+        private readonly ServiceDiscovery.ServiceDiscovery _serviceDiscovery;
+        private readonly Subject<SessionState> _stateChangedSubject = new Subject<SessionState>();
+        private readonly object _syncObject;
+        private Activity _activity;
+        private SessionEntityCapabilities _capabilities;
 
-        private IDisposable chatMessageSubscription;
-        private IDisposable errorMessageSubscription;
-        private Presence presence;
-        private Roster roster;
-        private SessionState state;
+        private IDisposable _chatMessageSubscription;
+        private IDisposable _errorMessageSubscription;
+        private Presence _presence;
+        private Roster _roster;
+        private SessionState _state;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "Session" /> class
@@ -77,34 +77,36 @@ namespace Hanoi.Xmpp.InstantMessaging
         public Session()
         {
             State = SessionState.LoggedOut;
-            avatarStorage = new AvatarStorage();
-            chats = new Dictionary<string, Chat>();
-            syncObject = new object();
-            connection = new Connection();
-            serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
-            personalEventing = new PersonalEventing.PersonalEventing(this);
-            activity = new Activity(this);
-            clientCapabilitiesStorage = new ClientCapabilitiesStorage();
-            roster = new Roster(this);
+            _avatarStorage = new AvatarStorage();
+            _chats = new Dictionary<string, Chat>();
+            _syncObject = new object();
+            _connection = new Connection();
+            _serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
+            _personalEventing = new PersonalEventing.PersonalEventing(this);
+            _activity = new Activity(this);
+            _clientCapabilitiesStorage = new ClientCapabilitiesStorage();
+            _roster = new Roster(this);
 
-            avatarStorage.Load();
-            clientCapabilitiesStorage.Load();
+            _avatarStorage.Load();
+            _clientCapabilitiesStorage.Load();
         }
 
         public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator) {
             State = SessionState.LoggedOut;
-            avatarStorage = new AvatarStorage();
-            chats = new Dictionary<string, Chat>();
-            syncObject = new object();
-            connection = new Connection(authenticator, featureDetection);
-            serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
-            personalEventing = new PersonalEventing.PersonalEventing(this);
-            activity = new Activity(this);
-            clientCapabilitiesStorage = new ClientCapabilitiesStorage();
-            roster = new Roster(this);
+            _avatarStorage = new AvatarStorage();
+            _chats = new Dictionary<string, Chat>();
+            _syncObject = new object();
 
-            avatarStorage.Load();
-            clientCapabilitiesStorage.Load();
+            _connection = new Connection(authenticator, featureDetection);
+
+            _serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
+            _personalEventing = new PersonalEventing.PersonalEventing(this);
+            _activity = new Activity(this);
+            _clientCapabilitiesStorage = new ClientCapabilitiesStorage();
+            _roster = new Roster(this);
+
+            _avatarStorage.Load();
+            _clientCapabilitiesStorage.Load();
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         internal Connection Connection
         {
-            get { return connection; }
+            get { return _connection; }
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         internal ClientCapabilitiesStorage ClientCapabilitiesStorage
         {
-            get { return clientCapabilitiesStorage; }
+            get { return _clientCapabilitiesStorage; }
         }
 
         /// <summary>
@@ -133,17 +135,17 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public IObservable<Message> MessageReceived
         {
-            get { return messageReceivedSubject.AsObservable(); }
+            get { return _messageReceivedSubject.AsObservable(); }
         }
 
         public IObservable<Serialization.InstantMessaging.Presence.Presence> OnPresenceMessage
         {
-            get { return connection.OnPresenceMessage; }
+            get { return _connection.OnPresenceMessage; }
         }
 
         public IObservable<RosterQuery> OnRosterMessage
         {
-            get { return connection.OnRosterMessage; }
+            get { return _connection.OnRosterMessage; }
         }
 
         /// <summary>
@@ -151,7 +153,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public IObservable<SessionState> StateChanged
         {
-            get { return stateChangedSubject.AsObservable(); }
+            get { return _stateChangedSubject.AsObservable(); }
         }
 
         /// <summary>
@@ -161,9 +163,9 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             get
             {
-                if (connection != null)
+                if (_connection != null)
                 {
-                    return connection.UserId;
+                    return _connection.UserId;
                 }
 
                 return null;
@@ -175,15 +177,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public Roster Roster
         {
-            get
-            {
-                if (roster == null)
-                {
-                    roster = new Roster(this);
-                }
-
-                return roster;
-            }
+            get { return _roster ?? (_roster = new Roster(this)); }
         }
 
         /// <summary>
@@ -191,15 +185,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public Activity Activity
         {
-            get
-            {
-                if (activity == null)
-                {
-                    activity = new Activity(this);
-                }
-
-                return activity;
-            }
+            get { return _activity ?? (_activity = new Activity(this)); }
         }
 
         /// <summary>
@@ -207,15 +193,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public SessionEntityCapabilities Capabilities
         {
-            get
-            {
-                if (capabilities == null)
-                {
-                    capabilities = new SessionEntityCapabilities(this);
-                }
-
-                return capabilities;
-            }
+            get { return _capabilities ?? (_capabilities = new SessionEntityCapabilities(this)); }
         }
 
         /// <summary>
@@ -223,13 +201,13 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public SessionState State
         {
-            get { return state; }
+            get { return _state; }
             private set
             {
-                if (state != value)
+                if (_state != value)
                 {
-                    state = value;
-                    stateChangedSubject.OnNext(state);
+                    _state = value;
+                    _stateChangedSubject.OnNext(_state);
                 }
             }
         }
@@ -239,15 +217,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public Presence Presence
         {
-            get
-            {
-                if (presence == null)
-                {
-                    presence = new Presence(this);
-                }
-
-                return presence;
-            }
+            get { return _presence ?? (_presence = new Presence(this)); }
         }
 
         /// <summary>
@@ -255,7 +225,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public ServiceDiscovery.ServiceDiscovery ServiceDiscovery
         {
-            get { return serviceDiscovery; }
+            get { return _serviceDiscovery; }
         }
 
         /// <summary>
@@ -263,7 +233,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public AvatarStorage AvatarStorage
         {
-            get { return avatarStorage; }
+            get { return _avatarStorage; }
         }
 
         /// <summary>
@@ -271,7 +241,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public PersonalEventing.PersonalEventing PersonalEventing
         {
-            get { return personalEventing; }
+            get { return _personalEventing; }
         }
 
         /// <summary>
@@ -280,7 +250,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <param name = "connectionString">Connection parameters</param>
         public ISession Open(string connectionString)
         {
-            if (connection != null && connection.State == ConnectionState.Open)
+            if (_connection != null && _connection.State == ConnectionState.Open)
             {
                 throw new XmppException("The session is already open");
             }
@@ -291,26 +261,17 @@ namespace Hanoi.Xmpp.InstantMessaging
             Subscribe();
 
             // Perform the authentication
-            connection.Open(connectionString);
+            Connection.Open(connectionString);
 
-            if (connection != null && connection.State == ConnectionState.Open)
+            if (Connection != null && Connection.State == ConnectionState.Open)
             {
-                // Send Roster Request
                 Roster.RequestRosterList();
 
-                // Set initial Presence status
                 Presence.SetInitialPresence();
-
-                // Advertise Capabilities
                 Capabilities.AdvertiseCapabilities();
-
-                // Discover server services
                 ServiceDiscovery.DiscoverServices();
-
-                // Discover personal eventing support
                 PersonalEventing.DiscoverSupport();
 
-                // Set as Logged In
                 State = SessionState.LoggedIn;
             }
             else
@@ -326,15 +287,15 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public ISession Close()
         {
-            if (connection != null &&
-                (connection.State == ConnectionState.Opening ||
-                 connection.State == ConnectionState.Open))
+            if (_connection != null &&
+                (_connection.State == ConnectionState.Opening ||
+                 _connection.State == ConnectionState.Open))
             {
                 try
                 {
                     State = SessionState.LoggingOut;
 
-                    if (connection.State == ConnectionState.Open)
+                    if (_connection.State == ConnectionState.Open)
                     {
                         // Save session configuration
                         AvatarStorage.Save();
@@ -343,11 +304,11 @@ namespace Hanoi.Xmpp.InstantMessaging
                         SetUnavailable();
 
                         // Clear all chats
-                        chats.Clear();
+                        _chats.Clear();
                     }
 
                     // Close connection
-                    connection.Close();
+                    _connection.Close();
 
                     // Unwire Connection events
                     Unsubscribe();
@@ -371,7 +332,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <returns></returns>
         public bool HasOpenChat(string contactId)
         {
-            return (chats != null && chats.ContainsKey(contactId));
+            return (_chats != null && _chats.ContainsKey(contactId));
         }
 
         /// <summary>
@@ -405,18 +366,18 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             Chat chat = null;
 
-            lock (syncObject)
+            lock (_syncObject)
             {
-                if (!chats.ContainsKey(contactId.BareIdentifier))
+                if (!_chats.ContainsKey(contactId.BareIdentifier))
                 {
                     chat = new Chat(this, Roster[contactId.BareIdentifier]);
-                    chats.Add(contactId.BareIdentifier, chat);
+                    _chats.Add(contactId.BareIdentifier, chat);
 
                     chat.ChatClosed += OnChatClosed;
                 }
                 else
                 {
-                    chat = chats[contactId.BareIdentifier];
+                    chat = _chats[contactId.BareIdentifier];
                 }
             }
 
@@ -615,10 +576,10 @@ namespace Hanoi.Xmpp.InstantMessaging
                 Send(iq);
 
                 // Save the avatar
-                avatarStorage.SaveAvatar(UserId.BareIdentifier, hash, avatarData);
+                _avatarStorage.SaveAvatar(UserId.BareIdentifier, hash, avatarData);
 
                 // Update session configuration
-                avatarStorage.Save();
+                _avatarStorage.Save();
             }
             catch
             {
@@ -705,12 +666,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <param name = "message">The message to be sent</param>
         internal void Send(object message)
         {
-            connection.Send(message);
+            _connection.Send(message);
         }
 
         private void CheckSessionState()
         {
-            if (connection == null || connection.State != ConnectionState.Open)
+            if (_connection == null || _connection.State != ConnectionState.Open)
             {
                 throw new XmppException("The session is not valid.");
             }
@@ -718,33 +679,33 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void Subscribe()
         {
-            chatMessageSubscription = connection.OnMessageReceived
+            _chatMessageSubscription = _connection.OnMessageReceived
                 .Where(m => m.Type == MessageType.Chat && m.ChatStateNotification != ChatStateNotification.None)
                 .Subscribe(OnChatMessageReceived);
 
-            errorMessageSubscription = connection.OnMessageReceived
+            _errorMessageSubscription = _connection.OnMessageReceived
                 .Where(m => m.Type == MessageType.Error)
                 .Subscribe(OnChatMessageReceived);
 
-            connection.AuthenticationFailiure += OnAuthenticationFailiure;
-            connection.ConnectionClosed += OnConnectionClosed;
+            _connection.AuthenticationFailiure += OnAuthenticationFailiure;
+            _connection.ConnectionClosed += OnConnectionClosed;
         }
 
         private void Unsubscribe()
         {
-            if (chatMessageSubscription != null)
+            if (_chatMessageSubscription != null)
             {
-                chatMessageSubscription.Dispose();
-                chatMessageSubscription = null;
+                _chatMessageSubscription.Dispose();
+                _chatMessageSubscription = null;
             }
-            if (errorMessageSubscription != null)
+            if (_errorMessageSubscription != null)
             {
-                errorMessageSubscription.Dispose();
-                errorMessageSubscription = null;
+                _errorMessageSubscription.Dispose();
+                _errorMessageSubscription = null;
             }
 
-            connection.AuthenticationFailiure -= OnAuthenticationFailiure;
-            connection.ConnectionClosed -= OnConnectionClosed;
+            _connection.AuthenticationFailiure -= OnAuthenticationFailiure;
+            _connection.ConnectionClosed -= OnConnectionClosed;
         }
 
         private void OnAuthenticationFailiure(object sender, AuthenticationFailiureEventArgs e)
@@ -762,27 +723,27 @@ namespace Hanoi.Xmpp.InstantMessaging
             Chat chat = null;
 
             if (String.IsNullOrEmpty(message.Body) &&
-                !chats.ContainsKey(message.From.BareIdentifier))
+                !_chats.ContainsKey(message.From.BareIdentifier))
             {
             }
             else
             {
-                if (!chats.ContainsKey(message.From.BareIdentifier))
+                if (!_chats.ContainsKey(message.From.BareIdentifier))
                 {
                     chat = CreateChat(message.From);
                 }
                 else
                 {
-                    chat = chats[message.From.BareIdentifier];
+                    chat = _chats[message.From.BareIdentifier];
                 }
 
-                messageReceivedSubject.OnNext(message);
+                _messageReceivedSubject.OnNext(message);
             }
         }
 
         private void OnErrorMessageReceived(Message message)
         {
-            messageReceivedSubject.OnNext(message);
+            _messageReceivedSubject.OnNext(message);
         }
 
         private void OnChatClosed(object sender, EventArgs e)
@@ -795,7 +756,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                 if (chat.Contact != null)
                 {
-                    chats.Remove(chat.Contact.ContactId.BareIdentifier);
+                    _chats.Remove(chat.Contact.ContactId.BareIdentifier);
                 }
             }
         }
