@@ -78,8 +78,8 @@ namespace Hanoi {
         /// <value><c>true</c> if [opens XMPP stream]; otherwise, <c>false</c>.</value>
         public bool OpensXmppStream {
             get {
-                return (name == XmppCodes.XmppStreamName &&
-                        node.StartsWith(XmppCodes.XmppStreamOpen));
+                return (name == StreamCodes.XmppStreamName &&
+                        node.StartsWith(StreamCodes.XmppStreamOpen));
             }
         }
 
@@ -88,7 +88,7 @@ namespace Hanoi {
         /// </summary>
         /// <value><c>true</c> if [closes XMPP stream]; otherwise, <c>false</c>.</value>
         public bool ClosesXmppStream {
-            get { return node.StartsWith(XmppCodes.XmppStreamClose); }
+            get { return node.StartsWith(StreamCodes.XmppStreamClose); }
         }
 
         /// <summary>

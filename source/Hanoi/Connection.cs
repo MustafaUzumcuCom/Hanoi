@@ -231,7 +231,7 @@ namespace Hanoi
         /// <returns><b>true</b> if it's an error message; otherwise <b>false</b></returns>
         private static bool IsErrorMessage(object message)
         {
-            bool isError = false;
+            var isError = false;
 
             if (message is IQ)
             {

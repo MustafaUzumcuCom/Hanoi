@@ -50,11 +50,7 @@ namespace Hanoi
             RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.Compiled
             );
 
-        private string bareJid;
-        private string domainName;
         private string fullJid;
-        private string resourceName;
-        private string userName;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "Jid" /> class with
@@ -75,9 +71,9 @@ namespace Hanoi
         /// <param name = "resourceName">The resource name</param>
         public Jid(string userName, string domainName, string resourceName)
         {
-            this.userName = Stringprep.NamePrep(userName);
-            this.domainName = Stringprep.NodePrep(domainName);
-            this.resourceName = Stringprep.ResourcePrep(resourceName);
+            this.UserName = Stringprep.NamePrep(userName);
+            this.DomainName = Stringprep.NodePrep(domainName);
+            this.ResourceName = Stringprep.ResourcePrep(resourceName);
 
             BuildBareAndFullJid();
         }
@@ -85,34 +81,22 @@ namespace Hanoi
         /// <summary>
         ///   Gets the Bare JID
         /// </summary>
-        public string BareIdentifier
-        {
-            get { return bareJid; }
-        }
+        public string BareIdentifier { get; private set; }
 
         /// <summary>
         ///   Gets the User Name
         /// </summary>
-        public string UserName
-        {
-            get { return userName; }
-        }
+        public string UserName { get; private set; }
 
         /// <summary>
         ///   Gets the Domain Name
         /// </summary>
-        public string DomainName
-        {
-            get { return domainName; }
-        }
+        public string DomainName { get; private set; }
 
         /// <summary>
         ///   Gets the Resource Name
         /// </summary>
-        public string ResourceName
-        {
-            get { return resourceName; }
-        }
+        public string ResourceName { get; private set; }
 
         // Implicit conversion from string to Jid. 
         public static implicit operator Jid(string x)
@@ -172,15 +156,15 @@ namespace Hanoi
             {
                 if (match.Groups["userid"] != null)
                 {
-                    userName = Stringprep.NamePrep(match.Groups["userid"].Value);
+                    UserName = Stringprep.NamePrep(match.Groups["userid"].Value);
                 }
                 if (match.Groups["domain"] != null)
                 {
-                    domainName = Stringprep.NodePrep(match.Groups["domain"].Value);
+                    DomainName = Stringprep.NodePrep(match.Groups["domain"].Value);
                 }
                 if (match.Groups["resource"] != null)
                 {
-                    resourceName = Stringprep.ResourcePrep(match.Groups["resource"].Value);
+                    ResourceName = Stringprep.ResourcePrep(match.Groups["resource"].Value);
                 }
             }
 
@@ -191,11 +175,11 @@ namespace Hanoi
         {
             var jidBuffer = new StringBuilder();
 
-            if (UserName != null && userName.Length > 0)
+            if (!string.IsNullOrWhiteSpace(UserName))
             {
                 jidBuffer.Append(UserName);
             }
-            if (DomainName != null && DomainName.Length > 0)
+            if (!string.IsNullOrWhiteSpace(DomainName))
             {
                 if (jidBuffer.Length > 0)
                 {
@@ -205,9 +189,9 @@ namespace Hanoi
                 jidBuffer.Append(DomainName);
             }
 
-            bareJid = jidBuffer.ToString();
+            BareIdentifier = jidBuffer.ToString();
 
-            if (ResourceName != null && ResourceName.Length > 0)
+            if (!string.IsNullOrWhiteSpace(ResourceName))
             {
                 jidBuffer.AppendFormat("/{0}", ResourceName);
             }

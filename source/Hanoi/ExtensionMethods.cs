@@ -31,12 +31,12 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Hanoi.Xmpp.InstantMessaging
+namespace Hanoi
 {
     /// <summary>
     ///   Hash extension methods
     /// </summary>
-    internal static class HashExtensionMethods
+    public static class HashExtensionMethods
     {
         /// <summary>
         ///   Converts a given byte array to a base-64 string

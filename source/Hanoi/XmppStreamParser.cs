@@ -122,7 +122,7 @@ namespace Hanoi
 
         private static bool IsEndStreamTag(string tag)
         {
-            return (tag.Equals(XmppCodes.XmppStreamClose));
+            return (tag.Equals(StreamCodes.XmppStreamClose));
         }
 
         private static bool IsEndTag(string tag)
@@ -143,7 +143,7 @@ namespace Hanoi
 
         private static bool IsXmppStreamOpen(string tag)
         {
-            return tag.StartsWith(XmppCodes.XmppStreamOpen, StringComparison.OrdinalIgnoreCase);
+            return tag.StartsWith(StreamCodes.XmppStreamOpen, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

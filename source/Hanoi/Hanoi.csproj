@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationFailiureEventArgs.cs" />
     <Compile Include="AuthenticatorFactory.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FeatureDetection.cs" />
     <Compile Include="Serialization\Core\ResourceBinding\Bind.cs" />
     <Compile Include="Serialization\Core\Sasl\Abort.cs" />
@@ -226,12 +227,12 @@
     <Compile Include="Serialization\ItemChoiceType.cs" />
     <Compile Include="Serialization\XmppSerializer.cs" />
     <Compile Include="Serialization\XmppTextWriter.cs" />
+    <Compile Include="StreamCodes.cs" />
     <Compile Include="Transports\BaseTransport.cs" />
     <Compile Include="Transports\HttpTransport.cs" />
     <Compile Include="Transports\ITransport.cs" />
     <Compile Include="Transports\ISecureTransport.cs" />
     <Compile Include="Transports\TcpTransport.cs" />
-    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Sockets\AuthMethod.cs" />
     <Compile Include="Sockets\AuthNone.cs" />
     <Compile Include="Sockets\AuthUserPass.cs" />

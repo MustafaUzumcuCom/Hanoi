@@ -164,7 +164,7 @@ namespace Hanoi.Transports {
                 var request = new DnsQueryRequest();
                 var response = request.Resolve
                     (
-                        String.Format("{0}.{1}", XmppCodes.XmppSrvRecordPrefix, ConnectionString.HostName),
+                        String.Format("{0}.{1}", StreamCodes.XmppSrvRecordPrefix, ConnectionString.HostName),
                         NsType.SRV,
                         NsClass.INET,
                         ProtocolType.Tcp
