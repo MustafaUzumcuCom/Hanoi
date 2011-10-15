@@ -570,6 +570,13 @@ namespace Hanoi
                 }
                 else if (message is Serialization.Core.Streams.StreamFeatures)
                 {
+                    // TODO: use the FeatureDetection class to calculate this behaviour
+                    // e.g.
+                    
+                    // public IFeatureDetection Features { get; set; }
+                    // ...
+                    // _streamFeatures = Features.Process(features);
+
                     ProcessStreamFeatures(message as Serialization.Core.Streams.StreamFeatures);
                 }
                 else if (UnhandledMessage != null)
@@ -617,12 +624,9 @@ namespace Hanoi
         ///   Process an Stream Features XMPP message
         /// </summary>
         /// <param name = "features"></param>
+        [Obsolete("Use FeatureDetection to detect whatever we want")]
         private void ProcessStreamFeatures(Serialization.Core.Streams.StreamFeatures features) 
         {
-            // TODO: use the FeatureDetection class to calculate this behaviour
-            // e.g. sample usage
-            // _streamFeatures = new FeatureDetection().Process(features);
-
             if (features.Mechanisms != null && features.Mechanisms.SaslMechanisms.Count > 0)
             {
                 foreach (string mechanism in features.Mechanisms.SaslMechanisms)
@@ -758,7 +762,13 @@ namespace Hanoi
             try
             {
                 // TODO: replace usage of this method with a pluggable feature
-                // authenticator = new AuthenticatorFactory().Create(_streamFeatures, this);
+                // and then we can compose the authenticators and inject into a connection
+                //
+                // e.g.
+                // public IAuthenticatorFactory Factory { get; set; }
+                // ...
+                // authenticator = Factory.Create(_streamFeatures, this);
+
                 authenticator = CreateAuthenticator();
 
                 if (authenticator != null)
