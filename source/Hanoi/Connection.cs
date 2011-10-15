@@ -87,9 +87,9 @@ namespace Hanoi
             FeatureDetection = featureDetection;
         }
 
-        private IAuthenticatorFactory Authenticator { get; set; }
+        public IAuthenticatorFactory Authenticator { get; private set; }
 
-        private IFeatureDetection FeatureDetection { get; set; }
+        public IFeatureDetection FeatureDetection { get; private set; }
 
         // end new code
 

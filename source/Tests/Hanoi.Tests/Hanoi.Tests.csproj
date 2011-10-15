@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticatorFactoryTests.cs" />
+    <Compile Include="ConnectionTests.cs" />
     <Compile Include="FeatureDetectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
