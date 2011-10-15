@@ -758,7 +758,7 @@ namespace Hanoi
             try
             {
                 // TODO: replace usage of this method with a pluggable feature
-                // authenticator = new ConnectionFactory().Create(_streamFeatures, this);
+                // authenticator = new AuthenticatorFactory().Create(_streamFeatures, this);
                 authenticator = CreateAuthenticator();
 
                 if (authenticator != null)
@@ -884,6 +884,7 @@ namespace Hanoi
         ///   Creates an instance of the <see cref = "Authenticator" /> used by the connection.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("This should be customisable, so extract to a separate class")]
         private Authenticator CreateAuthenticator()
         {
             Authenticator authenticator = null;
@@ -910,6 +911,8 @@ namespace Hanoi
         /// <param elementname = "feature">Feature to check.</param>
         /// <param name="feature"></param>
         /// <returns><b>true</b> if the feature is supported by the server; or <b>false</b> if not</returns>
+        /// 
+        [Obsolete("Should we also allow this to be customisable?")]
         private bool SupportsFeature(StreamFeatures feature)
         {
             return ((_streamFeatures & feature) == feature);

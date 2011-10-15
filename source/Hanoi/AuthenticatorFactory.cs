@@ -4,7 +4,7 @@ using Hanoi.Authentication;
 
 namespace Hanoi
 {
-    public class ConnectionFactory : IConnectionFactory {
+    public class AuthenticatorFactory : IConnectionFactory {
         
         private IDictionary<StreamFeatures, Func<Connection, Authenticator>> custom =
             new Dictionary<StreamFeatures, Func<Connection, Authenticator>>();
