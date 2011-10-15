@@ -65,7 +65,6 @@ namespace Hanoi
         private Subject<Presence> _onPresenceMessage = new Subject<Presence>();
         private Subject<RosterQuery> _onRosterMessage = new Subject<RosterQuery>();
         private Subject<IQ> _onVCardMessage = new Subject<IQ>();
-        private ConnectionState _state;
         private StreamFeatures _streamFeatures;
         private AutoResetEvent _streamFeaturesEvent;
         private ITransport _transport;
@@ -73,23 +72,22 @@ namespace Hanoi
         private IDisposable _transportMessageSubscription;
         private IDisposable _transportStreamClosedSubscription;
         private IDisposable _transportStreamInitializedSubscription;
-        private Jid _userId;
 
         // start new code
 
-        public Connection() {
-            
+        public Connection() : this(AuthenticatorFactory.Default, FeatureDetection.Default) {
+
         }
 
-        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection)  : this()
+        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection) 
         {
             Authenticator = authenticator;
-            FeatureDetection = featureDetection;
+            Features = featureDetection;
         }
 
-        public IAuthenticatorFactory Authenticator { get; private set; }
+        internal IAuthenticatorFactory Authenticator { get; private set; }
 
-        public IFeatureDetection FeatureDetection { get; private set; }
+        internal IFeatureDetection Features { get; private set; }
 
         // end new code
 
@@ -171,10 +169,7 @@ namespace Hanoi
         /// <exception cref = "InvalidOperationException">
         ///   The connection is not open.
         /// </exception>
-        public ConnectionState State
-        {
-            get { return _state; }
-        }
+        public ConnectionState State { get; private set; }
 
         /// <summary>
         ///   Gets the connection Host name
@@ -195,10 +190,7 @@ namespace Hanoi
         /// <summary>
         ///   Gets the User ID specified in the Connection String.
         /// </summary>
-        public Jid UserId
-        {
-            get { return _userId; }
-        }
+        public Jid UserId { get; private set; }
 
         /// <summary>
         ///   Gets the password specified in the Connection string.
@@ -334,19 +326,18 @@ namespace Hanoi
         /// <param name = "connectionString">The connection string used for authentication.</param>
         public void Open(string connectionString)
         {
-            if (_state == ConnectionState.Open)
+            if (State == ConnectionState.Open)
             {
                 throw new XmppException("Connection must be closed first.");
             }
 
             try
             {
-                // Initialization
                 Initialize();
 
                 // Build the connection string
                 _connectionString = new ConnectionString(connectionString);
-                _userId = _connectionString.UserId;
+                UserId = _connectionString.UserId;
 
                 // Connect to the server
                 if (_connectionString.UseHttpBinding)
@@ -372,10 +363,8 @@ namespace Hanoi
 
                 _transport.Open(_connectionString);
 
-                // Initialize XMPP Stream
                 InitializeXmppStream();
 
-                // Wait until we receive the Stream features
                 WaitForStreamFeatures();
 
                 if (_transport is ISecureTransport)
@@ -393,19 +382,13 @@ namespace Hanoi
                     }
                 }
 
-                // Perform authentication
                 bool authenticationDone = Authenticate();
 
                 if (authenticationDone)
                 {
-                    // Resource Binding.
                     BindResource();
-
-                    // Open the session
                     OpenSession();
-
-                    // Update state
-                    _state = ConnectionState.Open;
+                    State = ConnectionState.Open;
                 }
             }
             catch (Exception ex)
@@ -424,7 +407,7 @@ namespace Hanoi
         /// </summary>
         public void Close()
         {
-            if (_state == ConnectionState.Closed)
+            if (State == ConnectionState.Closed)
                 return;
 
             if (ConnectionClosing != null)
@@ -434,7 +417,7 @@ namespace Hanoi
 
             try
             {
-                _state = ConnectionState.Closing;
+                State = ConnectionState.Closing;
 
                 if (_transport != null)
                 {
@@ -506,9 +489,9 @@ namespace Hanoi
                 }
 
                 _streamFeatures = _streamFeatures & (~_streamFeatures);
-                _state = ConnectionState.Closed;
+                State = ConnectionState.Closed;
                 _connectionString = null;
-                _userId = null;
+                UserId = null;
             }
 
             if (ConnectionClosed != null)
@@ -588,11 +571,8 @@ namespace Hanoi
                 }
                 else if (message is Serialization.Core.Streams.StreamFeatures)
                 {
-                    // TODO: use the FeatureDetection class to calculate this behaviour
-                    // var features = message as Serialization.Core.Streams.StreamFeatures;
-                    // _streamFeatures = FeatureDetection.Process(features);
-
-                    ProcessStreamFeatures(message as Serialization.Core.Streams.StreamFeatures);
+                    var features = message as Serialization.Core.Streams.StreamFeatures;
+                    _streamFeatures = Features.Process(features);
                 }
                 else if (UnhandledMessage != null)
                 {
@@ -718,7 +698,7 @@ namespace Hanoi
                     {
                         if (item is Bind)
                         {
-                            _userId = ((Bind)item).Jid;
+                            UserId = ((Bind)item).Jid;
 
                             _bindResourceEvent.Set();
                         }
@@ -776,15 +756,7 @@ namespace Hanoi
 
             try
             {
-                // TODO: replace usage of this method with a pluggable feature
-                // and then we can compose the authenticators and inject into a connection
-                //
-                // e.g.
-                // public IAuthenticatorFactory Factory { get; set; }
-                // ...
-                // authenticator = Factory.Create(_streamFeatures, this);
-
-                authenticator = CreateAuthenticator();
+                authenticator = Authenticator.Create(_streamFeatures, this);
 
                 if (authenticator != null)
                 {
@@ -898,7 +870,7 @@ namespace Hanoi
         /// </summary>
         private void Initialize()
         {
-            _state = ConnectionState.Opening;
+            State = ConnectionState.Opening;
             _initializedStreamEvent = new AutoResetEvent(false);
             _streamFeaturesEvent = new AutoResetEvent(false);
             _bindResourceEvent = new AutoResetEvent(false);

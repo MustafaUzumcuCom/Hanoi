@@ -14,7 +14,25 @@ namespace Hanoi.Tests
             var connection = new Connection(factory, detection);
 
             Assert.NotNull(connection.Authenticator);
-            Assert.NotNull(connection.FeatureDetection);
+            Assert.NotNull(connection.Features);
+        }
+
+        [Fact]
+        public void Constructor_WhenNotSpecified_SetsDependencies()
+        {
+            var connection = new Connection();
+
+            Assert.NotNull(connection.Authenticator);
+            Assert.NotNull(connection.Features);
+        }
+
+        [Fact]
+        public void Constructor_WhenNotSpecified_SetsDependenciesToDefault()
+        {
+            var connection = new Connection();
+
+            Assert.Same(AuthenticatorFactory.Default, connection.Authenticator);
+            Assert.Same(FeatureDetection.Default, connection.Features);
         }
     }
 }
