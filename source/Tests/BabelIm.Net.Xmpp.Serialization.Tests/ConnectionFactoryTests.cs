@@ -38,5 +38,27 @@ namespace Hanoi.Tests
 
             Assert.IsType<SaslPlainAuthenticator>(auth);
         }
+
+        [Fact]
+        public void Create_WithXGoogleToken_ReturnsCorrectAuthenticator()
+        {
+            var connection = Substitute.For<Connection>();
+            var factory = new ConnectionFactory();
+
+            var auth = factory.Create(StreamFeatures.XGoogleToken, connection);
+
+            Assert.IsType<SaslXGoogleTokenAuthenticator>(auth);
+        }
+
+        [Fact]
+        public void Create_WithSaslDigestMD5Token_ReturnsCorrectAuthenticator()
+        {
+            var connection = Substitute.For<Connection>();
+            var factory = new ConnectionFactory();
+
+            var auth = factory.Create(StreamFeatures.SaslDigestMD5, connection);
+
+            Assert.IsType<SaslDigestAuthenticator>(auth);
+        }
     }
 }

@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E57FD011
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi", "source\Hanoi\Hanoi.csproj", "{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabelIm.Net.Xmpp.Serialization.Tests", "source\Tests\BabelIm.Net.Xmpp.Serialization.Tests\BabelIm.Net.Xmpp.Serialization.Tests.csproj", "{54C7296D-2B7C-4983-A23F-1B755799FFB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanoi.Tests", "source\Tests\BabelIm.Net.Xmpp.Serialization.Tests\Hanoi.Tests.csproj", "{54C7296D-2B7C-4983-A23F-1B755799FFB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
