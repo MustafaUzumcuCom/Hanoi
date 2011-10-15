@@ -1,15 +1,21 @@
-﻿using System;
-using Hanoi.Serialization.InstantMessaging.Register;
+﻿using Hanoi.Serialization.InstantMessaging.Register;
 
 namespace Hanoi
 {
     public interface IFeatureDetection {
-        
+        StreamFeatures Process(Serialization.Core.Streams.StreamFeatures features);
     }
 
     public class FeatureDetection : IFeatureDetection
     {
-        public StreamFeatures Process(Serialization.Core.Streams.StreamFeatures features) {
+        private static IFeatureDetection _default;
+        public static IFeatureDetection Default
+        {
+            get { return _default ?? (_default = new FeatureDetection()); }
+        }
+
+        public StreamFeatures Process(Serialization.Core.Streams.StreamFeatures features)
+        {
 
             StreamFeatures streamFeatures = default(StreamFeatures);
             if (features.Mechanisms != null && features.Mechanisms.SaslMechanisms.Count > 0)

@@ -57,5 +57,12 @@ namespace Hanoi.Tests
 
             Assert.True(output.HasFlag(StreamFeatures.ResourceBinding));
         }
+
+        [Fact]
+        public void Default_ForAllScenarios_IsNotNull()
+        {
+            Assert.NotNull(FeatureDetection.Default);
+            Assert.IsType<FeatureDetection>(FeatureDetection.Default);
+        }
     }
 }

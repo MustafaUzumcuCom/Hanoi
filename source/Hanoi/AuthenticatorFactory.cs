@@ -4,28 +4,34 @@ using Hanoi.Authentication;
 
 namespace Hanoi
 {
-    public class AuthenticatorFactory : IConnectionFactory {
-        
-        private IDictionary<StreamFeatures, Func<Connection, Authenticator>> custom =
+    public class AuthenticatorFactory : IAuthenticatorFactory
+    {
+        private readonly IDictionary<StreamFeatures, Func<Connection, Authenticator>> _custom =
             new Dictionary<StreamFeatures, Func<Connection, Authenticator>>();
+
+        private static IAuthenticatorFactory _default;
+        public static IAuthenticatorFactory Default
+        {
+            get { return _default ?? (_default = new AuthenticatorFactory()); }
+        }
 
         public Authenticator Create(StreamFeatures features, Connection connection)
         {
-            if (custom.ContainsKey(features))
+            if (_custom.ContainsKey(features))
             {
-                return custom[features](connection);
+                return _custom[features](connection);
             }
 
-            if (SupportsFeature(features, StreamFeatures.SaslDigestMD5))
+            if (HasFeature(features, StreamFeatures.SaslDigestMD5))
             {
                 return new SaslDigestAuthenticator(connection);
             }
-            if (SupportsFeature(features, StreamFeatures.XGoogleToken))
+            if (HasFeature(features, StreamFeatures.XGoogleToken))
             {
                 return new SaslXGoogleTokenAuthenticator(connection);
             }
 
-            if (SupportsFeature(features, StreamFeatures.SaslPlain))
+            if (HasFeature(features, StreamFeatures.SaslPlain))
             {
                 return new SaslPlainAuthenticator(connection);
             }
@@ -33,18 +39,18 @@ namespace Hanoi
             return null;
         }
 
-        private bool SupportsFeature(StreamFeatures feature, StreamFeatures reference)
+        private bool HasFeature(StreamFeatures features, StreamFeatures item)
         {
-            return ((reference & feature) == feature);
+            return ((item & features) == features);
         }
 
         public void Register(StreamFeatures streamFeatures, Func<Connection, Authenticator> createAuthenticator)
         {
-            custom.Add(streamFeatures, createAuthenticator);
+            _custom.Add(streamFeatures, createAuthenticator);
         }
     }
 
-    public interface IConnectionFactory
+    public interface IAuthenticatorFactory
     {
         Authenticator Create(StreamFeatures sessions, Connection connection);
     }

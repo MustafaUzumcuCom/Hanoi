@@ -91,6 +91,22 @@ namespace Hanoi.Xmpp.InstantMessaging
             clientCapabilitiesStorage.Load();
         }
 
+        public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator) {
+            State = SessionState.LoggedOut;
+            avatarStorage = new AvatarStorage();
+            chats = new Dictionary<string, Chat>();
+            syncObject = new object();
+            connection = new Connection(authenticator, featureDetection);
+            serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
+            personalEventing = new PersonalEventing.PersonalEventing(this);
+            activity = new Activity(this);
+            clientCapabilitiesStorage = new ClientCapabilitiesStorage();
+            roster = new Roster(this);
+
+            avatarStorage.Load();
+            clientCapabilitiesStorage.Load();
+        }
+
         /// <summary>
         ///   Gets the <see cref = "Hanoi.Connection" /> instance associated to the session
         /// </summary>

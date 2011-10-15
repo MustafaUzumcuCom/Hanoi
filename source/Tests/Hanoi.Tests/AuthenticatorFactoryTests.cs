@@ -74,5 +74,13 @@ namespace Hanoi.Tests
 
             Assert.Same(fakeAuthenticator, auth);
         }
+
+
+        [Fact]
+        public void Default_ForAllScenarios_IsNotNull()
+        {
+            Assert.NotNull(AuthenticatorFactory.Default);
+            Assert.IsType<AuthenticatorFactory>(AuthenticatorFactory.Default);
+        }
     }
 }

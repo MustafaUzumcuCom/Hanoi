@@ -75,6 +75,24 @@ namespace Hanoi
         private IDisposable _transportStreamInitializedSubscription;
         private Jid _userId;
 
+        // start new code
+
+        public Connection() {
+            
+        }
+
+        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection)  : this()
+        {
+            Authenticator = authenticator;
+            FeatureDetection = featureDetection;
+        }
+
+        private IAuthenticatorFactory Authenticator { get; set; }
+
+        private IFeatureDetection FeatureDetection { get; set; }
+
+        // end new code
+
         /// <summary>
         ///   Occurs when a new message is received.
         /// </summary>
@@ -571,11 +589,8 @@ namespace Hanoi
                 else if (message is Serialization.Core.Streams.StreamFeatures)
                 {
                     // TODO: use the FeatureDetection class to calculate this behaviour
-                    // e.g.
-                    
-                    // public IFeatureDetection Features { get; set; }
-                    // ...
-                    // _streamFeatures = Features.Process(features);
+                    // var features = message as Serialization.Core.Streams.StreamFeatures;
+                    // _streamFeatures = FeatureDetection.Process(features);
 
                     ProcessStreamFeatures(message as Serialization.Core.Streams.StreamFeatures);
                 }
@@ -777,28 +792,20 @@ namespace Hanoi
 
                     if (authenticator.AuthenticationFailed)
                     {
-                        if (AuthenticationFailiure != null)
-                        {
-                            AuthenticationFailiure(this,
-                                                   new AuthenticationFailiureEventArgs(
-                                                       authenticator.AuthenticationError));
-                        }
+                        OnAuthenticationFailure(authenticator.AuthenticationError);
                     }
 
                     result = !authenticator.AuthenticationFailed;
                 }
                 else
                 {
-                    if (AuthenticationFailiure != null)
+                    var message = "No valid authentication mechanism found.";
+                    if (AuthenticationFailiure == null)
                     {
-                        AuthenticationFailiure(this,
-                                               new AuthenticationFailiureEventArgs(
-                                                   "No valid authentication mechanism found."));
+                        throw new XmppException(message);
                     }
-                    else
-                    {
-                        throw new XmppException("No valid authentication mechanism found.");
-                    }
+
+                    OnAuthenticationFailure(message);
                 }
             }
             catch
@@ -815,6 +822,13 @@ namespace Hanoi
             }
 
             return result;
+        }
+
+        private void OnAuthenticationFailure(string error) {
+            if (AuthenticationFailiure != null)
+            {
+                AuthenticationFailiure(this, new AuthenticationFailiureEventArgs(error));
+            }
         }
 
         private void BindResource()
@@ -922,7 +936,6 @@ namespace Hanoi
         /// <param name="feature"></param>
         /// <returns><b>true</b> if the feature is supported by the server; or <b>false</b> if not</returns>
         /// 
-        [Obsolete("Should we also allow this to be customisable?")]
         private bool SupportsFeature(StreamFeatures feature)
         {
             return ((_streamFeatures & feature) == feature);
