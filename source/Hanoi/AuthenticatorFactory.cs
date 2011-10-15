@@ -9,6 +9,12 @@ namespace Hanoi
         private readonly IDictionary<StreamFeatures, Func<Connection, Authenticator>> _custom =
             new Dictionary<StreamFeatures, Func<Connection, Authenticator>>();
 
+        public AuthenticatorFactory() {
+            Register(StreamFeatures.SaslDigestMD5, c => new SaslDigestAuthenticator(c));
+            Register(StreamFeatures.XGoogleToken, c => new SaslXGoogleTokenAuthenticator(c));
+            Register(StreamFeatures.SaslPlain, c => new SaslPlainAuthenticator(c));    
+        }
+
         private static IAuthenticatorFactory _default;
         public static IAuthenticatorFactory Default
         {
@@ -22,26 +28,7 @@ namespace Hanoi
                 return _custom[features](connection);
             }
 
-            if (HasFeature(features, StreamFeatures.SaslDigestMD5))
-            {
-                return new SaslDigestAuthenticator(connection);
-            }
-            if (HasFeature(features, StreamFeatures.XGoogleToken))
-            {
-                return new SaslXGoogleTokenAuthenticator(connection);
-            }
-
-            if (HasFeature(features, StreamFeatures.SaslPlain))
-            {
-                return new SaslPlainAuthenticator(connection);
-            }
-
             return null;
-        }
-
-        private bool HasFeature(StreamFeatures features, StreamFeatures item)
-        {
-            return ((item & features) == features);
         }
 
         public void Register(StreamFeatures streamFeatures, Func<Connection, Authenticator> createAuthenticator)

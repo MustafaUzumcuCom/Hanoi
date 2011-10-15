@@ -32,24 +32,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Hanoi {
-    /// <summary>
-    ///   Represents a Connection String
-    /// </summary>
-    public sealed class ConnectionString {
+namespace Hanoi
+{
+    public sealed class ConnectionString
+    {
         /// <summary>
         ///   Synonyms list
         /// </summary>
-        private static readonly Dictionary<string, string> Synonyms = GetSynonyms();
+        private static readonly IDictionary<string, string> Synonyms = GetSynonyms();
 
-        private readonly Dictionary<string, object> options;
+        private readonly Dictionary<string, object> _options;
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:ConnectionString" /> class.
-        /// </summary>
-        /// <param name = "connectionString">The connection string.</param>
-        public ConnectionString(string connectionString) {
-            options = new Dictionary<string, object>();
+        public ConnectionString(string connectionString)
+        {
+            _options = new Dictionary<string, object>();
             Load(connectionString);
         }
 
@@ -57,7 +53,8 @@ namespace Hanoi {
         ///   Gets the login server.
         /// </summary>
         /// <value>The server.</value>
-        public string HostName {
+        public string HostName
+        {
             get { return GetString("server"); }
         }
 
@@ -67,7 +64,8 @@ namespace Hanoi {
         /// <value>
         ///   <c>true</c> if host name should be resolved; otherwise, <c>false</c>.
         /// </value>
-        public bool ResolveHostName {
+        public bool ResolveHostName
+        {
             get { return GetBoolean("resolve host name"); }
         }
 
@@ -75,7 +73,8 @@ namespace Hanoi {
         ///   Gets the port number.
         /// </summary>
         /// <value>The port.</value>
-        public int PortNumber {
+        public int PortNumber
+        {
             get { return GetInt32("port number"); }
         }
 
@@ -83,7 +82,8 @@ namespace Hanoi {
         ///   Gets the user id.
         /// </summary>
         /// <value>The user id.</value>
-        public string UserId {
+        public string UserId
+        {
             get { return GetString("user id"); }
         }
 
@@ -91,7 +91,8 @@ namespace Hanoi {
         ///   Gets the password.
         /// </summary>
         /// <value>The password.</value>
-        public string UserPassword {
+        public string UserPassword
+        {
             get { return GetString("user password"); }
         }
 
@@ -99,56 +100,64 @@ namespace Hanoi {
         ///   Gets the connection timeout.
         /// </summary>
         /// <value>The connection timeout.</value>
-        public int ConnectionTimeout {
+        public int ConnectionTimeout
+        {
             get { return GetInt32("connection timeout"); }
         }
 
         /// <summary>
         ///   Gets a value that indicating whether the connection should be done throught a proxy
         /// </summary>
-        public bool UseProxy {
+        public bool UseProxy
+        {
             get { return GetBoolean("use proxy"); }
         }
 
         /// <summary>
         ///   Gets the proxy type
         /// </summary>
-        public string ProxyType {
+        public string ProxyType
+        {
             get { return GetString("proxy type"); }
         }
 
         /// <summary>
         ///   Gets the proxy server
         /// </summary>
-        public string ProxyServer {
+        public string ProxyServer
+        {
             get { return GetString("proxy server"); }
         }
 
         /// <summary>
         ///   Gets the proxy port number
         /// </summary>
-        public int ProxyPortNumber {
+        public int ProxyPortNumber
+        {
             get { return GetInt32("proxy port number"); }
         }
 
         /// <summary>
         ///   Gets the proxy user name
         /// </summary>
-        public string ProxyUserName {
+        public string ProxyUserName
+        {
             get { return GetString("proxy user name"); }
         }
 
         /// <summary>
         ///   Gets the proxy password
         /// </summary>
-        public string ProxyPassword {
+        public string ProxyPassword
+        {
             get { return GetString("proxy password"); }
         }
 
         /// <summary>
         ///   Gets a value that indicates if http binding should be used
         /// </summary>
-        public bool UseHttpBinding {
+        public bool UseHttpBinding
+        {
             get { return GetBoolean("http binding"); }
         }
 
@@ -157,7 +166,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "key"></param>
         /// <returns></returns>
-        public static bool IsSynonym(string key) {
+        public static bool IsSynonym(string key)
+        {
             return Synonyms.ContainsKey(key);
         }
 
@@ -166,7 +176,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "key"></param>
         /// <returns></returns>
-        public static string GetSynonym(string key) {
+        public static string GetSynonym(string key)
+        {
             return Synonyms[key];
         }
 
@@ -174,7 +185,8 @@ namespace Hanoi {
         ///   Gets the synonyms.
         /// </summary>
         /// <returns></returns>
-        private static Dictionary<string, string> GetSynonyms() {
+        private static IDictionary<string, string> GetSynonyms()
+        {
             var synonyms = new Dictionary<string, string>();
 
             synonyms.Add("server", "server");
@@ -202,40 +214,43 @@ namespace Hanoi {
         /// <returns>
         ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             var cs = new StringBuilder();
-            Dictionary<string, object>.Enumerator e = options.GetEnumerator();
+            var e = _options.GetEnumerator();
 
             while (e.MoveNext())
             {
-                if (e.Current.Value != null)
-                {
-                    if (cs.Length > 0)
-                    {
-                        cs.Append(";");
-                    }
+                if (e.Current.Value == null) 
+                    continue;
 
-                    string key = CultureInfo.CurrentUICulture.TextInfo.ToTitleCase(e.Current.Key);
-                    cs.AppendFormat(CultureInfo.CurrentUICulture, "{0}={1}", key, e.Current.Value);
+                if (cs.Length > 0)
+                {
+                    cs.Append(";");
                 }
+
+                var key = CultureInfo.CurrentUICulture.TextInfo.ToTitleCase(e.Current.Key);
+                cs.AppendFormat(CultureInfo.CurrentUICulture, "{0}={1}", key, e.Current.Value);
             }
 
             return cs.ToString();
         }
 
-        private void SetDefaultOptions() {
-            options.Clear();
+        private void SetDefaultOptions()
+        {
+            _options.Clear();
 
-            options.Add("login server", null);
-            options.Add("port number", 5222);
-            options.Add("user id", null);
-            options.Add("user password", null);
-            options.Add("resource", null);
-            options.Add("sasl", false);
-            options.Add("connection timeout", -1);
+            _options.Add("login server", null);
+            _options.Add("port number", 5222);
+            _options.Add("user id", null);
+            _options.Add("user password", null);
+            _options.Add("resource", null);
+            _options.Add("sasl", false);
+            _options.Add("connection timeout", -1);
         }
 
-        private void Load(string connectionString) {
+        private void Load(string connectionString)
+        {
             string[] keyPairs = connectionString.Split(';');
 
             SetDefaultOptions();
@@ -253,7 +268,7 @@ namespace Hanoi {
                     if (Synonyms.ContainsKey(values[0]))
                     {
                         string key = Synonyms[values[0]];
-                        options[key] = values[1].Trim();
+                        _options[key] = values[1].Trim();
                     }
                 }
             }
@@ -261,37 +276,41 @@ namespace Hanoi {
             Validate();
         }
 
-        private void Validate() {
-            if ((HostName == null || HostName.Length == 0) ||
-                (UserId == null || UserId.Length == 0) ||
-                (UserPassword == null || UserPassword.Length == 0))
+        private void Validate()
+        {
+            if (string.IsNullOrEmpty(HostName) ||
+                string.IsNullOrEmpty(UserId) ||
+                string.IsNullOrEmpty(UserPassword))
             {
                 throw new XmppException("Invalid connection string options.");
             }
         }
 
-        private string GetString(string key) {
-            if (options.ContainsKey(key))
+        private string GetString(string key)
+        {
+            if (_options.ContainsKey(key))
             {
-                return (string) options[key];
+                return (string)_options[key];
             }
 
             return null;
         }
 
-        private int GetInt32(string key) {
-            if (options.ContainsKey(key))
+        private int GetInt32(string key)
+        {
+            if (_options.ContainsKey(key))
             {
-                return Convert.ToInt32(options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToInt32(_options[key], CultureInfo.CurrentUICulture);
             }
 
             return 0;
         }
 
-        private bool GetBoolean(string key) {
-            if (options.ContainsKey(key))
+        private bool GetBoolean(string key)
+        {
+            if (_options.ContainsKey(key))
             {
-                return Convert.ToBoolean(options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToBoolean(_options[key], CultureInfo.CurrentUICulture);
             }
 
             return false;

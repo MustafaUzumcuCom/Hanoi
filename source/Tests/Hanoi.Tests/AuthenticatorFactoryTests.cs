@@ -64,7 +64,7 @@ namespace Hanoi.Tests
         [Fact]
         public void Register_WithCustomToken_ReturnsCustomAuthenticator()
         {
-            var feature = StreamFeatures.InBandRegistration;
+            const StreamFeatures feature = StreamFeatures.InBandRegistration;
             var connection = Substitute.For<Connection>();
             var fakeAuthenticator = Substitute.For<Authenticator>(connection);
             var factory = new AuthenticatorFactory();
@@ -74,7 +74,6 @@ namespace Hanoi.Tests
 
             Assert.Same(fakeAuthenticator, auth);
         }
-
 
         [Fact]
         public void Default_ForAllScenarios_IsNotNull()

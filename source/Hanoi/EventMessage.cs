@@ -28,55 +28,40 @@
 */
 
 using Hanoi.Serialization.Extensions.PubSub;
-using Hanoi.Serialization.InstantMessaging.Client;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   Pub sub event message
     /// </summary>
-    public sealed class EventMessage {
-        private readonly PubSubEvent eventMessage;
-        private readonly Jid from;
-        private readonly string identifier;
-        private readonly Jid to;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:EventMessage" /> class.
-        /// </summary>
-        /// <param name = "message">The event.</param>
-        internal EventMessage(Serialization.InstantMessaging.Client.Message message) {
-            identifier = message.ID;
-            @from = message.From;
-            to = message.To;
-            eventMessage = (PubSubEvent) message.Items[0];
+    public sealed class EventMessage
+    {
+        internal EventMessage(Serialization.InstantMessaging.Client.Message message)
+        {
+            Identifier = message.ID;
+            From = message.From;
+            To = message.To;
+            Event = (PubSubEvent)message.Items[0];
         }
 
         /// <summary>
         ///   Gets the XMPP Event Message ID
         /// </summary>
-        public string Identifier {
-            get { return identifier; }
-        }
+        public string Identifier { get; private set; }
 
         /// <summary>
         ///   Gets the Event Message source JID
         /// </summary>
-        public Jid From {
-            get { return @from; }
-        }
+        public Jid From { get; private set; }
 
         /// <summary>
         ///   Gets the Event Message target JID
         /// </summary>
-        public Jid To {
-            get { return to; }
-        }
+        public Jid To { get; private set; }
 
         /// <summary>
         ///   Gets the XMPP Event Message data
         /// </summary>
-        public PubSubEvent Event {
-            get { return eventMessage; }
-        }
+        public PubSubEvent Event { get; private set; }
     }
 }
