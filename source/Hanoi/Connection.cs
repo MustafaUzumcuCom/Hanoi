@@ -47,10 +47,12 @@ using Hanoi.Transports;
 
 namespace Hanoi
 {
+    // NOTE: unsealed this class for testing
+
     /// <summary>
     ///   Represents a connection to a XMPP server
     /// </summary>
-    public sealed class Connection : IDisposable
+    public class Connection : IDisposable
     {
         private readonly Subject<EventMessage> _onEventMessage = new Subject<EventMessage>();
         private readonly Subject<IQ> _onServiceDiscoveryMessage = new Subject<IQ>();

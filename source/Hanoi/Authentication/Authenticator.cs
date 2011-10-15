@@ -38,7 +38,7 @@ namespace Hanoi.Authentication
     /// <summary>
     ///   Base class for authentication mechanims implementations.
     /// </summary>
-    internal abstract class Authenticator : IDisposable
+    public abstract class Authenticator : IDisposable
     {
         private List<string> pendingMessages;
 

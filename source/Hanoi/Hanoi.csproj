@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationFailiureEventArgs.cs" />
+    <Compile Include="ConnectionFactory.cs" />
     <Compile Include="Serialization\Core\ResourceBinding\Bind.cs" />
     <Compile Include="Serialization\Core\Sasl\Abort.cs" />
     <Compile Include="Serialization\Core\Sasl\Auth.cs" />
