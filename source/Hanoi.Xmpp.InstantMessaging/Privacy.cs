@@ -29,15 +29,13 @@
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
-#warning TODO: Implement
+    // TODO: Implement
 
     /// <summary>
-    ///   Pricacy ling management
+    /// Privacy something or other
     /// </summary>
     public sealed class Privacy
     {
-        #region · Constructors ·
-
-        #endregion
+     
     }
 }

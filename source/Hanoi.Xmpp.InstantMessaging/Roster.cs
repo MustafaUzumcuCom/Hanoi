@@ -153,8 +153,8 @@ namespace Hanoi.Xmpp.InstantMessaging
             var query = new RosterQuery();
             var iq = new IQ
                          {
-                             ID = IdentifierGenerator.Generate(), 
-                             Type = IQType.Set, 
+                             ID = IdentifierGenerator.Generate(),
+                             Type = IQType.Set,
                              From = connection.UserId,
                          };
 
@@ -183,8 +183,8 @@ namespace Hanoi.Xmpp.InstantMessaging
             var query = new RosterQuery();
             var iq = new IQ
                          {
-                             ID = IdentifierGenerator.Generate(), 
-                             Type = IQType.Get, 
+                             ID = IdentifierGenerator.Generate(),
+                             Type = IQType.Get,
                              From = connection.UserId
                          };
 
@@ -201,7 +201,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <returns></returns>
         public Roster RefreshBlockedContacts()
         {
-#warning TODO: Check if contact list should be stored in a separated collection or the information should be injected into Contact class
+            // TODO: Check if contact list should be stored in a separated collection or the information should be injected into Contact class
             if (session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ
@@ -396,7 +396,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             if (jid.BareIdentifier == session.UserId.BareIdentifier)
             {
-#warning TODO: See how to handle our own presence changes from other resources
+                // TODO: See how to handle our own presence changes from other resources
             }
             else
             {

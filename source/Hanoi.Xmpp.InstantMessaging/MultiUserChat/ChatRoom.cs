@@ -235,133 +235,133 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
             seekEnterChatRoomEvent.Set();
         }
 
-        private void ProcessMucUser(MucUser item)
+        private static void ProcessMucUser(MucUser item)
         {
             // Get the Status code
-            MucUserStatus status = item.Items.OfType<MucUserStatus>().FirstOrDefault();
+            var status = item.Items.OfType<MucUserStatus>().FirstOrDefault();
 
-            if (status != null)
+            if (status == null) 
+                return;
+
+            switch (status.Code)
             {
-                switch (status.Code)
-                {
-                    case 100:
-                        // stanza : message or presence
-                        // context: Entering a room
-                        // purpose: Inform user that any occupant is allowed to see the user's full JID
-                        break;
+                case 100:
+                    // stanza : message or presence
+                    // context: Entering a room
+                    // purpose: Inform user that any occupant is allowed to see the user's full JID
+                    break;
 
-                    case 101:
-                        // stanza : message (out of band)
-                        // context: Affiliation change
-                        // purpose: Inform user that his or her affiliation changed while not in the room
-                        break;
+                case 101:
+                    // stanza : message (out of band)
+                    // context: Affiliation change
+                    // purpose: Inform user that his or her affiliation changed while not in the room
+                    break;
 
-                    case 102:
-                        // stanza : message
-                        // context: Configuration change
-                        // purpose: Inform occupants that room now shows unavailable members
-                        break;
+                case 102:
+                    // stanza : message
+                    // context: Configuration change
+                    // purpose: Inform occupants that room now shows unavailable members
+                    break;
 
-                    case 103:
-                        // stanza : message
-                        // context: Configuration change
-                        // purpose: Inform occupants that room now does not show unavailable members
-                        break;
+                case 103:
+                    // stanza : message
+                    // context: Configuration change
+                    // purpose: Inform occupants that room now does not show unavailable members
+                    break;
 
-                    case 104:
-                        // stanza : message
-                        // context: Configuration change
-                        // purpose: Inform occupants that a non-privacy-related room configuration change has occurred
-                        break;
+                case 104:
+                    // stanza : message
+                    // context: Configuration change
+                    // purpose: Inform occupants that a non-privacy-related room configuration change has occurred
+                    break;
 
-                    case 110:
-                        // stanza : presence
-                        // context: Any room presence
-                        // purpose: Inform user that presence refers to one of its own room occupants</purpose>
-                        break;
+                case 110:
+                    // stanza : presence
+                    // context: Any room presence
+                    // purpose: Inform user that presence refers to one of its own room occupants</purpose>
+                    break;
 
-                    case 170:
-                        // stanza : message or initial presence
-                        // context: Configuration change
-                        // purpose: Inform occupants that room logging is now enabled
-                        break;
+                case 170:
+                    // stanza : message or initial presence
+                    // context: Configuration change
+                    // purpose: Inform occupants that room logging is now enabled
+                    break;
 
-                    case 171:
-                        // stanza : message
-                        // context: Configuration change
-                        // purpose: Inform occupants that room logging is now disabled
-                        break;
+                case 171:
+                    // stanza : message
+                    // context: Configuration change
+                    // purpose: Inform occupants that room logging is now disabled
+                    break;
 
-                    case 172:
-                        // stanza : message
-                        // context: Configuration change
-                        // purpose: Inform occupants that the room is now non-anonymous
-                        break;
+                case 172:
+                    // stanza : message
+                    // context: Configuration change
+                    // purpose: Inform occupants that the room is now non-anonymous
+                    break;
 
-                    case 173:
-                        // stanza : message
-                        // context: Configuration change
-                        // purpose: Inform occupants that the room is now semi-anonymous
-                        break;
+                case 173:
+                    // stanza : message
+                    // context: Configuration change
+                    // purpose: Inform occupants that the room is now semi-anonymous
+                    break;
 
-                    case 174:
-                        // stanza : message
-                        // context: Configuration change
-                        // purpose: Inform occupants that the room is now fully-anonymous
-                        break;
+                case 174:
+                    // stanza : message
+                    // context: Configuration change
+                    // purpose: Inform occupants that the room is now fully-anonymous
+                    break;
 
-                    case 201:
-                        // stanza : presence
-                        // context: Entering a room
-                        // purpose: Inform user that a new room has been created
-                        break;
+                case 201:
+                    // stanza : presence
+                    // context: Entering a room
+                    // purpose: Inform user that a new room has been created
+                    break;
 
-                    case 210:
-                        // stanza : presence
-                        // context: Entering a room
-                        // purpose: Inform user that service has assigned or modified occupant's roomnick
-                        break;
+                case 210:
+                    // stanza : presence
+                    // context: Entering a room
+                    // purpose: Inform user that service has assigned or modified occupant's roomnick
+                    break;
 
-                    case 301:
-                        // stanza : presence
-                        // context: Removal from room
-                        // purpose: Inform user that he or she has been banned from the room
-                        break;
+                case 301:
+                    // stanza : presence
+                    // context: Removal from room
+                    // purpose: Inform user that he or she has been banned from the room
+                    break;
 
-                    case 303:
-                        // stanza : presence
-                        // context: Exiting a room
-                        // purpose: Inform all occupants of new room nickname
-                        break;
+                case 303:
+                    // stanza : presence
+                    // context: Exiting a room
+                    // purpose: Inform all occupants of new room nickname
+                    break;
 
-                    case 307:
-                        // stanza : presence
-                        // context: Removal from room
-                        // purpose: Inform user that he or she has been kicked from the room
-                        break;
+                case 307:
+                    // stanza : presence
+                    // context: Removal from room
+                    // purpose: Inform user that he or she has been kicked from the room
+                    break;
 
-                    case 321:
-                        // stanza : presence
-                        // context: Removal from room
-                        // purpose: Inform user that he or she is being removed from the room
-                        //          because of an affiliation change
-                        break;
+                case 321:
+                    // stanza : presence
+                    // context: Removal from room
+                    // purpose: Inform user that he or she is being removed from the room
+                    //          because of an affiliation change
+                    break;
 
-                    case 322:
-                        // stanza : presence
-                        // context: Removal from room
-                        // purpose: Inform user that he or she is being removed from the room
-                        //          because the room has been changed to members-only and the user
-                        //          is not a member
-                        break;
+                case 322:
+                    // stanza : presence
+                    // context: Removal from room
+                    // purpose: Inform user that he or she is being removed from the room
+                    //          because the room has been changed to members-only and the user
+                    //          is not a member
+                    break;
 
-                    case 332:
-                        // stanza : presence
-                        // context: Removal from room
-                        // purpose: Inform user that he or she is being removed from the room
-                        //          because of a system shutdown
-                        break;
-                }
+                case 332:
+                    // stanza : presence
+                    // context: Removal from room
+                    // purpose: Inform user that he or she is being removed from the room
+                    //          because of a system shutdown
+                    break;
             }
         }
     }

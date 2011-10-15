@@ -43,20 +43,20 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
     /// </summary>
     public sealed class Activity : IEnumerable<Event>, INotifyCollectionChanged
     {
-        private readonly ObservableCollection<Event> activities;
-        private readonly Session session;
+        private readonly ObservableCollection<Event> _activities;
+        private readonly Session _session;
 
-        private IDisposable eventMessageSubscription;
-        private IDisposable messageSubscription;
-        private IDisposable sessionStateSubscription;
+        private IDisposable _eventMessageSubscription;
+        private IDisposable _messageSubscription;
+        private IDisposable _sessionStateSubscription;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "Session" /> class
         /// </summary>
         internal Activity(Session session)
         {
-            this.session = session;
-            activities = new ObservableCollection<Event>();
+            this._session = session;
+            _activities = new ObservableCollection<Event>();
 
             SubscribeToSessionState();
         }
@@ -65,12 +65,12 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 
         IEnumerator<Event> IEnumerable<Event>.GetEnumerator()
         {
-            return activities.GetEnumerator();
+            return _activities.GetEnumerator();
         }
 
         public IEnumerator GetEnumerator()
         {
-            return activities.GetEnumerator();
+            return _activities.GetEnumerator();
         }
 
         #endregion
@@ -86,7 +86,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         /// </summary>
         public void Clear()
         {
-            activities.Clear();
+            _activities.Clear();
 
             // TODO: necessary?
             Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
@@ -103,7 +103,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 
         private void SubscribeToSessionState()
         {
-            sessionStateSubscription = session
+            _sessionStateSubscription = _session
                 .StateChanged
                 .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe
@@ -125,33 +125,33 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 
         private void Subscribe()
         {
-            messageSubscription = session
+            _messageSubscription = _session
                 .MessageReceived
                 .Where(m => m.Type == MessageType.Headline || m.Type == MessageType.Normal)
                 .Subscribe(OnActivityMessage);
 
-            eventMessageSubscription = session.Connection
+            _eventMessageSubscription = _session.Connection
                 .OnEventMessage
                 .Subscribe(OnEventMessage);
 
-            activities.CollectionChanged += OnCollectionChanged;
+            _activities.CollectionChanged += OnCollectionChanged;
         }
 
         private void Unsubscribe()
         {
-            if (messageSubscription != null)
+            if (_messageSubscription != null)
             {
-                messageSubscription.Dispose();
-                messageSubscription = null;
+                _messageSubscription.Dispose();
+                _messageSubscription = null;
             }
 
-            if (eventMessageSubscription != null)
+            if (_eventMessageSubscription != null)
             {
-                eventMessageSubscription.Dispose();
-                eventMessageSubscription = null;
+                _eventMessageSubscription.Dispose();
+                _eventMessageSubscription = null;
             }
 
-            activities.CollectionChanged -= OnCollectionChanged;
+            _activities.CollectionChanged -= OnCollectionChanged;
         }
 
         private void OnActivityMessage(Message message)
@@ -159,11 +159,11 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             switch (message.Type)
             {
                 case MessageType.Normal:
-                    activities.Add(new MessageEvent(message));
+                    _activities.Add(new MessageEvent(message));
                     break;
 
                 case MessageType.Headline:
-                    activities.Add(new MessageEvent(message));
+                    _activities.Add(new MessageEvent(message));
                     break;
             }
         }
@@ -173,12 +173,12 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             // Add the activity based on the source event
             if (Event.IsActivityEvent(message.Event))
             {
-                Event xmppevent = Event.Create(session.Roster[message.From.BareIdentifier], message.Event);
+                Event xmppevent = Event.Create(_session.Roster[message.From.BareIdentifier], message.Event);
 
-#warning TODO: see what to do when it's null
+                // TODO: see what to do when it's null
                 if (xmppevent != null)
                 {
-#warning TODO: This needs to be changed
+                    // TODO: This needs to be changed
                     if (xmppevent is UserTuneEvent && ((UserTuneEvent)xmppevent).IsEmpty)
                     {
                         // And empty tune means no info available or that the user
@@ -186,7 +186,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
                     }
                     else
                     {
-                        activities.Add(xmppevent);
+                        _activities.Add(xmppevent);
                     }
                 }
             }

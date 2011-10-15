@@ -168,7 +168,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             {
                 if (item is Error)
                 {
-#warning TODO: Handle the error
+                    // TODO: Handle the error
                 }
                 else if (item is VCardAvatar)
                 {
@@ -416,7 +416,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                 }
                 catch
                 {
-#warning TODO: Handle the exception
+                    // TODO: Handle the exception
                 }
                 finally
                 {

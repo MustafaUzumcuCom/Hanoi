@@ -39,10 +39,10 @@ namespace Hanoi.Xmpp.InstantMessaging
     /// </summary>
     public sealed class ConnectionStringBuilder
     {
-        private readonly Hashtable options;
+        private readonly Hashtable _options = new Hashtable();
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:ConnectionStringBuilder" /> class.
+        ///   Initializes a new instance of the <see cref="ConnectionStringBuilder" /> class.
         /// </summary>
         public ConnectionStringBuilder()
             : this(null)
@@ -50,15 +50,13 @@ namespace Hanoi.Xmpp.InstantMessaging
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:ConnectionStringBuilder" /> class with
+        ///   Initializes a new instance of the <see cref="ConnectionStringBuilder" /> class with
         ///   the given connection string.
         /// </summary>
         /// <param name = "connectionString">The connection string.</param>
         public ConnectionStringBuilder(string connectionString)
         {
-            options = new Hashtable();
-
-            if (connectionString != null)
+            if (!string.IsNullOrWhiteSpace(connectionString))
             {
                 Load(connectionString);
             }
@@ -208,8 +206,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         public override string ToString()
         {
             var cs = new StringBuilder();
-
-            IDictionaryEnumerator e = options.GetEnumerator();
+            var e = _options.GetEnumerator();
 
             while (e.MoveNext())
             {
@@ -230,16 +227,13 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void Load(string connectionString)
         {
-            string[] keyPairs = connectionString.Split(';');
+            var keyPairs = connectionString.Split(';');
 
-            if (options != null)
-            {
-                options.Clear();
-            }
+            _options.Clear();
 
-            foreach (string keyPair in keyPairs)
+            foreach (var keyPair in keyPairs)
             {
-                string[] values = keyPair.Split('=');
+                var values = keyPair.Split('=');
 
                 if (values.Length == 2 &&
                     values[0] != null && values[0].Length > 0 &&
@@ -249,7 +243,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                     if (Hanoi.ConnectionString.IsSynonym(values[0]))
                     {
-                        options[Hanoi.ConnectionString.GetSynonym(values[0])] = values[1].Trim();
+                        _options[Hanoi.ConnectionString.GetSynonym(values[0])] = values[1].Trim();
                     }
                 }
             }
@@ -257,9 +251,9 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private string GetString(string key)
         {
-            if (options.Contains(key))
+            if (_options.Contains(key))
             {
-                return (string)options[key];
+                return (string)_options[key];
             }
 
             return null;
@@ -267,9 +261,9 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private int GetInt32(string key)
         {
-            if (options.Contains(key))
+            if (_options.Contains(key))
             {
-                return Convert.ToInt32(options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToInt32(_options[key], CultureInfo.CurrentCulture);
             }
 
             return 0;
@@ -277,9 +271,9 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private bool GetBoolean(string key)
         {
-            if (options.Contains(key))
+            if (_options.Contains(key))
             {
-                return Convert.ToBoolean(options[key], CultureInfo.CurrentUICulture);
+                return Convert.ToBoolean(_options[key], CultureInfo.CurrentCulture);
             }
 
             return false;
@@ -287,13 +281,13 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void SetValue(string key, object value)
         {
-            if (options.Contains(key))
+            if (_options.Contains(key))
             {
-                options[key] = value;
+                _options[key] = value;
             }
             else
             {
-                options.Add(key, value);
+                _options.Add(key, value);
             }
         }
     }

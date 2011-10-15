@@ -91,7 +91,8 @@ namespace Hanoi.Xmpp.InstantMessaging
             _clientCapabilitiesStorage.Load();
         }
 
-        public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator) {
+        public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator)
+        {
             State = SessionState.LoggedOut;
             _avatarStorage = new AvatarStorage();
             _chats = new Dictionary<string, Chat>();
@@ -257,10 +258,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             State = SessionState.LoggingIn;
 
-            // Wire Connection events
             Subscribe();
-
-            // Perform the authentication
             Connection.Open(connectionString);
 
             if (Connection != null && Connection.State == ConnectionState.Open)
@@ -364,7 +362,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             CheckSessionState();
 
-            Chat chat = null;
+            Chat chat;
 
             lock (_syncObject)
             {
@@ -385,10 +383,8 @@ namespace Hanoi.Xmpp.InstantMessaging
         }
 
         /// <summary>
-        ///   Creates the chat room.
+        /// Creates the chat room.
         /// </summary>
-        /// <param name = "chatRoomName">Name of the chat room.</param>
-        /// <returns></returns>
         public ChatRoom EnterChatRoom()
         {
             return EnterChatRoom(IdentifierGenerator.Generate());
@@ -397,20 +393,15 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Creates the chat room.
         /// </summary>
-        /// <param name = "chatRoomName">Name of the chat room.</param>
-        /// <returns></returns>
+        /// <param name="chatRoomName">Name of the chat room.</param>
         public ChatRoom EnterChatRoom(string chatRoomName)
         {
             CheckSessionState();
 
-            Service service = ServiceDiscovery.GetService(ServiceCategory.Conference);
+            var service = ServiceDiscovery.GetService(ServiceCategory.Conference);
+
             ChatRoom chatRoom = null;
-            var chatRoomId = new Jid
-                (
-                chatRoomName,
-                service.Identifier,
-                UserId.UserName
-                );
+            var chatRoomId = new Jid(chatRoomName, service.Identifier, UserId.UserName);
 
             if (service != null)
             {
@@ -581,25 +572,17 @@ namespace Hanoi.Xmpp.InstantMessaging
                 // Update session configuration
                 _avatarStorage.Save();
             }
-            catch
-            {
-                throw;
-            }
             finally
             {
-                if (avatarData != null)
-                {
-                    avatarData.Close();
-                    avatarData.Dispose();
-                    avatarData = null;
-                }
+                avatarData.Close();
+                avatarData.Dispose();
             }
 
             return this;
         }
 
         /// <summary>
-        ///   Sets as unavailable.
+        /// Sets as unavailable.
         /// </summary>
         public ISession SetUnavailable()
         {
@@ -611,9 +594,9 @@ namespace Hanoi.Xmpp.InstantMessaging
         }
 
         /// <summary>
-        ///   Sets the presence.
+        /// Sets the presence.
         /// </summary>
-        /// <param name = "showAs">The show as.</param>
+        /// <param name="newPresence">The Presence state to show.</param>
         public ISession SetPresence(PresenceState newPresence)
         {
             SetPresence(newPresence, null);
@@ -624,8 +607,8 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Sets the presence.
         /// </summary>
-        /// <param name = "newPresence">The new presence state.</param>
-        /// <param name = "status">The status.</param>
+        /// <param name="newPresence">The new presence state.</param>
+        /// <param name="status">The status.</param>
         public ISession SetPresence(PresenceState newPresence, string status)
         {
             switch (newPresence)
@@ -718,31 +701,16 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
         }
 
-        private void OnChatMessageReceived(Message message)
+        private void OnChatMessageReceived(Message message) 
         {
-            Chat chat = null;
+            if (String.IsNullOrEmpty(message.Body) && !_chats.ContainsKey(message.From.BareIdentifier)) 
+                return;
 
-            if (String.IsNullOrEmpty(message.Body) &&
-                !_chats.ContainsKey(message.From.BareIdentifier))
+            if (!_chats.ContainsKey(message.From.BareIdentifier))
             {
+                CreateChat(message.From);
             }
-            else
-            {
-                if (!_chats.ContainsKey(message.From.BareIdentifier))
-                {
-                    chat = CreateChat(message.From);
-                }
-                else
-                {
-                    chat = _chats[message.From.BareIdentifier];
-                }
-
-                _messageReceivedSubject.OnNext(message);
-            }
-        }
-
-        private void OnErrorMessageReceived(Message message)
-        {
+            
             _messageReceivedSubject.OnNext(message);
         }
 

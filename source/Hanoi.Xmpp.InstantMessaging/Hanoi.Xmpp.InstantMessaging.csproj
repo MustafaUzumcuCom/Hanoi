@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="Avatar.cs" />
     <Compile Include="AvatarStorage.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MultiUserChat\ChatRoomStatusCode.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="ObservableObject.cs" />

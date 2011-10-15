@@ -37,14 +37,6 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
     /// </summary>
     public sealed class UserTuneEvent : UserEvent
     {
-        private readonly string artist;
-        private readonly ushort length;
-        private readonly string rating;
-        private readonly string source;
-        private readonly string title;
-        private readonly string track;
-        private readonly string uri;
-
         /// <summary>
         ///   Initializes a new instance of the <see cref = "UserTuneEvent">UserTuneEvent</see> class.
         /// </summary>
@@ -65,13 +57,13 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             string uri)
             : base(null)
         {
-            this.artist = artist;
-            this.length = length;
-            this.rating = rating;
-            this.source = source;
-            this.title = title;
-            this.track = track;
-            this.uri = uri;
+            Artist = artist;
+            Length = length;
+            Rating = rating;
+            Source = source;
+            Title = title;
+            Track = track;
+            Uri = uri;
         }
 
         /// <summary>
@@ -82,56 +74,28 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
         public UserTuneEvent(Contact user, Tune tune)
             : base(user)
         {
-            artist = tune.Artist;
-            length = tune.Length;
-            rating = tune.Rating;
-            source = tune.Source;
-            title = tune.Title;
-            track = tune.Track;
-            uri = tune.Uri;
+            Artist = tune.Artist;
+            Length = tune.Length;
+            Rating = tune.Rating;
+            Source = tune.Source;
+            Title = tune.Title;
+            Track = tune.Track;
+            Uri = tune.Uri;
         }
 
-        /// <remarks />
-        public string Artist
-        {
-            get { return artist; }
-        }
+        public string Artist { get; private set; }
 
-        /// <remarks />
-        public ushort Length
-        {
-            get { return length; }
-        }
+        public ushort Length { get; private set; }
 
-        /// <remarks />
-        public string Rating
-        {
-            get { return rating; }
-        }
+        public string Rating { get; private set; }
 
-        /// <remarks />
-        public string Source
-        {
-            get { return source; }
-        }
+        public string Source { get; private set; }
 
-        /// <remarks />
-        public string Title
-        {
-            get { return title; }
-        }
+        public string Title { get; private set; }
 
-        /// <remarks />
-        public string Track
-        {
-            get { return track; }
-        }
+        public string Track { get; private set; }
 
-        /// <remarks />
-        public string Uri
-        {
-            get { return uri; }
-        }
+        public string Uri { get; private set; }
 
         public bool IsEmpty
         {
