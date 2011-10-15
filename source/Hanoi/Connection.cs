@@ -757,6 +757,8 @@ namespace Hanoi
 
             try
             {
+                // TODO: replace usage of this method with a pluggable feature
+                // authenticator = new ConnectionFactory().Create(_streamFeatures, this);
                 authenticator = CreateAuthenticator();
 
                 if (authenticator != null)
