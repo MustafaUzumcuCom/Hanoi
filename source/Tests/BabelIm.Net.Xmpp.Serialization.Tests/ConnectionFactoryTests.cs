@@ -60,5 +60,19 @@ namespace Hanoi.Tests
 
             Assert.IsType<SaslDigestAuthenticator>(auth);
         }
+
+        [Fact]
+        public void Register_WithCustomToken_ReturnsCustomAuthenticator()
+        {
+            var feature = StreamFeatures.InBandRegistration;
+            var connection = Substitute.For<Connection>();
+            var fakeAuthenticator = Substitute.For<Authenticator>(connection);
+            var factory = new ConnectionFactory();
+            factory.Register(feature, c => fakeAuthenticator);
+            
+            var auth = factory.Create(feature, connection);
+
+            Assert.Same(fakeAuthenticator, auth);
+        }
     }
 }
