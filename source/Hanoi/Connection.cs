@@ -41,7 +41,6 @@ using Hanoi.Serialization.Extensions.VCardTemp;
 using Hanoi.Serialization.Extensions.XmppPing;
 using Hanoi.Serialization.InstantMessaging.Client;
 using Hanoi.Serialization.InstantMessaging.Presence;
-using Hanoi.Serialization.InstantMessaging.Register;
 using Hanoi.Serialization.InstantMessaging.Roster;
 using Hanoi.Transports;
 
@@ -50,7 +49,7 @@ namespace Hanoi
     // NOTE: unsealed this class for testing
 
     /// <summary>
-    ///   Represents a connection to a XMPP server
+    /// Represents a connection to a XMPP server
     /// </summary>
     public class Connection : IDisposable
     {
@@ -73,14 +72,11 @@ namespace Hanoi
         private IDisposable _transportStreamClosedSubscription;
         private IDisposable _transportStreamInitializedSubscription;
 
-        // start new code
-
         public Connection() : this(AuthenticatorFactory.Default, FeatureDetection.Default) {
 
         }
 
-        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection) 
-        {
+        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection) {
             Authenticator = authenticator;
             Features = featureDetection;
         }
@@ -88,8 +84,6 @@ namespace Hanoi
         internal IAuthenticatorFactory Authenticator { get; private set; }
 
         internal IFeatureDetection Features { get; private set; }
-
-        // end new code
 
         /// <summary>
         ///   Occurs when a new message is received.
@@ -335,11 +329,9 @@ namespace Hanoi
             {
                 Initialize();
 
-                // Build the connection string
                 _connectionString = new ConnectionString(connectionString);
                 UserId = _connectionString.UserId;
 
-                // Connect to the server
                 if (_connectionString.UseHttpBinding)
                 {
                     _transport = new HttpTransport();
@@ -375,16 +367,12 @@ namespace Hanoi
                         if (SupportsFeature(StreamFeatures.SecureConnection))
                         {
                             ((ISecureTransport)_transport).OpenSecureConnection();
-
-                            // Wait until we receive the Stream features
                             WaitForStreamFeatures();
                         }
                     }
                 }
 
-                bool authenticationDone = Authenticate();
-
-                if (authenticationDone)
+                if (Authenticate())
                 {
                     BindResource();
                     OpenSession();
@@ -609,62 +597,10 @@ namespace Hanoi
             }
             else if (message is PubSubErrorUnsupported)
             {
-#warning TODO: Process PubSub Error
+                //  TODO: Process PubSub Error
             }
 
             return null;
-        }
-
-        /// <summary>
-        ///   Process an Stream Features XMPP message
-        /// </summary>
-        /// <param name = "features"></param>
-        [Obsolete("Use FeatureDetection to detect whatever we want")]
-        private void ProcessStreamFeatures(Serialization.Core.Streams.StreamFeatures features) 
-        {
-            if (features.Mechanisms != null && features.Mechanisms.SaslMechanisms.Count > 0)
-            {
-                foreach (string mechanism in features.Mechanisms.SaslMechanisms)
-                {
-                    switch (mechanism)
-                    {
-                        case XmppCodes.SaslDigestMD5Mechanism:
-                            _streamFeatures |= StreamFeatures.SaslDigestMD5;
-                            break;
-
-                        case XmppCodes.SaslPlainMechanism:
-                            _streamFeatures |= StreamFeatures.SaslPlain;
-                            break;
-
-                        case XmppCodes.SaslXGoogleTokenMechanism:
-                            _streamFeatures |= StreamFeatures.XGoogleToken;
-                            break;
-                    }
-                }
-            }
-
-            if (features.Bind != null)
-            {
-                _streamFeatures |= StreamFeatures.ResourceBinding;
-            }
-
-            if (features.SessionSpecified)
-            {
-                _streamFeatures |= StreamFeatures.Sessions;
-            }
-
-            if (features.Items.Count > 0)
-            {
-                foreach (object item in features.Items)
-                {
-                    if (item is RegisterIQ)
-                    {
-                        _streamFeatures |= StreamFeatures.InBandRegistration;
-                    }
-                }
-            }
-
-            _streamFeaturesEvent.Set();
         }
 
         /// <summary>
@@ -752,7 +688,7 @@ namespace Hanoi
         private bool Authenticate()
         {
             Authenticator authenticator = null;
-            bool result = false;
+            var result = false;
 
             try
             {
@@ -780,10 +716,6 @@ namespace Hanoi
                     OnAuthenticationFailure(message);
                 }
             }
-            catch
-            {
-                throw;
-            }
             finally
             {
                 if (authenticator != null)
@@ -796,7 +728,8 @@ namespace Hanoi
             return result;
         }
 
-        private void OnAuthenticationFailure(string error) {
+        private void OnAuthenticationFailure(string error)
+        {
             if (AuthenticationFailiure != null)
             {
                 AuthenticationFailiure(this, new AuthenticationFailiureEventArgs(error));
@@ -805,40 +738,40 @@ namespace Hanoi
 
         private void BindResource()
         {
-            if (SupportsFeature(StreamFeatures.ResourceBinding))
-            {
-                var bind = new Bind { Resource = UserId.ResourceName };
+            if (!SupportsFeature(StreamFeatures.ResourceBinding)) 
+                return;
 
-                var iq = new IQ
-                {
-                    Type = IQType.Set,
-                    ID = IdentifierGenerator.Generate()
-                };
+            var bind = new Bind { Resource = UserId.ResourceName };
 
-                iq.Items.Add(bind);
+            var iq = new IQ
+                         {
+                             Type = IQType.Set,
+                             ID = IdentifierGenerator.Generate()
+                         };
 
-                Send(iq);
+            iq.Items.Add(bind);
 
-                _bindResourceEvent.WaitOne();
-            }
+            Send(iq);
+
+            _bindResourceEvent.WaitOne();
         }
 
         private void OpenSession()
         {
-            if (SupportsFeature(StreamFeatures.Sessions))
-            {
-                var iq = new IQ
-                             {
-                                 Type = IQType.Set,
-                                 To = _connectionString.HostName,
-                                 ID = IdentifierGenerator.Generate()
-                             };
+            if (!SupportsFeature(StreamFeatures.Sessions)) 
+                return;
+
+            var iq = new IQ
+                         {
+                             Type = IQType.Set,
+                             To = _connectionString.HostName,
+                             ID = IdentifierGenerator.Generate()
+                         };
 
 
-                iq.Items.Add(new Session());
+            iq.Items.Add(new Session());
 
-                Send(iq);
-            }
+            Send(iq);
         }
 
         private void OnTransportXmppStreamInitialized()
@@ -857,7 +790,7 @@ namespace Hanoi
 
         private void OnTransportMessageReceived(object message)
         {
-            AutoResetEvent resetEvent = ProcessMessageInstance(message);
+            var resetEvent = ProcessMessageInstance(message);
 
             if (resetEvent != null)
             {
@@ -874,31 +807,6 @@ namespace Hanoi
             _initializedStreamEvent = new AutoResetEvent(false);
             _streamFeaturesEvent = new AutoResetEvent(false);
             _bindResourceEvent = new AutoResetEvent(false);
-        }
-
-        /// <summary>
-        ///   Creates an instance of the <see cref = "Authenticator" /> used by the connection.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("This should be customisable, so extract to a separate class")]
-        private Authenticator CreateAuthenticator()
-        {
-            Authenticator authenticator = null;
-
-            if (SupportsFeature(StreamFeatures.SaslDigestMD5))
-            {
-                authenticator = new SaslDigestAuthenticator(this);
-            }
-            else if (SupportsFeature(StreamFeatures.XGoogleToken))
-            {
-                authenticator = new SaslXGoogleTokenAuthenticator(this);
-            }
-            else if (SupportsFeature(StreamFeatures.SaslPlain))
-            {
-                authenticator = new SaslPlainAuthenticator(this);
-            }
-
-            return authenticator;
         }
 
         /// <summary>
