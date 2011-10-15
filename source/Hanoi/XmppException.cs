@@ -38,24 +38,23 @@ namespace Hanoi {
     ///   Exception for XMPP related errors.
     /// </summary>
     [Serializable]
-    public sealed class XmppException
-        : SystemException {
+    public sealed class XmppException : SystemException {
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppException" /> class.
+        ///   Initializes a new instance of the <see cref = "XmppException" /> class.
         /// </summary>
         public XmppException() {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppException" /> class with the given class
+        ///   Initializes a new instance of the <see cref = "XmppException" /> class with the given class
         /// </summary>
-        /// <param name = "message">The XMPP Stream error.</param>
+        /// <param name = "error">The XMPP Stream error.</param>
         public XmppException(StreamError error)
             : base(GetStreamErrorMessage(error)) {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppException" /> class with the given class
+        ///   Initializes a new instance of the <see cref = "XmppException" /> class with the given class
         /// </summary>
         /// <param name = "message">The message.</param>
         public XmppException(string message)
@@ -63,7 +62,7 @@ namespace Hanoi {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppException" /> class with the
+        ///   Initializes a new instance of the <see cref = "XmppException" /> class with the
         ///   given message and inner exception.
         /// </summary>
         /// <param name = "message">The message.</param>
@@ -73,7 +72,7 @@ namespace Hanoi {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppException" /> class.
+        ///   Initializes a new instance of the <see cref = "XmppException" /> class.
         /// </summary>
         /// <param name = "info">The object that holds the serialized object data.</param>
         /// <param name = "context">The contextual information about the source or destination.</param>

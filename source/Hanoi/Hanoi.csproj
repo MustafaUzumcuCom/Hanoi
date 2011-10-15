@@ -227,7 +227,7 @@
     <Compile Include="Serialization\ItemChoiceType.cs" />
     <Compile Include="Serialization\XmppSerializer.cs" />
     <Compile Include="Serialization\XmppTextWriter.cs" />
-    <Compile Include="StreamCodes.cs" />
+    <Compile Include="StreamElements.cs" />
     <Compile Include="Transports\BaseTransport.cs" />
     <Compile Include="Transports\HttpTransport.cs" />
     <Compile Include="Transports\ITransport.cs" />

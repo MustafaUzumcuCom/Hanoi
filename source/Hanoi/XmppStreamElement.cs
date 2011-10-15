@@ -27,59 +27,54 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   An element of an XMPP XML message
     /// </summary>
-    internal sealed class XmppStreamElement {
-        private readonly string name;
-        private readonly string node;
-        private readonly string xmlNamespace;
-
+    internal sealed class XmppStreamElement
+    {
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppStreamElement" /> class.
+        ///   Initializes a new instance of the <see cref = "XmppStreamElement" /> class.
         /// </summary>
         /// <param name = "name">The name.</param>
         /// <param name = "xmlNamespace">The XML namespace.</param>
         /// <param name = "node">The node.</param>
-        public XmppStreamElement(string name, string xmlNamespace, string node) {
-            this.name = name;
-            this.xmlNamespace = xmlNamespace;
-            this.node = node;
+        public XmppStreamElement(string name, string xmlNamespace, string node)
+        {
+            Name = name;
+            XmlNamespace = xmlNamespace;
+            Node = node;
         }
 
         /// <summary>
         ///   Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name {
-            get { return name; }
-        }
+        public string Name { get; private set; }
 
         /// <summary>
         ///   Gets the XML namespace.
         /// </summary>
         /// <value>The XML namespace.</value>
-        public string XmlNamespace {
-            get { return xmlNamespace; }
-        }
+        public string XmlNamespace { get; private set; }
 
         /// <summary>
         ///   Gets the node.
         /// </summary>
         /// <value>The node.</value>
-        public string Node {
-            get { return node; }
-        }
+        public string Node { get; private set; }
 
         /// <summary>
         ///   Gets a value indicating whether [opens XMPP stream].
         /// </summary>
         /// <value><c>true</c> if [opens XMPP stream]; otherwise, <c>false</c>.</value>
-        public bool OpensXmppStream {
-            get {
-                return (name == StreamCodes.XmppStreamName &&
-                        node.StartsWith(StreamCodes.XmppStreamOpen));
+        public bool OpensXmppStream
+        {
+            get
+            {
+                return (Name == StreamElements.XmppStreamName &&
+                        Node.StartsWith(StreamElements.XmppStreamOpen));
             }
         }
 
@@ -87,8 +82,9 @@ namespace Hanoi {
         ///   Gets a value indicating whether [closes XMPP stream].
         /// </summary>
         /// <value><c>true</c> if [closes XMPP stream]; otherwise, <c>false</c>.</value>
-        public bool ClosesXmppStream {
-            get { return node.StartsWith(StreamCodes.XmppStreamClose); }
+        public bool ClosesXmppStream
+        {
+            get { return Node.StartsWith(StreamElements.XmppStreamClose); }
         }
 
         /// <summary>
@@ -97,8 +93,9 @@ namespace Hanoi {
         /// <returns>
         ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
         /// </returns>
-        public override string ToString() {
-            return node;
+        public override string ToString()
+        {
+            return Node;
         }
     }
 }

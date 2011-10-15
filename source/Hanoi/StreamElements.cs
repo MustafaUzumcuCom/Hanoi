@@ -1,7 +1,7 @@
 using System;
 
 namespace Hanoi {
-    public static class StreamCodes {
+    public static class StreamElements {
         /// <summary>
         ///   XMPP Stream XML root node name
         /// </summary>

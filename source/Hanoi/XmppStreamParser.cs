@@ -38,34 +38,34 @@ namespace Hanoi
     /// </summary>
     internal sealed class XmppStreamParser : IDisposable
     {
-        private StringBuilder currentTag;
-        private long depth;
-        private bool isDisposed;
-        private StringBuilder node;
-        private string nodeName;
-        private string nodeNamespace;
-        private BinaryReader reader;
-        private XmppMemoryStream stream;
+        private StringBuilder _currentTag = new StringBuilder();
+        private long _depth;
+        private bool _isDisposed;
+        private StringBuilder _node = new StringBuilder();
+        private string _nodeName;
+        private string _nodeNamespace;
+        private BinaryReader _reader;
+        private XmppMemoryStream _stream;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:XmppStreamParser" /> class.
+        ///   Initializes a new instance of the <see cref = "XmppStreamParser" /> class.
         /// </summary>
         /// <param name = "stream">The stream.</param>
         public XmppStreamParser(XmppMemoryStream stream)
         {
-            this.stream = stream;
-            reader = new BinaryReader(this.stream, Encoding.UTF8);
-            node = new StringBuilder();
-            currentTag = new StringBuilder();
+            _stream = stream;
+            _reader = new BinaryReader(_stream, Encoding.UTF8);
         }
 
         /// <summary>
-        ///   Gets a value indicating whether this <see cref = "T:XmppStreamParser" /> is EOF.
+        ///   Gets a value indicating whether this <see cref = "XmppStreamParser" /> is EOF.
         /// </summary>
         /// <value><c>true</c> if EOF; otherwise, <c>false</c>.</value>
+// ReSharper disable InconsistentNaming
         public bool EOF
+// ReSharper restore InconsistentNaming
         {
-            get { return stream.EOF; }
+            get { return _stream.EOF; }
         }
 
         #region IDisposable Members
@@ -122,7 +122,7 @@ namespace Hanoi
 
         private static bool IsEndStreamTag(string tag)
         {
-            return (tag.Equals(StreamCodes.XmppStreamClose));
+            return (tag.Equals(StreamElements.XmppStreamClose));
         }
 
         private static bool IsEndTag(string tag)
@@ -143,7 +143,7 @@ namespace Hanoi
 
         private static bool IsXmppStreamOpen(string tag)
         {
-            return tag.StartsWith(StreamCodes.XmppStreamOpen, StringComparison.OrdinalIgnoreCase);
+            return tag.StartsWith(StreamElements.XmppStreamOpen, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -152,24 +152,24 @@ namespace Hanoi
         /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
         private void Dispose(bool disposing)
         {
-            if (!isDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
                     // Release managed resources here
-                    depth = 0;
-                    currentTag = null;
-                    node = null;
-                    nodeName = null;
-                    if (reader != null)
+                    _depth = 0;
+                    _currentTag = null;
+                    _node = null;
+                    _nodeName = null;
+                    if (_reader != null)
                     {
-                        reader.Close();
-                        reader = null;
+                        _reader.Close();
+                        _reader = null;
                     }
-                    if (stream != null)
+                    if (_stream != null)
                     {
-                        stream.Dispose();
-                        stream = null;
+                        _stream.Dispose();
+                        _stream = null;
                     }
                 }
 
@@ -179,7 +179,7 @@ namespace Hanoi
                 // only the following code is executed.
             }
 
-            isDisposed = true;
+            _isDisposed = true;
         }
 
         /// <summary>
@@ -188,67 +188,67 @@ namespace Hanoi
         /// <returns></returns>
         public XmppStreamElement ReadNextNode()
         {
-            if (node.Length == 0)
+            if (_node.Length == 0)
             {
-                depth = -1;
-                nodeName = null;
-                nodeNamespace = null;
+                _depth = -1;
+                _nodeName = null;
+                _nodeNamespace = null;
             }
 
-            while (!EOF && depth != 0)
+            while (!EOF && _depth != 0)
             {
                 SkipWhiteSpace();
 
                 int next = Peek();
-                if (next == '<' || currentTag.Length > 0)
+                if (next == '<' || _currentTag.Length > 0)
                 {
                     if (!ReadTag())
                     {
                         break;
                     }
 
-                    string tag = currentTag.ToString();
+                    string tag = _currentTag.ToString();
 
-                    if (!XmppStreamParser.IsProcessingInstruction(tag))
+                    if (!IsProcessingInstruction(tag))
                     {
-                        if (node.Length == 0 && XmppStreamParser.IsXmppStreamOpen(tag))
+                        if (_node.Length == 0 && IsXmppStreamOpen(tag))
                         {
-                            nodeName = XmppStreamParser.GetTagName(tag);
-                            depth = 0;
+                            _nodeName = GetTagName(tag);
+                            _depth = 0;
                         }
-                        else if (node.Length == 0 && XmppStreamParser.IsEndStreamTag(tag))
+                        else if (_node.Length == 0 && IsEndStreamTag(tag))
                         {
-                            nodeName = XmppStreamParser.GetTagName(tag);
-                            depth = 0;
+                            _nodeName = GetTagName(tag);
+                            _depth = 0;
                         }
                         else
                         {
-                            if (!XmppStreamParser.IsCharacterDataAndMarkup(tag))
+                            if (!IsCharacterDataAndMarkup(tag))
                             {
-                                if (XmppStreamParser.IsStartTag(tag))
+                                if (IsStartTag(tag))
                                 {
-                                    if (depth == -1)
+                                    if (_depth == -1)
                                     {
-                                        nodeName = XmppStreamParser.GetTagName(tag);
-                                        nodeNamespace = XmppStreamParser.GetXmlNamespace(tag);
+                                        _nodeName = GetTagName(tag);
+                                        _nodeNamespace = GetXmlNamespace(tag);
 
-                                        depth++;
+                                        _depth++;
                                     }
 
-                                    depth++;
+                                    _depth++;
                                 }
 
-                                if (XmppStreamParser.IsEndTag(tag))
+                                if (IsEndTag(tag))
                                 {
-                                    depth--;
+                                    _depth--;
                                 }
                             }
                         }
 
-                        node.Append(tag);
+                        _node.Append(tag);
                     }
 
-                    currentTag.Length = 0;
+                    _currentTag.Length = 0;
                 }
                 else if (next != -1)
                 {
@@ -261,14 +261,14 @@ namespace Hanoi
 
             XmppStreamElement result = null;
 
-            if (depth == 0)
+            if (_depth == 0)
             {
-                result = new XmppStreamElement(nodeName, nodeNamespace, node.ToString());
-                node.Length = 0;
-                currentTag.Length = 0;
-                depth = -1;
-                nodeName = null;
-                nodeNamespace = null;
+                result = new XmppStreamElement(_nodeName, _nodeNamespace, _node.ToString());
+                _node.Length = 0;
+                _currentTag.Length = 0;
+                _depth = -1;
+                _nodeName = null;
+                _nodeNamespace = null;
             }
 
             return result;
@@ -278,8 +278,8 @@ namespace Hanoi
         {
             SkipWhiteSpace();
 
-            int next = Peek();
-            if (next != '<' && currentTag.Length == 0)
+            var next = Peek();
+            if (next != '<' && _currentTag.Length == 0)
             {
                 throw new IOException();
             }
@@ -291,14 +291,12 @@ namespace Hanoi
                 {
                     return false;
                 }
-                else
-                {
-                    currentTag.Append(Read());
+                
+                _currentTag.Append(Read());
 
-                    if (next == '>')
-                    {
-                        return true;
-                    }
+                if (next == '>')
+                {
+                    return true;
                 }
             }
         }
@@ -312,7 +310,7 @@ namespace Hanoi
                 {
                     break;
                 }
-                else if (Char.IsWhiteSpace((char)next))
+                if (Char.IsWhiteSpace((char)next))
                 {
                     Read();
                 }
@@ -334,7 +332,7 @@ namespace Hanoi
 
                 if (Peek() != '<')
                 {
-                    node.Append(Read());
+                    _node.Append(Read());
                 }
                 else
                 {
@@ -347,12 +345,12 @@ namespace Hanoi
 
         private int Peek()
         {
-            return reader.PeekChar();
+            return _reader.PeekChar();
         }
 
         private char Read()
         {
-            return reader.ReadChar();
+            return _reader.ReadChar();
         }
     }
 }
