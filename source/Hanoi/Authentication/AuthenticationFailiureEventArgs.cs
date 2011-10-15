@@ -32,14 +32,14 @@ using System;
 namespace Hanoi.Authentication
 {
     /// <summary>
-    ///   EventArgs for the <see cref = "Hanoi.Xmpp.XmppConnection.AuthenticationFailiure" /> event.
+    ///   EventArgs for the <see cref="Hanoi.Connection.AuthenticationFailiure" /> event.
     /// </summary>
     public sealed class AuthenticationFailiureEventArgs : EventArgs
     {
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "AuthenticationFailiureEventArgs" /> class.
+        ///   Initializes a new instance of the <see cref="AuthenticationFailiureEventArgs" /> class.
         /// </summary>
-        /// <param name = "message">The authentication failiure message.</param>
+        /// <param name="message">The authentication failiure message.</param>
         public AuthenticationFailiureEventArgs(string message)
         {
             Message = message;

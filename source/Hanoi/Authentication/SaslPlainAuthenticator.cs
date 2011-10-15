@@ -44,15 +44,15 @@ namespace Hanoi.Authentication
     /// </remarks>
     internal sealed class SaslPlainAuthenticator : Authenticator
     {
-        private readonly AutoResetEvent waitEvent;
+        private readonly AutoResetEvent _waitEvent;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:SaslPlainAuthenticator" /> class.
+        ///   Initializes a new instance of the <see cref="SaslPlainAuthenticator" /> class.
         /// </summary>
         public SaslPlainAuthenticator(Connection connection)
             : base(connection)
         {
-            waitEvent = new AutoResetEvent(false);
+            _waitEvent = new AutoResetEvent(false);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Hanoi.Authentication
             
             Connection.Send(auth);
 
-            waitEvent.WaitOne();
+            _waitEvent.WaitOne();
 
             if (!AuthenticationFailed)
             {
@@ -85,7 +85,7 @@ namespace Hanoi.Authentication
         {
             if (e.StanzaInstance is Success)
             {
-                waitEvent.Set();
+                _waitEvent.Set();
             }
         }
 
@@ -93,7 +93,7 @@ namespace Hanoi.Authentication
         {
             base.OnAuthenticationError(sender, e);
 
-            waitEvent.Set();
+            _waitEvent.Set();
         }
 
         private string BuildMessage()

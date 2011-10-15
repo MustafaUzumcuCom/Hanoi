@@ -7,23 +7,23 @@ using Hanoi.Serialization.Core.Sasl;
 
 namespace Hanoi.Authentication
 {
-    /// <summary>
-    ///   http://209.85.129.132/search?q=cache:AhT1kmNCYw4J:dystopics.dump.be/%3Fp%3D54+IssueAuthToken&cd=2&hl=es&ct=clnk&gl=es&client=firefox-a
-    ///   </remarks>
+    /// <remarks>
+    /// http://209.85.129.132/search?q=cache:AhT1kmNCYw4J:dystopics.dump.be/%3Fp%3D54+IssueAuthToken&cd=2&hl=es&ct=clnk&gl=es&client=firefox-a
+    /// </remarks>
     internal sealed class SaslXGoogleTokenAuthenticator : Authenticator
     {
-        private readonly AutoResetEvent waitEvent;
+        private readonly AutoResetEvent _waitEvent;
         private string _auth;
-        private string lsid;
-        private string sid;
+        private string _lsid;
+        private string _sid;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:SaslPlainAuthenticator" /> class.
+        ///   Initializes a new instance of the <see cref = "SaslPlainAuthenticator" /> class.
         /// </summary>
         public SaslXGoogleTokenAuthenticator(Connection connection)
             : base(connection)
         {
-            waitEvent = new AutoResetEvent(false);
+            _waitEvent = new AutoResetEvent(false);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Hanoi.Authentication
 
                 Connection.Send(auth);
 
-                waitEvent.WaitOne();
+                _waitEvent.WaitOne();
 
                 if (!AuthenticationFailed)
                 {
@@ -63,7 +63,7 @@ namespace Hanoi.Authentication
         {
             if (e.StanzaInstance is Success)
             {
-                waitEvent.Set();
+                _waitEvent.Set();
             }
         }
 
@@ -71,12 +71,12 @@ namespace Hanoi.Authentication
         {
             base.OnAuthenticationError(sender, e);
 
-            waitEvent.Set();
+            _waitEvent.Set();
         }
 
         private string BuildMessage()
         {
-            string message = String.Format("\0{0}\0{1}", Connection.UserId.BareIdentifier, _auth);
+            var message = String.Format("\0{0}\0{1}", Connection.UserId.BareIdentifier, _auth);
 
             return Encoding.UTF8.GetBytes(message).ToBase64String();
         }
@@ -93,7 +93,7 @@ namespace Hanoi.Authentication
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
 
-            System.IO.Stream stream = request.GetRequestStream();
+            var stream = request.GetRequestStream();
 
             requestString.AppendFormat("Email={0}", Connection.UserId.BareIdentifier);
             requestString.AppendFormat("&Passwd={0}", Connection.UserPassword);
@@ -101,7 +101,7 @@ namespace Hanoi.Authentication
             requestString.AppendFormat("&service={0}", "mail");
             requestString.AppendFormat("&PersistentCookie={0}", false);
 
-            byte[] buffer = Encoding.UTF8.GetBytes(requestString.ToString());
+            var buffer = Encoding.UTF8.GetBytes(requestString.ToString());
 
             stream.Write(buffer, 0, buffer.Length);
             stream.Dispose();
@@ -110,75 +110,41 @@ namespace Hanoi.Authentication
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                System.IO.Stream responseStream = response.GetResponseStream();
-                var responseReader = new StreamReader(responseStream, true);
-
-                while (responseReader.Peek() != -1)
+                var responseStream = response.GetResponseStream();
+                if (responseStream != null)
                 {
-                    string data = responseReader.ReadLine();
+                    var responseReader = new StreamReader(responseStream, true);
 
-                    if (data.StartsWith("SID="))
+                    while (responseReader.Peek() != -1)
                     {
-                        sid = data.Replace("SID=", "");
+                        var data = responseReader.ReadLine();
+                        if (data != null)
+                        {
+                            if (data.StartsWith("SID="))
+                            {
+                                _sid = data.Replace("SID=", "");
+                            }
+                            else if (data.StartsWith("LSID="))
+                            {
+                                _lsid = data.Replace("LSID=", "");
+                            }
+                            else if (data.StartsWith("Auth="))
+                            {
+                                _auth = data.Replace("Auth=", "");
+                            }
+                        }
                     }
-                    else if (data.StartsWith("LSID="))
-                    {
-                        lsid = data.Replace("LSID=", "");
-                    }
-                    else if (data.StartsWith("Auth="))
-                    {
-                        _auth = data.Replace("Auth=", "");
-                    }
+
+                    responseStream.Dispose();
+                    responseReader.Dispose();
                 }
 
-                responseStream.Dispose();
-                responseReader.Dispose();
-
-                return (!String.IsNullOrEmpty(sid) &&
-                        !String.IsNullOrEmpty(lsid) &&
+                return (!String.IsNullOrEmpty(_sid) &&
+                        !String.IsNullOrEmpty(_lsid) &&
                         !String.IsNullOrEmpty(_auth));
             }
 
             return false;
         }
-
-        /*
-        private bool IssueToken()
-        {
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("https://www.google.com/accounts/IssueAuthToken");
-            StringBuilder requestString = new StringBuilder();
-
-            request.Method      = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            System.IO.Stream stream = request.GetRequestStream();
-
-            requestString.AppendFormat("SID={0}", this.sid);
-            requestString.AppendFormat("&service={0}", "mail");
-            requestString.AppendFormat("&Session={0}", true);
-
-            byte[] buffer = Encoding.UTF8.GetBytes(requestString.ToString());
-
-            stream.Write(buffer, 0, buffer.Length);
-            stream.Dispose();
-
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                System.IO.Stream responseStream = response.GetResponseStream();
-                StreamReader responseReader = new StreamReader(responseStream, true);
-
-                this.authToken = responseReader.ReadToEnd();
-
-                responseStream.Dispose();
-                responseReader.Dispose();
-
-                return true;
-            }
-
-            return false;
-        }
-        */
     }
 }

@@ -38,7 +38,7 @@ using Hanoi.Serialization.Core.Sasl;
 namespace Hanoi.Authentication
 {
     /// <summary>
-    ///   <see cref = "Authenticator" /> implementation for the SASL Digest Authentication mechanism.
+    ///   <see cref="Authenticator" /> implementation for the SASL Digest Authentication mechanism.
     /// </summary>
     /// <remarks>
     ///   References:
@@ -47,9 +47,9 @@ namespace Hanoi.Authentication
     /// </remarks>
     internal sealed class SaslDigestAuthenticator : Authenticator
     {
-        private readonly string cnonce;
-        private readonly AutoResetEvent successEvent;
-        private IDictionary<string, string> digestChallenge;
+        private readonly string _cnonce;
+        private readonly AutoResetEvent _successEvent;
+        private IDictionary<string, string> _digestChallenge;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="SaslDigestAuthenticator" /> class.
@@ -57,8 +57,8 @@ namespace Hanoi.Authentication
         public SaslDigestAuthenticator(Connection connection)
             : base(connection)
         {
-            cnonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(IdentifierGenerator.Generate()));
-            successEvent = new AutoResetEvent(false);
+            _cnonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(IdentifierGenerator.Generate()));
+            _successEvent = new AutoResetEvent(false);
         }
 
         private static IDictionary<string, string> DecodeDigestChallenge(Challenge challenge)
@@ -71,8 +71,8 @@ namespace Hanoi.Authentication
             {
                 if (match.Success && match.Groups.Count == 3)
                 {
-                    string key = match.Groups[1].Value.Trim();
-                    string value = match.Groups[2].Value.Trim();
+                    var key = match.Groups[1].Value.Trim();
+                    var value = match.Groups[2].Value.Trim();
 
                     // Strip quotes from the value
                     if (value.StartsWith("\"", StringComparison.OrdinalIgnoreCase) ||
@@ -80,6 +80,7 @@ namespace Hanoi.Authentication
                     {
                         value = value.Remove(0, 1);
                     }
+
                     if (value.EndsWith("\"", StringComparison.OrdinalIgnoreCase) ||
                         value.EndsWith("'", StringComparison.OrdinalIgnoreCase))
                     {
@@ -108,26 +109,26 @@ namespace Hanoi.Authentication
 
             Connection.Send(auth);
 
-            successEvent.WaitOne();
+            _successEvent.WaitOne();
 
             // Verify received Digest-Challenge
 
             // Check that the nonce setting is pressent
-            if (!digestChallenge.ContainsKey("nonce"))
+            if (!_digestChallenge.ContainsKey("nonce"))
             {
                 throw new XmppException("SASL Authrization failed. Incorrect challenge received from server");
             }
 
             // Check that the charset is correct
-            if (digestChallenge.ContainsKey("charset")
-                && digestChallenge["charset"] != "utf-8")
+            if (_digestChallenge.ContainsKey("charset")
+                && _digestChallenge["charset"] != "utf-8")
             {
                 throw new XmppException("SASL Authrization failed. Incorrect challenge received from server");
             }
 
             // Check that the mechanims is correct
-            if (!digestChallenge.ContainsKey("algorithm")
-                || digestChallenge["algorithm"] != "md5-sess")
+            if (!_digestChallenge.ContainsKey("algorithm")
+                || _digestChallenge["algorithm"] != "md5-sess")
             {
                 throw new XmppException("SASL Authrization failed. Incorrect challenge received from server");
             }
@@ -139,14 +140,14 @@ namespace Hanoi.Authentication
 
             Connection.Send(digestResponse);
 
-            successEvent.WaitOne();
+            _successEvent.WaitOne();
 
-            if (digestChallenge.ContainsKey("rspauth"))
+            if (_digestChallenge.ContainsKey("rspauth"))
             {
                 digestResponse = new Response();
                 Connection.Send(digestResponse);
 
-                successEvent.WaitOne();
+                _successEvent.WaitOne();
             }
 
             if (!AuthenticationFailed)
@@ -164,12 +165,12 @@ namespace Hanoi.Authentication
             if (e.StanzaInstance is Challenge)
             {
                 // Response to teh Authentication Information Request
-                digestChallenge = DecodeDigestChallenge((Challenge)e.StanzaInstance);
-                successEvent.Set();
+                _digestChallenge = DecodeDigestChallenge((Challenge)e.StanzaInstance);
+                _successEvent.Set();
             }
             else if (e.StanzaInstance is Success)
             {
-                successEvent.Set();
+                _successEvent.Set();
             }
         }
 
@@ -177,7 +178,7 @@ namespace Hanoi.Authentication
         {
             base.OnAuthenticationError(sender, e);
 
-            successEvent.Set();
+            _successEvent.Set();
         }
 
         private string BuildDigestRespose()
@@ -187,32 +188,32 @@ namespace Hanoi.Authentication
 
             response.AppendFormat("username=\"{0}\",", Connection.UserId.UserName);
 
-            if (digestChallenge.ContainsKey("realm"))
+            if (_digestChallenge.ContainsKey("realm"))
             {
-                response.AppendFormat("realm=\"{0}\",", digestChallenge["realm"]);
+                response.AppendFormat("realm=\"{0}\",", _digestChallenge["realm"]);
 
-                digestUri = String.Format("xmpp/{0}", digestChallenge["realm"]);
+                digestUri = String.Format("xmpp/{0}", _digestChallenge["realm"]);
             }
             else
             {
                 digestUri = String.Format("xmpp/{0}", Connection.HostName);
             }
 
-            response.AppendFormat("nonce=\"{0}\",", digestChallenge["nonce"]);
-            response.AppendFormat("cnonce=\"{0}\",", cnonce);
+            response.AppendFormat("nonce=\"{0}\",", _digestChallenge["nonce"]);
+            response.AppendFormat("cnonce=\"{0}\",", _cnonce);
             response.AppendFormat("nc={0},", "00000001");
             response.AppendFormat("qop={0},", SelectProtectionQuality());
             response.AppendFormat("digest-uri=\"{0}\",", digestUri);
             response.AppendFormat("response={0},", GenerateResponseValue());
-            response.AppendFormat("charset={0}", digestChallenge["charset"]);
+            response.AppendFormat("charset={0}", _digestChallenge["charset"]);
 
             return Encoding.UTF8.GetBytes(response.ToString()).ToBase64String();
         }
 
         private string GenerateResponseValue()
         {
-            var realm = ((digestChallenge.ContainsKey("realm")) ? digestChallenge["realm"] : Connection.HostName);
-            var nonce = digestChallenge["nonce"];
+            var realm = ((_digestChallenge.ContainsKey("realm")) ? _digestChallenge["realm"] : Connection.HostName);
+            var nonce = _digestChallenge["nonce"];
             var userId = Connection.UserId.UserName;
             var password = Connection.UserPassword;
             var digestURI = String.Format("xmpp/{0}", realm);
@@ -231,11 +232,11 @@ namespace Hanoi.Authentication
 
             var a1 = new MemoryStream();
 
-            var a1hash = (new[] { userId, ":", realm, ":", password }).ComputeMD5Hash();
-            var temp = Encoding.UTF8.GetBytes(String.Format(":{0}:{1}", nonce, cnonce));
+            var a1Hash = (new[] { userId, ":", realm, ":", password }).ComputeMD5Hash();
+            var temp = Encoding.UTF8.GetBytes(String.Format(":{0}:{1}", nonce, _cnonce));
 
             // There are no authzid-value
-            a1.Write(a1hash, 0, a1hash.Length);
+            a1.Write(a1Hash, 0, a1Hash.Length);
             a1.Write(temp, 0, temp.Length);
 
             /*
@@ -272,15 +273,15 @@ namespace Hanoi.Authentication
             var hexA2 = (new[] { a2 }).ComputeMD5Hash().ToHexString();
 
             return
-                (new[] { hexA1, ":", nonce, ":", "00000001", ":", cnonce, ":", quop, ":", hexA2 }).ComputeMD5Hash().
+                (new[] { hexA1, ":", nonce, ":", "00000001", ":", _cnonce, ":", quop, ":", hexA2 }).ComputeMD5Hash().
                     ToHexString();
         }
 
         private string SelectProtectionQuality()
         {
-            if (digestChallenge.ContainsKey("qop-options"))
+            if (_digestChallenge.ContainsKey("qop-options"))
             {
-                var quopOptions = digestChallenge["qop-options"].Split(',');
+                var quopOptions = _digestChallenge["qop-options"].Split(',');
 
                 foreach (var quo in quopOptions)
                 {
@@ -290,7 +291,7 @@ namespace Hanoi.Authentication
                         case "auth-conf":
                             break;
 
-                        case "auth":
+                        // case "auth":
                         default:
                             return quo;
                     }
