@@ -617,8 +617,12 @@ namespace Hanoi
         ///   Process an Stream Features XMPP message
         /// </summary>
         /// <param name = "features"></param>
-        private void ProcessStreamFeatures(Serialization.Core.Streams.StreamFeatures features)
+        private void ProcessStreamFeatures(Serialization.Core.Streams.StreamFeatures features) 
         {
+            // TODO: use the FeatureDetection class to calculate this behaviour
+            // e.g. sample usage
+            // _streamFeatures = new FeatureDetection().Process(features);
+
             if (features.Mechanisms != null && features.Mechanisms.SaslMechanisms.Count > 0)
             {
                 foreach (string mechanism in features.Mechanisms.SaslMechanisms)
