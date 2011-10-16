@@ -62,6 +62,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         AvatarStorage AvatarStorage { get; }
 
         SessionEntityCapabilities Capabilities { get; }
+
         event EventHandler<AuthenticationFailiureEventArgs> AuthenticationFailed;
 
         ISession Open(string connectionString);

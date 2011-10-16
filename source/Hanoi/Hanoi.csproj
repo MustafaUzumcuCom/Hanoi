@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationFailiureEventArgs.cs" />
     <Compile Include="AuthenticatorFactory.cs" />
+    <Compile Include="ConnectionFactory.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FeatureDetection.cs" />
     <Compile Include="Serialization\Core\ResourceBinding\Bind.cs" />

@@ -91,14 +91,14 @@ namespace Hanoi.Xmpp.InstantMessaging
             _clientCapabilitiesStorage.Load();
         }
 
-        public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator)
+        public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator, IConnectionFactory factory)
         {
             State = SessionState.LoggedOut;
             _avatarStorage = new AvatarStorage();
             _chats = new Dictionary<string, Chat>();
             _syncObject = new object();
 
-            _connection = new Connection(authenticator, featureDetection);
+            _connection = new Connection(authenticator, featureDetection, factory);
 
             _serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
             _personalEventing = new PersonalEventing.PersonalEventing(this);

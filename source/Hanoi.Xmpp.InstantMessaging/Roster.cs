@@ -76,7 +76,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <returns></returns>
         public Contact this[string jid]
         {
-            get { return contacts.Where(contact => contact.ContactId.BareIdentifier == jid).SingleOrDefault(); }
+            get { return contacts.SingleOrDefault(contact => contact.ContactId.BareIdentifier == jid); }
         }
 
         #region IEnumerable<Contact> Members
@@ -201,7 +201,8 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <returns></returns>
         public Roster RefreshBlockedContacts()
         {
-            // TODO: Check if contact list should be stored in a separated collection or the information should be injected into Contact class
+            // TODO: Check if contact list should be stored in a separated collection 
+            // TODO: or the information should be injected into Contact class
             if (session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ

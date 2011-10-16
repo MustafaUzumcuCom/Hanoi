@@ -72,15 +72,19 @@ namespace Hanoi
         private IDisposable _transportStreamClosedSubscription;
         private IDisposable _transportStreamInitializedSubscription;
 
-        public Connection() : this(AuthenticatorFactory.Default, FeatureDetection.Default) {
+        public Connection() : this(AuthenticatorFactory.Default, FeatureDetection.Default, ConnectionFactory.Default)
+        {
 
         }
 
-        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection) {
+        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection, IConnectionFactory factory) {
             Authenticator = authenticator;
             Features = featureDetection;
+            Factory = factory;
         }
 
+        internal IConnectionFactory Factory { get; private set; }
+        
         internal IAuthenticatorFactory Authenticator { get; private set; }
 
         internal IFeatureDetection Features { get; private set; }
@@ -332,14 +336,7 @@ namespace Hanoi
                 _connectionString = new ConnectionString(connectionString);
                 UserId = _connectionString.UserId;
 
-                if (_connectionString.UseHttpBinding)
-                {
-                    _transport = new HttpTransport();
-                }
-                else
-                {
-                    _transport = new TcpTransport();
-                }
+                _transport = Factory.Create(_connectionString);
 
                 _transportMessageSubscription = _transport
                     .OnMessageReceived
@@ -561,6 +558,7 @@ namespace Hanoi
                 {
                     var features = message as Serialization.Core.Streams.StreamFeatures;
                     _streamFeatures = Features.Process(features);
+                    return _streamFeaturesEvent;
                 }
                 else if (UnhandledMessage != null)
                 {
