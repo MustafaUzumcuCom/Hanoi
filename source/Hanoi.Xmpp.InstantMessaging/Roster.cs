@@ -46,25 +46,24 @@ namespace Hanoi.Xmpp.InstantMessaging
     /// </summary>
     public sealed class Roster : IEnumerable<Contact>, INotifyCollectionChanged
     {
-        private readonly Connection connection;
-        private readonly ObservableCollection<Contact> contacts;
-        private readonly List<string> pendingMessages;
-        private readonly Session session;
+        private readonly Connection _connection;
+        private readonly ObservableCollection<Contact> _contacts;
+        private readonly List<string> _pendingMessages;
+        private readonly Session _session;
 
-        private IDisposable infoQueryErrorSubscription;
-        private IDisposable presenceSubscription;
-        private IDisposable rosterNotificationSubscription;
-        private IDisposable sessionStateSubscription;
+        private IDisposable _infoQueryErrorSubscription;
+        private IDisposable _presenceSubscription;
+        private IDisposable _rosterNotificationSubscription;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "Roster" /> class
         /// </summary>
         internal Roster(Session session)
         {
-            this.session = session;
-            connection = session.Connection;
-            contacts = new ObservableCollection<Contact>();
-            pendingMessages = new List<string>();
+            _session = session;
+            _connection = session.Connection;
+            _contacts = new ObservableCollection<Contact>();
+            _pendingMessages = new List<string>();
 
             SubscribeToSessionState();
         }
@@ -76,19 +75,19 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <returns></returns>
         public Contact this[string jid]
         {
-            get { return contacts.SingleOrDefault(contact => contact.ContactId.BareIdentifier == jid); }
+            get { return _contacts.SingleOrDefault(contact => contact.ContactId.BareIdentifier == jid); }
         }
 
         #region IEnumerable<Contact> Members
 
         IEnumerator<Contact> IEnumerable<Contact>.GetEnumerator()
         {
-            return contacts.GetEnumerator();
+            return _contacts.GetEnumerator();
         }
 
         public IEnumerator GetEnumerator()
         {
-            return contacts.GetEnumerator();
+            return _contacts.GetEnumerator();
         }
 
         #endregion
@@ -124,7 +123,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                          {
                              ID = IdentifierGenerator.Generate(),
                              Type = IQType.Set,
-                             From = connection.UserId
+                             From = _connection.UserId
                          };
 
             var item = new RosterItem
@@ -138,9 +137,9 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             iq.Items.Add(query);
 
-            pendingMessages.Add(iq.ID);
+            _pendingMessages.Add(iq.ID);
 
-            connection.Send(iq);
+            _connection.Send(iq);
 
             return this;
         }
@@ -155,7 +154,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                          {
                              ID = IdentifierGenerator.Generate(),
                              Type = IQType.Set,
-                             From = connection.UserId,
+                             From = _connection.UserId,
                          };
 
             var item = new RosterItem
@@ -168,9 +167,9 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             iq.Items.Add(query);
 
-            pendingMessages.Add(iq.ID);
+            _pendingMessages.Add(iq.ID);
 
-            connection.Send(iq);
+            _connection.Send(iq);
 
             return this;
         }
@@ -185,12 +184,12 @@ namespace Hanoi.Xmpp.InstantMessaging
                          {
                              ID = IdentifierGenerator.Generate(),
                              Type = IQType.Get,
-                             From = connection.UserId
+                             From = _connection.UserId
                          };
 
             iq.Items.Add(query);
 
-            connection.Send(iq);
+            _connection.Send(iq);
 
             return this;
         }
@@ -203,7 +202,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             // TODO: Check if contact list should be stored in a separated collection 
             // TODO: or the information should be injected into Contact class
-            if (session.ServiceDiscovery.SupportsBlocking)
+            if (_session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ
                              {
@@ -213,7 +212,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                 iq.Items.Add(new BlockList());
 
-                session.Send(iq);
+                _session.Send(iq);
             }
 
             return this;
@@ -224,18 +223,18 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public Roster UnBlockAll()
         {
-            if (session.ServiceDiscovery.SupportsBlocking)
+            if (_session.ServiceDiscovery.SupportsBlocking)
             {
                 var iq = new IQ
                              {
                                  ID = IdentifierGenerator.Generate(),
-                                 From = session.UserId,
+                                 From = _session.UserId,
                                  Type = IQType.Set
                              };
 
                 iq.Items.Add(new UnBlock());
 
-                session.Send(iq);
+                _session.Send(iq);
             }
 
             return this;
@@ -254,12 +253,12 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void AddUserContact()
         {
-            contacts.Add
+            _contacts.Add
                 (
                     new Contact
                         (
-                        session,
-                        session.UserId.BareIdentifier,
+                        _session,
+                        _session.UserId.BareIdentifier,
                         "",
                         ContactSubscriptionType.Both,
                         new List<string>(new[] { "Buddies" })
@@ -269,77 +268,77 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void SubscribeToSessionState()
         {
-            sessionStateSubscription = session
+            _session
                 .StateChanged
                 .Subscribe
                 (
                     newState =>
-                    {
-                        if (newState == SessionState.LoggingIn)
                         {
-                            Subscribe();
-                        }
-                        else if (newState == SessionState.LoggedIn)
-                        {
-                            AddUserContact();
-                        }
-                        else if (newState == SessionState.LoggingOut)
-                        {
-                            Unsubscribe();
-                            contacts.Clear();
-
-                            if (CollectionChanged != null)
+                            if (newState == SessionState.LoggingIn)
                             {
-                                Dispatcher.CurrentDispatcher.BeginInvoke(
-                                    DispatcherPriority.Background,
-                                    new Action(() => CollectionChanged(this,
-                                                                       new NotifyCollectionChangedEventArgs(
-                                                                           NotifyCollectionChangedAction.Reset))));
+                                Subscribe();
+                            }
+                            else if (newState == SessionState.LoggedIn)
+                            {
+                                AddUserContact();
+                            }
+                            else if (newState == SessionState.LoggingOut)
+                            {
+                                Unsubscribe();
+                                _contacts.Clear();
+
+                                if (CollectionChanged != null)
+                                {
+                                    Dispatcher.CurrentDispatcher.BeginInvoke(
+                                        DispatcherPriority.Background,
+                                        new Action(() => CollectionChanged(this,
+                                                                           new NotifyCollectionChangedEventArgs(
+                                                                               NotifyCollectionChangedAction.Reset))));
+                                }
                             }
                         }
-                    }
                 );
         }
 
         private void Subscribe()
         {
-            rosterNotificationSubscription = connection
+            _rosterNotificationSubscription = _connection
                 .OnRosterMessage
                 .Subscribe(OnRosterNotification);
 
-            infoQueryErrorSubscription = connection
+            _infoQueryErrorSubscription = _connection
                 .OnInfoQueryMessage
                 .Where(iq => iq.Type == IQType.Error)
                 .Subscribe(OnQueryErrorReceived);
 
-            presenceSubscription = connection
+            _presenceSubscription = _connection
                 .OnPresenceMessage
                 .Subscribe(OnPresenceMessageReceived);
 
-            contacts.CollectionChanged += OnCollectionChanged;
+            _contacts.CollectionChanged += OnCollectionChanged;
         }
 
         private void Unsubscribe()
         {
-            if (rosterNotificationSubscription != null)
+            if (_rosterNotificationSubscription != null)
             {
-                rosterNotificationSubscription.Dispose();
-                rosterNotificationSubscription = null;
+                _rosterNotificationSubscription.Dispose();
+                _rosterNotificationSubscription = null;
             }
 
-            if (infoQueryErrorSubscription != null)
+            if (_infoQueryErrorSubscription != null)
             {
-                infoQueryErrorSubscription.Dispose();
-                infoQueryErrorSubscription = null;
+                _infoQueryErrorSubscription.Dispose();
+                _infoQueryErrorSubscription = null;
             }
 
-            if (presenceSubscription != null)
+            if (_presenceSubscription != null)
             {
-                presenceSubscription.Dispose();
-                presenceSubscription = null;
+                _presenceSubscription.Dispose();
+                _presenceSubscription = null;
             }
 
-            contacts.CollectionChanged -= OnCollectionChanged;
+            _contacts.CollectionChanged -= OnCollectionChanged;
         }
 
         private void OnRosterNotification(RosterQuery message)
@@ -354,7 +353,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                     // Create the new contact
                     var newContact = new Contact
                         (
-                        session,
+                        _session,
                         item.Jid,
                         item.Name,
                         (ContactSubscriptionType)item.Subscription,
@@ -362,14 +361,14 @@ namespace Hanoi.Xmpp.InstantMessaging
                         );
 
                     // Add the contact to the roster
-                    contacts.Add(newContact);
+                    _contacts.Add(newContact);
                 }
                 else
                 {
                     switch (item.Subscription)
                     {
                         case RosterSubscriptionType.Remove:
-                            contacts.Remove(contact);
+                            _contacts.Remove(contact);
                             break;
 
                         default:
@@ -395,7 +394,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             Jid jid = message.From;
 
-            if (jid.BareIdentifier == session.UserId.BareIdentifier)
+            if (jid.BareIdentifier == _session.UserId.BareIdentifier)
             {
                 // TODO: See how to handle our own presence changes from other resources
             }
@@ -414,7 +413,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                             case PresenceType.Subscribe:
                                 // auto-accept subscription requests
-                                session.Presence.Subscribed(jid);
+                                _session.Presence.Subscribed(jid);
                                 break;
 
                             case PresenceType.Unavailable:
@@ -422,7 +421,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                                 break;
 
                             case PresenceType.Unsubscribe:
-                                session.Presence.Unsuscribed(jid);
+                                _session.Presence.Unsuscribed(jid);
                                 break;
                         }
                     }
@@ -442,11 +441,11 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                             case PresenceType.Subscribe:
                                 // auto-accept subscription requests
-                                session.Presence.Subscribed(jid);
+                                _session.Presence.Subscribed(jid);
                                 break;
 
                             case PresenceType.Unsubscribe:
-                                session.Presence.Unsuscribed(jid);
+                                _session.Presence.Unsuscribed(jid);
                                 break;
                         }
                     }
@@ -456,25 +455,21 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void OnQueryErrorReceived(IQ message)
         {
-            if (pendingMessages.Contains(message.ID))
+            if (_pendingMessages.Contains(message.ID))
             {
-                pendingMessages.Remove(message.ID);
+                _pendingMessages.Remove(message.ID);
             }
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-
-            Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.Background,
-                new Action(() =>
+            CollectionChanged(this, e);
+            return;
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                                 {
-                                    if (
-                                        CollectionChanged !=
-                                        null)
+                                    if (CollectionChanged != null)
                                     {
-                                        CollectionChanged
-                                            (this, e);
+                                        CollectionChanged(this, e);
                                     }
                                 }
                         ));

@@ -26,6 +26,11 @@ namespace Hanoi.Authentication
             _waitEvent = new AutoResetEvent(false);
         }
 
+        public override string FeatureKey
+        {
+            get { return "X-GOOGLE-TOKEN"; }
+        }
+
         /// <summary>
         ///   Performs the authentication using the SASL Plain authentication mechanism.
         /// </summary>

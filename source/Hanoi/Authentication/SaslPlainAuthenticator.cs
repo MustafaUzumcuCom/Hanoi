@@ -55,6 +55,11 @@ namespace Hanoi.Authentication
             _waitEvent = new AutoResetEvent(false);
         }
 
+        public override string FeatureKey
+        {
+            get { return "PLAIN"; }
+        }
+
         /// <summary>
         ///   Performs the authentication using the SASL Plain authentication mechanism.
         /// </summary>

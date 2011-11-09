@@ -40,6 +40,8 @@ namespace Hanoi.Authentication
     /// </summary>
     public abstract class Authenticator : IDisposable
     {
+        public abstract string FeatureKey { get; }
+
         private List<string> pendingMessages;
 
         /// <summary>

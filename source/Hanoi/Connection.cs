@@ -77,7 +77,8 @@ namespace Hanoi
 
         }
 
-        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection, IConnectionFactory factory) {
+        public Connection(IAuthenticatorFactory authenticator, IFeatureDetection featureDetection, IConnectionFactory factory) 
+        {
             Authenticator = authenticator;
             Features = featureDetection;
             Factory = factory;

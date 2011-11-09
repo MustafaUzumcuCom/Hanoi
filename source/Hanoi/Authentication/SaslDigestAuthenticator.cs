@@ -99,6 +99,11 @@ namespace Hanoi.Authentication
             return table;
         }
 
+        public override string FeatureKey
+        {
+            get { return "DIGEST-MD5"; }
+        }
+
         /// <summary>
         ///   Performs the authentication using the SASL digest authentication mechanism.
         /// </summary>

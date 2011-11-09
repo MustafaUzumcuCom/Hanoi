@@ -377,7 +377,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         internal void RefreshData(string name, ContactSubscriptionType subscription, IList<string> groups)
         {
-            Name = ((name == null) ? String.Empty : name);
+            Name = (name ?? String.Empty);
 
             if (!String.IsNullOrEmpty(Name))
             {
