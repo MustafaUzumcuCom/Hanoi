@@ -28,6 +28,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace Hanoi
 {
@@ -71,5 +72,17 @@ namespace Hanoi
         ///   X-Google-Token Authentication Machanism
         /// </summary>
         XGoogleToken = 64
+    }
+
+    public class Features
+    {
+        public StreamFeatures StreamFeatures { get; set; }
+        public List<string> SaslFeatures { get; set; }
+
+        public Features()
+        {
+            StreamFeatures = default(StreamFeatures);
+            SaslFeatures = new List<string>();
+        }
     }
 }

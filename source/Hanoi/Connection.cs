@@ -64,7 +64,7 @@ namespace Hanoi
         private Subject<Presence> _onPresenceMessage = new Subject<Presence>();
         private Subject<RosterQuery> _onRosterMessage = new Subject<RosterQuery>();
         private Subject<IQ> _onVCardMessage = new Subject<IQ>();
-        private StreamFeatures _streamFeatures;
+        private Features _features;
         private AutoResetEvent _streamFeaturesEvent;
         private ITransport _transport;
 
@@ -474,7 +474,7 @@ namespace Hanoi
                     _transport = null;
                 }
 
-                _streamFeatures = _streamFeatures & (~_streamFeatures);
+                _features.StreamFeatures = _features.StreamFeatures & (~_features.StreamFeatures);
                 State = ConnectionState.Closed;
                 _connectionString = null;
                 UserId = null;
@@ -558,7 +558,7 @@ namespace Hanoi
                 else if (message is Serialization.Core.Streams.StreamFeatures)
                 {
                     var features = message as Serialization.Core.Streams.StreamFeatures;
-                    _streamFeatures = Features.Process(features);
+                    _features = Features.Process(features);
                     return _streamFeaturesEvent;
                 }
                 else if (UnhandledMessage != null)
@@ -691,7 +691,7 @@ namespace Hanoi
 
             try
             {
-                authenticator = Authenticator.Create(_streamFeatures, this);
+                authenticator = Authenticator.Create(_features.SaslFeatures, this);
 
                 if (authenticator != null)
                 {
@@ -817,7 +817,7 @@ namespace Hanoi
         /// 
         private bool SupportsFeature(StreamFeatures feature)
         {
-            return ((_streamFeatures & feature) == feature);
+            return ((_features.StreamFeatures & feature) == feature);
         }
     }
 }

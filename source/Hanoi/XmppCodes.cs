@@ -27,6 +27,8 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+using System;
+
 namespace Hanoi {
     /// <summary>
     ///   Internal constants
@@ -40,16 +42,19 @@ namespace Hanoi {
         /// <summary>
         ///   Code for the SASL Digest authentication mechanism
         /// </summary>
+        [Obsolete]
         public const string SaslDigestMD5Mechanism = "DIGEST-MD5";
 
         /// <summary>
         ///   Code for the SASL PLAIN authentication mechanism
         /// </summary>
+        [Obsolete]
         public const string SaslPlainMechanism = "PLAIN";
 
         /// <summary>
         ///   Code for the SASL X-GOOGLE-Token authentication mechanism
         /// </summary>
+        [Obsolete]
         public const string SaslXGoogleTokenMechanism = "X-GOOGLE-TOKEN";
     }
 }

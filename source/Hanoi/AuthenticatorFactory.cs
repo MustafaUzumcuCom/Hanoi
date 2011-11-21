@@ -6,14 +6,13 @@ namespace Hanoi
 {
     public class AuthenticatorFactory : IAuthenticatorFactory
     {
-        private readonly IDictionary<StreamFeatures, Func<Connection, Authenticator>> _custom =
-            new Dictionary<StreamFeatures, Func<Connection, Authenticator>>();
+        private readonly IDictionary<string, Func<Connection, Authenticator>> _custom = new Dictionary<string, Func<Connection, Authenticator>>();
 
         public AuthenticatorFactory()
         {
-            Register(StreamFeatures.SaslDigestMD5, c => new SaslDigestAuthenticator(c));
-            Register(StreamFeatures.XGoogleToken, c => new SaslXGoogleTokenAuthenticator(c));
-            Register(StreamFeatures.SaslPlain, c => new SaslPlainAuthenticator(c));    
+            Register("DIGEST-MD5", c => new SaslDigestAuthenticator(c));
+            Register("X-GOOGLE-TOKEN", c => new SaslXGoogleTokenAuthenticator(c));
+            Register("PLAIN", c => new SaslPlainAuthenticator(c));    
         }
 
         private static IAuthenticatorFactory _default;
@@ -22,18 +21,18 @@ namespace Hanoi
             get { return _default ?? (_default = new AuthenticatorFactory()); }
         }
 
-        public Authenticator Create(StreamFeatures features, Connection connection)
+        public Authenticator Create(List<string> features, Connection connection)
         {
             foreach (var k in _custom.Keys)
             {
-                if (features.HasFlag(k))
+                if (features.Contains(k))
                     return _custom[k](connection);
             }
 
             return null;
         }
 
-        public void Register(StreamFeatures streamFeatures, Func<Connection, Authenticator> createAuthenticator)
+        public void Register(string streamFeatures, Func<Connection, Authenticator> createAuthenticator)
         {
             _custom.Add(streamFeatures, createAuthenticator);
         }
@@ -41,6 +40,6 @@ namespace Hanoi
 
     public interface IAuthenticatorFactory
     {
-        Authenticator Create(StreamFeatures sessions, Connection connection);
+        Authenticator Create(List<string> features, Connection connection);
     }
 }
