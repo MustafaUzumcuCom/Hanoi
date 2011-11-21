@@ -197,7 +197,7 @@ namespace Hanoi
         /// <remarks>
         ///   Needed for <see cref = "Authenticator" /> implementations.
         /// </remarks>
-        internal string UserPassword
+        public string UserPassword
         {
             get
             {
@@ -515,7 +515,7 @@ namespace Hanoi
         /// <summary>
         ///   Initializes the XMPP stream.
         /// </summary>
-        internal void InitializeXmppStream()
+        public void InitializeXmppStream()
         {
             _transport.InitializeXmppStream();
 
@@ -525,7 +525,7 @@ namespace Hanoi
         /// <summary>
         ///   Waits until the stream:features message is received
         /// </summary>
-        internal void WaitForStreamFeatures()
+        public void WaitForStreamFeatures()
         {
             _streamFeaturesEvent.WaitOne();
         }

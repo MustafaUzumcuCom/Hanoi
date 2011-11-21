@@ -2,14 +2,6 @@
 
 namespace Hanoi.Authentication.Facebook
 {
-    public class FacebookFactory : IAuthenticatorFactory
-    {
-        public Authenticator Create(StreamFeatures sessions, Connection connection)
-        {
-            return new FacebookPlatformAuthenticator(connection);
-        }
-    }
-
     public class FacebookPlatformAuthenticator : Authenticator
     {
 

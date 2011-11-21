@@ -278,6 +278,7 @@ namespace Hanoi
 
         private void Validate()
         {
+            return;
             if (string.IsNullOrEmpty(HostName) ||
                 string.IsNullOrEmpty(UserId) ||
                 string.IsNullOrEmpty(UserPassword))

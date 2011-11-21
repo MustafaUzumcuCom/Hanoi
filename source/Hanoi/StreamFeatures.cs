@@ -28,7 +28,6 @@
 */
 
 using System;
-using System.Collections.Generic;
 
 namespace Hanoi
 {
@@ -46,11 +45,14 @@ namespace Hanoi
         /// <summary>
         ///   SASL Digest Authentication Mechanism.
         /// </summary>
+
+        [Obsolete]
         SaslDigestMD5 = 2,
 
         /// <summary>
         ///   SASL Plaint Authentication Mechanism.
         /// </summary>
+        [Obsolete]
         SaslPlain = 4,
 
         /// <summary>
@@ -71,18 +73,7 @@ namespace Hanoi
         /// <summary>
         ///   X-Google-Token Authentication Machanism
         /// </summary>
+        [Obsolete]
         XGoogleToken = 64
-    }
-
-    public class Features
-    {
-        public StreamFeatures StreamFeatures { get; set; }
-        public List<string> SaslFeatures { get; set; }
-
-        public Features()
-        {
-            StreamFeatures = default(StreamFeatures);
-            SaslFeatures = new List<string>();
-        }
     }
 }

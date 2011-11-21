@@ -15,23 +15,9 @@ namespace Hanoi
             var streamFeatures = new Features();
             if (features.Mechanisms != null && features.Mechanisms.SaslMechanisms.Count > 0)
             {
-                foreach (string mechanism in features.Mechanisms.SaslMechanisms)
+                foreach (var mechanism in features.Mechanisms.SaslMechanisms)
                 {
                     streamFeatures.SaslFeatures.Add(mechanism);
-                    switch (mechanism)
-                    {
-                        case XmppCodes.SaslDigestMD5Mechanism:
-                            streamFeatures.StreamFeatures |= StreamFeatures.SaslDigestMD5;
-                            break;
-
-                        case XmppCodes.SaslPlainMechanism:
-                            streamFeatures.StreamFeatures |= StreamFeatures.SaslPlain;
-                            break;
-
-                        case XmppCodes.SaslXGoogleTokenMechanism:
-                            streamFeatures.StreamFeatures |= StreamFeatures.XGoogleToken;
-                            break;
-                    }
                 }
             }
 
@@ -47,7 +33,7 @@ namespace Hanoi
 
             if (features.Items.Count > 0)
             {
-                foreach (object item in features.Items)
+                foreach (var item in features.Items)
                 {
                     if (item is RegisterIQ)
                     {

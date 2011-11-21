@@ -6,31 +6,31 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using Hanoi.Serialization;
 using Hanoi.Serialization.Core.Tls;
 using Hanoi.Sockets;
 
-namespace Hanoi.Transports {
+namespace Hanoi.Transports
+{
     /// <summary>
     ///   TCP/IP Transport implementation
     /// </summary>
-    internal sealed class TcpTransport : BaseTransport, ISecureTransport {
+    internal sealed class TcpTransport : BaseTransport, ISecureTransport
+    {
         private const string StreamNamespace = "jabber:client";
         private const string StreamURI = "http://etherx.jabber.org/streams";
         private const string StreamVersion = "1.0";
-
-        private const string StreamFormat =
-            "<?xml version='1.0' encoding='UTF-8' ?><stream:stream xmlns='{0}' xmlns:stream='{1}' to='{2}' version='{3}'>";
-
+        private const string StreamFormat = "<?xml version='1.0' encoding='UTF-8' ?><stream:stream xmlns='{0}' xmlns:stream='{1}' to='{2}' version='{3}'>";
         private const string EndStream = "</stream:stream>";
 
-        private XmppMemoryStream inputBuffer;
-        private Stream networkStream;
-        private XmppStreamParser parser;
-        private ProxySocket socket;
-        private AutoResetEvent tlsProceedEvent;
+        private XmppMemoryStream _inputBuffer;
+        private Stream _networkStream;
+        private XmppStreamParser _parser;
+        private ProxySocket _socket;
+        private AutoResetEvent _tlsProceedEvent;
 
         #region ISecureTransport Members
 
@@ -38,7 +38,8 @@ namespace Hanoi.Transports {
         ///   Opens the connection
         /// </summary>
         /// <param name = "connectionString">The connection string used for authentication.</param>
-        public override void Open(ConnectionString connectionString) {
+        public override void Open(ConnectionString connectionString)
+        {
             // Connection string
             ConnectionString = connectionString;
             UserId = ConnectionString.UserId;
@@ -56,7 +57,8 @@ namespace Hanoi.Transports {
         /// <summary>
         ///   Closes the connection
         /// </summary>
-        public override void Close() {
+        public override void Close()
+        {
             if (!IsDisposed)
             {
                 try
@@ -71,34 +73,34 @@ namespace Hanoi.Transports {
                 }
                 finally
                 {
-                    if (tlsProceedEvent != null)
+                    if (_tlsProceedEvent != null)
                     {
-                        tlsProceedEvent.Set();
-                        tlsProceedEvent = null;
+                        _tlsProceedEvent.Set();
+                        _tlsProceedEvent = null;
                     }
 
-                    if (networkStream != null)
+                    if (_networkStream != null)
                     {
-                        networkStream.Dispose();
-                        networkStream = null;
+                        _networkStream.Dispose();
+                        _networkStream = null;
                     }
 
-                    if (socket != null)
+                    if (_socket != null)
                     {
-                        socket.Close();
-                        socket = null;
+                        _socket.Close();
+                        _socket = null;
                     }
 
-                    if (inputBuffer != null)
+                    if (_inputBuffer != null)
                     {
-                        inputBuffer.Dispose();
-                        inputBuffer = null;
+                        _inputBuffer.Dispose();
+                        _inputBuffer = null;
                     }
 
-                    if (parser != null)
+                    if (_parser != null)
                     {
-                        parser.Dispose();
-                        parser = null;
+                        _parser.Dispose();
+                        _parser = null;
                     }
                 }
 
@@ -110,7 +112,8 @@ namespace Hanoi.Transports {
         ///   Sends a new message.
         /// </summary>
         /// <param name = "message">The message to be sent</param>
-        public override void Send(object message) {
+        public override void Send(object message)
+        {
             Send(XmppSerializer.Serialize(message));
         }
 
@@ -118,27 +121,30 @@ namespace Hanoi.Transports {
         ///   Sends an XMPP message string to the XMPP Server
         /// </summary>
         /// <param name = "value"></param>
-        public override void Send(string value) {
+        public override void Send(string value)
+        {
             Send(Encoding.UTF8.GetBytes(value));
         }
 
         /// <summary>
         ///   Sends an XMPP message buffer to the XMPP Server
         /// </summary>
-        public override void Send(byte[] buffer) {
+        public override void Send(byte[] buffer)
+        {
             lock (SyncWrites)
             {
                 Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
 
-                networkStream.Write(buffer, 0, buffer.Length);
-                networkStream.Flush();
+                _networkStream.Write(buffer, 0, buffer.Length);
+                _networkStream.Flush();
             }
         }
 
         /// <summary>
         ///   Initializes the XMPP stream.
         /// </summary>
-        public override void InitializeXmppStream() {
+        public override void InitializeXmppStream()
+        {
             // Serialization can't be used in this case
             string xml = String.Format
                 (
@@ -155,17 +161,18 @@ namespace Hanoi.Transports {
         /// <summary>
         ///   Opens a secure connection against the XMPP server using TLS
         /// </summary>
-        public void OpenSecureConnection() {
+        public void OpenSecureConnection()
+        {
             // Send Start TLS message
             var tlsMsg = new StartTls();
             Send(tlsMsg);
 
-            tlsProceedEvent.WaitOne();
+            _tlsProceedEvent.WaitOne();
 
             OpenSecureStream();
 
             // Clear the Input Buffer
-            inputBuffer.Clear();
+            _inputBuffer.Clear();
 
             // Re-Start Async Reads
             BeginReceiveData();
@@ -176,23 +183,24 @@ namespace Hanoi.Transports {
 
         #endregion
 
-        private void OpenSecureStream() {
-            if (networkStream != null)
+        private void OpenSecureStream()
+        {
+            if (_networkStream != null)
             {
-                networkStream.Close();
-                networkStream = null;
+                _networkStream.Close();
+                _networkStream = null;
             }
 
             // Initialize the Ssl Stream
-            networkStream = new SslStream
+            _networkStream = new SslStream
                 (
-                new NetworkStream(socket, false),
+                new NetworkStream(_socket, false),
                 false,
                 RemoteCertificateValidation
                 );
 
             // Perform SSL Authentication
-            ((SslStream) networkStream).AuthenticateAsClient
+            ((SslStream) _networkStream).AuthenticateAsClient
                 (
                     ConnectionString.HostName,
                     null,
@@ -204,7 +212,8 @@ namespace Hanoi.Transports {
         /// <summary>
         ///   Opens the connection to the XMPP server.
         /// </summary>
-        private void Connect() {
+        private void Connect()
+        {
             try
             {
                 if (ConnectionString.ResolveHostName)
@@ -214,10 +223,10 @@ namespace Hanoi.Transports {
                     // ReSharper restore RedundantBaseQualifier
                 }
 
-                var hostadd = Dns.GetHostEntry(HostName).AddressList[0];
+                IPAddress hostadd = Dns.GetHostEntry(HostName).AddressList[0];
                 var hostEndPoint = new IPEndPoint(hostadd, ConnectionString.PortNumber);
 
-                socket = new ProxySocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _socket = new ProxySocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 if (ConnectionString.UseProxy)
                 {
@@ -227,35 +236,35 @@ namespace Hanoi.Transports {
                     switch (ConnectionString.ProxyType)
                     {
                         case "SOCKS4":
-                            socket.ProxyType = ProxyTypes.Socks4;
+                            _socket.ProxyType = ProxyTypes.Socks4;
                             break;
 
                         case "SOCKS5":
-                            socket.ProxyType = ProxyTypes.Socks5;
+                            _socket.ProxyType = ProxyTypes.Socks5;
                             break;
 
                         default:
-                            socket.ProxyType = ProxyTypes.None;
+                            _socket.ProxyType = ProxyTypes.None;
                             break;
                     }
 
-                    socket.ProxyEndPoint = proxyEndPoint;
-                    socket.ProxyUser = ConnectionString.ProxyUserName;
+                    _socket.ProxyEndPoint = proxyEndPoint;
+                    _socket.ProxyUser = ConnectionString.ProxyUserName;
 
                     if (!String.IsNullOrWhiteSpace(ConnectionString.ProxyPassword))
                     {
-                        socket.ProxyPass = ConnectionString.ProxyPassword;
+                        _socket.ProxyPass = ConnectionString.ProxyPassword;
                     }
                 }
 
                 // Disables the Nagle algorithm for send coalescing.
-                socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, 1);
+                _socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, 1);
 
                 // Make the socket to connect to the Server
-                socket.Connect(hostEndPoint);
+                _socket.Connect(hostEndPoint);
 
                 // Create the Stream Instance
-                networkStream = new NetworkStream(socket, false);
+                _networkStream = new NetworkStream(_socket, false);
             }
             catch (Exception ex)
             {
@@ -267,8 +276,9 @@ namespace Hanoi.Transports {
         /// <summary>
         ///   Startds async readings on the socket connected to the server
         /// </summary>
-        private void BeginReceiveData() {
-            var state = new StateObject(networkStream);
+        private void BeginReceiveData()
+        {
+            var state = new StateObject(_networkStream);
             AsyncCallback asyncCallback = ReceiveCallback;
 
             // Begin receiving the data from the remote device.
@@ -284,7 +294,8 @@ namespace Hanoi.Transports {
         ///   Async read callback
         /// </summary>
         /// <param name = "ar"></param>
-        private void ReceiveCallback(IAsyncResult ar) {
+        private void ReceiveCallback(IAsyncResult ar)
+        {
             if (!ar.CompletedSynchronously)
             {
                 ProcessAsyncRead(ar);
@@ -295,7 +306,8 @@ namespace Hanoi.Transports {
         ///   Assync read processing.
         /// </summary>
         /// <param name = "ar"></param>
-        private void ProcessAsyncRead(IAsyncResult ar) {
+        private void ProcessAsyncRead(IAsyncResult ar)
+        {
             // Retrieve the state object and the client socket 
             // from the asynchronous state object.
             var state = (StateObject) ar.AsyncState;
@@ -309,20 +321,20 @@ namespace Hanoi.Transports {
                 {
                     Monitor.Enter(SyncReads);
 
-                    long currentPosition = inputBuffer.Position;
+                    long currentPosition = _inputBuffer.Position;
 
-                    inputBuffer.Seek(0, SeekOrigin.End);
-                    inputBuffer.Write(state.Buffer, 0, bytesRead);
-                    inputBuffer.Flush();
-                    inputBuffer.Seek(currentPosition, SeekOrigin.Begin);
+                    _inputBuffer.Seek(0, SeekOrigin.End);
+                    _inputBuffer.Write(state.Buffer, 0, bytesRead);
+                    _inputBuffer.Flush();
+                    _inputBuffer.Seek(currentPosition, SeekOrigin.Begin);
 
                     Monitor.Exit(SyncReads);
 
-                    var resetEvents = ProcessPendingMessages();
+                    List<AutoResetEvent> resetEvents = ProcessPendingMessages();
 
                     if (resetEvents != null && resetEvents.Count > 0)
                     {
-                        foreach (var resetEvent in resetEvents)
+                        foreach (AutoResetEvent resetEvent in resetEvents)
                         {
                             resetEvent.Set();
                         }
@@ -339,12 +351,13 @@ namespace Hanoi.Transports {
         ///   Process all pending XMPP messages
         /// </summary>
         /// <returns></returns>
-        private List<AutoResetEvent> ProcessPendingMessages() {
+        private List<AutoResetEvent> ProcessPendingMessages()
+        {
             var resetEvents = new List<AutoResetEvent>();
 
-            while (parser != null && !parser.EOF)
+            while (_parser != null && !_parser.EOF)
             {
-                AutoResetEvent resetEvent = ProcessXmppMessage(parser.ReadNextNode());
+                AutoResetEvent resetEvent = ProcessXmppMessage(_parser.ReadNextNode());
 
                 if (resetEvent != null)
                 {
@@ -360,7 +373,8 @@ namespace Hanoi.Transports {
         /// </summary>
         /// <param name = "node"></param>
         /// <returns></returns>
-        private AutoResetEvent ProcessXmppMessage(XmppStreamElement node) {
+        private AutoResetEvent ProcessXmppMessage(XmppStreamElement node)
+        {
             if (node != null)
             {
                 Debug.WriteLine(node.ToString());
@@ -375,13 +389,13 @@ namespace Hanoi.Transports {
                 }
                 else
                 {
-                    var message = XmppSerializer.Deserialize(node.Name, node.ToString());
+                    object message = XmppSerializer.Deserialize(node.Name, node.ToString());
 
                     if (message != null)
                     {
                         if (message is Proceed)
                         {
-                            return tlsProceedEvent;
+                            return _tlsProceedEvent;
                         }
 
                         OnMessageReceivedSubject.OnNext(message);
@@ -400,11 +414,8 @@ namespace Hanoi.Transports {
         /// <param name = "chain"></param>
         /// <param name = "sslPolicyErrors"></param>
         /// <returns></returns>
-        private bool RemoteCertificateValidation(object sender,
-                                                 System.Security.Cryptography.X509Certificates.X509Certificate
-                                                     certificate,
-                                                 System.Security.Cryptography.X509Certificates.X509Chain chain,
-                                                 SslPolicyErrors sslPolicyErrors) {
+        private bool RemoteCertificateValidation(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
             // TODO: Give the option to make this handled by the application using the library
             return true;
         }
@@ -412,10 +423,11 @@ namespace Hanoi.Transports {
         /// <summary>
         ///   Initializes the connection instance
         /// </summary>
-        private void Initialize() {
-            inputBuffer = new XmppMemoryStream();
-            parser = new XmppStreamParser(inputBuffer);
-            tlsProceedEvent = new AutoResetEvent(false);
+        private void Initialize()
+        {
+            _inputBuffer = new XmppMemoryStream();
+            _parser = new XmppStreamParser(_inputBuffer);
+            _tlsProceedEvent = new AutoResetEvent(false);
         }
     }
 }

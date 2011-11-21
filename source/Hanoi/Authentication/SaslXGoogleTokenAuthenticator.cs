@@ -41,8 +41,8 @@ namespace Hanoi.Authentication
                 // Send authentication mechanism
                 var auth = new Auth
                                {
-                                   Value = BuildMessage(), 
-                                   Mechanism = XmppCodes.SaslXGoogleTokenMechanism
+                                   Value = BuildMessage(),
+                                   Mechanism = FeatureKey,
                                };
 
                 Connection.Send(auth);

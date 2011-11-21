@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hanoi.Authentication;
 
 namespace Hanoi
@@ -21,25 +22,14 @@ namespace Hanoi
             get { return _default ?? (_default = new AuthenticatorFactory()); }
         }
 
-        public Authenticator Create(List<string> features, Connection connection)
+        public Authenticator Create(IList<string> features, Connection connection)
         {
-            foreach (var k in _custom.Keys)
-            {
-                if (features.Contains(k))
-                    return _custom[k](connection);
-            }
-
-            return null;
+            return (from k in _custom.Keys where features.Contains(k) select _custom[k](connection)).FirstOrDefault();
         }
 
         public void Register(string streamFeatures, Func<Connection, Authenticator> createAuthenticator)
         {
             _custom.Add(streamFeatures, createAuthenticator);
         }
-    }
-
-    public interface IAuthenticatorFactory
-    {
-        Authenticator Create(List<string> features, Connection connection);
     }
 }
