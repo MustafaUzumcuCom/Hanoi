@@ -663,7 +663,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         private void Subscribe()
         {
             _chatMessageSubscription = _connection.OnMessageReceived
-                .Where(m => m.Type == MessageType.Chat && m.ChatStateNotification != ChatStateNotification.None)
+                .Where(m => m.Type == MessageType.Chat)
                 .Subscribe(OnChatMessageReceived);
 
             _errorMessageSubscription = _connection.OnMessageReceived
@@ -703,7 +703,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void OnChatMessageReceived(Message message) 
         {
-            if (String.IsNullOrEmpty(message.Body) && !_chats.ContainsKey(message.From.BareIdentifier)) 
+            if (string.IsNullOrEmpty(message.Body) && !_chats.ContainsKey(message.From.BareIdentifier)) 
                 return;
 
             if (!_chats.ContainsKey(message.From.BareIdentifier))
