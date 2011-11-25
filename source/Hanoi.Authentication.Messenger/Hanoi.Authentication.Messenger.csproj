@@ -41,12 +41,17 @@
     <Compile Include="MsnpXmppAuthenticator.cs" />
     <Compile Include="MsnpXmppAuthFactory.cs" />
     <Compile Include="OAuth2Helper.cs" />
+    <Compile Include="OAuthConstants.cs" />
+    <Compile Include="OAuthToken.cs" />
+    <Compile Include="Scope.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web">
       <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Hanoi\Hanoi.csproj">
