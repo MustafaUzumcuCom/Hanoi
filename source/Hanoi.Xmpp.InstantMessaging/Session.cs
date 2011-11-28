@@ -139,9 +139,9 @@ namespace Hanoi.Xmpp.InstantMessaging
             get { return _messageReceivedSubject.AsObservable(); }
         }
 
-        public IObservable<Serialization.InstantMessaging.Presence.Presence> OnPresenceMessage
+        public IObservable<Contact> OnPresenceMessage
         {
-            get { return _connection.OnPresenceMessage; }
+            get { return _roster.OnContactPresence; }
         }
 
         public IObservable<RosterQuery> OnRosterMessage

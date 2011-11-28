@@ -44,37 +44,30 @@ using ServiceIdentity = Hanoi.Xmpp.InstantMessaging.ServiceDiscovery.ServiceIden
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
-    /// <summary>
-    ///   Represents a contact resource
-    /// </summary>
     public sealed class ContactResource
     {
         internal static int DefaultPresencePriorityValue = -200;
+        private readonly Contact _contact;
+        private readonly List<string> _pendingMessages;
+        private readonly ContactPresence _presence;
+        private readonly Jid _resourceId;
+        private readonly Session _session;
+        private Stream _avatar;
+        private string _avatarHash;
+        private ClientCapabilities _capabilities;
+        private IDisposable _infoQueryErrorSubscription;
+        private IDisposable _serviceDiscoverySubscription;
+        private IDisposable _sessionStateSubscription;
+        private IDisposable _vCardSubscription;
 
-        private readonly Contact contact;
-        private readonly List<string> pendingMessages;
-        private readonly ContactPresence presence;
-        private readonly Jid resourceId;
-        private readonly Session session;
-        private Stream avatar;
-        private string avatarHash;
-        private ClientCapabilities capabilities;
-        private IDisposable infoQueryErrorSubscription;
-        private IDisposable serviceDiscoverySubscription;
-        private IDisposable sessionStateSubscription;
-        private IDisposable vCardSubscription;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "ContactResource" /> class.
-        /// </summary>
         internal ContactResource(Session session, Contact contact, Jid resourceId)
         {
-            this.session = session;
-            this.contact = contact;
-            this.resourceId = resourceId;
-            presence = new ContactPresence(this.session);
-            capabilities = new ClientCapabilities();
-            pendingMessages = new List<string>();
+            _session = session;
+            _contact = contact;
+            _resourceId = resourceId;
+            _presence = new ContactPresence(_session, contact);
+            _capabilities = new ClientCapabilities();
+            _pendingMessages = new List<string>();
 
             Subscribe();
         }
@@ -94,7 +87,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <value>The resource id.</value>
         public Jid ResourceId
         {
-            get { return resourceId; }
+            get { return _resourceId; }
         }
 
         /// <summary>
@@ -103,7 +96,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <value>The presence.</value>
         public ContactPresence Presence
         {
-            get { return presence; }
+            get { return _presence; }
         }
 
         /// <summary>
@@ -112,12 +105,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <value>The capabilities.</value>
         public ClientCapabilities Capabilities
         {
-            get { return capabilities; }
+            get { return _capabilities; }
             private set
             {
-                if (capabilities != value)
+                if (_capabilities != value)
                 {
-                    capabilities = value;
+                    _capabilities = value;
                     // NotifyPropertyChanged(() => Capabilities);
                 }
             }
@@ -128,12 +121,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public Stream Avatar
         {
-            get { return avatar; }
+            get { return _avatar; }
             private set
             {
-                if (avatar != value)
+                if (_avatar != value)
                 {
-                    avatar = value;
+                    _avatar = value;
                     // NotifyPropertyChanged(() => Avatar);
                 }
             }
@@ -141,7 +134,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         public override string ToString()
         {
-            return resourceId.ToString();
+            return _resourceId.ToString();
         }
 
         internal void Update(Serialization.InstantMessaging.Presence.Presence presence)
@@ -150,7 +143,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             if (IsDefaultResource && Presence.PresenceStatus == PresenceState.Offline)
             {
-                string cachedHash = session.AvatarStorage.GetAvatarHash(ResourceId.BareIdentifier);
+                string cachedHash = _session.AvatarStorage.GetAvatarHash(ResourceId.BareIdentifier);
 
                 // Grab stored images for offline users
                 if (!String.IsNullOrEmpty(cachedHash))
@@ -159,8 +152,8 @@ namespace Hanoi.Xmpp.InstantMessaging
                     DisposeAvatarStream();
 
                     // Update the avatar hash and file Paths
-                    avatarHash = cachedHash;
-                    Avatar = session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
+                    _avatarHash = cachedHash;
+                    Avatar = _session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
                 }
             }
 
@@ -174,12 +167,12 @@ namespace Hanoi.Xmpp.InstantMessaging
                 {
                     var vcard = (VCardAvatar)item;
 
-                    if (vcard.Photo != null && vcard.Photo.Length > 0)
+                    if (!string.IsNullOrEmpty(vcard.Photo))
                     {
                         if (!String.IsNullOrEmpty(vcard.Photo))
                         {
                             // Check if we have the avatar cached
-                            string cachedHash = session.AvatarStorage.GetAvatarHash(ResourceId.BareIdentifier);
+                            string cachedHash = _session.AvatarStorage.GetAvatarHash(ResourceId.BareIdentifier);
 
                             if (cachedHash == vcard.Photo)
                             {
@@ -187,13 +180,13 @@ namespace Hanoi.Xmpp.InstantMessaging
                                 DisposeAvatarStream();
 
                                 // Update the avatar hash and file Paths
-                                avatarHash = vcard.Photo;
-                                Avatar = session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
+                                _avatarHash = vcard.Photo;
+                                Avatar = _session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
                             }
                             else
                             {
                                 // Update the avatar hash
-                                avatarHash = vcard.Photo;
+                                _avatarHash = vcard.Photo;
 
                                 // Avatar is not cached request the new avatar information
                                 RequestAvatar();
@@ -216,12 +209,12 @@ namespace Hanoi.Xmpp.InstantMessaging
                         Capabilities.Features.Clear();
 
                         // Check if we have the capabilities in the storage
-                        if (session.ClientCapabilitiesStorage.Exists(caps.Node, caps.VerificationString))
+                        if (_session.ClientCapabilitiesStorage.Exists(caps.Node, caps.VerificationString))
                         {
-                            Capabilities = session.ClientCapabilitiesStorage.Get(caps.Node, caps.VerificationString);
+                            Capabilities = _session.ClientCapabilitiesStorage.Get(caps.Node, caps.VerificationString);
                         }
-                        else if ((contact.Subscription == ContactSubscriptionType.Both ||
-                                  contact.Subscription == ContactSubscriptionType.To) &&
+                        else if ((_contact.Subscription == ContactSubscriptionType.Both ||
+                                  _contact.Subscription == ContactSubscriptionType.To) &&
                                  (!presence.TypeSpecified || presence.Type == PresenceType.Unavailable))
                         {
                             // Discover Entity Capabilities Extension Features
@@ -237,51 +230,51 @@ namespace Hanoi.Xmpp.InstantMessaging
         private void DiscoverCapabilities()
         {
             var requestIq = new IQ();
-            var request = new ServiceQuery();
+            var request = new ServiceQuery
+                              {
+                                  Node = Capabilities.DiscoveryInfoNode
+                              };
 
-            request.Node = Capabilities.DiscoveryInfoNode;
-            requestIq.From = session.UserId;
+            requestIq.From = _session.UserId;
             requestIq.ID = IdentifierGenerator.Generate();
             requestIq.To = ResourceId;
             requestIq.Type = IQType.Get;
-
             requestIq.Items.Add(request);
-
-            pendingMessages.Add(requestIq.ID);
-
-            session.Send(requestIq);
+            _pendingMessages.Add(requestIq.ID);
+            _session.Send(requestIq);
         }
 
         private void RequestAvatar()
         {
-            if (contact.Subscription == ContactSubscriptionType.Both ||
-                contact.Subscription == ContactSubscriptionType.To)
+            if (_contact.Subscription == ContactSubscriptionType.Both ||
+                _contact.Subscription == ContactSubscriptionType.To)
             {
-                var iq = new IQ();
-
-                iq.ID = IdentifierGenerator.Generate();
-                iq.Type = IQType.Get;
-                iq.To = ResourceId;
-                iq.From = session.UserId;
-
+                var iq = new IQ
+                             {
+                                 ID = IdentifierGenerator.Generate(),
+                                 Type = IQType.Get,
+                                 To = ResourceId,
+                                 From = _session.UserId
+                             };
+                
                 iq.Items.Add(new VCardData());
 
-                session.Send(iq);
+                _session.Send(iq);
             }
         }
 
         private void DisposeAvatarStream()
         {
-            if (Avatar != null)
-            {
-                Avatar.Dispose();
-                Avatar = null;
-            }
+            if (Avatar == null) 
+                return;
+
+            Avatar.Dispose();
+            Avatar = null;
         }
 
         private void SubscribeToSessionState()
         {
-            sessionStateSubscription = session
+            _sessionStateSubscription = _session
                 .StateChanged
                 .Where(s => s == SessionState.LoggingOut)
                 .Subscribe
@@ -298,17 +291,17 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             SubscribeToSessionState();
 
-            infoQueryErrorSubscription = session.Connection
+            _infoQueryErrorSubscription = _session.Connection
                 .OnInfoQueryMessage
                 .Where(message => message.Type == IQType.Error)
                 .Subscribe(message => OnQueryErrorMessage(message));
 
-            serviceDiscoverySubscription = session.Connection
+            _serviceDiscoverySubscription = _session.Connection
                 .OnServiceDiscoveryMessage
-                .Where(message => message.Type == IQType.Result && pendingMessages.Contains(message.ID))
+                .Where(message => message.Type == IQType.Result && _pendingMessages.Contains(message.ID))
                 .Subscribe(message => OnServiceDiscoveryMessage(message));
 
-            vCardSubscription = session.Connection
+            _vCardSubscription = _session.Connection
                 .OnVCardMessage
                 .Where(message => message.From == ResourceId)
                 .Subscribe(message => OnVCardMessage(message));
@@ -316,74 +309,74 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void Unsubscribe()
         {
-            if (sessionStateSubscription != null)
+            if (_sessionStateSubscription != null)
             {
-                sessionStateSubscription.Dispose();
-                sessionStateSubscription = null;
+                _sessionStateSubscription.Dispose();
+                _sessionStateSubscription = null;
             }
 
-            if (infoQueryErrorSubscription != null)
+            if (_infoQueryErrorSubscription != null)
             {
-                infoQueryErrorSubscription.Dispose();
-                infoQueryErrorSubscription = null;
+                _infoQueryErrorSubscription.Dispose();
+                _infoQueryErrorSubscription = null;
             }
 
-            if (serviceDiscoverySubscription != null)
+            if (_serviceDiscoverySubscription != null)
             {
-                serviceDiscoverySubscription.Dispose();
-                serviceDiscoverySubscription = null;
+                _serviceDiscoverySubscription.Dispose();
+                _serviceDiscoverySubscription = null;
             }
 
-            if (vCardSubscription != null)
+            if (_vCardSubscription != null)
             {
-                vCardSubscription.Dispose();
-                vCardSubscription = null;
+                _vCardSubscription.Dispose();
+                _vCardSubscription = null;
             }
         }
 
         private void OnServiceDiscoveryMessage(IQ message)
         {
-            pendingMessages.Remove(message.ID);
+            _pendingMessages.Remove(message.ID);
 
             Capabilities.Identities.Clear();
             Capabilities.Features.Clear();
 
             // Reponse to our capabilities query
-            foreach (object item in message.Items)
+            foreach (var item in message.Items)
             {
-                if (item is ServiceQuery)
+                if (!(item is ServiceQuery)) 
+                    continue;
+
+                var query = (ServiceQuery)item;
+
+                foreach (Serialization.Extensions.ServiceDiscovery.ServiceIdentity identity in query.Identities)
                 {
-                    var query = (ServiceQuery)item;
+                    Capabilities.Identities.Add
+                        (
+                            new ServiceIdentity(identity.Name, identity.Category, identity.Type)
+                        );
+                }
 
-                    foreach (Serialization.Extensions.ServiceDiscovery.ServiceIdentity identity in query.Identities)
-                    {
-                        Capabilities.Identities.Add
-                            (
-                                new ServiceIdentity(identity.Name, identity.Category, identity.Type)
-                            );
-                    }
-
-                    foreach (Serialization.Extensions.ServiceDiscovery.ServiceFeature supportedFeature in query.Features)
-                    {
-                        Capabilities.Features.Add(new ServiceFeature(supportedFeature.Name));
-                    }
+                foreach (Serialization.Extensions.ServiceDiscovery.ServiceFeature supportedFeature in query.Features)
+                {
+                    Capabilities.Features.Add(new ServiceFeature(supportedFeature.Name));
                 }
             }
 
-            if (!session.ClientCapabilitiesStorage.Exists(capabilities.Node, capabilities.VerificationString))
-            {
-                session.ClientCapabilitiesStorage.ClientCapabilities.Add(Capabilities);
-                session.ClientCapabilitiesStorage.Save();
-            }
+            if (_session.ClientCapabilitiesStorage.Exists(_capabilities.Node, _capabilities.VerificationString))
+                return;
+
+            _session.ClientCapabilitiesStorage.ClientCapabilities.Add(Capabilities);
+            _session.ClientCapabilitiesStorage.Save();
 
             // NotifyPropertyChanged(() => Capabilities);
         }
 
         private void OnQueryErrorMessage(IQ message)
         {
-            if (pendingMessages.Contains(message.ID))
+            if (_pendingMessages.Contains(message.ID))
             {
-                pendingMessages.Remove(message.ID);
+                _pendingMessages.Remove(message.ID);
             }
         }
 
@@ -406,13 +399,13 @@ namespace Hanoi.Xmpp.InstantMessaging
                         avatarImage = Image.FromStream(avatarStream);
 
                         // Save avatar
-                        if (avatarStream != null && avatarStream.Length > 0)
+                        if (avatarStream.Length > 0)
                         {
-                            session.AvatarStorage.SaveAvatar(ResourceId.BareIdentifier, avatarHash, avatarStream);
+                            _session.AvatarStorage.SaveAvatar(ResourceId.BareIdentifier, _avatarHash, avatarStream);
                         }
                     }
 
-                    Avatar = session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
+                    Avatar = _session.AvatarStorage.ReadAvatar(ResourceId.BareIdentifier);
                 }
                 catch
                 {
@@ -429,10 +422,10 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
             else
             {
-                session.AvatarStorage.RemoveAvatar(ResourceId.BareIdentifier);
+                _session.AvatarStorage.RemoveAvatar(ResourceId.BareIdentifier);
             }
 
-            session.AvatarStorage.Save();
+            _session.AvatarStorage.Save();
         }
     }
 }

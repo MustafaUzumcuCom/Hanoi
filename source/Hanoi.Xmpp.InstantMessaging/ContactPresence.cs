@@ -31,24 +31,19 @@ using Hanoi.Serialization.InstantMessaging.Presence;
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
-    /// <summary>
-    ///   XMPP Contact presence information
-    /// </summary>
     public sealed class ContactPresence
     {
-        private readonly Session session;
-        private PresenceState presenceStatus;
-        private int priority;
-        private string statusMessage;
+        private readonly Session _session;
+        private readonly Contact _contact;
+        private PresenceState _presenceStatus;
+        private int _priority;
+        private string _statusMessage;
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "">ContactPresence</see>
-        /// </summary>
-        /// <param name = "session"></param>
-        internal ContactPresence(Session session)
+        internal ContactPresence(Session session, Contact contact)
         {
-            this.session = session;
-            presenceStatus = PresenceState.Offline;
+            _session = session;
+            _contact = contact;
+            _presenceStatus = PresenceState.Offline;
         }
 
         /// <summary>
@@ -57,12 +52,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <value>The priority.</value>
         public int Priority
         {
-            get { return priority; }
+            get { return _priority; }
             set
             {
-                if (priority != value)
+                if (_priority != value)
                 {
-                    priority = value;
+                    _priority = value;
                     // NotifyPropertyChanged(() => Priority);
                 }
             }
@@ -74,15 +69,14 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <value>The presence status.</value>
         public PresenceState PresenceStatus
         {
-            get { return presenceStatus; }
+            get { return _presenceStatus; }
             set
             {
-                if (presenceStatus != value)
-                {
-                    presenceStatus = value;
-                    //NotifyPropertyChanged(() => PresenceStatus);
-                    session.Roster.OnContactPresenceChanged();
-                }
+                if (_presenceStatus == value) 
+                    return;
+
+                _presenceStatus = value;
+                _session.Roster.ContactPresence(_contact);
             }
         }
 
@@ -92,12 +86,12 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <value>The presence status message.</value>
         public string StatusMessage
         {
-            get { return statusMessage; }
+            get { return _statusMessage; }
             set
             {
-                if (statusMessage != value)
+                if (_statusMessage != value)
                 {
-                    statusMessage = value;
+                    _statusMessage = value;
                     //NotifyPropertyChanged(() => StatusMessage);
                 }
             }
@@ -105,8 +99,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         internal void Update(Serialization.InstantMessaging.Presence.Presence presence)
         {
-            if (presence.TypeSpecified &&
-                presence.Type == PresenceType.Unavailable)
+            if (presence.TypeSpecified && presence.Type == PresenceType.Unavailable)
             {
                 PresenceStatus = PresenceState.Offline;
             }
@@ -115,7 +108,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                 PresenceStatus = PresenceState.Available;
             }
 
-            foreach (object item in presence.Items)
+            foreach (var item in presence.Items)
             {
                 if (item is sbyte)
                 {

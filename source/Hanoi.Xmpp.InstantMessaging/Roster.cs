@@ -46,6 +46,10 @@ namespace Hanoi.Xmpp.InstantMessaging
     /// </summary>
     public sealed class Roster : IEnumerable<Contact>, INotifyCollectionChanged
     {
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event EventHandler ContactPresenceChanged;
+        public event EventHandler RosterReceived;
+
         private readonly Connection _connection;
         private readonly ObservableCollection<Contact> _contacts;
         private readonly List<string> _pendingMessages;
@@ -55,9 +59,8 @@ namespace Hanoi.Xmpp.InstantMessaging
         private IDisposable _presenceSubscription;
         private IDisposable _rosterNotificationSubscription;
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "Roster" /> class
-        /// </summary>
+        private Subject<Contact> _onContactPresence = new Subject<Contact>();
+
         internal Roster(Session session)
         {
             _session = session;
@@ -78,8 +81,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             get { return _contacts.SingleOrDefault(contact => contact.ContactId.BareIdentifier == jid); }
         }
 
-        #region IEnumerable<Contact> Members
-
         IEnumerator<Contact> IEnumerable<Contact>.GetEnumerator()
         {
             return _contacts.GetEnumerator();
@@ -90,26 +91,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             return _contacts.GetEnumerator();
         }
 
-        #endregion
-
-        #region INotifyCollectionChanged Members
-
-        /// <summary>
-        ///   Occurs when the roster changes ( contacts added, removed, updated, ... )
-        /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        #endregion
-
-        /// <summary>
-        ///   Occurs when the presence of a contact changes
-        /// </summary>
-        public event EventHandler ContactPresenceChanged;
-
-        /// <summary>
-        ///   Occurs when the Contact's Roster is recevied
-        /// </summary>
-        public event EventHandler RosterReceived;
 
         /// <summary>
         ///   Adds the given contact to the roster
@@ -243,6 +224,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// <summary>
         ///   Called when the presence of a contact is changed
         /// </summary>
+        [Obsolete]
         internal void OnContactPresenceChanged()
         {
             if (ContactPresenceChanged != null)
@@ -255,14 +237,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             _contacts.Add
                 (
-                    new Contact
-                        (
-                        _session,
-                        _session.UserId.BareIdentifier,
-                        "",
-                        ContactSubscriptionType.Both,
-                        new List<string>(new[] { "Buddies" })
-                        )
+                    new Contact(_session, _session.UserId.BareIdentifier, "", ContactSubscriptionType.Both, new List<string>(new[] { "Buddies" }))
                 );
         }
 
@@ -274,27 +249,26 @@ namespace Hanoi.Xmpp.InstantMessaging
                 (
                     newState =>
                         {
-                            if (newState == SessionState.LoggingIn)
+                            switch (newState)
                             {
-                                Subscribe();
-                            }
-                            else if (newState == SessionState.LoggedIn)
-                            {
-                                AddUserContact();
-                            }
-                            else if (newState == SessionState.LoggingOut)
-                            {
-                                Unsubscribe();
-                                _contacts.Clear();
-
-                                if (CollectionChanged != null)
-                                {
-                                    Dispatcher.CurrentDispatcher.BeginInvoke(
-                                        DispatcherPriority.Background,
-                                        new Action(() => CollectionChanged(this,
-                                                                           new NotifyCollectionChangedEventArgs(
-                                                                               NotifyCollectionChangedAction.Reset))));
-                                }
+                                case SessionState.LoggingIn:
+                                    Subscribe();
+                                    break;
+                                case SessionState.LoggedIn:
+                                    AddUserContact();
+                                    break;
+                                case SessionState.LoggingOut:
+                                    Unsubscribe();
+                                    _contacts.Clear();
+                                    if (CollectionChanged != null)
+                                    {
+                                        Dispatcher.CurrentDispatcher.BeginInvoke(
+                                            DispatcherPriority.Background,
+                                            new Action(() => CollectionChanged(this,
+                                                                               new NotifyCollectionChangedEventArgs(
+                                                                                   NotifyCollectionChangedAction.Reset))));
+                                    }
+                                    break;
                             }
                         }
                 );
@@ -473,6 +447,16 @@ namespace Hanoi.Xmpp.InstantMessaging
                                     }
                                 }
                         ));
+        }
+
+        internal void ContactPresence(Contact contact)
+        {
+            _onContactPresence.OnNext(contact);
+        }
+
+        public IObservable<Contact> OnContactPresence
+        {
+            get { return _onContactPresence.AsObservable(); }
         }
     }
 }
