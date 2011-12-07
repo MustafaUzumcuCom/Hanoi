@@ -29,11 +29,13 @@
 
 using System.IO;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   Internal class used as State for socket reads
     /// </summary>
-    internal sealed class StateObject {
+    internal sealed class StateObject
+    {
         private readonly byte[] buffer;
         private readonly Stream workStream;
 
@@ -41,7 +43,8 @@ namespace Hanoi {
         ///   Initializes a new instance of the <see cref = "StateObject" /> class.
         /// </summary>
         public StateObject()
-            : this(null) {
+            : this(null)
+        {
         }
 
         /// <summary>
@@ -50,7 +53,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "workStream">The worker stream</param>
         public StateObject(Stream workStream)
-            : this(workStream, 4096) {
+            : this(workStream, 4096)
+        {
         }
 
         /// <summary>
@@ -59,7 +63,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "workStream">The worker stream</param>
         /// <param name = "bufferSize">The buffer size</param>
-        public StateObject(Stream workStream, int bufferSize) {
+        public StateObject(Stream workStream, int bufferSize)
+        {
             buffer = new byte[bufferSize];
             this.workStream = workStream;
         }
@@ -67,14 +72,16 @@ namespace Hanoi {
         /// <summary>
         ///   Gets the worker stream
         /// </summary>
-        public Stream WorkStream {
+        public Stream WorkStream
+        {
             get { return workStream; }
         }
 
         /// <summary>
         ///   Gets the current buffer contents
         /// </summary>
-        public byte[] Buffer {
+        public byte[] Buffer
+        {
             get { return buffer; }
         }
     }

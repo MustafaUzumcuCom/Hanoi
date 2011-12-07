@@ -33,16 +33,19 @@ using System.Security.Permissions;
 using System.Text;
 using Hanoi.Serialization.Core.Streams;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   Exception for XMPP related errors.
     /// </summary>
     [Serializable]
-    public sealed class XmppException : SystemException {
+    public sealed class XmppException : SystemException
+    {
         /// <summary>
         ///   Initializes a new instance of the <see cref = "XmppException" /> class.
         /// </summary>
-        public XmppException() {
+        public XmppException()
+        {
         }
 
         /// <summary>
@@ -50,7 +53,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "error">The XMPP Stream error.</param>
         public XmppException(StreamError error)
-            : base(GetStreamErrorMessage(error)) {
+            : base(GetStreamErrorMessage(error))
+        {
         }
 
         /// <summary>
@@ -58,7 +62,8 @@ namespace Hanoi {
         /// </summary>
         /// <param name = "message">The message.</param>
         public XmppException(string message)
-            : base(message) {
+            : base(message)
+        {
         }
 
         /// <summary>
@@ -68,7 +73,8 @@ namespace Hanoi {
         /// <param name = "message">The message.</param>
         /// <param name = "innerException">The inner exception.</param>
         public XmppException(string message, Exception innerException)
-            : base(message, innerException) {
+            : base(message, innerException)
+        {
         }
 
         /// <summary>
@@ -77,10 +83,12 @@ namespace Hanoi {
         /// <param name = "info">The object that holds the serialized object data.</param>
         /// <param name = "context">The contextual information about the source or destination.</param>
         private XmppException(SerializationInfo info, StreamingContext context)
-            : base(info, context) {
+            : base(info, context)
+        {
         }
 
-        private static string GetStreamErrorMessage(StreamError message) {
+        private static string GetStreamErrorMessage(StreamError message)
+        {
             var exceptionMessage = new StringBuilder();
 
             if (message.BadFormat != null)
@@ -200,8 +208,9 @@ namespace Hanoi {
         ///   class = "System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
         ///   version = "1" Flags = "SerializationFormatter" /></PermissionSet>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             base.GetObjectData(info, context);
         }
-        }
+    }
 }

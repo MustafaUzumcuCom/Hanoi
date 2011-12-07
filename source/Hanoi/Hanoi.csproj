@@ -86,22 +86,52 @@
       <HintPath>..\..\lib\Rx Framework\System.CoreEx.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive">
       <HintPath>..\..\lib\Rx Framework\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationFailiureEventArgs.cs" />
     <Compile Include="AuthenticatorFactory.cs" />
+    <Compile Include="Xmpp\InstantMessaging\Avatar.cs" />
+    <Compile Include="Xmpp\InstantMessaging\Chat.cs" />
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="Xmpp\InstantMessaging\ConnectionStringBuilder.cs" />
+    <Compile Include="Xmpp\InstantMessaging\Contact.cs" />
+    <Compile Include="Xmpp\InstantMessaging\ContactPresence.cs" />
+    <Compile Include="Xmpp\InstantMessaging\ContactResource.cs" />
+    <Compile Include="Xmpp\InstantMessaging\ContactSubscriptionType.cs" />
+    <Compile Include="EntityCaps\ClientCapabilities.cs" />
+    <Compile Include="EntityCaps\ClientCapabilitiesStorage.cs" />
+    <Compile Include="EntityCaps\EntityCapabilities.cs" />
+    <Compile Include="EntityCaps\SessionEntityCapabilities.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FeatureDetection.cs" />
     <Compile Include="Features.cs" />
     <Compile Include="FilePath.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IAuthenticatorFactory.cs" />
     <Compile Include="IFeatureDetection.cs" />
+    <Compile Include="Xmpp\InstantMessaging\ISession.cs" />
+    <Compile Include="MultiUserChat\ChatRoom.cs" />
+    <Compile Include="MultiUserChat\ChatRoomFeatures.cs" />
+    <Compile Include="MultiUserChat\ChatRoomStatusCode.cs" />
+    <Compile Include="MultiUserChat\ChatRoomUser.cs" />
+    <Compile Include="PersonalEventing\Activity.cs" />
+    <Compile Include="PersonalEventing\Event.cs" />
+    <Compile Include="PersonalEventing\MessageEvent.cs" />
+    <Compile Include="PersonalEventing\PersonalEventing.cs" />
+    <Compile Include="PersonalEventing\UserEvent.cs" />
+    <Compile Include="PersonalEventing\UserMoodEvent.cs" />
+    <Compile Include="PersonalEventing\UserTuneEvent.cs" />
+    <Compile Include="Xmpp\InstantMessaging\Presence.cs" />
+    <Compile Include="Xmpp\InstantMessaging\PresenceState.cs" />
+    <Compile Include="Xmpp\InstantMessaging\Privacy.cs" />
+    <Compile Include="Roster.cs" />
     <Compile Include="Serialization\Core\ResourceBinding\Bind.cs" />
     <Compile Include="Serialization\Core\Sasl\Abort.cs" />
     <Compile Include="Serialization\Core\Sasl\Auth.cs" />
@@ -232,7 +262,17 @@
     <Compile Include="Serialization\ItemChoiceType.cs" />
     <Compile Include="Serialization\XmppSerializer.cs" />
     <Compile Include="Serialization\XmppTextWriter.cs" />
-    <Compile Include="Session.cs" />
+    <Compile Include="ServiceDiscovery\GatewayService.cs" />
+    <Compile Include="ServiceDiscovery\GatewayType.cs" />
+    <Compile Include="ServiceDiscovery\Service.cs" />
+    <Compile Include="ServiceDiscovery\ServiceCategory.cs" />
+    <Compile Include="ServiceDiscovery\ServiceDiscovery.cs" />
+    <Compile Include="ServiceDiscovery\ServiceDiscoveryObject.cs" />
+    <Compile Include="ServiceDiscovery\ServiceFeature.cs" />
+    <Compile Include="ServiceDiscovery\ServiceIdentity.cs" />
+    <Compile Include="ServiceDiscovery\ServiceItem.cs" />
+    <Compile Include="Xmpp\InstantMessaging\Session.cs" />
+    <Compile Include="Xmpp\InstantMessaging\SessionState.cs" />
     <Compile Include="StreamElements.cs" />
     <Compile Include="Transports\BaseTransport.cs" />
     <Compile Include="Transports\HttpTransport.cs" />
@@ -270,6 +310,7 @@
     <Compile Include="XmppStreamParser.cs" />
     <Compile Include="UnhandledMessageEventArgs.cs" />
     <Compile Include="EventMessage.cs" />
+    <Compile Include="Xmpp\InstantMessaging\AvatarStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -435,6 +476,15 @@
     <None Include="Serialization\Schemas\InstantMessaging\session.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="disco-categories.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="disco-features.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MultiUserChat\MucStatusCodes.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

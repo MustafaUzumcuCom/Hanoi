@@ -39,7 +39,7 @@ using System.Xml.Serialization;
 namespace Hanoi.Xmpp.InstantMessaging
 {
     [Serializable]
-    [XmlTypeAttribute(Namespace = "")]
+    [XmlType(Namespace = "")]
     [XmlRootAttribute("storage", Namespace = "", IsNullable = false)]
     public sealed class AvatarStorage
     {

@@ -47,10 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hanoi.Xmpp.InstantMessaging\Hanoi.Xmpp.InstantMessaging.csproj">
-      <Project>{490DA560-229D-460A-B16F-A35CFECA9937}</Project>
-      <Name>Hanoi.Xmpp.InstantMessaging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Hanoi\Hanoi.csproj">
       <Project>{BDA95318-6DAC-44EE-BAB8-DED0F6A1941C}</Project>
       <Name>Hanoi</Name>

@@ -29,11 +29,13 @@
 
 using System;
 
-namespace Hanoi {
+namespace Hanoi
+{
     /// <summary>
     ///   Internal constants
     /// </summary>
-    internal static class XmppCodes {
+    internal static class XmppCodes
+    {
         /// <summary>
         ///   Namespace URI of the XMPP stream
         /// </summary>
