@@ -38,54 +38,39 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
     /// </summary>
     public abstract class EntityCapabilities : ClientCapabilities
     {
-        /// <summary>
-        ///   Default hash algorithm name
-        /// </summary>
-        /// <remarks>
-        ///   SHA-1
-        /// </remarks>
         public static readonly string DefaultHashAlgorithmName = "sha-1";
 
-        private IDisposable infoQueryErrorSubscription;
-        private IDisposable serviceDiscoverySubscription;
-        private Session session;
+        private IDisposable _infoQueryErrorSubscription;
+        private IDisposable _serviceDiscoverySubscription;
+        private IDisposable _sessionStateSubscription;
 
-        private IDisposable sessionStateSubscription;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "EntityCapabilities" /> class.
-        /// </summary>
         protected EntityCapabilities(Session session)
         {
-            this.session = session;
+            Session = session;
 
             SubscribeToSessionState();
         }
 
-        /// <summary>
-        ///   Gets the <see cref = "InstantMessaging.Session">Session</see>
-        /// </summary>
-        protected Session Session
-        {
-            get { return session; }
-        }
+        protected Session Session { get; private set; }
 
         private void SubscribeToSessionState()
         {
-            sessionStateSubscription = session
+            _sessionStateSubscription = Session
                 .StateChanged
                 .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe
                 (
                     newState =>
                     {
-                        if (newState == SessionState.LoggingOut)
+                        switch (newState)
                         {
-                            Subscribe();
-                        }
-                        else if (newState == SessionState.LoggingOut)
-                        {
-                            Unsubscribe();
+                            case SessionState.LoggingIn:
+                                Subscribe();
+                                break;
+
+                            case SessionState.LoggingOut:
+                                Unsubscribe();
+                                break;
                         }
                     }
                 );
@@ -93,28 +78,28 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
 
         protected virtual void Subscribe()
         {
-            infoQueryErrorSubscription = session.Connection
+            _infoQueryErrorSubscription = Session.Connection
                 .OnInfoQueryMessage
                 .Where(message => message.Type == IQType.Error)
-                .Subscribe(message => OnQueryErrorMessage(message));
+                .Subscribe(OnQueryErrorMessage);
 
-            serviceDiscoverySubscription = session.Connection
+            _serviceDiscoverySubscription = Session.Connection
                 .OnServiceDiscoveryMessage
-                .Subscribe(message => OnServiceDiscoveryMessage(message));
+                .Subscribe(OnServiceDiscoveryMessage);
         }
 
         protected virtual void Unsubscribe()
         {
-            if (infoQueryErrorSubscription != null)
+            if (_infoQueryErrorSubscription != null)
             {
-                infoQueryErrorSubscription.Dispose();
-                infoQueryErrorSubscription = null;
+                _infoQueryErrorSubscription.Dispose();
+                _infoQueryErrorSubscription = null;
             }
 
-            if (serviceDiscoverySubscription != null)
+            if (_serviceDiscoverySubscription != null)
             {
-                serviceDiscoverySubscription.Dispose();
-                serviceDiscoverySubscription = null;
+                _serviceDiscoverySubscription.Dispose();
+                _serviceDiscoverySubscription = null;
             }
         }
 

@@ -31,24 +31,14 @@ using System;
 
 namespace Hanoi.Authentication
 {
-    /// <summary>
-    ///   EventArgs for the <see cref="Hanoi.Connection.AuthenticationFailiure" /> event.
-    /// </summary>
     public sealed class AuthenticationFailiureEventArgs : EventArgs
     {
-        /// <summary>
-        ///   Initializes a new instance of the <see cref="AuthenticationFailiureEventArgs" /> class.
-        /// </summary>
-        /// <param name="message">The authentication failiure message.</param>
+        public string Message { get; private set; }
+
         public AuthenticationFailiureEventArgs(string message)
         {
             Message = message;
         }
 
-        /// <summary>
-        ///   Gets the authentication failiure message.
-        /// </summary>
-        /// <value>The message.</value>
-        public string Message { get; private set; }
     }
 }

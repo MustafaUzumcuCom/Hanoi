@@ -46,33 +46,24 @@ namespace Hanoi.Xmpp.InstantMessaging
             _presenceStatus = PresenceState.Offline;
         }
 
-        /// <summary>
-        ///   Gets or sets the presence priority.
-        /// </summary>
-        /// <value>The priority.</value>
         public int Priority
         {
             get { return _priority; }
             set
             {
                 if (_priority != value)
-                {
-                    _priority = value;
-                    // NotifyPropertyChanged(() => Priority);
-                }
+                    return;
+
+                _priority = value;
             }
         }
 
-        /// <summary>
-        ///   Gets or sets the presence status.
-        /// </summary>
-        /// <value>The presence status.</value>
         public PresenceState PresenceStatus
         {
             get { return _presenceStatus; }
             set
             {
-                if (_presenceStatus == value) 
+                if (_presenceStatus == value)
                     return;
 
                 _presenceStatus = value;
@@ -80,20 +71,16 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
         }
 
-        /// <summary>
-        ///   Gets or sets the presence status message.
-        /// </summary>
-        /// <value>The presence status message.</value>
         public string StatusMessage
         {
             get { return _statusMessage; }
             set
             {
-                if (_statusMessage != value)
-                {
-                    _statusMessage = value;
-                    //NotifyPropertyChanged(() => StatusMessage);
-                }
+                if (_statusMessage == value) 
+                    return;
+
+                _statusMessage = value;
+                _session.Roster.ContactPresence(_contact);
             }
         }
 
@@ -129,7 +116,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
         }
 
-        private PresenceState DecodeShowAs(ShowType showas)
+        private static PresenceState DecodeShowAs(ShowType showas)
         {
             switch (showas)
             {

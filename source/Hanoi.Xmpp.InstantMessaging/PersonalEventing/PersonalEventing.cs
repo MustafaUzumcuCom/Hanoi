@@ -40,97 +40,70 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
     /// </summary>
     public sealed class PersonalEventing
     {
-        private readonly List<string> features;
-        private readonly List<string> pendingMessages;
-        private readonly Session session;
-        private IDisposable infoQueryErrorSubscription;
-        private bool isUserTuneEnabled;
-        private IDisposable serviceDiscoverySubscription;
-        private IDisposable sessionStateSubscription;
+        private readonly List<string> _features;
+        private readonly List<string> _pendingMessages;
+        private readonly Session _session;
+        private IDisposable _infoQueryErrorSubscription;
+        private bool _isUserTuneEnabled;
+        private IDisposable _serviceDiscoverySubscription;
+        private IDisposable _sessionStateSubscription;
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:ServiceDiscovery" /> class.
-        /// </summary>
-        /// <param name = "session">The session.</param>
         internal PersonalEventing(Session session)
         {
-            this.session = session;
-            pendingMessages = new List<string>();
-            features = new List<string>();
+            _session = session;
+            _pendingMessages = new List<string>();
+            _features = new List<string>();
 
             SubscribeToSessionState();
         }
 
-        /// <summary>
-        ///   Gets the collection of features ( if personal eventing is supported )
-        /// </summary>
         public IEnumerable<string> Features
         {
-            get
-            {
-                foreach (string feature in features)
-                {
-                    yield return feature;
-                }
-            }
+            get { return _features; }
         }
 
-        /// <summary>
-        ///   Gets a value that indicates if it supports user tunes
-        /// </summary>
         public bool SupportsUserTune
         {
             get { return SupportsFeature(InstantMessaging.Features.UserTune); }
         }
 
-        /// <summary>
-        ///   Gets a value that indicates if it supports user moods
-        /// </summary>
         public bool SupportsUserMood
         {
             get { return SupportsFeature(InstantMessaging.Features.UserMood); }
         }
 
-        /// <summary>
-        ///   Gets or sets a value that indicates if user tune is enabled
-        /// </summary>
         public bool IsUserTuneEnabled
         {
-            get { return isUserTuneEnabled; }
+            get { return _isUserTuneEnabled; }
             set
             {
-                if (isUserTuneEnabled != value)
-                {
-                    isUserTuneEnabled = value;
-                }
+                if (_isUserTuneEnabled == value)
+                    return;
+
+                _isUserTuneEnabled = value;
             }
         }
 
-        /// <summary>
-        ///   Discover if we have personal eventing support enabled
-        /// </summary>
-        /// <returns></returns>
         internal void DiscoverSupport()
         {
             var query = new ServiceItemQuery();
-            var iq = new IQ();
-
-            iq.ID = IdentifierGenerator.Generate();
-            iq.Type = IQType.Get;
-            iq.From = session.UserId;
-            iq.To = session.UserId.BareIdentifier;
+            var iq = new IQ
+                         {
+                             ID = IdentifierGenerator.Generate(),
+                             Type = IQType.Get,
+                             From = _session.UserId,
+                             To = _session.UserId.BareIdentifier
+                         };
 
             iq.Items.Add(query);
-
-            pendingMessages.Add(iq.ID);
-            features.Clear();
-
-            session.Send(iq);
+            _pendingMessages.Add(iq.ID);
+            _features.Clear();
+            _session.Send(iq);
         }
 
         private bool SupportsFeature(string featureName)
         {
-            var q = from feature in features
+            var q = from feature in _features
                     where feature == featureName
                     select feature;
 
@@ -139,7 +112,7 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 
         private void SubscribeToSessionState()
         {
-            sessionStateSubscription = session
+            _sessionStateSubscription = _session
                 .StateChanged
                 .Where(s => s == SessionState.LoggingIn || s == SessionState.LoggingOut)
                 .Subscribe
@@ -152,8 +125,8 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
                         }
                         else if (newState == SessionState.LoggingOut)
                         {
-                            features.Clear();
-                            pendingMessages.Clear();
+                            _features.Clear();
+                            _pendingMessages.Clear();
                             Unsubscribe();
                         }
                     }
@@ -162,41 +135,41 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 
         private void Subscribe()
         {
-            infoQueryErrorSubscription = session.Connection
+            _infoQueryErrorSubscription = _session.Connection
                 .OnInfoQueryMessage
                 .Where(iq => iq.Type == IQType.Error)
-                .Subscribe(message => OnQueryErrorMessage(message));
+                .Subscribe(OnQueryErrorMessage);
 
-            infoQueryErrorSubscription = session.Connection
+            _infoQueryErrorSubscription = _session.Connection
                 .OnServiceDiscoveryMessage
-                .Where(message => message.Type == IQType.Result && pendingMessages.Contains(message.ID))
-                .Subscribe(message => OnServiceDiscoveryMessage(message));
+                .Where(message => message.Type == IQType.Result && _pendingMessages.Contains(message.ID))
+                .Subscribe(OnServiceDiscoveryMessage);
         }
 
         private void Unsubscribe()
         {
-            if (infoQueryErrorSubscription != null)
+            if (_infoQueryErrorSubscription != null)
             {
-                infoQueryErrorSubscription.Dispose();
-                infoQueryErrorSubscription = null;
+                _infoQueryErrorSubscription.Dispose();
+                _infoQueryErrorSubscription = null;
             }
 
-            if (serviceDiscoverySubscription != null)
+            if (_serviceDiscoverySubscription != null)
             {
-                serviceDiscoverySubscription.Dispose();
-                serviceDiscoverySubscription = null;
+                _serviceDiscoverySubscription.Dispose();
+                _serviceDiscoverySubscription = null;
             }
         }
 
         private void OnServiceDiscoveryMessage(IQ message)
         {
-            pendingMessages.Remove(message.ID);
+            _pendingMessages.Remove(message.ID);
 
             foreach (ServiceItemQuery item in message.Items)
             {
                 foreach (ServiceItem sitem in item.Items)
                 {
-                    features.Add(sitem.Node);
+                    _features.Add(sitem.Node);
                 }
 
                 //if (SupportsUserTune)
@@ -208,9 +181,9 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 
         private void OnQueryErrorMessage(IQ message)
         {
-            if (pendingMessages.Contains(message.ID))
+            if (_pendingMessages.Contains(message.ID))
             {
-                pendingMessages.Remove(message.ID);
+                _pendingMessages.Remove(message.ID);
             }
         }
     }

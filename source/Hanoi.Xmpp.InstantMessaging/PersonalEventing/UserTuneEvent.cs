@@ -32,29 +32,17 @@ using Hanoi.Serialization.Extensions.UserTune;
 
 namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 {
-    /// <summary>
-    ///   Activity for the user tune event
-    /// </summary>
     public sealed class UserTuneEvent : UserEvent
     {
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "UserTuneEvent">UserTuneEvent</see> class.
-        /// </summary>
-        /// <param name="artist"></param>
-        /// <param name="length"></param>
-        /// <param name="rating"></param>
-        /// <param name="source"></param>
-        /// <param name="title"></param>
-        /// <param name="track"></param>
-        /// <param name="uri">Url of the track</param>
-        public UserTuneEvent(
-            string artist,
-            ushort length,
-            string rating,
-            string source,
-            string title,
-            string track,
-            string uri)
+        public string Artist { get; private set; }
+        public ushort Length { get; private set; }
+        public string Rating { get; private set; }
+        public string Source { get; private set; }
+        public string Title { get; private set; }
+        public string Track { get; private set; }
+        public string Uri { get; private set; }
+        
+        public UserTuneEvent(string artist, ushort length, string rating, string source, string title, string track, string uri)
             : base(null)
         {
             Artist = artist;
@@ -66,11 +54,6 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             Uri = uri;
         }
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "UserTuneEvent">UserTuneEvent</see> class.
-        /// </summary>
-        /// <param name = "user">User contact</param>
-        /// <param name = "tune">User tune</param>
         public UserTuneEvent(Contact user, Tune tune)
             : base(user)
         {
@@ -83,29 +66,15 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             Uri = tune.Uri;
         }
 
-        public string Artist { get; private set; }
-
-        public ushort Length { get; private set; }
-
-        public string Rating { get; private set; }
-
-        public string Source { get; private set; }
-
-        public string Title { get; private set; }
-
-        public string Track { get; private set; }
-
-        public string Uri { get; private set; }
-
         public bool IsEmpty
         {
             get
             {
-                return (String.IsNullOrEmpty(Artist) &&
-                        String.IsNullOrEmpty(Title) &&
-                        String.IsNullOrEmpty(Rating) &&
-                        String.IsNullOrEmpty(Source) &&
-                        String.IsNullOrEmpty(Track) &&
+                return (string.IsNullOrEmpty(Artist) &&
+                        string.IsNullOrEmpty(Title) &&
+                        string.IsNullOrEmpty(Rating) &&
+                        string.IsNullOrEmpty(Source) &&
+                        string.IsNullOrEmpty(Track) &&
                         Length == 0);
             }
         }

@@ -36,57 +36,59 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.InstantMessaging {
-    /// <summary>
-    ///   <see cref = "Session" /> configuration
-    /// </summary>
+namespace Hanoi.Xmpp.InstantMessaging
+{
     [Serializable]
     [XmlTypeAttribute(Namespace = "")]
     [XmlRootAttribute("storage", Namespace = "", IsNullable = false)]
-    public sealed class AvatarStorage {
-        private static XmlSerializer Serializer = new XmlSerializer(typeof (AvatarStorage));
-        private static readonly string AvatarsDirectory = "Avatars";
-        private static readonly string AvatarsFile = "Avatars.xml";
+    public sealed class AvatarStorage
+    {
+        private static XmlSerializer _serializer = new XmlSerializer(typeof(AvatarStorage));
+        private readonly string _avatarsDirectory = "Avatars";
+        private string _avatarsFile = "Avatars.xml";
+        private object _syncObject = new object();
+        private List<Avatar> _avatars = new List<Avatar>();
 
-        private List<Avatar> avatars;
-        private object syncObject;
+        public AvatarStorage()
+        {
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "XmppSessionConfiguration" /> class.
-        /// </summary>
-        public AvatarStorage() {
-            avatars = new List<Avatar>();
-            syncObject = new object();
         }
 
-        [XmlArray("avatars")]
-        [XmlArrayItem("avatar", typeof (Avatar))]
-        public List<Avatar> Avatars {
-            get { return avatars; }
+        public AvatarStorage(string jid)
+        {
+            _avatarsFile = jid + _avatarsFile;
+        }
+        
+        [XmlArray("avatars"), XmlArrayItem("avatar", typeof(Avatar))]
+        public List<Avatar> Avatars
+        {
+            get { return _avatars; }
+            set { _avatars = value; }
         }
 
-        private static bool ExistsAvatar(string file) {
-            string filename = AvatarsDirectory + Path.DirectorySeparatorChar + file;
+        private bool ExistsAvatar(string file)
+        {
+            var filename = _avatarsDirectory + Path.DirectorySeparatorChar + file;
 
-            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
+            using (var storage = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                if (storage.GetDirectoryNames(AvatarsDirectory).Length == 0)
+                if (storage.GetDirectoryNames(_avatarsDirectory).Length == 0)
                 {
-                    storage.CreateDirectory(AvatarsDirectory);
+                    storage.CreateDirectory(_avatarsDirectory);
                 }
 
                 return (storage.GetFileNames(filename).Length != 0);
             }
         }
 
-        private static byte[] ReadFile(string file) {
-            string filename = AvatarsDirectory + Path.DirectorySeparatorChar + file;
-
-            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
+        private byte[] ReadFile(string file)
+        {
+            string filename = _avatarsDirectory + Path.DirectorySeparatorChar + file;
+            using (var storage = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                if (storage.GetDirectoryNames(AvatarsDirectory).Length == 0)
+                if (storage.GetDirectoryNames(_avatarsDirectory).Length == 0)
                 {
-                    storage.CreateDirectory(AvatarsDirectory);
+                    storage.CreateDirectory(_avatarsDirectory);
                 }
 
                 using (var stream =
@@ -101,31 +103,17 @@ namespace Hanoi.Xmpp.InstantMessaging {
             }
         }
 
-        /// <summary>
-        ///   Gets the avatar hash.
-        /// </summary>
-        /// <param name = "contactId">The contact id.</param>
-        /// <returns></returns>
-        public string GetAvatarHash(string contactId) {
-            Avatar avatar = avatars.Where(a => a.Contact == contactId).SingleOrDefault();
-
-            if (avatar != null)
-            {
-                return avatar.Hash;
-            }
-
-            return null;
+        public string GetAvatarHash(string contactId)
+        {
+            Avatar avatar = Avatars.Where(a => a.Contact == contactId).SingleOrDefault();
+            return avatar != null ? avatar.Hash : null;
         }
 
-        /// <summary>
-        ///   Reads the avatar.
-        /// </summary>
-        /// <param name = "contactId">The contact id.</param>
-        /// <returns></returns>
-        public Stream ReadAvatar(string contactId) {
-            lock (syncObject)
+        public Stream ReadAvatar(string contactId)
+        {
+            lock (_syncObject)
             {
-                Avatar avatar = avatars.Where(a => a.Contact == contactId).SingleOrDefault();
+                Avatar avatar = Avatars.Where(a => a.Contact == contactId).SingleOrDefault();
 
                 if (avatar != null)
                 {
@@ -143,12 +131,13 @@ namespace Hanoi.Xmpp.InstantMessaging {
         ///   Removes the avatar of the given contact id.
         /// </summary>
         /// <param name = "contactId">The contact id.</param>
-        public void RemoveAvatar(string contactId) {
-            lock (syncObject)
+        public void RemoveAvatar(string contactId)
+        {
+            lock (_syncObject)
             {
                 try
                 {
-                    Avatars.Remove(avatars.Where(a => a.Contact == contactId).SingleOrDefault());
+                    Avatars.Remove(Avatars.Where(a => a.Contact == contactId).SingleOrDefault());
                 }
                 catch
                 {
@@ -160,33 +149,27 @@ namespace Hanoi.Xmpp.InstantMessaging {
         /// <summary>
         ///   Loads avatars
         /// </summary>
-        public void Load() {
+        public void Load()
+        {
             using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                if (storage.FileExists(AvatarsFile))
-                {
-                    using (var stream =
-                        new IsolatedStorageFileStream(AvatarsFile, FileMode.OpenOrCreate, storage))
-                    {
-                        if (stream.Length > 0)
-                        {
-                            var avatarStorage = (AvatarStorage) Serializer.Deserialize(stream);
+                if (!storage.FileExists(_avatarsFile)) 
+                    return;
 
-                            Avatars.AddRange(avatarStorage.Avatars);
-                        }
-                    }
+                using (var stream = new IsolatedStorageFileStream(_avatarsFile, FileMode.OpenOrCreate, storage))
+                {
+                    if (stream.Length <= 0) 
+                        return;
+
+                    var avatarStorage = (AvatarStorage)_serializer.Deserialize(stream);
+                    Avatars.AddRange(avatarStorage.Avatars);
                 }
             }
         }
 
-        /// <summary>
-        ///   Saves the avatar.
-        /// </summary>
-        /// <param name = "contactId">The contact id.</param>
-        /// <param name = "hash">The hash.</param>
-        /// <param name = "avatar">The avatar image.</param>
-        public void SaveAvatar(string contactId, string hash, MemoryStream avatarStream) {
-            lock (syncObject)
+        public void SaveAvatar(string contactId, string hash, MemoryStream avatarStream)
+        {
+            lock (_syncObject)
             {
                 // The avatar files should be saved only if it's not in use by another user ( several users can share the same avatar )
                 var q = from userAvatar in Avatars
@@ -197,15 +180,12 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 {
                     if (q.Count() == 0 && avatarStream.Length > 0)
                     {
-                        String avatarFile = String.Format("{0}{1}{2}{3}", AvatarsDirectory, Path.DirectorySeparatorChar,
-                                                          hash, ".avatar");
-
-                        if (!ExistsAvatar(String.Format("{0}{1}", hash, ".avatar")))
+                        var avatarFile = string.Format("{0}{1}{2}{3}", _avatarsDirectory, Path.DirectorySeparatorChar, hash, ".avatar");
+                        if (!ExistsAvatar(string.Format("{0}{1}", hash, ".avatar")))
                         {
-                            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
+                            using (var storage = IsolatedStorageFile.GetUserStoreForAssembly())
                             {
-                                using (var stream =
-                                    new IsolatedStorageFileStream(avatarFile, FileMode.Create, storage))
+                                using (var stream = new IsolatedStorageFileStream(avatarFile, FileMode.Create, storage))
                                 {
                                     stream.Write(avatarStream.ToArray(), 0, Convert.ToInt32(avatarStream.Length));
                                 }
@@ -220,7 +200,7 @@ namespace Hanoi.Xmpp.InstantMessaging {
                 finally
                 {
                     // Check if the avatar is already added to the list
-                    Avatar avatar = avatars.Where(a => a.Contact == contactId).SingleOrDefault();
+                    Avatar avatar = Avatars.Where(a => a.Contact == contactId).SingleOrDefault();
 
                     if (avatar != null)
                     {
@@ -230,30 +210,19 @@ namespace Hanoi.Xmpp.InstantMessaging {
                     else
                     {
                         // Add the new avatar to the list
-                        avatars.Add(new Avatar(contactId, hash));
+                        Avatars.Add(new Avatar(contactId, hash));
                     }
                 }
             }
         }
 
-        /// <summary>
-        ///   Saves the configuration.
-        /// </summary>
-        public void Save() {
-            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
+        public void Save()
+        {
+            using (var xmlWriter = new XmlTextWriter(Path.Combine(FilePath.Directory, _avatarsFile), Encoding.UTF8))
             {
-                using (var stream =
-                    new IsolatedStorageFileStream(AvatarsFile, FileMode.OpenOrCreate, storage))
-                {
-                    using (var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8))
-                    {
-                        // Writer settings
-                        xmlWriter.QuoteChar = '\'';
-                        xmlWriter.Formatting = Formatting.Indented;
-
-                        Serializer.Serialize(xmlWriter, this);
-                    }
-                }
+                xmlWriter.QuoteChar = '\'';
+                xmlWriter.Formatting = Formatting.Indented;
+                _serializer.Serialize(xmlWriter, this);
             }
         }
     }

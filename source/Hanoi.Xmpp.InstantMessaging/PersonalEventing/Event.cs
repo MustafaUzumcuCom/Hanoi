@@ -33,16 +33,8 @@ using Hanoi.Serialization.Extensions.UserTune;
 
 namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 {
-    /// <summary>
-    ///   Represents an XMPP event
-    /// </summary>
     public abstract class Event
     {
-        /// <summary>
-        ///   Return a value that iundicates wheter a pubsub event is an activity event
-        /// </summary>
-        /// <param name = "xmppevent"></param>
-        /// <returns></returns>
         public static bool IsActivityEvent(PubSubEvent xmppevent)
         {
             if (xmppevent.Item is PubSubEventItems)
@@ -60,12 +52,6 @@ namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
             return false;
         }
 
-        /// <summary>
-        ///   Creates an xmpp event with the give user and pubsub event
-        /// </summary>
-        /// <param name = "user"></param>
-        /// <param name = "xmppevent"></param>
-        /// <returns></returns>
         public static Event Create(Contact user, PubSubEvent xmppevent)
         {
             if (xmppevent.Item is PubSubEventItems)

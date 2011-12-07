@@ -47,7 +47,7 @@ namespace Hanoi.Xmpp.InstantMessaging
     public sealed class Roster : IEnumerable<Contact>, INotifyCollectionChanged
     {
         public event NotifyCollectionChangedEventHandler CollectionChanged;
-        public event EventHandler ContactPresenceChanged;
+
         public event EventHandler RosterReceived;
 
         private readonly Connection _connection;
@@ -59,7 +59,7 @@ namespace Hanoi.Xmpp.InstantMessaging
         private IDisposable _presenceSubscription;
         private IDisposable _rosterNotificationSubscription;
 
-        private Subject<Contact> _onContactPresence = new Subject<Contact>();
+        private readonly Subject<Contact> _onContactPresence = new Subject<Contact>();
 
         internal Roster(Session session)
         {
@@ -221,18 +221,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Called when the presence of a contact is changed
-        /// </summary>
-        [Obsolete]
-        internal void OnContactPresenceChanged()
-        {
-            if (ContactPresenceChanged != null)
-            {
-                ContactPresenceChanged(this, EventArgs.Empty);
-            }
-        }
-
         private void AddUserContact()
         {
             _contacts.Add
@@ -248,29 +236,29 @@ namespace Hanoi.Xmpp.InstantMessaging
                 .Subscribe
                 (
                     newState =>
+                    {
+                        switch (newState)
                         {
-                            switch (newState)
-                            {
-                                case SessionState.LoggingIn:
-                                    Subscribe();
-                                    break;
-                                case SessionState.LoggedIn:
-                                    AddUserContact();
-                                    break;
-                                case SessionState.LoggingOut:
-                                    Unsubscribe();
-                                    _contacts.Clear();
-                                    if (CollectionChanged != null)
-                                    {
-                                        Dispatcher.CurrentDispatcher.BeginInvoke(
-                                            DispatcherPriority.Background,
-                                            new Action(() => CollectionChanged(this,
-                                                                               new NotifyCollectionChangedEventArgs(
-                                                                                   NotifyCollectionChangedAction.Reset))));
-                                    }
-                                    break;
-                            }
+                            case SessionState.LoggingIn:
+                                Subscribe();
+                                break;
+                            case SessionState.LoggedIn:
+                                AddUserContact();
+                                break;
+                            case SessionState.LoggingOut:
+                                Unsubscribe();
+                                _contacts.Clear();
+                                if (CollectionChanged != null)
+                                {
+                                    Dispatcher.CurrentDispatcher.BeginInvoke(
+                                        DispatcherPriority.Background,
+                                        new Action(() => CollectionChanged(this,
+                                                                           new NotifyCollectionChangedEventArgs(
+                                                                               NotifyCollectionChangedAction.Reset))));
+                                }
+                                break;
                         }
+                    }
                 );
         }
 
@@ -439,14 +427,6 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             CollectionChanged(this, e);
             return;
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
-                                {
-                                    if (CollectionChanged != null)
-                                    {
-                                        CollectionChanged(this, e);
-                                    }
-                                }
-                        ));
         }
 
         internal void ContactPresence(Contact contact)

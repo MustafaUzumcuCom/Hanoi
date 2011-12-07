@@ -42,82 +42,32 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
     [XmlRootAttribute("client", Namespace = "", IsNullable = false)]
     public class ClientCapabilities
     {
-        private string hashAlgorithmName;
-        private List<ServiceIdentity> identities;
-        private string node;
-        private List<ServiceFeature> supportedFeatures;
-        private string verificationString;
+        private List<ServiceIdentity> _identities;
+        private List<ServiceFeature> _supportedFeatures;
 
-        /// <summary>
-        ///   Gets or sets the client node
-        /// </summary>
         [XmlAttribute("node")]
-        public string Node
-        {
-            get { return node; }
-            set { node = value; }
-        }
+        public string Node { get; set; }
 
-        /// <summary>
-        ///   Gets or sets the client version
-        /// </summary>
         [XmlAttribute("ver")]
-        public string VerificationString
-        {
-            get { return verificationString; }
-            set { verificationString = value; }
-        }
+        public string VerificationString { get; set; }
 
-        /// <summary>
-        ///   Gets or sets the hash algorithm name
-        /// </summary>
         [XmlAttribute("hash")]
-        public string HashAlgorithmName
-        {
-            get { return hashAlgorithmName; }
-            set { hashAlgorithmName = value; }
-        }
+        public string HashAlgorithmName { get; set; }
 
-        /// <summary>
-        ///   Gets or sets the identity.
-        /// </summary>
-        /// <value>The identity.</value>
         [XmlArray("identities")]
         [XmlArrayItem("identity", typeof(ServiceIdentity))]
         public List<ServiceIdentity> Identities
         {
-            get
-            {
-                if (identities == null)
-                {
-                    identities = new List<ServiceIdentity>();
-                }
-
-                return identities;
-            }
+            get { return _identities ?? (_identities = new List<ServiceIdentity>()); }
         }
 
-        /// <summary>
-        ///   Gets the list of supported features
-        /// </summary>
         [XmlArray("features")]
         [XmlArrayItem("feature", typeof(ServiceFeature))]
         public List<ServiceFeature> Features
         {
-            get
-            {
-                if (supportedFeatures == null)
-                {
-                    supportedFeatures = new List<ServiceFeature>();
-                }
-
-                return supportedFeatures;
-            }
+            get { return _supportedFeatures ?? (_supportedFeatures = new List<ServiceFeature>()); }
         }
 
-        /// <summary>
-        ///   Gets the discovery info node
-        /// </summary>
         [XmlIgnore]
         public string DiscoveryInfoNode
         {

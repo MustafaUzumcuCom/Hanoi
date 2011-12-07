@@ -170,7 +170,14 @@ namespace Hanoi.Serialization
 
             if (serializer != null)
             {
-                return serializer.Deserialize(xml);
+                try
+                {
+                    return serializer.Deserialize(xml);
+                }
+                catch
+                {
+                    
+                }
             }
 
             return null;

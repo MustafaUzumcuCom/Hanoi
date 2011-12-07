@@ -31,9 +31,6 @@ using System;
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
-    /// <summary>
-    ///   <see cref = "Contact" /> presence subscription type.
-    /// </summary>
     [Serializable]
     public enum ContactSubscriptionType
     {

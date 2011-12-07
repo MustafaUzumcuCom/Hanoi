@@ -29,28 +29,13 @@
 
 namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 {
-    /// <summary>
-    ///   Activity event for headline and normal messages
-    /// </summary>
     public sealed class MessageEvent : Event
     {
-        private readonly Message _message;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "">MessageEvent</see> class.
-        /// </summary>
-        /// <param name = "message">The message information</param>
         public MessageEvent(Message message)
         {
-            _message = message;
+            Message = message;
         }
 
-        /// <summary>
-        ///   Gets the message information
-        /// </summary>
-        public Message Message
-        {
-            get { return _message; }
-        }
+        public Message Message { get; private set; }
     }
 }

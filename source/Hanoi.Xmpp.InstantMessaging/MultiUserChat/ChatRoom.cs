@@ -38,54 +38,29 @@ using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
 namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
 {
-    /// <summary>
-    ///   Represents a conversation in a conference room
-    /// </summary>
     public sealed class ChatRoom : ServiceDiscoveryObject
     {
-        private readonly AutoResetEvent createChatRoomEvent;
-        private readonly AutoResetEvent seekEnterChatRoomEvent;
-        private Service conferenceService;
+        private readonly AutoResetEvent _createChatRoomEvent;
+        private readonly AutoResetEvent _seekEnterChatRoomEvent;
+        private Service _conferenceService;
 
-        private IDisposable messageReceivedSubscription;
-        private IDisposable presenceSubscription;
-        private ObservableCollection<ChatRoomUser> users;
+        private IDisposable _messageReceivedSubscription;
+        private IDisposable _presenceSubscription;
+        private ObservableCollection<ChatRoomUser> _users;
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:ChatRoom" /> class.
-        /// </summary>
-        /// <param name = "session">The session.</param>
-        /// <param name = "conferenceService">The conference service.</param>
-        /// <param name = "chatRoomId">The chat room id.</param>
         internal ChatRoom(Session session, Service conferenceService, Jid chatRoomId)
             : base(session, chatRoomId)
         {
-            this.conferenceService = conferenceService;
-            seekEnterChatRoomEvent = new AutoResetEvent(false);
-            createChatRoomEvent = new AutoResetEvent(false);
+            _conferenceService = conferenceService;
+            _seekEnterChatRoomEvent = new AutoResetEvent(false);
+            _createChatRoomEvent = new AutoResetEvent(false);
         }
 
-        /// <summary>
-        ///   Gets the users.
-        /// </summary>
-        /// <value>The users.</value>
         public ObservableCollection<ChatRoomUser> Users
         {
-            get
-            {
-                if (users == null)
-                {
-                    users = new ObservableCollection<ChatRoomUser>();
-                }
-
-                return users;
-            }
+            get { return _users ?? (_users = new ObservableCollection<ChatRoomUser>()); }
         }
 
-        /// <summary>
-        ///   Enters to the chat room
-        /// </summary>
-        /// <returns></returns>
         public ChatRoom Enter()
         {
             var presence = new Serialization.InstantMessaging.Presence.Presence
@@ -98,15 +73,11 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
 
             Session.Send(presence);
 
-            createChatRoomEvent.WaitOne();
+            _createChatRoomEvent.WaitOne();
 
             return this;
         }
 
-        /// <summary>
-        ///   Sends the message.
-        /// </summary>
-        /// <param name = "message">The message.</param>
         public ChatRoom SendMessage(string message)
         {
             var chatMessage = new Serialization.InstantMessaging.Client.Message
@@ -130,10 +101,6 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
             return this;
         }
 
-        /// <summary>
-        ///   Invites the given contact to the chat room
-        /// </summary>
-        /// <param name = "contact"></param>
         public ChatRoom Invite(Contact contact)
         {
             var user = new MucUser();
@@ -156,9 +123,6 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
             return this;
         }
 
-        /// <summary>
-        ///   Closes the chatroom
-        /// </summary>
         public void Close()
         {
             var presence = new Serialization.InstantMessaging.Presence.Presence
@@ -177,52 +141,45 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
         {
             base.Subscribe();
 
-            messageReceivedSubscription = Session
+            _messageReceivedSubscription = Session
                 .MessageReceived
                 .Where(m => m.Type == MessageType.GroupChat && m.From.BareIdentifier.Equals(Identifier.BareIdentifier))
-                .Subscribe(message => OnMultiUserChatMessageReceived(message));
+                .Subscribe(OnMultiUserChatMessageReceived);
 
-            presenceSubscription = Session.Connection
+            _presenceSubscription = Session.Connection
                 .OnPresenceMessage
                 .Where(message => message.From.Equals(Identifier.ToString()))
-                .Subscribe(message => OnPresenceMessageReceived(message));
+                .Subscribe(OnPresenceMessageReceived);
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
 
-            if (messageReceivedSubscription != null)
+            if (_messageReceivedSubscription != null)
             {
-                messageReceivedSubscription.Dispose();
-                messageReceivedSubscription = null;
+                _messageReceivedSubscription.Dispose();
+                _messageReceivedSubscription = null;
             }
 
-            if (presenceSubscription != null)
+            if (_presenceSubscription != null)
             {
-                presenceSubscription.Dispose();
-                presenceSubscription = null;
+                _presenceSubscription.Dispose();
+                _presenceSubscription = null;
             }
         }
 
         private void OnMultiUserChatMessageReceived(Message message)
         {
-            createChatRoomEvent.Set();
-            seekEnterChatRoomEvent.Set();
+            _createChatRoomEvent.Set();
+            _seekEnterChatRoomEvent.Set();
         }
 
         private void OnPresenceMessageReceived(Serialization.InstantMessaging.Presence.Presence message)
         {
-            //<presence to='carlosga@neko.im/Home' from='babelimtest@conference.neko.im/carlosga'>
-            //    <x xmlns='http://jabber.org/protocol/muc#user'>
-            //        <item jid='carlosga@neko.im/Home' affiliation='owner' role='moderator'/>
-            //        <status code='110'/>
-            //    </x>
-            //</presence>
-
             if (message.Items != null && message.Items.Count > 0)
             {
-                foreach (object item in message.Items)
+                foreach (var item in message.Items)
                 {
                     if (item is MucUser)
                     {
@@ -231,8 +188,8 @@ namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
                 }
             }
 
-            createChatRoomEvent.Set();
-            seekEnterChatRoomEvent.Set();
+            _createChatRoomEvent.Set();
+            _seekEnterChatRoomEvent.Set();
         }
 
         private static void ProcessMucUser(MucUser item)

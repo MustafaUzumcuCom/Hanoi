@@ -34,47 +34,31 @@ using Hanoi.Serialization.InstantMessaging.Client;
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
-    /// <summary>
-    ///   Represents a chat conversation with a contact.
-    /// </summary>
     public sealed class Chat
     {
-        private IDisposable chatMessageSubscription;
-        private Contact contact;
-        private Queue<Message> pendingMessages;
-        private Session session;
+        private IDisposable _chatMessageSubscription;
+        private Contact _contact;
+        private Queue<Message> _pendingMessages;
+        private Session _session;
+        private IDisposable _sessionStateSubscription;
 
-        private IDisposable sessionStateSubscription;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:Chat" /> class.
-        /// </summary>
-        /// <param name = "session">The session.</param>
-        /// <param name = "contact">The contact.</param>
         internal Chat(Session session, Contact contact)
         {
-            this.session = session;
-            this.contact = contact;
-            pendingMessages = new Queue<Message>();
+            _session = session;
+            _contact = contact;
+            _pendingMessages = new Queue<Message>();
 
             Subscribe();
         }
 
-        /// <summary>
-        ///   Gets the contact.
-        /// </summary>
-        /// <value>The contact.</value>
         public Contact Contact
         {
-            get { return contact; }
+            get { return _contact; }
         }
 
-        /// <summary>
-        ///   Gets the pending messages
-        /// </summary>
         public Queue<Message> PendingMessages
         {
-            get { return pendingMessages; }
+            get { return _pendingMessages; }
         }
 
         private static object CreateChatStateNotification(ChatStateNotification notificationType)
@@ -100,28 +84,13 @@ namespace Hanoi.Xmpp.InstantMessaging
             return null;
         }
 
-        /// <summary>
-        ///   Occurs when a new message is received
-        /// </summary>
         public event EventHandler ReceivedMessage;
-
-        /// <summary>
-        ///   Occurs before the chat is closed
-        /// </summary>
         public event EventHandler ChatClosing;
-
-        /// <summary>
-        ///   Occurs when the chat is closed
-        /// </summary>
         public event EventHandler ChatClosed;
 
-        /// <summary>
-        ///   Sends the message.
-        /// </summary>
-        /// <param name = "message">The message.</param>
         public string SendMessage(string message)
         {
-            if (session == null)
+            if (_session == null)
             {
                 throw new InvalidOperationException("Chat session is closed.");
             }
@@ -135,7 +104,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                                   {
                                       ID = IdentifierGenerator.Generate(),
                                       Type = MessageType.Chat,
-                                      From = session.UserId.ToString(),
+                                      From = _session.UserId.ToString(),
                                       To = Contact.ContactId.ToString(),
                                   };
 
@@ -146,37 +115,30 @@ namespace Hanoi.Xmpp.InstantMessaging
 
             chatMessage.Items.Add(body);
 
-            session.Send(chatMessage);
+            _session.Send(chatMessage);
 
             return chatMessage.ID;
         }
 
-        /// <summary>
-        ///   Sends a chat state notification
-        /// </summary>
-        /// <param name = "notificationType"></param>
         public void SendChatStateNotification(ChatStateNotification notificationType)
         {
             // Generate the notification only if the target entity supports it
-            if (Contact.SupportsChatStateNotifications)
-            {
-                var message = new Serialization.InstantMessaging.Client.Message
-                                  {
-                                      ID = IdentifierGenerator.Generate(),
-                                      Type = MessageType.Chat,
-                                      From = session.UserId.ToString(),
-                                      To = Contact.ContactId.ToString(),
-                                  };
+            if (!Contact.SupportsChatStateNotifications) 
+                return;
 
-                message.Items.Add(CreateChatStateNotification(notificationType));
+            var message = new Serialization.InstantMessaging.Client.Message
+                              {
+                                  ID = IdentifierGenerator.Generate(),
+                                  Type = MessageType.Chat,
+                                  From = _session.UserId.ToString(),
+                                  To = Contact.ContactId.ToString(),
+                              };
 
-                session.Send(message);
-            }
+            message.Items.Add(CreateChatStateNotification(notificationType));
+
+            _session.Send(message);
         }
 
-        /// <summary>
-        ///   Closes this instance.
-        /// </summary>
         public void Close()
         {
             if (ChatClosing != null)
@@ -185,44 +147,29 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
 
             SendChatStateNotification(ChatStateNotification.Gone);
-            pendingMessages.Clear();
+            _pendingMessages.Clear();
             Unsubscribe();
-            pendingMessages = null;
+            _pendingMessages = null;
 
             if (ChatClosed != null)
             {
                 ChatClosed(this, new EventArgs());
             }
 
-            session = null;
-            contact = null;
-        }
-
-        private void SubscribeToSessionState()
-        {
-            sessionStateSubscription = session
-                .StateChanged
-                .Where(s => s == SessionState.LoggingOut)
-                .Subscribe
-                (
-                    newState =>
-                    {
-                        Close();
-                        Unsubscribe();
-                    }
-                );
+            _session = null;
+            _contact = null;
         }
 
         private void Subscribe()
         {
-            chatMessageSubscription = session
+            _chatMessageSubscription = _session
                 .MessageReceived
-                .Where(m => m.Type == MessageType.Chat && m.From.BareIdentifier == contact.ContactId.BareIdentifier)
+                .Where(m => m.Type == MessageType.Chat && m.From.BareIdentifier == _contact.ContactId.BareIdentifier)
                 .Subscribe
                 (
                     message =>
                     {
-                        pendingMessages.Enqueue(message);
+                        _pendingMessages.Enqueue(message);
 
                         if (ReceivedMessage != null)
                         {
@@ -234,10 +181,10 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void Unsubscribe()
         {
-            if (chatMessageSubscription != null)
+            if (_chatMessageSubscription != null)
             {
-                chatMessageSubscription.Dispose();
-                chatMessageSubscription = null;
+                _chatMessageSubscription.Dispose();
+                _chatMessageSubscription = null;
             }
 
             UnsubscribeFromSessionState();
@@ -245,10 +192,10 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         private void UnsubscribeFromSessionState()
         {
-            if (sessionStateSubscription != null)
+            if (_sessionStateSubscription != null)
             {
-                sessionStateSubscription.Dispose();
-                sessionStateSubscription = null;
+                _sessionStateSubscription.Dispose();
+                _sessionStateSubscription = null;
             }
         }
     }

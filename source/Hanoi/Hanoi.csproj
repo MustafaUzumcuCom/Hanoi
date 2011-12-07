@@ -99,6 +99,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FeatureDetection.cs" />
     <Compile Include="Features.cs" />
+    <Compile Include="FilePath.cs" />
     <Compile Include="IAuthenticatorFactory.cs" />
     <Compile Include="IFeatureDetection.cs" />
     <Compile Include="Serialization\Core\ResourceBinding\Bind.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Serialization\ItemChoiceType.cs" />
     <Compile Include="Serialization\XmppSerializer.cs" />
     <Compile Include="Serialization\XmppTextWriter.cs" />
+    <Compile Include="Session.cs" />
     <Compile Include="StreamElements.cs" />
     <Compile Include="Transports\BaseTransport.cs" />
     <Compile Include="Transports\HttpTransport.cs" />

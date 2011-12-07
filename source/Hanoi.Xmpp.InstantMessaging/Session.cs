@@ -47,93 +47,63 @@ using Hanoi.Xmpp.InstantMessaging.ServiceDiscovery;
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
-    /// <summary>
-    ///   XMPP Instant Messaging Session
-    /// </summary>
     public sealed class Session : ISession
     {
-        private readonly AvatarStorage _avatarStorage;
         private readonly Dictionary<string, Chat> _chats;
-        private readonly ClientCapabilitiesStorage _clientCapabilitiesStorage;
         private readonly Connection _connection;
-
         private readonly Subject<Message> _messageReceivedSubject = new Subject<Message>();
+        private readonly Subject<Contact> _contactChanged = new Subject<Contact>();
+        private readonly Subject<SessionState> _stateChangedSubject = new Subject<SessionState>();
+
         private readonly PersonalEventing.PersonalEventing _personalEventing;
         private readonly ServiceDiscovery.ServiceDiscovery _serviceDiscovery;
-        private readonly Subject<SessionState> _stateChangedSubject = new Subject<SessionState>();
         private readonly object _syncObject;
+        private ClientCapabilitiesStorage _clientCapabilitiesStorage;
+        private AvatarStorage _avatarStorage;
         private Activity _activity;
         private SessionEntityCapabilities _capabilities;
-
         private IDisposable _chatMessageSubscription;
         private IDisposable _errorMessageSubscription;
         private Presence _presence;
         private Roster _roster;
         private SessionState _state;
+        
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "Session" /> class
-        /// </summary>
-        public Session()
+        public event EventHandler<AuthenticationFailiureEventArgs> AuthenticationFailed;
+
+        public Session() 
+            : this(FeatureDetection.Default, AuthenticatorFactory.Default, ConnectionFactory.Default, "")
         {
-            State = SessionState.LoggedOut;
-            _avatarStorage = new AvatarStorage();
-            _chats = new Dictionary<string, Chat>();
-            _syncObject = new object();
-            _connection = new Connection();
-            _serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
-            _personalEventing = new PersonalEventing.PersonalEventing(this);
-            _activity = new Activity(this);
-            _clientCapabilitiesStorage = new ClientCapabilitiesStorage();
-            _roster = new Roster(this);
-
-            _avatarStorage.Load();
-            _clientCapabilitiesStorage.Load();
+            
         }
 
-        public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator, IConnectionFactory factory)
+        public Session(IFeatureDetection featureDetection, IAuthenticatorFactory authenticator, IConnectionFactory factory, string storagePath)
         {
             State = SessionState.LoggedOut;
-            _avatarStorage = new AvatarStorage();
             _chats = new Dictionary<string, Chat>();
             _syncObject = new object();
-
             _connection = new Connection(authenticator, featureDetection, factory);
-
             _serviceDiscovery = new ServiceDiscovery.ServiceDiscovery(this);
             _personalEventing = new PersonalEventing.PersonalEventing(this);
             _activity = new Activity(this);
-            _clientCapabilitiesStorage = new ClientCapabilitiesStorage();
             _roster = new Roster(this);
 
-            _avatarStorage.Load();
-            _clientCapabilitiesStorage.Load();
+            FilePath.Directory = storagePath;
         }
 
-        /// <summary>
-        ///   Gets the <see cref = "Hanoi.Connection" /> instance associated to the session
-        /// </summary>
         internal Connection Connection
         {
             get { return _connection; }
         }
 
-        /// <summary>
-        ///   Gets the client capabilities storage
-        /// </summary>
         internal ClientCapabilitiesStorage ClientCapabilitiesStorage
         {
             get { return _clientCapabilitiesStorage; }
         }
-
-        /// <summary>
-        ///   Occurs when the authentications fails.
-        /// </summary>
-        public event EventHandler<AuthenticationFailiureEventArgs> AuthenticationFailed;
-
-        /// <summary>
-        ///   Occurs when a message is received.
-        /// </summary>
+        public IObservable<Contact>  ContactChanged
+        {
+            get { return _contactChanged.AsObservable(); }
+        }
         public IObservable<Message> MessageReceived
         {
             get { return _messageReceivedSubject.AsObservable(); }
@@ -149,117 +119,79 @@ namespace Hanoi.Xmpp.InstantMessaging
             get { return _connection.OnRosterMessage; }
         }
 
-        /// <summary>
-        ///   Occurs when the session state changes.
-        /// </summary>
         public IObservable<SessionState> StateChanged
         {
             get { return _stateChangedSubject.AsObservable(); }
         }
 
-        /// <summary>
-        ///   Gets the User <see cref = "Jid">JID</see>
-        /// </summary>
         public Jid UserId
         {
-            get
-            {
-                if (_connection != null)
-                {
-                    return _connection.UserId;
-                }
-
-                return null;
-            }
+            get { return _connection != null ? _connection.UserId : null; }
         }
 
-        /// <summary>
-        ///   Gets the session <see cref = "InstantMessaging.Roster">Roster</see>
-        /// </summary>
         public Roster Roster
         {
             get { return _roster ?? (_roster = new Roster(this)); }
         }
 
-        /// <summary>
-        ///   Gets the list of <see cref = "InstantMessaging.PersonalEventing.Activity">activities</see>
-        /// </summary>
         public Activity Activity
         {
             get { return _activity ?? (_activity = new Activity(this)); }
         }
 
-        /// <summary>
-        ///   Gets the client session supported features
-        /// </summary>
         public SessionEntityCapabilities Capabilities
         {
             get { return _capabilities ?? (_capabilities = new SessionEntityCapabilities(this)); }
         }
 
-        /// <summary>
-        ///   Gets the session state
-        /// </summary>
         public SessionState State
         {
             get { return _state; }
             private set
             {
-                if (_state != value)
-                {
-                    _state = value;
-                    _stateChangedSubject.OnNext(_state);
-                }
+                if (_state == value)
+                    return;
+                _state = value;
+                _stateChangedSubject.OnNext(_state);
             }
         }
 
-        /// <summary>
-        ///   Gets the presence
-        /// </summary>
         public Presence Presence
         {
             get { return _presence ?? (_presence = new Presence(this)); }
         }
 
-        /// <summary>
-        ///   Gets the <see cref = "Session">service discovery </see> instance associated to the session
-        /// </summary>
         public ServiceDiscovery.ServiceDiscovery ServiceDiscovery
         {
             get { return _serviceDiscovery; }
         }
 
-        /// <summary>
-        ///   Gets the avatar storage
-        /// </summary>
         public AvatarStorage AvatarStorage
         {
             get { return _avatarStorage; }
         }
 
-        /// <summary>
-        ///   Gets the <see cref = "InstantMessaging.PersonalEventing.PersonalEventing">personal eventing</see> instance associated to the session
-        /// </summary>
         public PersonalEventing.PersonalEventing PersonalEventing
         {
             get { return _personalEventing; }
         }
 
-        /// <summary>
-        ///   Opens a new Session with the given connection parameters
-        /// </summary>
-        /// <param name = "connectionString">Connection parameters</param>
-        public ISession Open(string connectionString)
+        public ISession Open(ConnectionStringBuilder connectionString)
         {
             if (_connection != null && _connection.State == ConnectionState.Open)
             {
                 throw new XmppException("The session is already open");
             }
 
+            _avatarStorage = new AvatarStorage(connectionString.UserId);
+            _avatarStorage.Load();
+
+            _clientCapabilitiesStorage = new ClientCapabilitiesStorage(connectionString.UserId);
+            _clientCapabilitiesStorage.Load();
             State = SessionState.LoggingIn;
 
             Subscribe();
-            Connection.Open(connectionString);
+            Connection.Open(connectionString.ToString());
 
             if (Connection != null && Connection.State == ConnectionState.Open)
             {
@@ -280,9 +212,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Closes the Session
-        /// </summary>
         public ISession Close()
         {
             if (_connection != null &&
@@ -295,20 +224,12 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                     if (_connection.State == ConnectionState.Open)
                     {
-                        // Save session configuration
                         AvatarStorage.Save();
-
-                        // Change presence to unavailable
                         SetUnavailable();
-
-                        // Clear all chats
                         _chats.Clear();
                     }
 
-                    // Close connection
                     _connection.Close();
-
-                    // Unwire Connection events
                     Unsubscribe();
                 }
                 catch
@@ -323,98 +244,66 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Checks if a given user has an open chat session
-        /// </summary>
-        /// <param name = "contactId"></param>
-        /// <returns></returns>
         public bool HasOpenChat(string contactId)
         {
             return (_chats != null && _chats.ContainsKey(contactId));
         }
 
-        /// <summary>
-        ///   Checks if a given user has an open chat session
-        /// </summary>
-        /// <param name = "contactId"></param>
-        /// <returns></returns>
         public bool HasOpenChat(Jid contactId)
         {
             return HasOpenChat(contactId.BareIdentifier);
         }
 
-        /// <summary>
-        ///   Creates the chat.
-        /// </summary>
-        /// <param name = "contactId">The contact id.</param>
-        /// <returns></returns>
         public Chat CreateChat(string contactId)
         {
             return CreateChat(new Jid(contactId));
         }
 
-        /// <summary>
-        ///   Creates the chat.
-        /// </summary>
-        /// <param name = "contactId">The contact id.</param>
-        /// <returns></returns>
         public Chat CreateChat(Jid contactId)
         {
-            CheckSessionState();
-
-            Chat chat;
-
-            lock (_syncObject)
+            if (CheckSessionState())
             {
-                if (!_chats.ContainsKey(contactId.BareIdentifier))
-                {
-                    chat = new Chat(this, Roster[contactId.BareIdentifier]);
-                    _chats.Add(contactId.BareIdentifier, chat);
+                Chat chat;
 
-                    chat.ChatClosed += OnChatClosed;
-                }
-                else
+                lock (_syncObject)
                 {
-                    chat = _chats[contactId.BareIdentifier];
+                    if (!_chats.ContainsKey(contactId.BareIdentifier))
+                    {
+                        chat = new Chat(this, Roster[contactId.BareIdentifier]);
+                        _chats.Add(contactId.BareIdentifier, chat);
+
+                        chat.ChatClosed += OnChatClosed;
+                    }
+                    else
+                    {
+                        chat = _chats[contactId.BareIdentifier];
+                    }
                 }
+
+                return chat;
             }
-
-            return chat;
+            return null;
         }
 
-        /// <summary>
-        /// Creates the chat room.
-        /// </summary>
         public ChatRoom EnterChatRoom()
         {
             return EnterChatRoom(IdentifierGenerator.Generate());
         }
 
-        /// <summary>
-        ///   Creates the chat room.
-        /// </summary>
-        /// <param name="chatRoomName">Name of the chat room.</param>
         public ChatRoom EnterChatRoom(string chatRoomName)
         {
-            CheckSessionState();
-
-            var service = ServiceDiscovery.GetService(ServiceCategory.Conference);
-
-            ChatRoom chatRoom = null;
-            var chatRoomId = new Jid(chatRoomName, service.Identifier, UserId.UserName);
-
-            if (service != null)
+            if (CheckSessionState())
             {
-                chatRoom = new ChatRoom(this, service, chatRoomId);
+                var service = ServiceDiscovery.GetService(ServiceCategory.Conference);
+                var chatRoomId = new Jid(chatRoomName, service.Identifier, UserId.UserName);
+                var chatRoom = new ChatRoom(this, service, chatRoomId);
                 chatRoom.Enter();
-            }
 
-            return chatRoom;
+                return chatRoom;
+            } 
+            return null;
         }
 
-        /// <summary>
-        ///   Publishes user tune information
-        /// </summary>
         public ISession PublishTune(UserTuneEvent tuneEvent)
         {
             var iq = new IQ();
@@ -445,9 +334,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Stops user tune publications
-        /// </summary>
         public ISession StopTunePublication()
         {
             var iq = new IQ();
@@ -471,24 +357,18 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Publishes user mood information
-        /// </summary>
         public ISession PublishMood(MoodType mood, string description)
         {
-            var instance = new Mood();
-
-            instance.MoodType = mood;
-            instance.Text = description;
+            var instance = new Mood
+                               {
+                                   MoodType = mood,
+                                   Text = description
+                               };
 
             PublishMood(new UserMoodEvent(null, instance));
-
             return this;
         }
 
-        /// <summary>
-        ///   Publishes user mood information
-        /// </summary>
         public ISession PublishMood(UserMoodEvent moodEvent)
         {
             var iq = new IQ();
@@ -514,13 +394,8 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Publishes the display name.
-        /// </summary>
-        /// <param name = "displayName">The display name.</param>
         public ISession PublishDisplayName(string displayName)
         {
-            // Publish the display name ( nickname )
             var iq = new IQ();
             var vcard = new VCardData();
 
@@ -537,12 +412,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Publishes the avatar.
-        /// </summary>
-        /// <param name = "mimetype">The mimetype.</param>
-        /// <param name = "hash">The hash.</param>
-        /// <param name = "avatarImage">The avatar image.</param>
         public ISession PublishAvatar(string mimetype, string hash, Image avatarImage)
         {
             var avatarData = new MemoryStream();
@@ -566,10 +435,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                 Send(iq);
 
-                // Save the avatar
                 _avatarStorage.SaveAvatar(UserId.BareIdentifier, hash, avatarData);
-
-                // Update session configuration
                 _avatarStorage.Save();
             }
             finally
@@ -581,22 +447,14 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        /// Sets as unavailable.
-        /// </summary>
         public ISession SetUnavailable()
         {
-            CheckSessionState();
-
-            Presence.SetUnavailable();
+            if (CheckSessionState())
+                Presence.SetUnavailable();
 
             return this;
         }
 
-        /// <summary>
-        /// Sets the presence.
-        /// </summary>
-        /// <param name="newPresence">The Presence state to show.</param>
         public ISession SetPresence(PresenceState newPresence)
         {
             SetPresence(newPresence, null);
@@ -604,11 +462,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Sets the presence.
-        /// </summary>
-        /// <param name="newPresence">The new presence state.</param>
-        /// <param name="status">The status.</param>
         public ISession SetPresence(PresenceState newPresence, string status)
         {
             switch (newPresence)
@@ -628,36 +481,21 @@ namespace Hanoi.Xmpp.InstantMessaging
             return this;
         }
 
-        /// <summary>
-        ///   Sets the presence.
-        /// </summary>
-        /// <param name = "newPresence">The new presence state.</param>
-        /// <param name = "status">The status.</param>
-        /// <param name = "priority">The priority.</param>
         public ISession SetPresence(PresenceState newPresence, string status, int priority)
         {
-            CheckSessionState();
-
-            Presence.SetPresence(newPresence, status);
-
+            if (CheckSessionState())
+                Presence.SetPresence(newPresence, status);
             return this;
         }
 
-        /// <summary>
-        ///   Sends a XMPP message to the server
-        /// </summary>
-        /// <param name = "message">The message to be sent</param>
         internal void Send(object message)
         {
             _connection.Send(message);
         }
 
-        private void CheckSessionState()
+        private bool CheckSessionState()
         {
-            if (_connection == null || _connection.State != ConnectionState.Open)
-            {
-                throw new XmppException("The session is not valid.");
-            }
+            return _connection != null && _connection.State == ConnectionState.Open;
         }
 
         private void Subscribe()
@@ -701,16 +539,16 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
         }
 
-        private void OnChatMessageReceived(Message message) 
+        private void OnChatMessageReceived(Message message)
         {
-            if (string.IsNullOrEmpty(message.Body) && !_chats.ContainsKey(message.From.BareIdentifier)) 
+            if (string.IsNullOrEmpty(message.Body) && !_chats.ContainsKey(message.From.BareIdentifier))
                 return;
 
             if (!_chats.ContainsKey(message.From.BareIdentifier))
             {
                 CreateChat(message.From);
             }
-            
+
             _messageReceivedSubject.OnNext(message);
         }
 
@@ -718,20 +556,25 @@ namespace Hanoi.Xmpp.InstantMessaging
         {
             var chat = (Chat)sender;
 
-            if (chat != null)
-            {
-                chat.ChatClosed -= OnChatClosed;
+            if (chat == null) 
+                return;
 
-                if (chat.Contact != null)
-                {
-                    _chats.Remove(chat.Contact.ContactId.BareIdentifier);
-                }
+            chat.ChatClosed -= OnChatClosed;
+
+            if (chat.Contact != null)
+            {
+                _chats.Remove(chat.Contact.ContactId.BareIdentifier);
             }
         }
 
         private void OnConnectionClosed(object sender, EventArgs e)
         {
             Close();
+        }
+
+        internal void OnContactMessage(Contact contact)
+        {
+            _contactChanged.OnNext(contact);
         }
     }
 }

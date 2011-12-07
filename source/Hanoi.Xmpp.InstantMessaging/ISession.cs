@@ -65,7 +65,7 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         event EventHandler<AuthenticationFailiureEventArgs> AuthenticationFailed;
 
-        ISession Open(string connectionString);
+        ISession Open(ConnectionStringBuilder connectionString);
 
         ISession PublishAvatar(string mimetype, string hash, System.Drawing.Image avatarImage);
 

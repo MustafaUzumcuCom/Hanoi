@@ -31,60 +31,18 @@ using System;
 
 namespace Hanoi.Xmpp.InstantMessaging.MultiUserChat
 {
-    /// <summary>
-    ///   Chat Room Supported Features
-    /// </summary>
     [Flags]
     public enum ChatRoomFeatures
     {
-        /// <summary>
-        ///   Public
-        /// </summary>
         Public = 1,
-
-        /// <summary>
-        ///   Persistent
-        /// </summary>
         Persistent = 2,
-
-        /// <summary>
-        ///   Open
-        /// </summary>
         Open = 4,
-
-        /// <summary>
-        ///   Semi Anonymous
-        /// </summary>
         SemiAnonymous = 8,
-
-        /// <summary>
-        ///   Unmoderated
-        /// </summary>
         Unmoderated = 16,
-
-        /// <summary>
-        ///   Unsecured
-        /// </summary>
         Unsecured = 32,
-
-        /// <summary>
-        ///   Hidden
-        /// </summary>
         Hidden = 64,
-
-        /// <summary>
-        ///   Password Protected
-        /// </summary>
         PasswordProtected = 128,
-
-        /// <summary>
-        ///   Temporary
-        /// </summary>
         Temporary = 256,
-
-        /// <summary>
-        ///   NonAnonymous
-        /// </summary>
         NonAnonymous = 512
     }
 }

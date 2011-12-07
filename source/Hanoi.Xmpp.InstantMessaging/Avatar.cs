@@ -30,32 +30,27 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Hanoi.Xmpp.InstantMessaging {
+namespace Hanoi.Xmpp.InstantMessaging
+{
     [Serializable]
     [XmlType(Namespace = "")]
     [XmlRootAttribute("avatar", Namespace = "", IsNullable = false)]
-    public sealed class Avatar {
-        private string contact;
-        private string hash;
-
-        public Avatar() {
-        }
-
-        public Avatar(string contactId, string hash) {
-            contact = contactId;
-            this.hash = hash;
-        }
-
+    public sealed class Avatar
+    {
         [XmlElement("contact")]
-        public string Contact {
-            get { return contact; }
-            set { contact = value; }
-        }
+        public string Contact { get; set; }
 
         [XmlElement("hash")]
-        public string Hash {
-            get { return hash; }
-            set { hash = value; }
+        public string Hash { get; set; }
+
+        public Avatar()
+        {
+        }
+
+        public Avatar(string contactId, string hash)
+        {
+            Contact = contactId;
+            Hash = hash;
         }
     }
 }

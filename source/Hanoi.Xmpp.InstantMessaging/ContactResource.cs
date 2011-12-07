@@ -72,63 +72,44 @@ namespace Hanoi.Xmpp.InstantMessaging
             Subscribe();
         }
 
-        /// <summary>
-        ///   Gets a value that indicates wheter this resource is the default resource
-        /// </summary>
-        /// <value>The resource id.</value>
         public bool IsDefaultResource
         {
             get { return (Presence.Priority == DefaultPresencePriorityValue); }
         }
 
-        /// <summary>
-        ///   Gets or sets the resource id.
-        /// </summary>
-        /// <value>The resource id.</value>
         public Jid ResourceId
         {
             get { return _resourceId; }
         }
 
-        /// <summary>
-        ///   Gets or sets the resource presence information.
-        /// </summary>
-        /// <value>The presence.</value>
         public ContactPresence Presence
         {
             get { return _presence; }
         }
 
-        /// <summary>
-        ///   Gets or sets the resource capabilities.
-        /// </summary>
-        /// <value>The capabilities.</value>
         public ClientCapabilities Capabilities
         {
             get { return _capabilities; }
             private set
             {
-                if (_capabilities != value)
-                {
-                    _capabilities = value;
-                    // NotifyPropertyChanged(() => Capabilities);
-                }
+                if (_capabilities == value) 
+                    return;
+
+                _capabilities = value; 
+                _session.OnContactMessage(_contact);
             }
         }
 
-        /// <summary>
-        ///   Gets the original avatar image
-        /// </summary>
         public Stream Avatar
         {
             get { return _avatar; }
             private set
             {
-                if (_avatar != value)
-                {
-                    _avatar = value;
-                    // NotifyPropertyChanged(() => Avatar);
-                }
+                if (_avatar == value) 
+                    return;
+
+                _avatar = value;
+                _session.OnContactMessage(_contact);
             }
         }
 
@@ -221,7 +202,7 @@ namespace Hanoi.Xmpp.InstantMessaging
                             DiscoverCapabilities();
                         }
 
-                        // NotifyPropertyChanged(() => Capabilities);
+                        _session.OnContactMessage(_contact);
                     }
                 }
             }
@@ -294,17 +275,17 @@ namespace Hanoi.Xmpp.InstantMessaging
             _infoQueryErrorSubscription = _session.Connection
                 .OnInfoQueryMessage
                 .Where(message => message.Type == IQType.Error)
-                .Subscribe(message => OnQueryErrorMessage(message));
+                .Subscribe(OnQueryErrorMessage);
 
             _serviceDiscoverySubscription = _session.Connection
                 .OnServiceDiscoveryMessage
                 .Where(message => message.Type == IQType.Result && _pendingMessages.Contains(message.ID))
-                .Subscribe(message => OnServiceDiscoveryMessage(message));
+                .Subscribe(OnServiceDiscoveryMessage);
 
             _vCardSubscription = _session.Connection
                 .OnVCardMessage
                 .Where(message => message.From == ResourceId)
-                .Subscribe(message => OnVCardMessage(message));
+                .Subscribe(OnVCardMessage);
         }
 
         private void Unsubscribe()
@@ -369,7 +350,7 @@ namespace Hanoi.Xmpp.InstantMessaging
             _session.ClientCapabilitiesStorage.ClientCapabilities.Add(Capabilities);
             _session.ClientCapabilitiesStorage.Save();
 
-            // NotifyPropertyChanged(() => Capabilities);
+            _session.OnContactMessage(_contact);
         }
 
         private void OnQueryErrorMessage(IQ message)

@@ -31,40 +31,16 @@ using Hanoi.Serialization.Extensions.UserMood;
 
 namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 {
-    /// <summary>
-    ///   Activity event for user mood
-    /// </summary>
     public sealed class UserMoodEvent : UserEvent
     {
-        private readonly string _mood;
-        private readonly string _text;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "UserMoodEvent">UserMoodEvent</see> class.
-        /// </summary>
-        /// <param name = "user">User contact</param>
-        /// <param name = "mood">User mood</param>
         public UserMoodEvent(Contact user, Mood mood)
             : base(user)
         {
-            _mood = mood.MoodType.ToString();
-            _text = mood.Text;
+            Mood = mood.MoodType.ToString();
+            Text = mood.Text;
         }
 
-        /// <summary>
-        ///   Gets the user mood
-        /// </summary>
-        public string Mood
-        {
-            get { return _mood; }
-        }
-
-        /// <summary>
-        ///   Gets the user mood text
-        /// </summary>
-        public string Text
-        {
-            get { return _text; }
-        }
+        public string Mood { get; private set; }
+        public string Text { get; private set; }
     }
 }

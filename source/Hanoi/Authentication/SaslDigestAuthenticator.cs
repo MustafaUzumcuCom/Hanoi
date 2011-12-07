@@ -139,14 +139,13 @@ namespace Hanoi.Authentication
             }
 
             // Send the Digest-Reponse
-            var digestResponse = new Response();
-
-            digestResponse.Value = BuildDigestRespose();
+            var digestResponse = new Response
+                                     {
+                                         Value = BuildDigestRespose()
+                                     };
 
             Connection.Send(digestResponse);
-
             _successEvent.WaitOne();
-
             if (_digestChallenge.ContainsKey("rspauth"))
             {
                 digestResponse = new Response();
@@ -155,14 +154,11 @@ namespace Hanoi.Authentication
                 _successEvent.WaitOne();
             }
 
-            if (!AuthenticationFailed)
-            {
-                // Re-Initialize XMPP Stream
-                Connection.InitializeXmppStream();
+            if (AuthenticationFailed) 
+                return;
 
-                // Wait until we receive the Stream features
-                Connection.WaitForStreamFeatures();
-            }
+            Connection.InitializeXmppStream();
+            Connection.WaitForStreamFeatures();
         }
 
         protected override void OnUnhandledMessage(object sender, UnhandledMessageEventArgs e)
@@ -223,18 +219,6 @@ namespace Hanoi.Authentication
             var password = Connection.UserPassword;
             var digestURI = String.Format("xmpp/{0}", realm);
             var quop = SelectProtectionQuality();
-
-            // TODO: is this necessary?
-            /*
-            If authzid is specified, then A1 is
-                A1 = { H( { username-value, ":", realm-value, ":", passwd } ),
-                    ":", nonce-value, ":", cnonce-value, ":", authzid-value }
-
-            If authzid is not specified, then A1 is
-                A1 = { H( { username-value, ":", realm-value, ":", passwd } ),
-                    ":", nonce-value, ":", cnonce-value }
-            */
-
             var a1 = new MemoryStream();
 
             var a1Hash = (new[] { userId, ":", realm, ":", password }).ComputeMD5Hash();
@@ -243,36 +227,8 @@ namespace Hanoi.Authentication
             // There are no authzid-value
             a1.Write(a1Hash, 0, a1Hash.Length);
             a1.Write(temp, 0, temp.Length);
-
-            /*
-            HEX(H(A2))
-
-            If the "qop" directive's value is "auth", then A2 is:
-                A2       = { "AUTHENTICATE:", digest-uri-value }
-
-            If the "qop" value is "auth-int" or "auth-conf" then A2 is:
-                A2       = { "AUTHENTICATE:", digest-uri-value,
-                        ":00000000000000000000000000000000" }
-            */
-
             string a2 = "AUTHENTICATE:" + digestURI +
                         ((quop == "auth") ? null : ":00000000000000000000000000000000");
-
-            /*
-            KD(k, s) = H({k, ":", s}), 
-
-            HEX( KD ( HEX(H(A1)),
-                 { nonce-value, ":" nc-value, ":",
-                   cnonce-value, ":", qop-value, ":", HEX(H(A2)) }))
-            */
-            /*
-            return SaslDigestAuthenticator.ConvertToHex(
-                    SaslDigestAuthenticator.ComputeHash(
-                        SaslDigestAuthenticator.ConvertToHex(SaslDigestAuthenticator.ComputeHash(a1.ToArray())), ":",
-                        nonce, ":", "00000001", ":", cnonce, ":", quop, ":",
-                        SaslDigestAuthenticator.ConvertToHex(SaslDigestAuthenticator.ComputeHash(a2)))
-                        );
-             */
 
             var hexA1 = a1.ToArray().ComputeMD5Hash().ToHexString();
             var hexA2 = (new[] { a2 }).ComputeMD5Hash().ToHexString();

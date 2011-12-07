@@ -29,35 +29,15 @@
 
 using System;
 
-namespace Hanoi.Xmpp.InstantMessaging {
-    /// <summary>
-    ///   Session states
-    /// </summary>
+namespace Hanoi.Xmpp.InstantMessaging
+{
     [Serializable]
-    public enum SessionState {
-        /// <summary>
-        ///   Loggin out
-        /// </summary>
+    public enum SessionState
+    {
         LoggingOut,
-
-        /// <summary>
-        ///   Logged out
-        /// </summary>
         LoggedOut,
-
-        /// <summary>
-        ///   Logging in
-        /// </summary>
         LoggingIn,
-
-        /// <summary>
-        ///   Logged in
-        /// </summary>
         LoggedIn,
-
-        /// <summary>
-        ///   Error
-        /// </summary>
         Error,
     }
 }

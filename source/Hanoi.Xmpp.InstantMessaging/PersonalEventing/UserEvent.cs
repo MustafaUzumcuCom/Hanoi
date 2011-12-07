@@ -29,28 +29,13 @@
 
 namespace Hanoi.Xmpp.InstantMessaging.PersonalEventing
 {
-    /// <summary>
-    ///   XMPP User event activity ( tunes, moods, ... )
-    /// </summary>
     public abstract class UserEvent : Event
     {
-        private readonly Contact _user;
+        public Contact User { get; private set; }
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "UserEvent" /> class.
-        /// </summary>
-        /// <param name = "user"></param>
         protected UserEvent(Contact user)
         {
-            _user = user;
-        }
-
-        /// <summary>
-        ///   Gets the user data
-        /// </summary>
-        public Contact User
-        {
-            get { return _user; }
+            User = user;
         }
     }
 }

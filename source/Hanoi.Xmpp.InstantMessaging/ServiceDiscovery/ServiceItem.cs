@@ -29,9 +29,6 @@
 
 namespace Hanoi.Xmpp.InstantMessaging.ServiceDiscovery
 {
-    /// <summary>
-    ///   Represents a <see cref = "Service" /> item.
-    /// </summary>
     public sealed class ServiceItem : ServiceDiscoveryObject
     {
         internal ServiceItem(Session session, string identifier)

@@ -41,7 +41,7 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
     /// </summary>
     public sealed class SessionEntityCapabilities : EntityCapabilities
     {
-        private Session session;
+        private Session _session;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "EntityCapabilities" /> class.
@@ -49,7 +49,7 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
         internal SessionEntityCapabilities(Session session)
             : base(session)
         {
-            this.session = session;
+            _session = session;
 
             // Supported features
             Features.Add(new ServiceFeature(InstantMessaging.Features.ServiceDiscoveryInfo));
@@ -66,124 +66,109 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
             Features.Add(new ServiceFeature(InstantMessaging.Features.XmppPing));
         }
 
-        /// <summary>
-        ///   Gets or sets the application name.
-        /// </summary>
-        /// <value>The name of the application.</value>
         public string Name { get; set; }
-
-        /// <summary>
-        ///   Gets or sets the application version
-        /// </summary>
         public string Version { get; set; }
-
-        /// <summary>
-        ///   Gets the service discovery name
-        /// </summary>
         public string ServiceDiscoveryName
         {
-            get { return String.Format("{0} {1}", Name, Version); }
+            get { return string.Format("{0} {1}", Name, Version); }
         }
 
         public void AdvertiseCapabilities()
         {
-            if (!String.IsNullOrEmpty(ServiceDiscoveryName) &&
-                !String.IsNullOrEmpty(Node) &&
-                Identities.Count > 0)
+            if (string.IsNullOrEmpty(ServiceDiscoveryName) || string.IsNullOrEmpty(Node) || Identities.Count <= 0)
+                return;
+
+            var presence = new Serialization.InstantMessaging.Presence.Presence
+                               {
+                                   Id = IdentifierGenerator.Generate()
+                               };
+
+            if (_session.Capabilities != null)
             {
-                var presence = new Serialization.InstantMessaging.Presence.Presence
-                                   {
-                                       Id = IdentifierGenerator.Generate()
-                                   };
-
-                if (session.Capabilities != null)
-                {
-                    presence.Items.Add(GetEntityCapabilities());
-                }
-
-                session.Send(presence);
+                presence.Items.Add(GetEntityCapabilities());
             }
+
+            _session.Send(presence);
         }
 
         protected override void OnServiceDiscoveryMessage(IQ message)
         {
             // Answers to Entity Capabilities and service discovery info requests
-            if (message.Type == IQType.Get)
+            if (message.Type != IQType.Get) 
+                return;
+
+            if (!(message.Items[0] is ServiceQuery)) 
+                return;
+
+            var query = (ServiceQuery)message.Items[0];
+            var response = new ServiceQuery
+                               {
+                                   Node = ((!string.IsNullOrEmpty(query.Node)) ? DiscoveryInfoNode : null)
+                               };
+
+            var responseIq = new IQ
+                                 {
+                                     From = _session.UserId,
+                                     ID = message.ID,
+                                     To = message.From,
+                                     Type = IQType.Result
+                                 };
+
+            foreach (var identity in Identities)
             {
-                if (message.Items[0] is ServiceQuery)
-                {
-                    var query = (ServiceQuery)message.Items[0];
-                    var response = new ServiceQuery
-                                       {
-                                           Node = ((!String.IsNullOrEmpty(query.Node)) ? DiscoveryInfoNode : null)
-                                       };
+                var supportedIdentity = new Serialization.Extensions.ServiceDiscovery.ServiceIdentity
+                                            {
+                                                Name = identity.Name,
+                                                Category = identity.Category.ToString().ToLower(),
+                                                Type = identity.Type
+                                            };
 
-                    var responseIq = new IQ
-                                         {
-                                             From = session.UserId,
-                                             ID = message.ID,
-                                             To = message.From,
-                                             Type = IQType.Result
-                                         };
-
-                    foreach (ServiceIdentity identity in Identities)
-                    {
-                        var supportedIdentity = new Serialization.Extensions.ServiceDiscovery.ServiceIdentity
-                                                    {
-                                                        Name = identity.Name,
-                                                        Category = identity.Category.ToString().ToLower(),
-                                                        Type = identity.Type
-                                                    };
-
-                        response.Identities.Add(supportedIdentity);
-                    }
-
-                    foreach (ServiceFeature supportedFeature in Features)
-                    {
-                        var feature = new Serialization.Extensions.ServiceDiscovery.ServiceFeature
-                                          {
-                                              Name = supportedFeature.Name
-                                          };
-
-                        response.Features.Add(feature);
-                    }
-
-                    responseIq.Items.Add(response);
-
-                    session.Send(responseIq);
-
-                    //// Error response
-                    //IQ errorIq = new IQ();
-                    //ServiceQuery response = new ServiceQuery();
-                    //Error error = new Error();
-
-                    //errorIq.From = this.session.UserId.ToString();
-                    //errorIq.ID = e.QueryResult.ID;
-                    //errorIq.To = e.QueryResult.From;
-                    //errorIq.Type = IQType.Error;
-                    //errorIq.Error = error;
-                    //response.Node = query.Node;
-                    //error.Type = ErrorType.Cancel;
-                    //error.ItemNotFound = "";
-
-                    //errorIq.Items.Add(response);
-
-                    //this.session.Send(errorIq);
-                }
+                response.Identities.Add(supportedIdentity);
             }
+
+            foreach (var supportedFeature in Features)
+            {
+                var feature = new Serialization.Extensions.ServiceDiscovery.ServiceFeature
+                                  {
+                                      Name = supportedFeature.Name
+                                  };
+
+                response.Features.Add(feature);
+            }
+
+            responseIq.Items.Add(response);
+
+            _session.Send(responseIq);
+
+            //// Error response
+            //IQ errorIq = new IQ();
+            //ServiceQuery response = new ServiceQuery();
+            //Error error = new Error();
+
+            //errorIq.From = this.session.UserId.ToString();
+            //errorIq.ID = e.QueryResult.ID;
+            //errorIq.To = e.QueryResult.From;
+            //errorIq.Type = IQType.Error;
+            //errorIq.Error = error;
+            //response.Node = query.Node;
+            //error.Type = ErrorType.Cancel;
+            //error.ItemNotFound = "";
+
+            //errorIq.Items.Add(response);
+
+            //this.session.Send(errorIq);
         }
 
         private Serialization.Extensions.EntityCapabilities.EntityCapabilities GetEntityCapabilities()
         {
-            var capabilities = new Serialization.Extensions.EntityCapabilities.EntityCapabilities();
+            var capabilities = new Serialization.Extensions.EntityCapabilities.EntityCapabilities
+                                   {
+                                       HashAlgorithmName = DefaultHashAlgorithmName,
+                                       Node = Node,
+                                       VerificationString = BuildVerificationString()
+                                   };
 
-            capabilities.HashAlgorithmName = EntityCapabilities.DefaultHashAlgorithmName;
-            capabilities.Node = Node;
-            capabilities.VerificationString = BuildVerificationString();
-
-            // Update the Verification String
             VerificationString = capabilities.VerificationString;
-
             return capabilities;
         }
 

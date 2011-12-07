@@ -31,40 +31,14 @@ using System;
 
 namespace Hanoi.Xmpp.InstantMessaging
 {
-    /// <summary>
-    ///   Presence states
-    /// </summary>
     [Serializable]
     public enum PresenceState
     {
-        /// <summary>
-        ///   Away
-        /// </summary>
         Away = 0,
-
-        /// <summary>
-        ///   Available
-        /// </summary>
         Available = 1,
-
-        /// <summary>
-        ///   Busy
-        /// </summary>
         Busy = 2,
-
-        /// <summary>
-        ///   Extended away ( Idle )
-        /// </summary>
         Idle = 4,
-
-        /// <summary>
-        ///   Invisible
-        /// </summary>
         Invisible = 5,
-
-        /// <summary>
-        ///   Offline
-        /// </summary>
         Offline = -1,
     }
 }

@@ -48,14 +48,6 @@ namespace Hanoi.Xmpp.InstantMessaging
         private List<ContactResource> _resources;
         private ContactSubscriptionType _subscription;
 
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "T:Contact" /> class.
-        /// </summary>
-        /// <param name = "session">The session.</param>
-        /// <param name = "contactId">The contact id.</param>
-        /// <param name = "name">The name.</param>
-        /// <param name = "subscription">The subscription.</param>
-        /// <param name = "groups">The groups.</param>
         internal Contact(Session session, string contactId, string name, ContactSubscriptionType subscription, IList<string> groups)
         {
             _session = session;
@@ -67,53 +59,29 @@ namespace Hanoi.Xmpp.InstantMessaging
             AddDefaultResource();
         }
 
-        /// <summary>
-        ///   Gets the contact id.
-        /// </summary>
-        /// <value>The contact id.</value>
         public Jid ContactId
         {
             get { return _contactId; }
         }
 
-        /// <summary>
-        ///   Gets the name.
-        /// </summary>
-        /// <value>The name.</value>
         public string Name
         {
             get { return _name; }
             private set
             {
-                if (_name != value)
-                {
-                    _name = value;
+                if (_name == value) 
+                    return;
 
-                    // NotifyPropertyChanged(() => Name);
-                }
+                _name = value;
+                _session.OnContactMessage(this);
             }
         }
 
-        /// <summary>
-        ///   Gets the contact groups.
-        /// </summary>
-        /// <value>The groups.</value>
         public List<string> Groups
         {
-            get
-            {
-                if (_groups == null)
-                {
-                    _groups = new List<string>();
-                }
-
-                return _groups;
-            }
+            get { return _groups ?? (_groups = new List<string>()); }
         }
 
-        /// <summary>
-        ///   Gets the contact Display Name
-        /// </summary>
         public string DisplayName
         {
             get { return _displayName; }
@@ -126,23 +94,15 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                 Update();
 
-                //NotifyPropertyChanged(() => DisplayName);
+                _session.OnContactMessage(this);
             }
         }
 
-        /// <summary>
-        ///   Gets the list available resources.
-        /// </summary>
-        /// <value>The resources.</value>
         public IEnumerable<ContactResource> Resources
         {
             get { return _resources ?? (_resources = new List<ContactResource>()); }
         }
 
-        /// <summary>
-        ///   Gets or sets the subscription.
-        /// </summary>
-        /// <value>The subscription.</value>
         public ContactSubscriptionType Subscription
         {
             get { return _subscription; }
@@ -152,48 +112,31 @@ namespace Hanoi.Xmpp.InstantMessaging
                     return;
 
                 _subscription = value;
-
-                //NotifyPropertyChanged(() => Subscription);
+                _session.OnContactMessage(this);
             }
         }
 
-        /// <summary>
-        ///   Gets the presence.
-        /// </summary>
-        /// <value>The presence.</value>
         public ContactResource Resource
         {
             get { return GetResource(); }
         }
 
-        /// <summary>
-        ///   Gets the presence.
-        /// </summary>
-        /// <value>The presence.</value>
         public ContactPresence Presence
         {
             get { return GetResource().Presence; }
         }
 
-        /// <summary>
-        ///   Gets a value that indicates if the contact supports File Transfer
-        /// </summary>
+        //TODO: Implement indicator if contact supports file transfer
         public bool SupportsFileTransfer
         {
             get { throw new NotImplementedException(); }
         }
 
-        /// <summary>
-        ///   Gets a value that indicates if the contact supports MUC
-        /// </summary>
         public bool SupportsConference
         {
             get { return (Resource.Capabilities.Features.Where(f => f.Name == Features.MultiUserChat).Count() > 0); }
         }
 
-        /// <summary>
-        ///   Gets a value that indicates if the contact supports chat state notifications
-        /// </summary>
         public bool SupportsChatStateNotifications
         {
             get
@@ -204,10 +147,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             }
         }
 
-        /// <summary>
-        ///   Adds to group.
-        /// </summary>
-        /// <param name = "groupName">Name of the group.</param>
         public void AddToGroup(string groupName)
         {
             var iq = new IQ();
@@ -233,9 +172,6 @@ namespace Hanoi.Xmpp.InstantMessaging
             _session.Send(iq);
         }
 
-        /// <summary>
-        ///   Updates the contact data.
-        /// </summary>
         public void Update()
         {
             var iq = new IQ();
@@ -256,17 +192,11 @@ namespace Hanoi.Xmpp.InstantMessaging
             _session.Send(iq);
         }
 
-        /// <summary>
-        ///   Request subscription to he presence of the contanct
-        /// </summary>
         public void RequestSubscription()
         {
             _session.Presence.RequestSubscription(ContactId);
         }
 
-        /// <summary>
-        ///   Block contact
-        /// </summary>
         public void Block()
         {
             if (_session.ServiceDiscovery.SupportsBlocking)
@@ -299,37 +229,30 @@ namespace Hanoi.Xmpp.InstantMessaging
         /// </summary>
         public void UnBlock()
         {
-            if (_session.ServiceDiscovery.SupportsBlocking)
-            {
-                var iq = new IQ
-                             {
-                                 ID = IdentifierGenerator.Generate(),
-                                 From = _session.UserId,
-                                 Type = IQType.Set
-                             };
+            if (!_session.ServiceDiscovery.SupportsBlocking) 
+                return;
 
-                var unBlock = new UnBlock();
+            var iq = new IQ
+                         {
+                             ID = IdentifierGenerator.Generate(),
+                             From = _session.UserId,
+                             Type = IQType.Set
+                         };
 
-                unBlock.Items.Add
-                    (
-                        new BlockItem
-                            {
-                                Jid = ContactId.BareIdentifier
-                            }
-                    );
+            var unBlock = new UnBlock();
+            unBlock.Items.Add
+                (
+                    new BlockItem
+                        {
+                            Jid = ContactId.BareIdentifier
+                        }
+                );
 
-                iq.Items.Add(unBlock);
+            iq.Items.Add(unBlock);
 
-                _session.Send(iq);
-            }
+            _session.Send(iq);
         }
 
-        /// <summary>
-        ///   Returns a <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
-        /// </summary>
-        /// <returns>
-        ///   A <see cref = "T:System.String"></see> that represents the current <see cref = "T:System.Object"></see>.
-        /// </returns>
         public override string ToString()
         {
             return ContactId.ToString();
@@ -355,16 +278,9 @@ namespace Hanoi.Xmpp.InstantMessaging
 
         internal void RefreshData(string name, ContactSubscriptionType subscription, IList<string> groups)
         {
-            Name = (name ?? String.Empty);
+            Name = (name ?? string.Empty);
 
-            if (!String.IsNullOrEmpty(Name))
-            {
-                _displayName = this._name;
-            }
-            else
-            {
-                _displayName = _contactId.UserName;
-            }
+            _displayName = !string.IsNullOrEmpty(Name) ? _name : _contactId.UserName;
 
             Subscription = subscription;
 
@@ -377,15 +293,14 @@ namespace Hanoi.Xmpp.InstantMessaging
                 Groups.Add("Contacts");
             }
 
-            //NotifyPropertyChanged(() => DisplayName);
-            //NotifyPropertyChanged(() => Groups);
+            _session.OnContactMessage(this);
         }
 
         internal void UpdatePresence(Jid jid, Serialization.InstantMessaging.Presence.Presence presence)
         {
             lock (_syncObject)
             {
-                ContactResource resource = _resources
+                var resource = _resources
                     .Where(contactResource => contactResource.ResourceId.Equals(jid))
                     .SingleOrDefault();
 
@@ -397,15 +312,10 @@ namespace Hanoi.Xmpp.InstantMessaging
 
                 resource.Update(presence);
 
-                // Remove the resource information if the contact has gone offline
-                if (!resource.IsDefaultResource &&
-                    resource.Presence.PresenceStatus == PresenceState.Offline)
-                {
+                if (!resource.IsDefaultResource && resource.Presence.PresenceStatus == PresenceState.Offline)
                     _resources.Remove(resource);
-                }
 
-                //NotifyPropertyChanged(() => Presence);
-                //NotifyPropertyChanged(() => Resource);
+                _session.OnContactMessage(this);
             }
         }
 

@@ -210,11 +210,6 @@ namespace Hanoi
             }
         }
 
-        #region IDisposable Members
-
-        /// <summary>
-        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -227,13 +222,6 @@ namespace Hanoi
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-
-        /// <summary>
-        ///   Checks if the given XMPP message instance is an error message
-        /// </summary>
-        /// <param name = "message">The XMPP Message instance</param>
-        /// <returns><b>true</b> if it's an error message; otherwise <b>false</b></returns>
         private static bool IsErrorMessage(object message)
         {
             var isError = false;
@@ -474,7 +462,9 @@ namespace Hanoi
                     _transport = null;
                 }
 
-                _features.StreamFeatures = _features.StreamFeatures & (~_features.StreamFeatures);
+                if (_features != null)
+                    _features.StreamFeatures = _features.StreamFeatures & (~_features.StreamFeatures);
+
                 State = ConnectionState.Closed;
                 _connectionString = null;
                 UserId = null;
@@ -629,6 +619,7 @@ namespace Hanoi
             {
                 foreach (object item in iq.Items)
                 {
+                    Console.WriteLine(item.GetType().ToString());
                     if (iq.Type != IQType.Error)
                     {
                         if (item is Bind)

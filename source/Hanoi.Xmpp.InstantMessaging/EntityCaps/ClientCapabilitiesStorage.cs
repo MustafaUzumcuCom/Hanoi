@@ -38,32 +38,30 @@ using System.Xml.Serialization;
 
 namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
 {
-    /// <summary>
-    ///   Entity capabilities store
-    /// </summary>
     [Serializable]
     [XmlTypeAttribute(Namespace = "")]
     [XmlRootAttribute("capabilities", Namespace = "", IsNullable = false)]
     public sealed class ClientCapabilitiesStorage
     {
-        private const string ClientCapabilitiesFile = "ClientCapabilities.xml";
-        private static XmlSerializer Serializer = new XmlSerializer(typeof(ClientCapabilitiesStorage));
+        private string _clientCapabilitiesFile = "ClientCapabilities.xml";
+        private static XmlSerializer _serializer = new XmlSerializer(typeof(ClientCapabilitiesStorage));
+        private List<ClientCapabilities> _clientCapabilities;
 
-        private List<ClientCapabilities> clientCapabilities;
+        public ClientCapabilitiesStorage(string bareIdentifier)
+        {
+            _clientCapabilitiesFile = bareIdentifier + _clientCapabilitiesFile;
+        }
+
+        public ClientCapabilitiesStorage()
+        {
+            
+        }
 
         [XmlArray("caps")]
         [XmlArrayItem("client", typeof(ClientCapabilities))]
         public List<ClientCapabilities> ClientCapabilities
         {
-            get
-            {
-                if (clientCapabilities == null)
-                {
-                    clientCapabilities = new List<ClientCapabilities>();
-                }
-
-                return clientCapabilities;
-            }
+            get { return _clientCapabilities ?? (_clientCapabilities = new List<ClientCapabilities>()); }
         }
 
         public bool Exists(string node, string verificationString)
@@ -80,39 +78,32 @@ namespace Hanoi.Xmpp.InstantMessaging.EntityCaps
 
         public void Load()
         {
-            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
+            using (var storage = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                if (storage.FileExists(ClientCapabilitiesFile))
-                {
-                    using (var stream =
-                        new IsolatedStorageFileStream(ClientCapabilitiesFile, FileMode.OpenOrCreate, storage))
-                    {
-                        if (stream.Length > 0)
-                        {
-                            var capsstorage = (ClientCapabilitiesStorage)Serializer.Deserialize(stream);
+                if (!storage.FileExists(_clientCapabilitiesFile))
+                    return;
 
-                            ClientCapabilities.AddRange(capsstorage.ClientCapabilities);
-                        }
-                    }
+                using (var stream = new IsolatedStorageFileStream(_clientCapabilitiesFile, FileMode.OpenOrCreate, storage))
+                {
+                    if (stream.Length <= 0) 
+                        return;
+                    var capsstorage = (ClientCapabilitiesStorage)_serializer.Deserialize(stream);
+                    ClientCapabilities.AddRange(capsstorage.ClientCapabilities);
                 }
             }
         }
 
         public void Save()
         {
-            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly())
+            using (var storage = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                using (var stream =
-                    new IsolatedStorageFileStream(ClientCapabilitiesFile, FileMode.OpenOrCreate, storage))
+                using (var stream = new IsolatedStorageFileStream(_clientCapabilitiesFile, FileMode.OpenOrCreate, storage))
                 {
-                    // Save Caps as XML
                     using (var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8))
                     {
-                        // Writer settings
                         xmlWriter.QuoteChar = '\'';
                         xmlWriter.Formatting = Formatting.Indented;
-
-                        Serializer.Serialize(xmlWriter, this);
+                        _serializer.Serialize(xmlWriter, this);
                     }
                 }
             }

@@ -32,111 +32,60 @@ using System.Collections.Generic;
 
 namespace Hanoi.Authentication
 {
-
-    // TODO: introduce IAuthenticator interface
-
-    /// <summary>
-    ///   Base class for authentication mechanims implementations.
-    /// </summary>
     public abstract class Authenticator : IDisposable
     {
         public abstract string FeatureKey { get; }
+        private List<string> _pendingMessages;
 
-        private List<string> pendingMessages;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref="Authenticator" /> class.
-        /// </summary>
-        /// <param name = "connection">A <see cref="Hanoi.Connection" /> instance</param>
         protected Authenticator(Connection connection)
         {
             Connection = connection;
-
             Subscribe();
         }
 
-        /// <summary>
-        ///   Gets the authentication error.
-        /// </summary>
-        /// <value>The authentication error.</value>
         public string AuthenticationError { get; private set; }
-
-        /// <summary>
-        ///   Gets a value indicating whether the authentication has failed.
-        /// </summary>
-        /// <value><c>true</c> if authentication failed; otherwise, <c>false</c>.</value>
         public bool AuthenticationFailed { get; protected set; }
-
-        /// <summary>
-        ///   Gets the connection associated with the authenticator class.
-        /// </summary>
         public Connection Connection { get; private set; }
 
-        /// <summary>
-        ///   Gets the list of message ID's pending of response
-        /// </summary>
         public List<string> PendingMessages
         {
-            get
-            {
-                if (pendingMessages == null)
-                {
-                    pendingMessages = new List<string>();
-                }
-
-                return pendingMessages;
-            }
+            get { return _pendingMessages ?? (_pendingMessages = new List<string>()); }
         }
 
-        #region IDisposable Members
-
-        /// <summary>
-        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
+        
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-
-        /// <summary>
-        ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "T:Hanoi.Authentication.Authenticator" /> is reclaimed by garbage collection.
-        /// </summary>
+        
         ~Authenticator()
         {
             Dispose(false);
         }
-
-        /// <summary>
-        ///   Disposes the specified disposing.
-        /// </summary>
-        /// <param name = "disposing">if set to <c>true</c> [disposing].</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!disposing) 
+                return;
+
+            Unsubscribe();
+
+            if (_pendingMessages != null)
             {
-                Unsubscribe();
-
-                if (pendingMessages != null)
-                {
-                    pendingMessages.Clear();
-                }
-
-                pendingMessages = null;
-                Connection = null;
-                AuthenticationError = null;
-                AuthenticationFailed = false;
+                _pendingMessages.Clear();
             }
+
+            _pendingMessages = null;
+            Connection = null;
+            AuthenticationError = null;
+            AuthenticationFailed = false;
         }
 
-        /// <summary>
-        ///   Performs the authentication.
-        /// </summary>
+        
         public abstract void Authenticate();
-
+        protected abstract void OnUnhandledMessage(object sender, UnhandledMessageEventArgs e);
+        
         protected void Subscribe()
         {
             Connection.UnhandledMessage += OnUnhandledMessage;
@@ -149,23 +98,11 @@ namespace Hanoi.Authentication
             Connection.AuthenticationError -= OnAuthenticationError;
         }
 
-        /// <summary>
-        ///   Called when an unhandled message is received
-        /// </summary>
-        /// <param name = "sender">The sender.</param>
-        /// <param name = "e">The <see cref = "T:Hanoi.XmppUnhandledMessageEventArgs" /> instance containing the event data.</param>
-        protected abstract void OnUnhandledMessage(object sender, UnhandledMessageEventArgs e);
-
-        /// <summary>
-        ///   Called when an authentication failiure occurs.
-        /// </summary>
-        /// <param name = "sender">The sender.</param>
-        /// <param name = "e">The <see cref = "AuthenticationFailiureEventArgs" /> instance containing the event data.</param>
         protected virtual void OnAuthenticationError(object sender, AuthenticationFailiureEventArgs e)
         {
-            if (pendingMessages != null)
+            if (_pendingMessages != null)
             {
-                pendingMessages.Clear();
+                _pendingMessages.Clear();
             }
 
             AuthenticationError = e.Message;
